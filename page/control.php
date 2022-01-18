@@ -116,21 +116,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                                             </td>
                                                             <td>
-                                                                <?php if ($rowc['member'] == '1') {
-
-                                                                    $status = 'checked';
-                                                                } else {
-                                                                    $status = '';
-                                                                } ?>
-
-                                                                <label class="switch">
-                                                                    <input type="checkbox" name="id" class="change2" <?php echo $status ?> id="<?php echo $rowc['p_id']; ?>">
-                                                                    <div class="slider round"> </div>
-
-                                                                </label>
-
-                                                            </td>
-                                                            <td>
                                                                 <?php if ($rowc['staff'] == '1') {
 
                                                                     $status = 'checked';
@@ -140,6 +125,21 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                                                 <label class="switch">
                                                                     <input type="checkbox" name="id" class="change3" <?php echo $status ?> id="<?php echo $rowc['p_id']; ?>">
+                                                                    <div class="slider round"> </div>
+
+                                                                </label>
+
+                                                            </td>
+                                                            <td>
+                                                                <?php if ($rowc['member'] == '1') {
+
+                                                                    $status = 'checked';
+                                                                } else {
+                                                                    $status = '';
+                                                                } ?>
+
+                                                                <label class="switch">
+                                                                    <input type="checkbox" name="id" class="change2" <?php echo $status ?> id="<?php echo $rowc['p_id']; ?>">
                                                                     <div class="slider round"> </div>
 
                                                                 </label>

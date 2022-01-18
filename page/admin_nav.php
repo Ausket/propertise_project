@@ -70,7 +70,7 @@ $resultrt = mysqli_query($con, $sqlrt);
     <!-- Main Sidebar Container -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="index.php" class="brand-link">
+        <a href="profile.php" class="brand-link">
             <span class="brand-text font-weight-light" style="margin-left: 20px; text-transform: uppercase;"><?php echo $row_id['utype']; ?> Managment</span>
         </a>
 

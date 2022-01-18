@@ -35,18 +35,13 @@ if (isset($_POST['submit'])) {
             $_SESSION["utype"] = $row["utype"];
             $_SESSION["ustatus"] = $row["ustatus"];
 
-            // if( $_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff'  ){
-            //   header("location: index.php");
-            // }
-            // if( $_SESSION["utype"] == 'member'){
-            //     header("location: index_member.php");
-            //   }
-              
-            // if( $_SESSION["utype"] == 'agent'){
-            //     header("location: index_agent.php");
-            //   }
-            header("location: index.php");
-
+            if( $_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff'  ){
+              header("location: profile.php");
+            }
+            if( $_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent'){
+                header("location: user/profile.php");
+              }
+                
             
         } else {
             echo "<script>";

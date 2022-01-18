@@ -308,9 +308,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         /* ---------------------------------------get_amphure  -------------------------------------------------   */
 
         $('#province').change(function() {
-
-
-
             var id = $(this).val();
             $.ajax({
                 type: "post",
@@ -332,9 +329,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
         /* ---------------------------------------  -------------------------------------------------   */
 
         $('#amphure').change(function() {
-
-
-
             var id = $(this).val();
             $.ajax({
                 type: "post",

@@ -2,6 +2,7 @@
 require('../dbconnect.php');
 
 $id = $_GET['id'];
+$ids = $_SESSION['u_id'];
 $ptype = $_POST['ptype'];
 $project_name = $_POST['project_name'];
 $bedroom = $_POST['bedroom'];
@@ -58,9 +59,29 @@ if ($file != '') {
 
 
         $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe' WHERE a_id = $id ";
-        $result4 = mysqli_query($con, $sql4)or die(mysqli_error($con));;
+        $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
 
-        echo '<script> window.location.href = "../page/advertise.php";alert("แก้ไขข้อมูลเรียบร้อย")</script>';
+        $sql6 = "SELECT * FROM users WHERE u_id = $ids";
+        $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
+        $row6 = mysqli_fetch_assoc($result6);
+        $utype = $row6['utype'];
+
+        if ($utype == 'admin') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/advertise.php");
+        }
+        if ($utype == 'staff') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/advertise.php");
+        }
+        if ($utype == 'member') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/user/advertise.php");
+        }
+        if ($utype == 'agent') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/user/advertise.php");
+        }
     }
 }
 
@@ -83,9 +104,29 @@ if ($file == '') {
 
 
         $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe' WHERE a_id = $id ";
-        $result4 = mysqli_query($con, $sql4)or die(mysqli_error($con));;
+        $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
 
 
-        echo '<script> window.location.href = "../page/advertise.php";alert("แก้ไขข้อมูลเรียบร้อย")</script>';
+        $sql6 = "SELECT * FROM users WHERE u_id = $ids";
+        $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
+        $row6 = mysqli_fetch_assoc($result6);
+        $utype = $row6['utype'];
+
+        if ($utype == 'admin') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/advertise.php");
+        }
+        if ($utype == 'staff') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/advertise.php");
+        }
+        if ($utype == 'member') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/user/advertise.php");
+        }
+        if ($utype == 'agent') {
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/user/advertise.php");
+        }
     }
 }
