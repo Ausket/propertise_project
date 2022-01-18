@@ -278,7 +278,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             status_id: status_id
                         },
                         success: function(data) {
-                            location.reload();
+                            Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'อัพเดทสำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setTimeout(function() {
+                        window.location = window.location;
+                    }, 1000);
                         }
                     });
                 }
@@ -293,7 +302,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             status_id: status_id
                         },
                         success: function(data) {
-                            location.reload();
+                            Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'อัพเดทสำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setTimeout(function() {
+                        window.location = window.location;
+                    }, 1000);
                         }
                     });
                 }
@@ -308,7 +326,16 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             status_id: status_id
                         },
                         success: function(data) {
-                            location.reload();
+                            Swal.fire({
+                        position: 'top-center',
+                        icon: 'success',
+                        title: 'อัพเดทสำเร็จ',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                    setTimeout(function() {
+                        window.location = window.location;
+                    }, 1000);
 
                         }
                     });
