@@ -88,7 +88,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <span aria-hidden="true">&times;</span>
                                                     </button>
                                                 </div>
-                                                <form action="../backend/addmember_db.php" enctype="multipart/form-data" method="POST" enctype="multipart/form-data">
+                                                <form action="../backend/addmember_db.php" id="myform" enctype="multipart/form-data" method="POST" enctype="multipart/form-data">
                                                     <div class="modal-body">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="file" id="customFile" aria-describedby="inputGroupFileAddon01">
@@ -103,73 +103,73 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     <div class="modal-footer">
                                                         <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
                                                     </div>
-                                     </div>          
+                                            </div>
+                                        </div>
+                                        <!-- /.card -->
+                                    </div>
                                 </div>
-                                <!-- /.card -->
                             </div>
+                            <!-- /.card -->
                         </div>
-                    </div>
-                    <!-- /.card -->
-                </div>
-               
-                    <div class="card card-dark">
-                        <div class="card-header">
-                            <h3 class="card-title">เพิ่มสมาชิก</h3>
-                        </div>
-                        <div class="card-body">
-                            <!-- /.card-header -->
-                            <!-- form start -->
 
+                        <div class="card card-dark">
+                            <div class="card-header">
+                                <h3 class="card-title">เพิ่มสมาชิก</h3>
+                            </div>
                             <div class="card-body">
-                                <div class="form-group">
+                                <!-- /.card-header -->
+                                <!-- form start -->
 
-                                    <label for="exampleInputEmail1">ชื่อ</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" name="name" value="" placeholder="ชื่อ" required>
+                                <div class="card-body">
+                                    <div class="form-group">
 
+                                        <label for="exampleInputEmail1">ชื่อ</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="name" value="" placeholder="ชื่อ" required>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">อีเมล</label>
+                                        <input type="email" class="form-control" id="exampleInputPassword1" name="email" value="" placeholder="อีเมล" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">รหัสผ่าน</label>
+
+                                        <input type="password" class="form-control" id="exampleInputPassword1" name="password" value="" placeholder="รหัสผ่าน" required>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <label for="exampleInputEmail1">เบอร์โทร</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="tel" value="" placeholder="เบอร์โทร" required>
+
+                                    </div>
+                                    <div class="form-group">
+
+                                        <label for="exampleInputEmail1">ที่อยู่</label>
+                                        <textarea type="text" class="form-control" id="exampleInputEmail1" name="address" value="" placeholder="ที่อยู่" required></textarea>
+
+                                    </div>
+                                    <div class="form-group">
+
+                                        <label for="exampleInputEmail1">วันเกิด</label>
+                                        <input type="date" class="form-control" id="exampleInputEmail1" name="birth_date" value="" placeholder="วันเกิด" required>
+
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">เลขบัตรประชาชน</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="id_card" value="" placeholder="เลขบัตรประชาชน" required>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">อีเมล</label>
-                                    <input type="email" class="form-control" id="exampleInputPassword1" name="email" value="" placeholder="อีเมล" required>
+                                <!-- /.card-body -->
+                                <div class="card-footer">
+                                    <button type="submit" name="submit" class="btn btn-primary d-block m-auto">บันทึก</button>
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputPassword1">รหัสผ่าน</label>
-
-                                    <input type="password" class="form-control" id="exampleInputPassword1" name="password" value="" placeholder="รหัสผ่าน" required>
-                                </div>
-                                <div class="form-group">
-
-                                    <label for="exampleInputEmail1">เบอร์โทร</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" name="tel" value="" placeholder="เบอร์โทร" required>
-
-                                </div>
-                                <div class="form-group">
-
-                                    <label for="exampleInputEmail1">ที่อยู่</label>
-                                    <textarea type="text" class="form-control" id="exampleInputEmail1" name="address" value="" placeholder="ที่อยู่" required></textarea>
-
-                                </div>
-                                <div class="form-group">
-
-                                    <label for="exampleInputEmail1">วันเกิด</label>
-                                    <input type="date" class="form-control" id="exampleInputEmail1" name="birth_date" value="" placeholder="วันเกิด" required>
-
-                                </div>
-                                <div class="form-group">
-                                    <label for="exampleInputEmail1">เลขบัตรประชาชน</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" name="id_card" value="" placeholder="เลขบัตรประชาชน" required>
-                                </div>
+                                </form>
                             </div>
-                            <!-- /.card-body -->
-                            <div class="card-footer">
-                                <button type="submit" name="submit" class="btn btn-primary d-block m-auto">บันทึก</button>
-                            </div>
-                            </form>
+                            <!-- /.card -->
                         </div>
-                        <!-- /.card -->
                     </div>
-               </div>           
-         </div>
-    </section>
+                </div>
+        </section>
     </div>
     <!-- /.content-wrapper -->
 
@@ -228,22 +228,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         });
 
-      
-    $('.custom-file-input').on('change', function() { //selecter class custom และ ดักจับ event(change)
-      var fileName = $(this).val().split('\\').pop(); //ดึงค่าข้อมูลของตัว path และแยกข้อมูลด้วย split และใช้ pop ในการแยกข้อมูลด้านหลังสุดของ array
-      $(this).siblings('.custom-file-label').html(fileName) //siblings(เลือกทุกอย่างยกเว้นตัวเอง แต่จะเลือกตัวlabel) html(แสดงในส่วนของข้อความออกมา)
-      if (this.files[0]) { //ถ้ามีการรับค่าจาก array ของ file
-        var reader = new FileReader() //สร้างฟังก์ชันขึ้นใหม่
-        $('.figure').addClass('d-block') //selecter ไปที่ class figure , add class 'd-block' เพื่อโชว์รูปภาพ
-        reader.onload = function(e) { //เรียกค่าข้อมูลของ file
-          $('#imageUpload').attr('src', e.target.result).width(240)
-          $('#imageUpload2').attr('src', e.target.result).width(100) //selecter id ของ img และเซ็ต attr ของข้อมูล
 
-        }
-        reader.readAsDataURL(this.files[0]) //อ่านค่าของ array file
-      }
-    })
+        $('.custom-file-input').on('change', function() { //selecter class custom และ ดักจับ event(change)
+            var fileName = $(this).val().split('\\').pop(); //ดึงค่าข้อมูลของตัว path และแยกข้อมูลด้วย split และใช้ pop ในการแยกข้อมูลด้านหลังสุดของ array
+            $(this).siblings('.custom-file-label').html(fileName) //siblings(เลือกทุกอย่างยกเว้นตัวเอง แต่จะเลือกตัวlabel) html(แสดงในส่วนของข้อความออกมา)
+            if (this.files[0]) { //ถ้ามีการรับค่าจาก array ของ file
+                var reader = new FileReader() //สร้างฟังก์ชันขึ้นใหม่
+                $('.figure').addClass('d-block') //selecter ไปที่ class figure , add class 'd-block' เพื่อโชว์รูปภาพ
+                reader.onload = function(e) { //เรียกค่าข้อมูลของ file
+                    $('#imageUpload').attr('src', e.target.result).width(240)
+                    $('#imageUpload2').attr('src', e.target.result).width(100) //selecter id ของ img และเซ็ต attr ของข้อมูล
 
+                }
+                reader.readAsDataURL(this.files[0]) //อ่านค่าของ array file
+            }
+        })
+
+        $(document).ready(function() {
+
+            $('#myform').validate({ // initialize the plugin
+                rules: {
+                    field1: {
+                        required: true,
+                        email: true
+                    },
+                    field2: {
+                        required: true,
+                        minlength: 5
+                    }
+                }
+            });
+
+        });
     </script>
 </body>
 

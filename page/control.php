@@ -45,7 +45,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <body class="hold-transition sidebar-mini">
     <div class="wrapper">
 
-    <?php require('admin_nav.php') ?>
+        <?php require('admin_nav.php') ?>
 
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
@@ -56,7 +56,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="col-sm-6">
                             <h1 style="text-transform: uppercase">ตั้งค่าสิทธิ์ผู้ใช้</h1>
                         </div>
-                        
+
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
@@ -97,7 +97,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                     ?>
 
                                                         <tr>
-                                                            
+
                                                             <td><?php echo $order++; ?></td>
                                                             <td><label for="page"><?php echo $rowc['page']; ?></label></td>
                                                             <td>
@@ -160,16 +160,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                                 </label>
 
                                                             </td>
-                                                           <td>
-                                                               <a href="tab_edit.php?id=<?php echo  $idr ?>"  class="btn btn-primary"><i class="far fa-edit"></a></i>&nbsp;
-                                                               <a href="../backend/tab_delete.php?id=<?php echo  $idr ?>" onclick="return confirm('Are you sure to delete ?')"  class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td>
+                                                            <td>
+                                                                <a href="tab_edit.php?id=<?php echo  $idr ?>" class="btn btn-primary"><i class="far fa-edit"></a></i>&nbsp;
+                                                                <a href="../backend/tab_delete.php?id=<?php echo  $idr ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                                                            </td>
 
                                                         </tr>
                                                     <?php  } ?>
                                                 </div>
                                             </tbody>
                                             <div>
-                                            <a href="tab_manage.php"  class="btn btn-warning">เพิ่มหน้า</a>
+                                                <a href="tab_manage.php" class="btn btn-warning">เพิ่มหน้า</a>
 
                                         </table>
                                     </div>
@@ -215,6 +216,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <script src="../js/buttons.html5.min.js"></script>
         <script src="../js/buttons.print.min.js"></script>
         <script src="../js/buttons.colVis.min.js"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <!-- AdminLTE App -->
         <script src="../js/adminlte.min.js"></script>
         <!-- AdminLTE for demo purposes -->
@@ -240,70 +242,78 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
         </script>
         <script>
-             $(document).on('click', '.change', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/control_admin.php",
-                                    method: "POST",
-                                    data: {
-                                      status_id: status_id
-                                    },
-                                    success: function(data) { 
-                                    location.reload();                                                   
-                                    }
+            $(document).on('click', '.change', function() {
+                var status_id = $(this).attr("id");
+                if (status_id != '') {
+                    $.ajax({
+                        url: "../backend/control_admin.php",
+                        method: "POST",
+                        data: {
+                            status_id: status_id
+                        },
+                        success: function(data) {
+                            Swal.fire({
+                                position: 'top-center',
+                                icon: 'success',
+                                title: 'อัพเดทสำเร็จ',
+                                showConfirmButton: false,
+                                timer: 1000
+                            })
+                            setTimeout(function() {
+                                window.location = window.location;
+                            }, 1000);
+                        }
 
-                                });
-                            }
-                        });
+                    });
+                }
+            });
 
-                        $(document).on('click', '.change2', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/control_member.php",
-                                    method: "POST",
-                                    data: {
-                                        status_id: status_id
-                                    },
-                                    success: function(data) {
-                                    location.reload();  
-                                    }
-                                });
-                            }
-                        });
-                        $(document).on('click', '.change3', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/control_staff.php",
-                                    method: "POST",
-                                    data: {
-                                        status_id: status_id
-                                    },
-                                    success: function(data) {
-                                    location.reload();      
-                                       
-                                    }
-                                });
-                            }
-                        });
-                        $(document).on('click', '.change4', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/control_agent.php",
-                                    method: "POST",
-                                    data: {
-                                        status_id: status_id
-                                    },
-                                    success: function(data) {
-                                    location.reload();    
-                                       
-                                    }
-                                });
-                            }
-                        });
+            $(document).on('click', '.change2', function() {
+                var status_id = $(this).attr("id");
+                if (status_id != '') {
+                    $.ajax({
+                        url: "../backend/control_member.php",
+                        method: "POST",
+                        data: {
+                            status_id: status_id
+                        },
+                        success: function(data) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+            $(document).on('click', '.change3', function() {
+                var status_id = $(this).attr("id");
+                if (status_id != '') {
+                    $.ajax({
+                        url: "../backend/control_staff.php",
+                        method: "POST",
+                        data: {
+                            status_id: status_id
+                        },
+                        success: function(data) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+            $(document).on('click', '.change4', function() {
+                var status_id = $(this).attr("id");
+                if (status_id != '') {
+                    $.ajax({
+                        url: "../backend/control_agent.php",
+                        method: "POST",
+                        data: {
+                            status_id: status_id
+                        },
+                        success: function(data) {
+                            location.reload();
+
+                        }
+                    });
+                }
+            });
         </script>
         </script>
 </body>
