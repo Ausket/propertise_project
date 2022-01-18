@@ -193,7 +193,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">ไปรษณีย์</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" name="postal_code" value="" placeholder="ไปรษณีย์" required>
+                                        <input type="text" class="form-control" id="postal_code" name="postal_code" value="" placeholder="ไปรษณีย์" required>
                                     </div>
 
                                     <!-- /.card-body -->

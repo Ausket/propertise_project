@@ -48,7 +48,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 style="text-transform: uppercase"><?php echo $row['utype']; ?> edit profile</h1>
+            <h1 style="text-transform: uppercase"> แก้ไขข้อมูลส่วนตัว</h1>
           </div>
           
         </div>
@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="offset-sm-3 col-md-6">
 
               <!-- Profile Image -->
-              <div class="card card-pink card-outline">
+              <div class="card card-warning card-outline">
                 <div class="card-body box-profile">
                   <div class="text-center">
                     <img class="profile-user-img img-fluid img-circle" src="../m_img/<?php echo $row['img']; ?>" alt="User profile picture">
@@ -119,50 +119,50 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="tab-pane" id="settings">
                       <form class="form-horizontal" action="../backend/edit_profile_db.php?id=<?php echo $row['u_id'] ?>" method="post">
                         <div class="form-group row">
-                          <label for="inputName" class="col-sm-2 col-form-label"> Name</label>
+                          <label for="inputName" class="col-sm-2 col-form-label"> ชื่อ</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" name="name" id="name" value="<?php echo $row['name']; ?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputEmail" class="col-sm-2 col-form-label">Email</label>
+                          <label for="inputEmail" class="col-sm-2 col-form-label">อีเมล</label>
                           <div class="col-sm-10">
                             <input type="email" class="form-control" name="email" id="email" value="<?php echo $row['email']; ?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputName2" class="col-sm-2 col-form-label">Tel</label>
+                          <label for="inputName2" class="col-sm-2 col-form-label">เบอร์โทร</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" name="tel" id="tel" value="<?php echo $row['tel']; ?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputExperience" class="col-sm-2 col-form-label">Address</label>
+                          <label for="inputExperience" class="col-sm-2 col-form-label">ที่อยู่</label>
                           <div class="col-sm-10">
                             <textarea type="text" class="form-control" name="address" id="address" value=""><?php echo $row['address']; ?></textarea>
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputName2" class="col-sm-2 col-form-label">Birth Date</label>
+                          <label for="inputName2" class="col-sm-2 col-form-label">วันเกิด</label>
                           <div class="col-sm-10">
                             <input type="date" class="form-control" name="birth_date" id="birth_date" value="<?php echo $row['birth_date']; ?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputName2" class="col-sm-2 col-form-label">Company</label>
+                          <label for="inputName2" class="col-sm-2 col-form-label">บริษัท</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" name="company" id="company" value="<?php echo $row['company']; ?>">
                           </div>
                         </div>
                         <div class="form-group row">
-                          <label for="inputName2" class="col-sm-2 col-form-label">ID Card</label>
+                          <label for="inputName2" class="col-sm-2 col-form-label">บัตรประชาชน</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" name="id_card" id="id_card" value="<?php echo $row['id_card']; ?>">
                           </div>
                         </div>
                         <div class="form-group row">
                           <div class="offset-5 col-6">
-                            <button type="submit" class="btn btn-success">Submit</button>
+                            <button type="submit" class="btn btn-success">บันทึก</button>
                           </div>
                         </div>
                       </form>

@@ -61,7 +61,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
           <div class="offset-sm-3 col-md-6">
 
             <!-- Profile Image -->
-            <div class="card card-pink card-outline">
+            <div class="card card-warning card-outline">
               <div class="card-body box-profile">
                 <div class="text-center">
 
@@ -149,7 +149,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                 <hr>
                 <div class="col-12">
-                  <a href="edit_profile.php"><button class="btn btn-success d-block m-auto" type="submit"><i class="fas fa-user-edit"></i> แก้ไข</button></a>
+                  <a href="edit_profile.php"><button class="btn btn-warning d-block m-auto" type="submit"><i class="fas fa-user-edit"></i> แก้ไข</button></a>
                 </div>
               </div>
               <!-- /.card-body -->
