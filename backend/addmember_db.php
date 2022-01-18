@@ -58,7 +58,9 @@ if ($file != '') {
             $sql = "INSERT INTO users(email,password,name,tel,address,utype,img,birth_date,id_card) VALUES('$email','$password','$name','$tel','$address','member','$newname','$birth_date','$id_card') ";
 
             $result2 = mysqli_query($con, $sql)or die(mysqli_error($con));
-            header("Location:../page/members.php");
+
+            echo '<script> window.location.href = "../page/members.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
+           
         }
 
     }
@@ -91,7 +93,8 @@ if ($file != '') {
             $sql2 = "INSERT INTO users(email,password,name,tel,address,utype,img,birth_date,id_card) VALUES('$email','$password','$name','$tel','$address','member','user.png','$birth_date','$id_card') ";
 
             $result2 = mysqli_query($con, $sql2)or die(mysqli_error($con));
-            header("Location:../page/members.php");
+            
+            echo '<script> window.location.href = "../page/members.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
             
         }
        

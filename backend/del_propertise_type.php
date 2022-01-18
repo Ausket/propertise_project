@@ -6,13 +6,9 @@ $id= $_GET['id'];
 
 $sql = "DELETE FROM property_type WHERE ptype_id = $id";
 
-$result = mysqli_query($con,$sql);
+$result = mysqli_query($con,$sql) or die(mysqli_error($con)) ;
 
-if($result){
-    header("Location:../page/propertise_type.php");
-    exit(0);
-}else{
-    echo "เกิดข้อผิดพลาดขึ้น";
-} 
+header("Location:../page/propertise_type.php");
+   
 
 ?>

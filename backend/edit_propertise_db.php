@@ -48,7 +48,7 @@ if ($file != '') {
             $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area' WHERE l_id = $id ";
             $result = mysqli_query($con, $sql);
            
-            header("Location:../page/propertise.php");
+            echo '<script> window.location.href = "../page/propertise.php";alert("แก้ไขข้อมูลเรียบร้อย") </script>';
           
            
     }
@@ -64,7 +64,8 @@ if ($file != '') {
                 $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area' WHERE l_id = $id ";
                 $result = mysqli_query($con, $sql);
                
-                header("Location:../page/propertise.php");
+                echo '<script> window.location.href = "../page/propertise.php";alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+
               
                
         }

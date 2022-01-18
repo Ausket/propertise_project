@@ -17,11 +17,8 @@ $birth_date = $_POST["birth_date"];
 //แก้ไขข้อมูล
 $sql = "UPDATE users SET name='$name',email= '$email',tel='$tel',address='$address',id_card='$id_card',company='$company',birth_date='$birth_date' WHERE u_id = $id";
 
-$result = mysqli_query($con, $sql);
+$result = mysqli_query($con, $sql) or die(mysqli_error($con));
 
-if ($result) {
     echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
     header("Location:../page/profile.php");
-} else {
-    echo mysqli_error($con);
-}
+

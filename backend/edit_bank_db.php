@@ -32,15 +32,17 @@ if ($file != '') {
     
     $sql = "UPDATE bank SET b_name='$name',loan_amount= '$loan_amount',interest_rate='$interest_rate',mrr_mlr='$mrr_mlr',max_loan_amount='$max_loan_amount',contact='$contact',img='$newname' WHERE b_id = $id";
     $result = mysqli_query($con, $sql);
-    
-    header("Location:../page/bank.php");
+
+    echo '<script> window.location.href = "../page/bank.php";alert("แก้ไขข้อมูลเรียบร้อย")</script>';
+   
 }
 if ($file == '') {
     
     $sql = "UPDATE bank SET b_name='$name',loan_amount= '$loan_amount',interest_rate='$interest_rate',mrr_mlr='$mrr_mlr',max_loan_amount='$max_loan_amount',contact='$contact' WHERE b_id = $id";
     $result = mysqli_query($con, $sql);
     
-    header("Location:../page/bank.php");
+    
+    echo '<script> window.location.href = "../page/bank.php";alert("แก้ไขข้อมูลเรียบร้อย")</script>';
 }
 
 

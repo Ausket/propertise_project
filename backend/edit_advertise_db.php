@@ -60,7 +60,7 @@ if ($file != '') {
         $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe' WHERE a_id = $id ";
         $result4 = mysqli_query($con, $sql4)or die(mysqli_error($con));;
 
-        header("Location:../page/advertise.php");
+        echo '<script> window.location.href = "../page/advertise.php";alert("แก้ไขข้อมูลเรียบร้อย")</script>';
     }
 }
 
@@ -86,6 +86,6 @@ if ($file == '') {
         $result4 = mysqli_query($con, $sql4)or die(mysqli_error($con));;
 
 
-        header("Location:../page/advertise.php");
+        echo '<script> window.location.href = "../page/advertise.php";alert("แก้ไขข้อมูลเรียบร้อย")</script>';
     }
 }

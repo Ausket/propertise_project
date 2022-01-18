@@ -34,7 +34,7 @@ $resultrt = mysqli_query($con, $sqlrt);
 
     <!-- Navbar -->
 
-    <nav class="main-header navbar navbar-expand navbar-orange ">
+    <nav class="main-header navbar navbar-expand navbar-info ">
         <!-- Left navbar links -->
         <ul class="navbar-nav">
             <li class="nav-item">

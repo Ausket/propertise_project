@@ -63,7 +63,7 @@ if ($file != '') {
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id') ";
         $result5 = mysqli_query($con, $sql5)or die(mysqli_error($con));;
 
-        header("Location:../page/advertise.php");
+        echo '<script> window.location.href = "../page/advertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
     }
 } else {
     if (isset($_POST['submit'])) {
@@ -86,7 +86,7 @@ if ($file != '') {
 
         $sql6 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id') ";
         $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
-
-        header("Location:../page/advertise.php");
+        
+        echo '<script> window.location.href = "../page/advertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
     }
 }

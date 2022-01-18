@@ -160,7 +160,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                                 </label>
 
                                                             </td>
-                                                           <td><a href="tab_edit.php?id=<?php echo  $idr ?>"><i class="far fa-edit"></a></i>&nbsp;&nbsp;&nbsp;<a href="../backend/tab_delete.php?id=<?php echo  $idr ?>" onclick="return confirm('Are you sure to delete ?')"><i class="far fa-trash-alt"></i></a></td>
+                                                           <td>
+                                                               <a href="tab_edit.php?id=<?php echo  $idr ?>"  class="btn btn-primary"><i class="far fa-edit"></a></i>&nbsp;
+                                                               <a href="../backend/tab_delete.php?id=<?php echo  $idr ?>" onclick="return confirm('Are you sure to delete ?')"  class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td>
 
                                                         </tr>
                                                     <?php  } ?>

@@ -12,12 +12,11 @@ $price = $_POST['price'];
 if (isset($_POST['submit'])) {
     $sql = "INSERT INTO package_type(pack_name,images,video,period,page,boots,price) VALUES('$pack_name','$images','$videos','$period','$page','$boots','$price') ";
 
-    $result = mysqli_query($con, $sql);
+    $result = mysqli_query($con, $sql) or die(mysqli_error($con));
+
+    echo '<script> window.location.href = "../page/package_type.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
 }
 
-if ($result) {
-    header("Location:../page/package_type.php");
-    exit(0);
-} else {
-    echo "mysql_error($con)";
-}
+
+    
+   

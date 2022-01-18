@@ -4,11 +4,11 @@
 
 $id= $_GET['id'];
 
-$sql = "DELETE FROM advertise_type WHERE atype_id = $id";
+$sql = "DELETE FROM user_role_type WHERE id = $id";
 
 $result = mysqli_query($con,$sql) or die(mysqli_error($con));
 
-header("Location:../page/advertise_type.php");
-   
+header("Location:../page/page_type.php");
+    
 
 ?>

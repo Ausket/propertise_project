@@ -8,12 +8,10 @@ require('../dbconnect.php');
                 $sql = "UPDATE advertise_type
                 SET type = '$type'
                  WHERE atype_id = '$id' ";
-                $result = mysqli_query($con, $sql);
+                $result = mysqli_query($con, $sql) or die(mysqli_error($con));
 
-                if ($result) {
-
-                    echo '<script> window.location.href = "../page/advertise_type.php";alert("Update success") </script>';
-                }
+                echo '<script> window.location.href = "../page/advertise_type.php";alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+               
 
 
 ?>

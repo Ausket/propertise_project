@@ -93,7 +93,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <!-- /.card -->
 
             <!-- About Me Box -->
-            <div class="card card-warning">
+            <div class="card card-dark">
               <div class="card-header">
                 <h3 class="card-title">เกี่ยวกับฉัน</h3>
               </div>

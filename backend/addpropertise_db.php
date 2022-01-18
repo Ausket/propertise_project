@@ -51,8 +51,7 @@ if ($file != '') {
             $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id') ";
             $result = mysqli_query($con, $sql) or die(mysqli_error($con));;
            
-            header("Location:../page/propertise.php");
-          
+            echo '<script> window.location.href = "../page/propertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
            
     }
     
@@ -70,8 +69,7 @@ if ($file != '') {
         $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id') ";
         $result = mysqli_query($con, $sql) or die(mysqli_error($con));;
        
-    
-        header("Location:../page/propertise.php");
+        echo '<script> window.location.href = "../page/propertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
        
 }
     
