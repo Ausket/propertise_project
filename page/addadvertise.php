@@ -76,7 +76,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container">
                     <div class="row m-auto">
                         <!-- general form elements -->
-                        <div class="column m-auto " style="width: 500px;">
+                        <div class="column m-auto " style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">รายละเอียดอสังหา</h3>
@@ -106,18 +106,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" value="" placeholder="ชื่อโครงการ">
                                     </div>
                                     <div class="row ">
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนห้องนอน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="" placeholder="จำนวนห้องนอน" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="" placeholder="จำนวนห้องน้ำ" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="" placeholder="จำนวนที่จอดรถ/คัน" required>
-                                    </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องนอน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="" placeholder="จำนวนห้องนอน" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="" placeholder="จำนวนห้องน้ำ" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                        </div>
                                     </div>
                                     <div class="form-group">
 
@@ -131,18 +131,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <input type="type" class="form-control" id="exampleInputEmail1" name="space_area" value="" placeholder="ขนาดพื้นที่" required>
 
                                     </div>
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            <label>
-                                                เลือกรูปภาพ</label>
-                                            <input type="file" name="img" id="fileToUpload">
-
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row m-auto " style="width: 500px;">
+                        <div class="column m-auto " style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">ที่ตั้งอสังหา</h3>
@@ -202,54 +194,153 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-body -->
                                 </div>
                             </div>
-                            <div class="column m-auto" style="width: 500px;">
-                                <div class="card card-dark">
-                                    <div class="card-header">
-                                        <h3 class="card-title">รายละเอียดประกาศ</h3>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <!-- form start -->
-
-                                    <div class="card-body">
-                                        <div class="form-group">
-
-                                            <label for="exampleInputEmail1">ประเภทประกาศ</label>
-                                            <select class="custom-select" name="atype" id="atype">
-                                                <option class="text-center">เลือกประเภทประกาศ</option>
-                                                <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
-                                                    <?php
-                                                    if ($rowa['at_status'] == '1') {
-                                                        echo " <option  value=" . $rowa['atype_id'] . "> " . $rowa['type'] . " </option> ";
-                                                    }
-                                                    ?>
-                                                <?php  } ?>
-                                            </select>
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">หัวข้อ</label>
-                                            <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="" placeholder="หัวข้อ" required>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">บรรยาย</label>
-                                            <textarea type="text" class="form-control" id="describe" name="describe" value="" placeholder="บรรยาย" required></textarea>
-                                            <script>
-                                            CKEDITOR.replace('describe');
-
-                                            function CKupdate() {
-                                                for (instance in CKEDITOR.instances)
-                                                    CKEDITOR.instances[instance].updateElement();
-                                            }
-                                        </script>
-                                        </div>
-
-
-                                        <!-- /.card-body -->
-                                    </div>
-
+                            <div class="column m-auto" style="width: 700px;">
+                            <div class="card card-dark">
+                                <div class="card-header">
+                                    <h3 class="card-title">รูปภาพ</h3>
                                 </div>
-                                <button type="submit" name="submit" class="btn btn-success m-auto d-block " style="width: 150px;">ประกาศ</button>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <label>
+                                            รูปภาพหลัก</label>
+                                        <input type="file" name="img" id="fileToUpload">
+                                    </div>
+                                    <div></div>
+                                </div>
+                                <hr>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label>รูปภาพเพิ่มเติม</label>
+                                        <input type="text" name="ids" value="<?php echo $ids ?>" hidden>
+                                        <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
+                                                                                        echo date("Y-m-d\TH:i:s"); ?>>
+                                        <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
+                                        <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
+                                        <input name="hdnLine" id="hdnLine" type="hidden" value=0>
+
+                                        <div class="card">
+                                            <div class="card-body ">
+                                                <div id="mySpan" name="mySpan">(ไฟล์ต่างๆ) <br>
+                                                </div>
+                                                <script language="javascript">
+                                                    function fncCreateElement() {
+
+                                                        var mySpan = document.getElementById('mySpan');
+                                                        var myLine = document.getElementById('hdnLine');
+                                                        myLine.value++;
+
+                                                        var myElement4 = document.createElement('br');
+                                                        myElement4.setAttribute('name', "br" + myLine.value);
+                                                        myElement4.setAttribute('id', "br" + myLine.value);
+                                                        mySpan.appendChild(myElement4);
+
+                                                        var div = document.createElement('div');
+                                                        div.id = 'div' + myLine.value;
+                                                        div.className = 'card-body bg-light';
+                                                        div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
+
+
+                                                        var myElement4 = document.createElement('br');
+                                                        myElement4.setAttribute('name', "br" + myLine.value);
+                                                        myElement4.setAttribute('id', "br" + myLine.value);
+                                                        div.appendChild(myElement4);
+
+                                                        var myElement2 = document.createElement('input');
+                                                        myElement2.setAttribute('type', "file");
+                                                        myElement2.setAttribute('name', "file[]");
+                                                        myElement2.setAttribute('id', "file" + myLine.value);
+                                                        myElement2.setAttribute('required', 'true');
+                                                        div.appendChild(myElement2);
+
+                                                        var myElement4 = document.createElement('br');
+                                                        myElement4.setAttribute('name', "br" + myLine.value);
+                                                        myElement4.setAttribute('id', "br" + myLine.value);
+                                                        div.appendChild(myElement4);
+
+                                                        mySpan.appendChild(div);
+
+
+                                                    }
+
+                                                    function fncDeleteElement() {
+
+                                                        var mySpan = document.getElementById('mySpan');
+                                                        var myLine = document.getElementById('hdnLine');
+
+                                                        var deleteSpan = document.getElementById('div' + myLine.value);
+                                                        mySpan.removeChild(deleteSpan);
+
+                                                        var deleteBr = document.getElementById("br" + myLine.value);
+                                                        mySpan.removeChild(deleteBr);
+                                                        // var deleteFile = document.getElementById("file" + myLine.value);
+                                                        // mySpan.removeChild(deleteFile);
+                                                        // var deleteBr = document.getElementById("br" + myLine.value);
+                                                        // mySpan.removeChild(deleteBr);
+
+
+                                                        myLine.value--;
+
+                                                    }
+                                                </script>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- /.card-body -->
+                                </div>
                             </div>
+                                </div>
+                                <div class="column m-auto" style="width: 700px;">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">รายละเอียดประกาศ</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <!-- form start -->
+
+                                        <div class="card-body">
+                                            <div class="form-group">
+
+                                                <label for="exampleInputEmail1">ประเภทประกาศ</label>
+                                                <select class="custom-select" name="atype" id="atype">
+                                                    <option class="text-center">เลือกประเภทประกาศ</option>
+                                                    <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
+                                                        <?php
+                                                        if ($rowa['at_status'] == '1') {
+                                                            echo " <option  value=" . $rowa['atype_id'] . "> " . $rowa['type'] . " </option> ";
+                                                        }
+                                                        ?>
+                                                    <?php  } ?>
+                                                </select>
+
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">หัวข้อ</label>
+                                                <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="" placeholder="หัวข้อ" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="exampleInputPassword1">บรรยาย</label>
+                                                <textarea type="text" class="form-control" id="describe" name="describe" value="" placeholder="บรรยาย" required></textarea>
+                                                <script>
+                                                    CKEDITOR.replace('describe');
+
+                                                    function CKupdate() {
+                                                        for (instance in CKEDITOR.instances)
+                                                            CKEDITOR.instances[instance].updateElement();
+                                                    }
+                                                </script>
+                                            </div>
+
+
+                                            <!-- /.card-body -->
+                                        </div>
+
+                                    </div>
+                                    <button type="submit" name="submit" class="btn btn-success m-auto d-block " style="width: 150px;">ประกาศ</button>
+                                </div>
             </form>
         </section>
         <!-- /.card-body -->

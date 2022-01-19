@@ -197,7 +197,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <div class="column m-auto" style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
-                                    <h3 class="card-title">รุปภาพ</h3>
+                                    <h3 class="card-title">รูปภาพ</h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
@@ -212,30 +212,90 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div></div>
                                     </div>
                                     <hr>
-                                    <form action="../backend/uploadfile.php?File=1<?php ?>" method="POST" enctype="multipart/form-data">
-                                        <div class="form-group">
-                                            <div class="form-group">
-                                                <label>
-                                                    รูปภาพอื่นๆเพิ่มเติม</label>
-                                                <!-- <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                            <label>รูปภาพเพิ่มเติม</label>
+                                                <input type="text" name="ids" value="<?php echo $ids ?>" hidden>
+                                                <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
                                                                                                 echo date("Y-m-d\TH:i:s"); ?>>
-                                                <input name="btnCreate" type="button" class="btn btn-sm btn-success" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
-                                                <input name="btnDelete" type="button" class="btn btn-sm btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
-                                                <input name="hdnLine" id="hdnLine" type="hidden" value=0> -->
+                                                <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
+                                                <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
+                                                <input name="hdnLine" id="hdnLine" type="hidden" value=0>
 
+                                                <div class="card">
+                                                    <div class="card-body ">
+                                                        <div id="mySpan" name="mySpan">(ไฟล์ต่างๆ) <br>
+                                                        </div>
+                                                        <script language="javascript">
+                                                            function fncCreateElement() {
+
+                                                                var mySpan = document.getElementById('mySpan');
+                                                                var myLine = document.getElementById('hdnLine');
+                                                                myLine.value++;
+
+                                                                var myElement4 = document.createElement('br');
+                                                                myElement4.setAttribute('name', "br" + myLine.value);
+                                                                myElement4.setAttribute('id', "br" + myLine.value);
+                                                                mySpan.appendChild(myElement4);
+
+                                                                var div = document.createElement('div');
+                                                                div.id = 'div' + myLine.value;
+                                                                div.className = 'card-body bg-light';
+                                                                div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
+
+
+                                                                var myElement4 = document.createElement('br');
+                                                                myElement4.setAttribute('name', "br" + myLine.value);
+                                                                myElement4.setAttribute('id', "br" + myLine.value);
+                                                                div.appendChild(myElement4);
+
+                                                                var myElement2 = document.createElement('input');
+                                                                myElement2.setAttribute('type', "file");
+                                                                myElement2.setAttribute('name', "file[]");
+                                                                myElement2.setAttribute('id', "file" + myLine.value);
+                                                                myElement2.setAttribute('required', 'true');
+                                                                div.appendChild(myElement2);
+
+                                                                var myElement4 = document.createElement('br');
+                                                                myElement4.setAttribute('name', "br" + myLine.value);
+                                                                myElement4.setAttribute('id', "br" + myLine.value);
+                                                                div.appendChild(myElement4);
+
+                                                                mySpan.appendChild(div);
+
+
+                                                            }
+
+                                                            function fncDeleteElement() {
+
+                                                                var mySpan = document.getElementById('mySpan');
+                                                                var myLine = document.getElementById('hdnLine');
+
+                                                                var deleteSpan = document.getElementById('div' + myLine.value);
+                                                                mySpan.removeChild(deleteSpan);
+
+                                                                var deleteBr = document.getElementById("br" + myLine.value);
+                                                                mySpan.removeChild(deleteBr);
+                                                                // var deleteFile = document.getElementById("file" + myLine.value);
+                                                                // mySpan.removeChild(deleteFile);
+                                                                // var deleteBr = document.getElementById("br" + myLine.value);
+                                                                // mySpan.removeChild(deleteBr);
+
+
+                                                                myLine.value--;
+
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                </div>
+                                    
                                             </div>
-                                        </div>
-                                    </form>
-
-
                                     <!-- /.card-body -->
                                 </div>
 
-                            </div>
+                            </div class="form-group">
                             <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">บันทึก</button>
                         </div>
-
-
             </form>
         </section>
         <!-- /.card-body -->
@@ -346,67 +406,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         });
     </script>
-    <script language="javascript">
-        function fncCreateElement() {
 
-            var mySpan = document.getElementById('mySpan');
-            var myLine = document.getElementById('hdnLine');
-            myLine.value++;
-
-            var myElement4 = document.createElement('br');
-            myElement4.setAttribute('name', "br" + myLine.value);
-            myElement4.setAttribute('id', "br" + myLine.value);
-            mySpan.appendChild(myElement4);
-
-            var div = document.createElement('div');
-            div.id = 'div' + myLine.value;
-            div.className = 'card-body bg-light';
-            div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
-
-
-
-            var myElement4 = document.createElement('br');
-            myElement4.setAttribute('name', "br" + myLine.value);
-            myElement4.setAttribute('id', "br" + myLine.value);
-            div.appendChild(myElement4);
-
-            var myElement2 = document.createElement('input');
-            myElement2.setAttribute('type', "file");
-            myElement2.setAttribute('name', "file[]");
-            myElement2.setAttribute('id', "file" + myLine.value);
-            myElement2.setAttribute('required', 'true');
-            div.appendChild(myElement2);
-
-            var myElement4 = document.createElement('br');
-            myElement4.setAttribute('name', "br" + myLine.value);
-            myElement4.setAttribute('id', "br" + myLine.value);
-            div.appendChild(myElement4);
-
-            mySpan.appendChild(div);
-
-
-        }
-
-        function fncDeleteElement() {
-
-            var mySpan = document.getElementById('mySpan');
-            var myLine = document.getElementById('hdnLine');
-
-            var deleteSpan = document.getElementById('div' + myLine.value);
-            mySpan.removeChild(deleteSpan);
-
-            var deleteBr = document.getElementById("br" + myLine.value);
-            mySpan.removeChild(deleteBr);
-            // var deleteFile = document.getElementById("file" + myLine.value);
-            // mySpan.removeChild(deleteFile);
-            // var deleteBr = document.getElementById("br" + myLine.value);
-            // mySpan.removeChild(deleteBr);
-
-
-            myLine.value--;
-
-        }
-    </script>
 </body>
 
 </html>
