@@ -70,6 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
+    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -128,17 +129,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="exampleInputPassword1">ชื่อโครงการ</label>
                                         <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" value="<?php echo $row2['project_name']; ?>" placeholder="ชื่อโครงการ">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="row ">
+                                    <div class="form-group col-md-4">
                                         <label for="exampleInputPassword1">จำนวนห้องนอน</label>
                                         <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4">
                                         <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
                                         <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4">
                                         <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
                                         <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                    </div>
                                     </div>
                                     <div class="form-group">
 
@@ -267,8 +270,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">ไปรษณีย์</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" name="postal_code" value="<?php echo $row2['postal_code']; ?>" placeholder="ไปรษณีย์" required>
+                                        <label for="exampleInputEmail1">รหัสไปรษณีย์</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="postal_code" value="<?php echo $row2['postal_code']; ?>" placeholder="รหัสไปรษณีย์" required>
                                     </div>
 
                                     <!-- /.card-body -->
@@ -305,7 +308,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">บรรยาย</label>
-                                        <textarea type="text" class="form-control" id="exampleInputPassword1" name="describe" value="" placeholder="บรรยาย" required><?php echo $row2['note']; ?></textarea>
+                                        <textarea type="text" class="form-control" id="describe" name="describe" value="" placeholder="บรรยาย" required><?php echo $row2['note']; ?></textarea>
+                                        <script>
+                                            CKEDITOR.replace('describe');
+
+                                            function CKupdate() {
+                                                for (instance in CKEDITOR.instances)
+                                                    CKEDITOR.instances[instance].updateElement();
+                                            }
+                                        </script>
                                     </div>
 
 

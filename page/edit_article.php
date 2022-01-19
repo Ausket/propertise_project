@@ -42,6 +42,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
+    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -85,7 +86,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">รายละเอียด</label>
-                                        <textarea type="text" class="form-control" id="exampleInputPassword1" name="note" value="" required><?php echo $rowb['a_note']; ?></textarea>
+                                        <textarea type="text" class="form-control" id="note" name="note" value="" required><?php echo $rowb['a_note']; ?></textarea>
+                                        <script>
+                                            CKEDITOR.replace('note');
+
+                                            function CKupdate() {
+                                                for (instance in CKEDITOR.instances)
+                                                    CKEDITOR.instances[instance].updateElement();
+                                            }
+                                        </script>
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">ประเภท</label>

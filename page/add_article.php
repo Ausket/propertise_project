@@ -38,6 +38,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
+    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -50,57 +51,65 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 style="text-transform: uppercase">เพิ่มธนาคาร</h1>
+                        <h1 style="text-transform: uppercase">เพิ่มบทความ</h1>
                     </div>
-                    
+
                 </div>
             </div><!-- /.container-fluid -->
         </section>
 
-            <!-- Main content -->
-            <section class="content">
-                <div class="container-fluid ">
-                    <div class="row">
-                        <div class="offset-sm-3 col-md-6">
-                            <!-- general form elements -->
-                            <div class="card card-dark">
-                                <div class="card-header">
-                                    <h3 class="card-title">เพิ่มธนาคาร</h3>
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid ">
+                <div class="row">
+                    <div class="offset-sm-3 col-md-6">
+                        <!-- general form elements -->
+                        <div class="card card-dark">
+                            <div class="card-header">
+                                <h3 class="card-title">เพิ่มบทความ</h3>
 
-                                </div>
-                                <!-- /.card-header -->
-                                <!-- form start -->
+                            </div>
+                            <!-- /.card-header -->
+                            <!-- form start -->
 
-                                <form action="../backend/add_article_db.php" enctype="multipart/form-data" method="POST">
-                                    <div class="card-body">
-                                        <div class="form-group">
+                            <form action="../backend/add_article_db.php" enctype="multipart/form-data" method="POST">
+                                <div class="card-body">
+                                    <div class="form-group">
 
-                                            <label for="exampleInputEmail1">หัวข้อ</label>
-                                            <input type="text" class="form-control" id="exampleInputEmail1" name="title" value="" placeholder="" required>
+                                        <label for="exampleInputEmail1">หัวข้อ</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="title" value="" placeholder="" required>
 
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">รายละเอียด</label>
-                                            <textarea type="text" class="form-control" id="exampleInputPassword1" name="note" value="" placeholder="" required></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">ประเภท</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">รายละเอียด</label>
+                                        <textarea type="text" class="form-control" id="note" name="note" value=""  required></textarea>
+                                        <script>
+                                            CKEDITOR.replace('note');
 
-                                            <select class="custom-select" name="type" id="ptype">
+                                            function CKupdate() {
+                                                for (instance in CKEDITOR.instances)
+                                                    CKEDITOR.instances[instance].updateElement();
+                                            }
+                                        </script>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">ประเภท</label>
+
+                                        <select class="custom-select" name="type" id="ptype">
                                             <option class="text-center">เลือกประเภทบทความ</option>
-                                            <option  value="รีวิว">รีวิว </option>
-                                            <option  value="บทความ">บทความ </option>
-                                            <option  value="โปรโมชั่น">โปรโมชั่น </option>
-                                               
-                                        </select>
-                                        </div>
-                                        
-                                        <div class="form-group">
-                                            <div class="form-group">
-                                                เลือกรูปภาพ
-                                                <input type="file" name="img" id="fileToUpload">
+                                            <option value="รีวิว">รีวิว </option>
+                                            <option value="บทความ">บทความ </option>
+                                            <option value="โปรโมชั่น">โปรโมชั่น </option>
 
-                                            </div>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            เลือกรูปภาพ
+                                            <input type="file" name="img" id="fileToUpload">
+
+                                        </div>
 
                                     </div>
                                     <!-- /.card-body -->
@@ -108,72 +117,69 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <div class="card-footer">
                                         <button type="submit" name="submit" class="btn btn-primary d-block m-auto">บันทึก</button>
                                     </div>
-                                </form>
-                            </div>
-                            <!-- /.card -->
-
-
                             </form>
                         </div>
-                        <!-- /.content-wrapper -->
+                        <!-- /.card -->
 
-                        <!-- Control Sidebar -->
-                        <aside class="control-sidebar control-sidebar-dark">
-                            <!-- Control sidebar content goes here -->
-                            <div class="p-3">
-                                <h5>Title</h5>
-                                <p>Sidebar content</p>
-                            </div>
-                        </aside>
-                        <!-- /.control-sidebar -->
 
-                        <!-- Main Footer -->
+                        </form>
                     </div>
-                    <!-- ./wrapper -->
+                    <!-- /.content-wrapper -->
 
-                    <!-- REQUIRED SCRIPTS -->
+                    <!-- Control Sidebar -->
+                    <aside class="control-sidebar control-sidebar-dark">
+                        <!-- Control sidebar content goes here -->
+                        <div class="p-3">
+                            <h5>Title</h5>
+                            <p>Sidebar content</p>
+                        </div>
+                    </aside>
+                    <!-- /.control-sidebar -->
 
-                    <!-- jQuery -->
-                    <script src="../js/jquery.min.js"></script>
-                    <!-- Bootstrap 4 -->
-                    <script src="../js/bootstrap.bundle.min.js"></script>
-                    <!-- AdminLTE App -->
-                    <script src="../js/adminlte.min.js"></script>
+                    <!-- Main Footer -->
+                </div>
+                <!-- ./wrapper -->
 
-                    <script src="../js/jquery.dataTables.min.js"></script>
-                    <script src="../js/dataTables.bootstrap4.min.js"></script>
-                    <script src="../js/dataTables.responsive.min.js"></script>
-                    <script src="../js/responsive.bootstrap4.min.js"></script>
-                    <script src="../js/dataTables.buttons.min.js"></script>
-                    <script src="../js/buttons.bootstrap4.min.js"></script>
-                    <script src="../js/jszip/jszip.min.js"></script>
-                    <script src="../js/pdfmake.min.js"></script>
-                    <script src="../js/vfs_fonts.js"></script>
-                    <script src="../js/buttons.html5.min.js"></script>
-                    <script src="../js/buttons.print.min.js"></script>
-                    <script src="../js/buttons.colVis.min.js"></script>
+                <!-- REQUIRED SCRIPTS -->
 
-                    <script>
-                        $(function() {
-                            $("#example1").DataTable({
-                                "responsive": true,
-                                "lengthChange": false,
-                                "autoWidth": false,
-                                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-                            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-                            $('#example2').DataTable({
-                                "paging": true,
-                                "lengthChange": false,
-                                "searching": false,
-                                "ordering": true,
-                                "info": true,
-                                "autoWidth": false,
-                                "responsive": true,
-                            });
+                <!-- jQuery -->
+                <script src="../js/jquery.min.js"></script>
+                <!-- Bootstrap 4 -->
+                <script src="../js/bootstrap.bundle.min.js"></script>
+                <!-- AdminLTE App -->
+                <script src="../js/adminlte.min.js"></script>
+                <script src="../js/jquery.dataTables.min.js"></script>
+                <script src="../js/dataTables.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.responsive.min.js"></script>
+                <script src="../js/responsive.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.buttons.min.js"></script>
+                <script src="../js/buttons.bootstrap4.min.js"></script>
+                <script src="../js/jszip/jszip.min.js"></script>
+                <script src="../js/pdfmake.min.js"></script>
+                <script src="../js/vfs_fonts.js"></script>
+                <script src="../js/buttons.html5.min.js"></script>
+                <script src="../js/buttons.print.min.js"></script>
+                <script src="../js/buttons.colVis.min.js"></script>
+
+                <script>
+                    $(function() {
+                        $("#example1").DataTable({
+                            "responsive": true,
+                            "lengthChange": false,
+                            "autoWidth": false,
+                            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                        }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+                        $('#example2').DataTable({
+                            "paging": true,
+                            "lengthChange": false,
+                            "searching": false,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": false,
+                            "responsive": true,
                         });
-
-                        
-                    </script>
+                    });
+                </script>
 </body>
 
 </html>

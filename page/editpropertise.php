@@ -128,17 +128,19 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="exampleInputPassword1">ชื่อโครงการ</label>
                                         <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" value="<?php echo $row2['project_name']; ?>" placeholder="ชื่อโครงการ">
                                     </div>
-                                    <div class="form-group">
+                                    <div class="row">
+                                    <div class="form-group col-md-4">
                                         <label for="exampleInputPassword1">จำนวนห้องนอน</label>
                                         <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4">
                                         <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
                                         <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group col-md-4">
                                         <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
                                         <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                    </div>
                                     </div>
                                     <div class="form-group">
 
