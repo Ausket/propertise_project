@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 19, 2022 at 08:40 AM
+-- Generation Time: Jan 20, 2022 at 05:07 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.3.33
 
@@ -36,20 +36,23 @@ CREATE TABLE `advertise` (
   `title` varchar(255) NOT NULL,
   `note` varchar(255) NOT NULL,
   `u_id` int(11) NOT NULL,
-  `date` datetime NOT NULL DEFAULT current_timestamp()
+  `date` datetime NOT NULL DEFAULT current_timestamp(),
+  `ad_status` enum('1','0') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `advertise`
 --
 
-INSERT INTO `advertise` (`a_id`, `atype_id`, `ptype_id`, `l_id`, `pd_id`, `title`, `note`, `u_id`, `date`) VALUES
-(3, 1, 1, 2, 2, 'title', 'test002', 16, '2022-01-14 13:07:41'),
-(5, 1, 1, 17, 17, 'ขายบ้านมือสอง', 'ขายบ้านมือสอง', 3, '2022-01-14 13:07:41'),
-(19, 1, 1, 34, 37, 'ขายบ้านมือสอง ราคาถูก', 'ขายบ้านมือสอง ราคาถูก', 3, '2022-01-16 11:33:47'),
-(20, 1, 5, 35, 38, 'test', 'test', 3, '2022-01-18 10:50:17'),
-(21, 1, 1, 36, 39, 'ขายบ้านมือสอง', 'ขายบ้านมือสอง', 16, '2022-01-19 00:13:38'),
-(22, 1, 15, 37, 40, 'ขายบ้านมือสอง', 'ขายบ้านมือสอง', 39, '2022-01-19 09:17:03');
+INSERT INTO `advertise` (`a_id`, `atype_id`, `ptype_id`, `l_id`, `pd_id`, `title`, `note`, `u_id`, `date`, `ad_status`) VALUES
+(1, 1, 1, 1, 1, 'title', '<p>test002</p>\r\n', 16, '2022-01-14 13:07:41', '1'),
+(2, 1, 1, 2, 2, 'ขายบ้านมือสอง', 'ขายบ้านมือสอง', 3, '2022-01-14 13:07:41', '1'),
+(4, 1, 2, 6, 6, 'คอนโดหรูติดแม่น้ำ', '<p>คอนโดหรูติดแม่น้ำ</p>\r\n', 16, '2022-01-19 22:22:44', '1'),
+(5, 1, 1, 9, 9, 'ขายบ้านมือสอง', '<p>ขายบ้านมือสอง</p>\r\n', 3, '2022-01-20 00:27:21', '1'),
+(9, 4, 2, 13, 13, 'ขายบ้านมือสอง', '<p>ขายบ้านมือสอง</p>\r\n', 3, '2022-01-20 00:50:33', '1'),
+(10, 2, 2, 14, 14, 'คอนโดใกล้มอเกษตร', '<p>คอนโดใกล้มอเกษตร</p>\r\n', 3, '2022-01-20 00:52:24', '1'),
+(11, 1, 2, 15, 15, 'ขายบ้านมือสอง', '<p>ขายบ้านมือสอง</p>\r\n', 3, '2022-01-20 00:56:12', '0'),
+(24, 1, 2, 33, 33, 'ขายบ้านมือสอง', '<p>ขายบ้านมือสอง</p>\r\n', 3, '2022-01-20 21:44:20', '1');
 
 -- --------------------------------------------------------
 
@@ -1102,7 +1105,7 @@ CREATE TABLE `article` (
   `a_id` int(255) NOT NULL,
   `a_title` varchar(255) NOT NULL,
   `a_note` varchar(255) NOT NULL,
-  `a_type` varchar(255) NOT NULL,
+  `at_id` int(255) NOT NULL,
   `a_img` varchar(255) NOT NULL DEFAULT 'home.png',
   `a_status` enum('1','0') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1111,14 +1114,35 @@ CREATE TABLE `article` (
 -- Dumping data for table `article`
 --
 
-INSERT INTO `article` (`a_id`, `a_title`, `a_note`, `a_type`, `a_img`, `a_status`) VALUES
-(6, 'ขายบ้านมือสอง', 'ขายบ้านมือสอง', 'บทความ', 'home.png', '1'),
-(8, 'คอนโดใกล้มอเกษตร', 'คอนโดใกล้มอเกษตร', 'รีวิว', 'home.png', '1'),
-(9, 'test', 'test', 'โปรโมชั่น', 'home.png', '1'),
-(12, 'รีวิว', 'รีวิว', 'รีวิว', 'home.png', '1'),
-(19, 'คอนโดใกล้มอเกษตร', 'คอนโดใกล้มอเกษตร', 'โปรโมชั่น', 'home.png', '1'),
-(22, 'ขายบ้านมือสอง', 'ขายบ้านมือสอง', 'โปรโมชั่น', '1599903684554-1.202201186844.jpeg', '1'),
-(25, 'ขายบ้านมือสอง              ', '<p><strong>ขายบ้านมือสอง</strong></p>\r\n', 'บทความ', 'home.png', '1');
+INSERT INTO `article` (`a_id`, `a_title`, `a_note`, `at_id`, `a_img`, `a_status`) VALUES
+(1, 'ขายบ้านมือสอง', '<p>ขายบ้านมือสอง</p>\r\n', 2, 'bank.202201206537.png', '0'),
+(2, 'คอนโดใกล้มอเกษตร', '<p>คอนโดใกล้มอเกษตร</p>\r\n', 4, 'Layn.202201209484.jpg', '1'),
+(3, 'คอนโดใกล้มอเกษตร', '<p>คอนโดใกล้มอเกษตร</p>\r\n', 3, 'bank.202201202014.png', '0'),
+(4, 'ขายบ้านมือสอง', '<p><img alt=\"\" src=\"../image/upload/458980492.png\" style=\"height:100px; width:100px\" />ขายบ้านมือสอง&nbsp; &nbsp;<img alt=\"\" src=\"../image/upload/916626574.png\" style=\"height:100px; width:100px\" /></p>\r\n', 2, 'm&m.202201205812.png', '1');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `article_type`
+--
+
+CREATE TABLE `article_type` (
+  `at_id` int(200) NOT NULL,
+  `a_type` varchar(255) NOT NULL,
+  `at_status` enum('1','0') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `article_type`
+--
+
+INSERT INTO `article_type` (`at_id`, `a_type`, `at_status`) VALUES
+(1, 'รีวิว', '1'),
+(2, 'โปรโมชั่น', '1'),
+(3, 'บทความ', '1'),
+(4, 'โมเดิร์น', '0'),
+(5, 'โครงกาารใหม่', '1'),
+(7, 'คอนโดในกรุงเทพ', '1');
 
 -- --------------------------------------------------------
 
@@ -10051,6 +10075,21 @@ CREATE TABLE `file` (
   `pd_id` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `file`
+--
+
+INSERT INTO `file` (`f_id`, `f_name`, `f_date`, `pd_id`) VALUES
+(9, 'icon-avatar-6202201193763.jpg', '2022-01-19 21:58:30', '4'),
+(10, 'drink202201193763.png', '2022-01-19 21:58:30', '4'),
+(13, 'home202201196363.png', '2022-01-19 22:21:26', '6'),
+(14, 'bank202201202814.png', '2022-01-20 00:24:12', '7'),
+(15, '1416404_alert222_script-alert-1-script202201202814.png', '2022-01-20 00:24:12', '7'),
+(27, 'bank202201208097.png', '2022-01-20 15:05:56', '19'),
+(28, '002429e4b28532ce5273cafa10be61c2202201208097.jpg', '2022-01-20 15:05:56', '19'),
+(29, 'icon-avatar-6202201209609.jpg', '2022-01-20 15:25:21', '1'),
+(30, 'coke202201209609.png', '2022-01-20 15:25:21', '1');
+
 -- --------------------------------------------------------
 
 --
@@ -10124,14 +10163,28 @@ CREATE TABLE `location_property` (
 --
 
 INSERT INTO `location_property` (`l_id`, `house_no`, `village_no`, `lane`, `road`, `province_id`, `amphure_id`, `district_id`, `postal_code`, `latitude`, `longitude`, `u_id`) VALUES
-(2, '45', '6', '', '', 0, 0, 0, '73140', NULL, NULL, 0),
-(17, '65', '8', '', '', 16, 191, 250302, '73110', NULL, NULL, 0),
-(18, '45', '2', '', '', 1, 14, 101403, '73140', NULL, NULL, 39),
-(21, '99', '8', '', '', 57, 799, 720302, '73110', NULL, NULL, 39),
-(34, '22', '7', '', '', 12, 153, 210302, '73140', NULL, NULL, 3),
-(35, '22', '2', '', '', 10, 130, 190801, '73110', NULL, NULL, 3),
-(36, '65', '2', '', '', 1, 6, 100603, '73110', NULL, NULL, 16),
-(37, '65', '6', '', '', 10, 131, 190903, '73140', NULL, NULL, 39);
+(1, '45', '6', '', '', 3, 59, 120202, '73140', NULL, NULL, 0),
+(2, '65', '8', '', '', 16, 191, 250302, '73110', NULL, NULL, 0),
+(3, '45', '2', '', '', 1, 14, 101403, '73140', NULL, NULL, 39),
+(4, '44', '2', '', '', 17, 202, 260101, '73110', NULL, NULL, 3),
+(5, '65', '6', '', '', 5, 76, 140303, '73110', NULL, NULL, 3),
+(6, '65', '3', '', '', 15, 179, 240204, '73110', NULL, NULL, 16),
+(8, '44', '7', '', '', 58, 812, 730606, '73140', NULL, NULL, 39),
+(9, '39/2', '3', '', '', 17, 203, 260203, '73140', NULL, NULL, 3),
+(10, '39/2', '6', '', '', 16, 191, 250301, '73110', NULL, NULL, 3),
+(11, '65', '2', '', '', 17, 202, 260104, '73110', NULL, NULL, 3),
+(12, '44', '6', '', '', 8, 110, 170204, '73110', NULL, NULL, 3),
+(13, '65', '3', '', '', 6, 91, 150202, '73110', NULL, NULL, 3),
+(14, '65', '6', '', '', 5, 76, 140303, '73140', NULL, NULL, 3),
+(15, '65', '6', '', '', 17, 202, 260101, '73110', NULL, NULL, 3),
+(17, '44', '6', '', '', 16, 189, 250102, '73110', NULL, NULL, 3),
+(18, '44', '6', '', '', 5, 77, 140403, '73110', NULL, NULL, 3),
+(20, '44', '2', '', '', 6, 93, 150403, '73110', NULL, NULL, 3),
+(21, '22', '6', '', '', 18, 206, 270102, '73110', NULL, NULL, 3),
+(24, '44', '3', '', '', 9, 118, 180403, '73110', NULL, NULL, 16),
+(28, '39/2', '2', '', '', 4, 69, 130402, '73140', NULL, NULL, 16),
+(32, '39/2', '3', '', '', 4, 66, 130101, '73110', NULL, NULL, 3),
+(33, '44', '3', '', '', 15, 186, 240902, '73110', NULL, NULL, 3);
 
 -- --------------------------------------------------------
 
@@ -10187,14 +10240,28 @@ CREATE TABLE `property_detail` (
 --
 
 INSERT INTO `property_detail` (`pd_id`, `l_id`, `project_name`, `bedroom`, `bathroom`, `parking`, `price`, `space_area`, `img_video`, `ptype_id`, `u_id`, `pd_status`) VALUES
-(2, 2, 'บ้านสีรุ้ง', '3', '2', '1', '3000000', '60 ตารางวา', 'vending-machine.202201181851.png', 1, 0, '1'),
-(17, 17, 'Happyland', '2', '1', '1', '1500000', '32 ตาราวา', 'home.png', 1, 0, '1'),
-(18, 18, 'colorland', '3', '2', '1', '1500000', '20 ตาราวา', 'Layo.202201196469.jpg', 2, 39, '0'),
-(21, 21, 'wonderland', '3', '2', '1', '2100000', '50 ตาราวา', 'home.png', 1, 39, '1'),
-(37, 34, 'Skyland', '2', '1', '1', '2400000', '32 ตาราวา', '1599903684554-1.202201168523.jpeg', 1, 3, '1'),
-(38, 35, 'test22', '3', '2', '1', '4500000', '32 ตาราวา', 'home.png', 5, 3, '0'),
-(39, 36, 'Colorland', '3', '2', '1', '2400000', '18 ตาราวา', 'home.png', 1, 16, '1'),
-(40, 37, 'wonderland', '2', '1', '1', '1500000', '32 ตาราวา', 'bank.202201195652.png', 15, 39, '1');
+(1, 1, 'บ้านสีรุ้ง', '3', '2', '1', '3000000', '60 ตารางวา', 'vending-machine.202201181851.png', 1, 0, '1'),
+(2, 2, 'Happyland', '2', '1', '1', '1500000', '32 ตาราวา', 'home.png', 1, 0, '1'),
+(3, 3, 'colorland', '3', '2', '1', '1500000', '20 ตาราวา', 'Layo.202201196469.jpg', 2, 39, '0'),
+(4, 4, 'Happyland', '2', '1', '1', '1500000', '18 ตาราวา', 'bank.202201191205.png', 2, 3, '1'),
+(5, 5, 'wonderland', '2', '1', '1', '2400000', '20 ตาราวา', 'coke.202201193695.jpg', 2, 3, '1'),
+(6, 6, 'loveland', '2', '1', '1', '2100000', '20 ตาราวา', 'kitkat.202201194481.png', 2, 16, '1'),
+(8, 8, 'Happyland', '3', '2', '1', '4500000', '50 ตาราวา', 'home.png', 1, 39, '1'),
+(9, 9, 'Happyland', '2', '1', '1', '2100000', '50 ตาราวา', 'bank.202201193757.png', 1, 3, '1'),
+(10, 10, 'Colorland', '2', '1', '1', '1500000', '18 ตาราวา', 'bank.202201198339.png', 2, 3, '1'),
+(11, 11, 'test', '2', '1', '1', '1500000', '18 ตาราวา', '1416404_alert222_script-alert-1-script.202201198626.png', 1, 3, '1'),
+(12, 12, 'Colorland', '2', '1', '1', '2100000', '20 ตาราวา', 'coke.202201197926.jpg', 2, 3, '1'),
+(13, 13, 'Colorland', '2', '1', '1', '2100000', '18 ตาราวา', '1416404_alert222_script-alert-1-script.202201191353.png', 2, 3, '1'),
+(14, 14, 'wonderland', '2', '1', '1', '2400000', '20 ตาราวา', '97305669-avatar-icon-of-girl-in-a-baseball-cap.202201194799.jpg', 2, 3, '1'),
+(15, 15, 'test', '2', '1', '1', '1500000', '18 ตาราวา', 'coke.202201196632.jpg', 2, 3, '1'),
+(17, 17, 'wonderland', '2', '1', '1', '1500000', '50 ตาราวา', 'home.png', 3, 3, '1'),
+(18, 18, 'wonderland', '2', '1', '1', '2100000', '18 ตาราวา', 'home.png', 2, 3, '1'),
+(20, 20, 'wonderland', '2', '1', '1', '2100000', '18 ตาราวา', 'home.png', 1, 3, '1'),
+(21, 21, 'wonderland', '2', '1', '1', '2100000', '18 ตาราวา', 'boy-avatar-4-1129037.202201199953.png', 3, 3, '1'),
+(24, 24, 'wonderland', '2', '1', '1', '2100000', '18 ตาราวา', 'bank.202201201140.png', 1, 16, '0'),
+(28, 28, 'wonderland', '2', '1', '1', '2100000', '18 ตาราวา', 'bank.202201204726.png', 3, 16, '1'),
+(32, 32, 'test', '1', '1', '1', '1500000', '18 ตาราวา', 'home.png', 2, 3, '0'),
+(33, 33, '', '2', '1', '1', '1500000', '18 ตาราวา', 'bank.202201202468.png', 2, 3, '1');
 
 -- --------------------------------------------------------
 
@@ -10416,7 +10483,7 @@ INSERT INTO `users_role` (`p_id`, `page`, `link`, `icon`, `type`, `admin`, `memb
 (3, 'จัดการพนักงาน', 'staffs.php', 'nav-icon fas fa-user-tie', 2, '1', '0', '1', '0'),
 (4, 'จัดการนายหน้า', 'agents.php', 'nav-icon fas fa-house-user', 2, '1', '0', '1', '0'),
 (5, 'ตั้งค่าสิทธ์ใช้งาน', 'control.php', 'nav-icon fas fa-cogs', 3, '1', '0', '0', '0'),
-(6, 'ประเภทประกาศ', 'advertise_type.php', 'nav-icon fas fa-ad', 4, '1', '1', '0', '0'),
+(6, 'ประเภทประกาศ', 'advertise_type.php', 'nav-icon fas fa-ad', 4, '1', '0', '0', '0'),
 (7, 'จัดการประกาศ', 'advertise.php', 'nav-icon fas fa-clipboard', 4, '1', '1', '1', '1'),
 (8, 'ประเภทอสังหา', 'propertise_type.php', 'nav-icon fas fa-home', 5, '1', '0', '0', '0'),
 (9, 'ข้อมูลอสังหา', 'propertise.php', 'nav-icon fas fa-building', 5, '1', '1', '1', '1'),
@@ -10425,8 +10492,7 @@ INSERT INTO `users_role` (`p_id`, `page`, `link`, `icon`, `type`, `admin`, `memb
 (12, 'ธนาคาร', 'bank.php', 'nav-icon fas fa-university', 7, '1', '1', '1', '1'),
 (16, 'จัดการหมวดหมู่', 'page_type.php', 'nav-icon fas fa-edit', 3, '1', '0', '0', '0'),
 (17, 'บทความ', 'articles.php', 'nav-icon far fa-newspaper', 8, '1', '0', '1', '0'),
-(18, 'รีวิว', 'reviews.php', 'nav-icon fas fa-scroll', 8, '1', '0', '1', '0'),
-(19, 'โปรโมชั่น', 'promotion.php', 'nav-icon fas fa-bullhorn', 8, '1', '0', '1', '0');
+(18, 'หมวดหมู่', 'article_type.php', 'nav-icon fas fa-scroll', 8, '1', '0', '1', '0');
 
 -- --------------------------------------------------------
 
@@ -10483,6 +10549,12 @@ ALTER TABLE `article`
   ADD PRIMARY KEY (`a_id`);
 
 --
+-- Indexes for table `article_type`
+--
+ALTER TABLE `article_type`
+  ADD PRIMARY KEY (`at_id`);
+
+--
 -- Indexes for table `bank`
 --
 ALTER TABLE `bank`
@@ -10499,6 +10571,12 @@ ALTER TABLE `contact`
 --
 ALTER TABLE `districts`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `file`
+--
+ALTER TABLE `file`
+  ADD PRIMARY KEY (`f_id`);
 
 --
 -- Indexes for table `geographies`
@@ -10574,7 +10652,7 @@ ALTER TABLE `user_role_type`
 -- AUTO_INCREMENT for table `advertise`
 --
 ALTER TABLE `advertise`
-  MODIFY `a_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `a_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `advertise_type`
@@ -10592,7 +10670,13 @@ ALTER TABLE `amphures`
 -- AUTO_INCREMENT for table `article`
 --
 ALTER TABLE `article`
-  MODIFY `a_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `a_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `article_type`
+--
+ALTER TABLE `article_type`
+  MODIFY `at_id` int(200) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `bank`
@@ -10605,6 +10689,12 @@ ALTER TABLE `bank`
 --
 ALTER TABLE `contact`
   MODIFY `c_id` int(255) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `file`
+--
+ALTER TABLE `file`
+  MODIFY `f_id` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `geographies`
@@ -10622,7 +10712,7 @@ ALTER TABLE `history_package`
 -- AUTO_INCREMENT for table `location_property`
 --
 ALTER TABLE `location_property`
-  MODIFY `l_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `l_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `package_type`
@@ -10634,7 +10724,7 @@ ALTER TABLE `package_type`
 -- AUTO_INCREMENT for table `property_detail`
 --
 ALTER TABLE `property_detail`
-  MODIFY `pd_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `pd_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `property_type`
