@@ -12,7 +12,7 @@ $row = mysqli_fetch_assoc($result);
 $sqlp = "SELECT * FROM users_role  ";
 $resultp = mysqli_query($con, $sqlp);
 
-$sql2 = "SELECT * FROM article WHERE a_type = 'โปรโมชั่น' ORDER BY a_id DESC";
+$sql2 = "SELECT * FROM article_type ORDER BY at_id DESC";
 $result2 = mysqli_query($con, $sql2);
 $order = 1;
 ?>
@@ -52,7 +52,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 style="text-transform: uppercase">โปรโมชั่น</h1>
+                        <h1 style="text-transform: uppercase">หมวดหมู่บทความ</h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -62,13 +62,14 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <section class="content">
             <div class="container-fluid ">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="offset-2 col-8">
 
                         <!-- /.card -->
 
                         <div class="card">
                             <div class="card-header">
-                                <a href="add_article.php" class="btn btn-warning ">เพิ่มบทความ&nbsp;<i class="fas fa-hand-holding-heart"></i></a>
+                            <div id="input"><button type="button" class="btn btn-warning" data-toggle="modal" data-target="#input-modal">
+                                    เพิ่มหมวดหมู่<i class="fas fa-hand-holding-heart"></i></button></div>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -76,9 +77,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <thead>
                                         <tr>
                                             <th>ลำดับ</th>
-                                            <th>รูปภาพ</th>
-                                            <th>หัวข้อ</th>
-                                            <th>รายละเอียด</th>    
+                                            <th>ชื่อหมวดหมู</th>
                                             <th>สถานะ</th>
                                             <th>จัดการ</th>
 
@@ -90,29 +89,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($row2 = mysqli_fetch_array($result2)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../p_img/<?php echo $row2['a_img'] ?>"style="border-radius:50%" width="100"></td>
-                                                <td><?php echo $row2['a_title']; ?></td>
-                                                <td><?php echo $row2['a_note']; ?></td>
+                                                <td><?php echo $row2['a_type']; ?></td>
                                                 <td>
-                                                <?php if ($row2['a_status'] == '1') {
+                                                    <?php if ($row2['at_status'] == '1') {
 
-                                                    $status = 'checked';
-                                                } else {
-                                                    $status = '';
-                                                } ?>
+                                                        $status = 'checked';
+                                                    } else {
+                                                        $status = '';
+                                                    } ?>
 
-                                                <label class="switch">
-                                                    <input type="checkbox" name="id" class="change" <?php echo $status ?> id="<?php echo $row2['a_id']; ?>">
+                                                    <label class="switch">
+                                                        <input type="checkbox" name="id" class="change" <?php echo $status ?> id="<?php echo $row2['at_id']; ?>">
+                                                        <div class="slider round"> </div>
 
-                                                    <div class="slider round"> </div>
-
-                                                </label>
+                                                    </label>
 
                                                 </td>
 
+
+
                                                 <td class="text-center">
-                                                    <a href="edit_article.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary"><i class="far fa-edit"></a></i>&nbsp;
-                                                    <a href="../backend/del_article.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td>
+                                                    <a href="edit_article_type.php?id=<?php echo $row2['at_id']; ?>" class="btn btn-primary"><i class="far fa-edit"></a></i>&nbsp;
+                                                    <a href="../backend/del_article_type.php?id=<?php echo $row2['at_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger"><i class="far fa-trash-alt"></i></a>
+                                                </td>
 
                                             </tr>
 
@@ -185,21 +184,70 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         });
                     });
                     $(document).on('click', '.change', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/update_status_article.php",
-                                    method: "POST",
-                                    data: {
-                                        status_id: status_id
-                                    },
-                                    success: function(data) {
-                                        
-                                        console.log(data);
-                                    }
-                                });
+                        var status_id = $(this).attr("id");
+                        if (status_id != '') {
+                            $.ajax({
+                                url: "../backend/update_status_atype.php",
+                                method: "POST",
+                                data: {
+                                    status_id: status_id
+                                },
+                                success: function(data) {
+
+                                    console.log(data);
+                                }
+                            });
+                        }
+                    });
+                </script>
+                <!-- Modal -->
+               
+                <div id="input-modal" class="modal fade" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h3>เพิ่มหมวดหมู่</h3>
+                                <a class="close" data-dismiss="modal">×</a>
+                            </div>
+                            <form id="inputform" name="input" role="form">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="name">ชื่อหมวดหมู่</label>
+                                        <input type="text" name="type" class="form-control">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    <input type="submit" class="btn btn-success" id="submit">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    $(document).ready(function() {
+                        $("#inputform").submit(function(event) {
+                            submitForm();
+                            return false;
+                        });
+                    });
+
+                    function submitForm() {
+                        $.ajax({
+                            type: "POST",
+                            url: "../backend/add_article_type.php",
+                            cache: false,
+                            data: $('form#inputform').serialize(),
+                            success: function(response) {
+                                $("#input").html(response)
+                                $("#input-modal").modal('hide');
+                            },
+                            error: function() {
+                                alert("Error");
                             }
                         });
+                    }
                 </script>
 </body>
 

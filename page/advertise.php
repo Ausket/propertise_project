@@ -14,7 +14,7 @@ $resultp = mysqli_query($con, $sqlp);
 
 if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff') {
     $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.atype_id,advertise_type.type,advertise.date,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
 location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
 FROM (((((advertise
@@ -35,7 +35,7 @@ INNER JOIN districts ON location_property.district_id = districts.id)
     $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 } else {
     $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
 location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
 FROM (((((advertise
@@ -83,6 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/switch_insurance.css">
+    
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -133,6 +134,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <th>คำบรรยาย</th>
                                             <th>ผู้ลงประกาศ</th>
                                             <th>วันลงประกาศ</th>
+                                            <th>สถานะ</th>
                                             <th>Action</th>
 
 
@@ -176,18 +178,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <td><?php echo $row2['note']; ?></td>
                                                 <td><?php echo $row2['name']; ?></td>
                                                 <td><?php echo $row2['date']; ?></td>
+                                                <td>
+                                                <?php if ($row2['ad_status'] == '1') {
+
+                                                    $status = 'checked';
+                                                } else {
+                                                    $status = '';
+                                                } ?>
+
+                                                <label class="switch">
+                                                    <input type="checkbox" name="id" class="change" <?php echo $status ?> id="<?php echo $row2['a_id']; ?>">
+
+                                                    <div class="slider round"> </div>
+
+                                                </label>
+
+                                                </td>
 
 
                                                 <td class="text-center">
-                                                    <a href="edit_advertise.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary m-auto d-block"><i class="far fa-edit" ></a></i>&nbsp;
-                                                    <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger m-auto d-block"><i class="far fa-trash-alt"></i></a></td>
+                                                    <a href="edit_advertise.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary m-auto d-block"><i class="far fa-edit"></a></i>&nbsp;
+                                                    <a title='ไฟล์' type=button class="btn btn-info m-auto d-block file" name="file" value="ไฟล์" id="<?php echo $row2["pd_id"]; ?>">
+                                                        <i class="fas fa-folder"></i></a>&nbsp;
+                                                    <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger m-auto d-block"><i class="far fa-trash-alt"></i></a>
+                                                </td>
 
                                             </tr>
-
-
                                         <?php  } ?>
-
-
                                     </tbody>
 
                                 </table>
@@ -217,9 +234,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <!-- jQuery -->
                 <script src="../js/jquery.min.js"></script>
                 <!-- Bootstrap 4 -->
-                <script src="../js/bootstrap.bundle.min.js"></script>
+
                 <!-- AdminLTE App -->
-                <script src="../js/adminlte.min.js"></script>
 
                 <script src="../js/jquery.dataTables.min.js"></script>
                 <script src="../js/dataTables.bootstrap4.min.js"></script>
@@ -235,7 +251,65 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <script src="../js/buttons.colVis.min.js"></script>
 
                 <script>
-                    $(function() {
+                   
+                    $(document).on('click', '.change', function() {
+                        var status_id = $(this).attr("id");
+                        if (status_id != '') {
+                            $.ajax({
+                                url: "../backend/update_status_advertise.php",
+                                method: "POST",
+                                data: {
+                                    status_id: status_id
+                                },
+                                success: function(data) {
+
+                                    console.log(data);
+                                }
+                            });
+                        }
+                    });
+                </script>
+                <script>
+                    $(document).on('click', '.file', function() {
+                        var p_id = $(this).attr("id");
+                        if (p_id != '') {
+                            $.ajax({
+                                url: "showfile.php",
+                                method: "POST",
+                                data: {
+                                    p_id: p_id
+                                },
+                                success: function(data) {
+                                    $('#File_detail1').html(data);
+                                    $('#dataModal1').modal('show');
+                                }
+                            });
+                        }
+                    });
+                </script>
+
+                <div id="dataModal1" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>ไฟล์ต่างๆ<h5>
+                            </div>
+                            <div class="modal-body" id="File_detail1">
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <script src="../js/bootstrap.bundle.min.js"></script>
+                <script src="../js/adminlte.min.js"></script>
+                <script>
+                     $(function() {
                         $("#example1").DataTable({
                             "responsive": true,
                             "lengthChange": false,
@@ -252,23 +326,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             "responsive": true,
                         });
                     });
-                    $(document).on('click', '.change', function() {
-                        var status_id = $(this).attr("id");
-                        if (status_id != '') {
-                            $.ajax({
-                                url: "../backend/update_status_users.php",
-                                method: "POST",
-                                data: {
-                                    status_id: status_id
-                                },
-                                success: function(data) {
-
-                                    console.log(data);
-                                }
-                            });
-                        }
-                    });
                 </script>
+
+
 </body>
 
 </html>

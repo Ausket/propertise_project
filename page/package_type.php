@@ -176,22 +176,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             "responsive": true,
                         });
                     });
-                    $(document).on('click', '.change', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/update_status_users.php",
-                                    method: "POST",
-                                    data: {
-                                        status_id: status_id
-                                    },
-                                    success: function(data) {
-                                        
-                                        console.log(data);
-                                    }
-                                });
-                            }
-                        });
+                   
                 </script>
 </body>
 

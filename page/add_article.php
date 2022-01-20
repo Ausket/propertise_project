@@ -12,6 +12,9 @@ $row = mysqli_fetch_assoc($result);
 $sqlp = "SELECT * FROM users_role  ";
 $resultp = mysqli_query($con, $sqlp);
 
+$sqla = "SELECT * FROM article_type  ";
+$resulta = mysqli_query($con, $sqla);
+
 
 
 ?>
@@ -38,7 +41,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
-    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="http://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -75,40 +78,41 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <form action="../backend/add_article_db.php" enctype="multipart/form-data" method="POST">
                                 <div class="card-body">
                                     <div class="form-group">
+                                        <label for="exampleInputPassword1">หัวข้อหลัก</label>
 
-                                        <label for="exampleInputEmail1">หัวข้อ</label>
+                                        <select class="custom-select" name="type" id="ptype">
+                                            <option class="text-center">เลือกประเภทบทความ</option>
+                                            <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
+                                                <?php
+                                                if ($rowa['at_status'] == '1') {
+                                                    echo " <option  value=" . $rowa['at_id'] . "> " . $rowa['a_type'] . " </option> ";
+                                                }
+                                                ?>
+                                            <?php  } ?>
+
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+
+                                        <label for="exampleInputEmail1">หัวข้อย่อย</label>
                                         <input type="text" class="form-control" id="exampleInputEmail1" name="title" value="" placeholder="" required>
 
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">รายละเอียด</label>
-                                        <textarea type="text" class="form-control" id="note" name="note" value=""  required></textarea>
+                                        <textarea type="text" class="form-control" id="note" name="note" value="" required></textarea>
                                         <script>
-                                            CKEDITOR.replace('note');
-
-                                            function CKupdate() {
-                                                for (instance in CKEDITOR.instances)
-                                                    CKEDITOR.instances[instance].updateElement();
-                                            }
+                                            CKEDITOR.replace('note', {
+                                                height: 300,
+                                                filebrowserUploadUrl: 'upload.php'
+                                            });
                                         </script>
                                     </div>
+                                    <hr>
                                     <div class="form-group">
-                                        <label for="exampleInputPassword1">ประเภท</label>
-
-                                        <select class="custom-select" name="type" id="ptype">
-                                            <option class="text-center">เลือกประเภทบทความ</option>
-                                            <option value="รีวิว">รีวิว </option>
-                                            <option value="บทความ">บทความ </option>
-                                            <option value="โปรโมชั่น">โปรโมชั่น </option>
-
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <div class="form-group">
-                                            เลือกรูปภาพ
+                                        <div class="form-group col-md-12">
+                                            <label> รูปภาพหลัก </label>
                                             <input type="file" name="img" id="fileToUpload">
-
                                         </div>
 
                                     </div>

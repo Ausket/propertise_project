@@ -32,7 +32,7 @@ date_default_timezone_set('Asia/Bangkok');
 $numrand = (mt_rand(1000, 9999));
 
 // --------------------------------------------------------
-
+$hdnLine = $_POST['hdnLine'];
 $date = $_POST['date'];
 $nameDateT = date('Ymd'); //เก็บวันที่
 $pathT = "../file/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
@@ -48,23 +48,24 @@ if ($file != '') {
 
     if (isset($_POST['submit'])) {
 
-        $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
-        $result2 = mysqli_query($con, $sql2);
-
-        $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
-        $result3 = mysqli_query($con, $sql3);
-        $row3 = mysqli_fetch_assoc($result3);
-        $l_id = $row3['l_id'];
-
-        $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id') ";
-        $result = mysqli_query($con, $sql) or die(mysqli_error($con));;
-
-        if ($_FILES["file"]["name"][0] == "") {
+        if ($hdnLine == 0) {
             echo "<script type='text/javascript'>";
             echo "alert('กรุณาเลือกเพิ่มไฟล์');";
             echo "window.location = '../page/addpropertise.php';";
             echo "</script>";
         } else {
+
+            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
+            $result2 = mysqli_query($con, $sql2);
+
+            $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
+            $result3 = mysqli_query($con, $sql3);
+            $row3 = mysqli_fetch_assoc($result3);
+            $l_id = $row3['l_id'];
+
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id') ";
+            $result = mysqli_query($con, $sql) or die(mysqli_error($con));;
+
             for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
                 if ($_FILES["file"]["name"][$i] !== '') {
                     $fileT[$i] = $_FILES["file"]["name"][$i];
@@ -79,32 +80,33 @@ if ($file != '') {
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
                                VALUES ('$newnameT[$i]','$date','$l_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
+
+                    echo '<script> window.location.href = "../page/propertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
                 }
             }
         }
-
-        echo '<script> window.location.href = "../page/propertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
     }
 } else {
     if (isset($_POST['submit'])) {
 
-        $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
-        $result2 = mysqli_query($con, $sql2);
-
-        $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
-        $result3 = mysqli_query($con, $sql3);
-        $row3 = mysqli_fetch_assoc($result3);
-        $l_id = $row3['l_id'];
-
-        $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id') ";
-        $result = mysqli_query($con, $sql) or die(mysqli_error($con));
-
-        if ($_FILES["file"]["name"][0] == "") {
+        if ($hdnLine == 0) {
             echo "<script type='text/javascript'>";
             echo "alert('กรุณาเลือกเพิ่มไฟล์');";
             echo "window.location = '../page/addpropertise.php';";
             echo "</script>";
         } else {
+
+            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
+            $result2 = mysqli_query($con, $sql2);
+
+            $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
+            $result3 = mysqli_query($con, $sql3);
+            $row3 = mysqli_fetch_assoc($result3);
+            $l_id = $row3['l_id'];
+
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id') ";
+            $result = mysqli_query($con, $sql) or die(mysqli_error($con));
+
 
             for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
                 if ($_FILES["file"]["name"][$i] !== '') {
@@ -120,9 +122,10 @@ if ($file != '') {
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
                            VALUES ('$newnameT[$i]','$date','$l_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
+
+                    echo '<script> window.location.href = "../page/propertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
                 }
             }
         }
-        echo '<script> window.location.href = "../page/propertise.php";alert("เพิ่มข้อมูลสำเร็จ")</script>';
     }
 }

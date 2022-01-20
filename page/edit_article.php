@@ -13,11 +13,17 @@ $sqlp = "SELECT * FROM users_role  ";
 $resultp = mysqli_query($con, $sqlp);
 
 $idb = $_GET["id"];
-$sqlb = "SELECT * FROM article WHERE a_id= $idb";
-$resultb = mysqli_query($con, $sqlb);
-$rowb = mysqli_fetch_assoc($resultb);
 
+$sqla = "SELECT * FROM article_type  ";
+$resulta = mysqli_query($con, $sqla);
 
+$sql2 = "SELECT article.a_title , article.a_note , article.a_img , article.a_img , article.a_status , article.a_id,
+article_type.a_type
+FROM (article
+INNER  JOIN  article_type ON article.at_id = article_type.at_id)
+WHERE a_id= $idb ";
+$result2 = mysqli_query($con, $sql2);
+$row2 = mysqli_fetch_assoc($result2);
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +48,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
-    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="http://cdn.ckeditor.com/4.6.2/standard-all/ckeditor.js"></script>
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -57,7 +63,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <div class="col-sm-6">
                         <h1 style="text-transform: uppercase">แก้ไขข้อมูล</h1>
                     </div>
-                    
+
                 </div>
             </div><!-- /.container-fluid -->
         </section>
@@ -76,56 +82,48 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <!-- /.card-header -->
                             <!-- form start -->
 
-                            <form action="../backend/edit_article_db.php?id=<?php echo $rowb['a_id'] ?>" enctype="multipart/form-data" method="POST">
+                            <form action="../backend/edit_article_db.php?id=<?php echo $row2['a_id'] ?>" enctype="multipart/form-data" method="POST">
                                 <div class="card-body">
+
+                                    <div class="form-group">
+                                        <label for="exampleInputPassword1">หัวข้อหลัก</label>
+                                        <select class="custom-select" name="type" id="ptype">
+                                            <option class="text-center">เลือกประเภทบทความ</option>
+                                            <?php foreach ($resulta as $value) {  ?>
+
+                                                <?php if ($value['at_status'] == '1') { ?>
+                                                    <option value="<?php echo $value['at_id'] ?>" <?php if ($value['a_type'] == $row2['a_type']) {
+                                                                                                            echo "selected";
+                                                                                                        } ?>>
+                                                        <?php echo $value['a_type']; ?></option>
+                                                <?php  } ?>
+                                            <?php  } ?>
+
+                                        </select>
+                                    </div>
                                     <div class="form-group">
 
-                                        <label for="exampleInputEmail1">หัวข้อ</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" name="title" value="<?php echo $rowb['a_title']; ?>" required>
+                                        <label for="exampleInputEmail1">หัวข้อย่อย</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="title" value="<?php echo $row2['a_title']; ?>" required>
 
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputPassword1">รายละเอียด</label>
-                                        <textarea type="text" class="form-control" id="note" name="note" value="" required><?php echo $rowb['a_note']; ?></textarea>
+                                        <textarea type="text" class="form-control" id="note" name="note" value="" required><?php echo $row2['a_note']; ?></textarea>
                                         <script>
-                                            CKEDITOR.replace('note');
-
-                                            function CKupdate() {
-                                                for (instance in CKEDITOR.instances)
-                                                    CKEDITOR.instances[instance].updateElement();
-                                            }
+                                            CKEDITOR.replace('note', {
+                                                height: 300,
+                                                filebrowserUploadUrl: 'upload.php'
+                                            });
                                         </script>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">ประเภท</label>
 
-                                        
-                                        <select class="custom-select" name="type" id="ptype">
-                                            <option class="text-center">เลือกประเภทบทความ</option>
-                                            <?php if($rowb['a_type']== 'รีวิว'){
-                                                echo '<option value="รีวิว" selected >รีวิว</option>';
-                                                echo '<option value="บทความ"  >บทความ</option>';
-                                                echo '<option value="โปรโมชั่น" >โปรโมชั่น</option>';
-                                            } 
-                                            else if($rowb['a_type']== 'บทความ'){
-                                                echo '<option value="รีวิว"  >รีวิว</option>';
-                                                echo '<option value="บทความ" selected >บทความ</option>';
-                                                echo '<option value="โปรโมชั่น" >โปรโมชั่น</option>';
-                                            } 
-                                            else{
-                                                echo '<option value="รีวิว"  >รีวิว</option>';
-                                                echo '<option value="บทความ"  >บทความ</option>';
-                                                echo '<option value="โปรโมชั่น" selected>โปรโมชั่น</option>';
-                                            } ?>
-                                               
-                                        </select>
-                                    </div>
-                                    
+
                                     <div class="form-group">
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
                                                 <label>รูปภาพเดิม</label><br>
-                                                <img src="../p_img/<?php echo $rowb['a_img']; ?>" width="40%"> &nbsp;&nbsp;
+                                                <img src="../a_img/<?php echo $row2['a_img']; ?>" width="40%"> &nbsp;&nbsp;
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <script language="JavaScript">

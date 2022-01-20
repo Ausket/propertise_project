@@ -99,7 +99,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <div class="container">
                     <div class="row m-auto">
                         <!-- general form elements -->
-                        <div class="column m-auto" style="width: 500px;">
+                        <div class="column m-auto" style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">รายละเอียดอสังหา</h3>
@@ -198,7 +198,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         $resultd = mysqli_query($con, $sqld);
                         ?>
 
-                        <div class="row  m-auto " style="width: 500px;">
+                        <div class="column m-auto " style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">ที่ตั้งอสังหา</h3>
@@ -277,7 +277,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-body -->
                                 </div>
                             </div>
-                        <div class="column  m-auto" style="width: 500px;">
+                        <div class="column  m-auto" style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">รายละเอียดประกาศ</h3>
@@ -318,8 +318,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             }
                                         </script>
                                     </div>
-
-
                                     <!-- /.card-body -->
                                 </div>
 
@@ -330,9 +328,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </section>
         <!-- /.card-body -->
 
-        <!-- /.card -->
-
-
+       
 
     </div>
     <!-- /.content-wrapper -->

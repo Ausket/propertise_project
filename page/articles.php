@@ -12,7 +12,11 @@ $row = mysqli_fetch_assoc($result);
 $sqlp = "SELECT * FROM users_role  ";
 $resultp = mysqli_query($con, $sqlp);
 
-$sql2 = "SELECT * FROM article WHERE a_type = 'บทความ' ORDER BY a_id DESC";
+$sql2 = "SELECT article.a_title , article.a_note , article.a_img , article.a_img , article.a_status , article.a_id,
+article_type.a_type
+FROM (article
+INNER  JOIN  article_type ON article.at_id = article_type.at_id)
+ORDER BY a_id DESC";
 $result2 = mysqli_query($con, $sql2);
 $order = 1;
 ?>
@@ -77,7 +81,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <tr>
                                             <th>ลำดับ</th>
                                             <th>รูปภาพ</th>
-                                            <th>หัวข้อ</th>
+                                            <th>หัวข้อหลัก</th>
+                                            <th>หัวข้อย่อย</th>
                                             <th>รายละเอียด</th>    
                                             <th>สถานะ</th>
                                             <th>จัดการ</th>
@@ -90,7 +95,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($row2 = mysqli_fetch_array($result2)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../p_img/<?php echo $row2['a_img'] ?>"style="border-radius:50%" width="100"></td>
+                                                <td><img src="../a_img/<?php echo $row2['a_img'] ?>"style="border-radius:50%" width="100"></td>
+                                                <td><?php echo $row2['a_type']; ?></td>
                                                 <td><?php echo $row2['a_title']; ?></td>
                                                 <td><?php echo $row2['a_note']; ?></td>
                                                 <td>

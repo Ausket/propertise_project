@@ -13,9 +13,7 @@ require('../dbconnect.php');
 
              $status =   $value['a_status'];
         }
-
-        
-      
+   
 
         if($status == '1'){
 
