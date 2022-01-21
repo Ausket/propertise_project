@@ -113,7 +113,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <script>
                                             CKEDITOR.replace('note', {
                                                 height: 300,
-                                                filebrowserUploadUrl: 'upload.php'
+                                                filebrowserUploadUrl: '../backend/upload.php'
                                             });
                                         </script>
                                     </div>

@@ -194,6 +194,40 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-body -->
                                 </div>
                             </div>
+
+                            <div class="column m-auto " style="width: 700px;">
+                            <div class="card card-dark">
+                                <div class="card-header">
+                                    <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <!-- form start -->
+
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="form-group col-md-12 ">
+                                            <input type="checkbox" id="pool" name="facility[]" value="สระว่ายน้ำ" >
+                                            <label  class="mr-5"> สระว่ายน้ำ</label>
+                                            <input type="checkbox" id="library" name="facility[]" value="ห้องสมุด">
+                                            <label  class="mr-5"> ห้องสมุด</label>
+                                            <input type="checkbox" id="park" name="facility[]" value="สวนสาธารณะ">
+                                            <label class="mr-5"> สวนสาธารณะ</label>
+                                            <input type="checkbox" id="fitnet" name="facility[]" value="ฟิตเนส">
+                                            <label  class="mr-5"> ฟิตเนส</label><br>
+                                            <input type="checkbox" id="store" name="facility[]" value="ร้านสะดวกซื้อ">
+                                            <label  class="mr-4"> ร้านสะดวกซื้อ</label>
+                                            <input type="checkbox" id="playground" name="facility[]" value="สนามเด็กเล่น">
+                                            <label  class="mr-4"> สนามเด็กเล่น</label>
+                                            <input type="checkbox" id="air" name="facility[]" value="เครื่องปรับอากาศ">
+                                            <label  class="mr-4"> เครื่องปรับอากาศ</label>
+                                            <input type="checkbox" id="wifi" name="facility[]" value="Wi-Fi">
+                                            <label  class="mr-5"> Wi-Fi</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                             <div class="column m-auto" style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">

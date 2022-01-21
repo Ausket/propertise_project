@@ -9,6 +9,7 @@ $bathroom = $_POST['bathroom'];
 $parking = $_POST['parking'];
 $price = $_POST['price'];
 $space_area = $_POST['space_area'];
+$facility=implode(",",$_POST["facility"]);
 
 $house_no = $_POST['house_no'];
 $village_no = $_POST['village_no'];
@@ -63,7 +64,7 @@ if ($file != '') {
             $row3 = mysqli_fetch_assoc($result3);
             $l_id = $row3['l_id'];
 
-            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id') ";
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id','$facility') ";
             $result = mysqli_query($con, $sql) or die(mysqli_error($con));;
 
             for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
@@ -104,7 +105,7 @@ if ($file != '') {
             $row3 = mysqli_fetch_assoc($result3);
             $l_id = $row3['l_id'];
 
-            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id') ";
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id','$facility') ";
             $result = mysqli_query($con, $sql) or die(mysqli_error($con));
 
 

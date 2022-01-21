@@ -83,7 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/switch_insurance.css">
-    
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -124,14 +124,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <th>หัวข้อ</th>
                                             <th>ประเภทประกาศ</th>
                                             <th>ประเภทอสังหา</th>
-                                            <th>ชื่อโครงการ</th>
-                                            <th>จำนวนห้องนอน</th>
-                                            <th>จำนวนห้องน้ำ</th>
-                                            <th>จำนวนที่จอดรถ</th>
-                                            <th>ราคา</th>
-                                            <th>ขนาดพื้นที่</th>
-                                            <th>สถานที่ตั้ง</th>
-                                            <th>คำบรรยาย</th>
                                             <th>ผู้ลงประกาศ</th>
                                             <th>วันลงประกาศ</th>
                                             <th>สถานะ</th>
@@ -152,55 +144,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <td><?php echo $row2['title']; ?></td>
                                                 <td><?php echo $row2['type']; ?></td>
                                                 <td><?php echo $row2['p_type']; ?></td>
-                                                <td><?php echo $row2['project_name']; ?></td>
-                                                <td><?php echo $row2['bedroom']; ?></td>
-                                                <td><?php echo $row2['bathroom']; ?></td>
-                                                <td><?php echo $row2['parking']; ?></td>
-                                                <td><?php echo $row2['price']; ?></td>
-                                                <td><?php echo $row2['space_area']; ?></td>
-                                                <td><?php if ($row2['house_no'] != '') {
-                                                        echo $h_no . " " . $row2['house_no'];
-                                                    } ?> <?php if ($row2['village_no'] != '') {
-                                                                echo $v_no . " " . $row2['village_no'];
-                                                            } ?>
-                                                    <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
-                                                    <?php foreach ($result3 as $value) {
-
-                                                        if ($value['l_id'] == $row2['l_id']) {
-
-                                                            echo 'ต.' . $value['dname_th'] . ' ';
-                                                            echo 'อ.' . $value['aname_th'] . ' ';
-                                                            echo 'จ.' . $value['name_th'] . ' ';
-                                                        }
-                                                    } ?>
-                                                    <?php echo $row2['postal_code']; ?>
-                                                </td>
-                                                <td><?php echo $row2['note']; ?></td>
                                                 <td><?php echo $row2['name']; ?></td>
                                                 <td><?php echo $row2['date']; ?></td>
                                                 <td>
-                                                <?php if ($row2['ad_status'] == '1') {
+                                                    <?php if ($row2['ad_status'] == '1') {
 
-                                                    $status = 'checked';
-                                                } else {
-                                                    $status = '';
-                                                } ?>
+                                                        $status = 'checked';
+                                                    } else {
+                                                        $status = '';
+                                                    } ?>
 
-                                                <label class="switch">
-                                                    <input type="checkbox" name="id" class="change" <?php echo $status ?> id="<?php echo $row2['a_id']; ?>">
+                                                    <label class="switch">
+                                                        <input type="checkbox" name="id" class="change" <?php echo $status ?> id="<?php echo $row2['a_id']; ?>">
 
-                                                    <div class="slider round"> </div>
+                                                        <div class="slider round"> </div>
 
-                                                </label>
+                                                    </label>
 
                                                 </td>
 
 
                                                 <td class="text-center">
-                                                    <a href="edit_advertise.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary m-auto d-block"><i class="far fa-edit"></a></i>&nbsp;
-                                                    <a title='ไฟล์' type=button class="btn btn-info m-auto d-block file" name="file" value="ไฟล์" id="<?php echo $row2["pd_id"]; ?>">
+                                                    <a href="edit_advertise.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary  "><i class="far fa-edit"></a></i>&nbsp;
+                                                    <a title='ไฟล์' type=button class="btn btn-info file" name="file" value="ไฟล์" id="<?php echo $row2["pd_id"]; ?>">
                                                         <i class="fas fa-folder"></i></a>&nbsp;
-                                                    <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger m-auto d-block"><i class="far fa-trash-alt"></i></a>
+                                                    <a title='วิว' type=button class="btn btn-warning view" name="view" value="วิว" id="<?php echo $row2["a_id"]; ?>">
+                                                        <i class="fas fa-eye"></i></a>&nbsp;
+                                                    <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger "><i class="far fa-trash-alt"></i></a>
                                                 </td>
 
                                             </tr>
@@ -251,7 +221,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 <script src="../js/buttons.colVis.min.js"></script>
 
                 <script>
-                   
                     $(document).on('click', '.change', function() {
                         var status_id = $(this).attr("id");
                         if (status_id != '') {
@@ -274,7 +243,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         var p_id = $(this).attr("id");
                         if (p_id != '') {
                             $.ajax({
-                                url: "showfile.php",
+                                url: "showfile_ad.php",
                                 method: "POST",
                                 data: {
                                     p_id: p_id
@@ -286,10 +255,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             });
                         }
                     });
+                    $(document).on('click', '.view', function() {
+                        var r_id = $(this).attr("id");
+                        if (r_id != '') {
+                            $.ajax({
+                                url: "show_ad.php",
+                                method: "POST",
+                                data: {
+                                    r_id: r_id
+                                },
+                                success: function(data) {
+                                    $('#Report_detail').html(data);
+                                    $('#dataModal2').modal('show');
+                                }
+                            });
+                        }
+                    });
                 </script>
 
                 <div id="dataModal1" class="modal fade" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
 
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -305,11 +290,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                     </div>
                 </div>
+                <!-- Modal content-->
+                <div id="dataModal2" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable " role="document">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>รายละเอียดประกาศ<h5>
+                            </div>
+                            <div class="modal-body" id="Report_detail">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
 
                 <script src="../js/bootstrap.bundle.min.js"></script>
                 <script src="../js/adminlte.min.js"></script>
                 <script>
-                     $(function() {
+                    $(function() {
                         $("#example1").DataTable({
                             "responsive": true,
                             "lengthChange": false,

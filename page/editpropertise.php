@@ -19,7 +19,7 @@ $resultpr = mysqli_query($con, $sqlpr);
 
 $id2 = $_GET["id"];
 $sql2 = "SELECT property_detail.pd_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.l_id,location_property.house_no,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.l_id,location_property.house_no,property_detail.facility,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.amphure_id,
 location_property.district_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
 FROM ((property_detail
@@ -39,6 +39,7 @@ INNER JOIN districts ON location_property.district_id = districts.id)
 ";
 $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 
+$facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
 
 $sqlt = "SELECT * FROM property_type  ";
 $resultt = mysqli_query($con, $sqlt);
@@ -129,18 +130,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" value="<?php echo $row2['project_name']; ?>" placeholder="ชื่อโครงการ">
                                     </div>
                                     <div class="row">
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนห้องนอน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
-                                    </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องนอน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                        </div>
                                     </div>
                                     <div class="form-group">
 
@@ -277,9 +278,38 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 </div>
                             </div>
 
-                        <div >
-                            <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">บันทึก</button>
-                        </div>
+                            <div class="column m-auto " style="width: 600px;">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 ">
+                                                <?php
+                                                $facility = explode(",", $row2['facility']); //array
+                                                foreach ($facility_arr as $value) {
+                                                    if (in_array($value, $facility)) {
+                                                        echo " <input type='checkbox' id='' name='facility[]' value='$value'checked >
+                                                        <label  class='mr-4'> $value</label>";
+                                                    } else {
+                                                        echo " <input type='checkbox' id='' name='facility[]' value='$value' >
+                                                        <label  class='mr-4'> $value</label>";
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">บันทึก</button>
+                            </div>
             </form>
         </section>
         <!-- /.card-body -->
@@ -348,54 +378,54 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
         /* ---------------------------------------get_amphure  -------------------------------------------------   */
 
-         $('#province').change(function() {
+        $('#province').change(function() {
 
 
 
-             var id = $(this).val();
-             $.ajax({
-                 type: "post",
-                 url: "../backend/get_amphure.php",
-                 data: {
-                     province: id
-                 },
+            var id = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "../backend/get_amphure.php",
+                data: {
+                    province: id
+                },
 
-                 success: function(data) {
+                success: function(data) {
 
-                     $('#amphure').html(data);
-                     
-                     console.log(data);
+                    $('#amphure').html(data);
 
-                 }
-             });
+                    console.log(data);
 
-             $('#district').html('<option value="" selected disabled class="text-center">เลือกตำบล</option>');
+                }
+            });
 
-         });
+            $('#district').html('<option value="" selected disabled class="text-center">เลือกตำบล</option>');
 
-          /* ---------------------------------------  -------------------------------------------------   */
+        });
+
+        /* ---------------------------------------  -------------------------------------------------   */
 
         $('#amphure').change(function() {
 
 
 
-var id = $(this).val();
-$.ajax({
-    type: "post",
-    url: "../backend/get_district.php",
-    data: {
-        amphure: id
-    },
+            var id = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "../backend/get_district.php",
+                data: {
+                    amphure: id
+                },
 
-    success: function(data) {
+                success: function(data) {
 
-        $('#district').html(data);
-        console.log(data);
+                    $('#district').html(data);
+                    console.log(data);
 
-    }
-});
+                }
+            });
 
-});
+        });
     </script>
 </body>
 

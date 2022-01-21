@@ -54,7 +54,7 @@ if (isset($_POST["p_id"])) {
 
     <div class="form-row">
         <div class="form-group col-md-12">
-            <a href="addfile.php?id=<?php echo $ids  ?>" title='เพิ่มไฟล์'>
+            <a href="addfile_ad.php?id=<?php echo $ids  ?>" title='เพิ่มไฟล์'>
                 <button type=button class="btn btn-info">เพิ่มไฟล์ <i class="fas fa-plus-circle"></i></button><br><br>
             </a>
             <table id="Table" class="table table-striped">
@@ -73,8 +73,7 @@ if (isset($_POST["p_id"])) {
                     ?>
                         <tr>
                             <td><?php echo $i ?></td>
-                            <td hidden><?php echo $row["f_id"]; ?></td>
-                            <td><?php echo $row["f_name"]; ?></td>
+                            <td><img src="../file/<?php echo $row['f_name'] ?>" style="border-radius:50%" width="60"></td>
                             <td><?php echo $row["f_date"]; ?></td>
                             <td>
                                 <div class='row'>

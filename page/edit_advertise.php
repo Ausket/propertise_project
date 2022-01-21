@@ -25,7 +25,7 @@ $resultpr = mysqli_query($con, $sqlpr);
 $id2 = $_GET["id"];
 
 $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
 location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
 FROM ((((advertise
@@ -45,6 +45,8 @@ INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
 INNER JOIN districts ON location_property.district_id = districts.id) 
 ";
 $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
+
+$facility_arr = array("สระว่ายน้ำ","ห้องสมุด","สวนสาธารณะ","ฟิตเนส","ร้านสะดวกซื้อ","สนามเด็กเล่น","เครื่องปรับอากาศ","Wi-Fi");
 
 ?>
 
@@ -130,18 +132,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" value="<?php echo $row2['project_name']; ?>" placeholder="ชื่อโครงการ">
                                     </div>
                                     <div class="row ">
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนห้องนอน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
-                                    </div>
-                                    <div class="form-group col-md-4">
-                                        <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
-                                    </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องนอน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                        </div>
                                     </div>
                                     <div class="form-group">
 
@@ -277,58 +279,88 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-body -->
                                 </div>
                             </div>
-                        <div class="column  m-auto" style="width: 700px;">
-                            <div class="card card-dark">
-                                <div class="card-header">
-                                    <h3 class="card-title">รายละเอียดประกาศ</h3>
+
+                            <div class="column m-auto " style="width: 700px;">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 ">
+                                                <?php
+                                                $facility = explode(",", $row2['facility']); //array
+                                                foreach ($facility_arr as $value) {
+                                                    if (in_array($value, $facility)) {
+                                                        echo " <input type='checkbox' id='' name='facility[]' value='$value'checked >
+                                                        <label  class='mr-5'> $value</label>";
+                                                    } else {
+                                                        echo " <input type='checkbox' id='' name='facility[]' value='$value' >
+                                                        <label  class='mr-5'> $value</label>";
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- /.card-header -->
-                                <!-- form start -->
-
-                                <div class="card-body">
-                                    <div class="form-group">
-
-                                        <label for="exampleInputEmail1">ประเภทประกาศ</label>
-                                        <select class="custom-select" name="atype" id="atype">
-                                            <option class="text-center">เลือกประเภทประกาศ</option>
-                                            <?php foreach ($resulta as $value) {  ?>
-                                                <?php if ($value['at_status'] == '1') { ?>
-                                                    <option value="<?php echo $value['atype_id'] ?>" <?php if ($value['type'] == $row2['type']) {
-                                                                                                            echo "selected";
-                                                                                                        } ?>>
-                                                        <?php echo $value['type']; ?></option>
-                                                <?php  } ?>
-                                            <?php  } ?>
-                                        </select>
-
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">หัวข้อ</label>
-                                        <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="<?php echo $row2['title']; ?>" placeholder="หัวข้อ" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">บรรยาย</label>
-                                        <textarea type="text" class="form-control" id="describe" name="describe" value="" placeholder="บรรยาย" required><?php echo $row2['note']; ?></textarea>
-                                        <script>
-                                            CKEDITOR.replace('describe');
-
-                                            function CKupdate() {
-                                                for (instance in CKEDITOR.instances)
-                                                    CKEDITOR.instances[instance].updateElement();
-                                            }
-                                        </script>
-                                    </div>
-                                    <!-- /.card-body -->
-                                </div>
-
                             </div>
-                            <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">แก้ไขประกาศ</button>
-                        </div>
+
+                            <div class="column  m-auto" style="width: 700px;">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">รายละเอียดประกาศ</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
+
+                                    <div class="card-body">
+                                        <div class="form-group">
+
+                                            <label for="exampleInputEmail1">ประเภทประกาศ</label>
+                                            <select class="custom-select" name="atype" id="atype">
+                                                <option class="text-center">เลือกประเภทประกาศ</option>
+                                                <?php foreach ($resulta as $value) {  ?>
+                                                    <?php if ($value['at_status'] == '1') { ?>
+                                                        <option value="<?php echo $value['atype_id'] ?>" <?php if ($value['type'] == $row2['type']) {
+                                                                                                                echo "selected";
+                                                                                                            } ?>>
+                                                            <?php echo $value['type']; ?></option>
+                                                    <?php  } ?>
+                                                <?php  } ?>
+                                            </select>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">หัวข้อ</label>
+                                            <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="<?php echo $row2['title']; ?>" placeholder="หัวข้อ" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">บรรยาย</label>
+                                            <textarea type="text" class="form-control" id="describe" name="describe" value="" placeholder="บรรยาย" required><?php echo $row2['note']; ?></textarea>
+                                            <script>
+                                                CKEDITOR.replace('describe');
+
+                                                function CKupdate() {
+                                                    for (instance in CKEDITOR.instances)
+                                                        CKEDITOR.instances[instance].updateElement();
+                                                }
+                                            </script>
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+
+                                </div>
+                                <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">แก้ไขประกาศ</button>
+                            </div>
             </form>
         </section>
         <!-- /.card-body -->
 
-       
+
 
     </div>
     <!-- /.content-wrapper -->

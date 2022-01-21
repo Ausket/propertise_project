@@ -121,12 +121,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <th>รูปภาพ</th>
                                             <th>ประเภทอสังหา</th>
                                             <th>ชื่อโครงการ</th>
-                                            <th>จำนวนห้องนอน</th>
-                                            <th>จำนวนห้องน้ำ</th>
-                                            <th>จำนวนที่จอดรถ</th>
-                                            <th>ราคา</th>
-                                            <th>ขนาดพื้นที่</th>
-                                            <th>สถานที่ตั้ง</th>
                                             <th>สถานะ</th>
                                             <th>Action</th>
 
@@ -146,27 +140,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <td><img src="../p_img/<?php echo $row2['img_video'] ?>" style="border-radius:50%" width="100"></td>
                                                 <td><?php echo $row2['p_type']; ?></td>
                                                 <td><?php echo $row2['project_name']; ?></td>
-                                                <td><?php echo $row2['bedroom']; ?></td>
-                                                <td><?php echo $row2['bathroom']; ?></td>
-                                                <td><?php echo $row2['parking']; ?></td>
-                                                <td><?php echo $row2['price']; ?></td>
-                                                <td><?php echo $row2['space_area']; ?></td>
-                                                <td><?php if ($row2['house_no'] != '') {
-                                                        echo $h_no . " " . $row2['house_no'];
-                                                    } ?> <?php if ($row2['village_no'] != '') {
-                                                                echo $v_no . " " . $row2['village_no'];
-                                                            } ?>
-                                                    <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
-                                                    <?php foreach ($result3 as $value) {
-
-                                                        if ($value['l_id'] == $row2['l_id']) {
-
-                                                            echo 'ต.' . $value['dname_th'] . ' ';
-                                                            echo  'อ.' . $value['aname_th'] . ' ';
-                                                            echo  'จ.' . $value['name_th'] . ' ';
-                                                        }
-                                                    } ?>
-                                                    <?php echo $row2['postal_code']; ?>
                                                 <td>
                                                     <?php if ($row2['pd_status'] == '1') {
                                                         $status = 'checked';
@@ -183,10 +156,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 </td>
 
                                                 <td class="text-center">
-                                                    <a href="editpropertise.php?id=<?php echo $row2['pd_id']; ?>" class="btn btn-primary m-auto d-block"><i class="far fa-edit"></a></i>&nbsp;
-                                                    <a title='ไฟล์' type=button class="btn btn-info m-auto d-block file" name="file" value="ไฟล์" id="<?php echo $row2["pd_id"]; ?>">
+                                                    <a href="editpropertise.php?id=<?php echo $row2['pd_id']; ?>" class="btn btn-primary "><i class="far fa-edit"></a></i>&nbsp;
+                                                    <a title='ไฟล์' type=button class="btn btn-info  file" name="file" value="ไฟล์" id="<?php echo $row2["pd_id"]; ?>">
                                                         <i class="fas fa-folder"></i></a>&nbsp;
-                                                    <a href="../backend/delpropertise.php?id=<?php echo $row2['l_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger m-auto d-block"><i class="far fa-trash-alt"></i></a>
+                                                        <a title='วิว' type=button class="btn btn-warning view" name="view" value="วิว" id="<?php echo $row2["pd_id"]; ?>">
+                                                        <i class="fas fa-eye"></i></a>&nbsp;
+                                                    <a href="../backend/delpropertise.php?id=<?php echo $row2['l_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger "><i class="far fa-trash-alt"></i></a>
                                                 </td>
 
                                             </tr>
@@ -273,6 +248,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             });
                         }
                     });
+                    $(document).on('click', '.view', function() {
+                        var r_id = $(this).attr("id");
+                        if (r_id != '') {
+                            $.ajax({
+                                url: "show_pro.php",
+                                method: "POST",
+                                data: {
+                                    r_id: r_id
+                                },
+                                success: function(data) {
+                                    $('#Report_detail').html(data);
+                                    $('#dataModal2').modal('show');
+                                }
+                            });
+                        }
+                    });
                     
                 </script>
                  <script>
@@ -280,7 +271,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         var p_id = $(this).attr("id");
                         if (p_id != '') {
                             $.ajax({
-                                url: "showfile.php",
+                                url: "showfile_pro.php",
                                 method: "POST",
                                 data: {
                                     p_id: p_id
@@ -295,7 +286,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </script>
 
                 <div id="dataModal1" class="modal fade" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-dialog modal-dialog-scrollable  modal-dialog-centered" role="document">
 
                         <!-- Modal content-->
                         <div class="modal-content">
@@ -306,6 +297,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- Modal content-->
+                <div id="dataModal2" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable " role="document">
+
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>รายละเอียดอสังหา<h5>
+                            </div>
+                            <div class="modal-body" id="Report_detail">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                             </div>
                         </div>
 

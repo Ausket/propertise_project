@@ -70,7 +70,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="../backend/addfile_db.php?id=<?php echo $idf?>" enctype="multipart/form-data" method="POST">
+                <form action="../backend/addfile_pro_db.php?id=<?php echo $idf?>" enctype="multipart/form-data" method="POST">
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">
