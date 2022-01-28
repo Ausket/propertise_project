@@ -65,7 +65,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
               <div class="card card-warning card-outline">
                 <div class="card-body box-profile">
                   <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="../m_img/<?php echo $row['img']; ?>" alt="User profile picture">
+                    <img class="profile-user-img img-fluid img-circle" src="../image/m_img/<?php echo $row['img']; ?>" alt="User profile picture">
                     <!-- Button trigger modal -->
                     <button type="button" class="btn mx-auto d-block my-3 btn-warning" data-toggle="modal" data-target="#exampleModal">
                       เปลี่ยนรูปภาพ

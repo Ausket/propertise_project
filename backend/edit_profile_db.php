@@ -33,9 +33,9 @@ if ($utype == 'staff') {
 }
 if($utype == 'member'){
     echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-    header("Location:../page/user/profile.php");
+    header("Location:../frontend/dashboard-profiles.php");
 }
 if($utype == 'agent'){
     echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-    header("Location:../page/user/profile.php");
+    header("Location:../frontend/dashboard-profiles.php");
 }

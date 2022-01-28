@@ -94,7 +94,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($rowu = mysqli_fetch_array($resultu)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../m_img/<?php echo $rowu['img'] ?>" style="border-radius:50%" width="100"></td>
+                                                <td><img src="../image/m_img/<?php echo $rowu['img'] ?>" style="border-radius:50%" width="100"></td>
                                                 <td><?php echo $rowu['name']; ?></td>
                                                 <td><?php echo $rowu['tel']; ?></td>
                                                 <td><?php echo $rowu['email']; ?></td>

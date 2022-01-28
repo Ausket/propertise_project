@@ -16,7 +16,7 @@ $files_r = strrchr($files_v, ".");
 $files = strrev($files_r);
 
 $nameDate = date('Ymd'); //เก็บวันที่
-$path = "../a_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
+$path = "../image/a_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
 date_default_timezone_set('Asia/Bangkok');
 $numrand = (mt_rand(1000, 9999));
 

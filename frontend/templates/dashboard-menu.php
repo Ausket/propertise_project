@@ -1,0 +1,125 @@
+<?php
+require_once('../dbconnect.php');
+
+$id = $_SESSION['u_id'];
+if (empty($id)) {
+    header('Location:../index.php');
+}
+$sqlu = "SELECT * FROM users WHERE u_id= $id ";
+$resultu = mysqli_query($con, $sqlu);
+$rowu = mysqli_fetch_assoc($resultu);
+
+$sqla = "SELECT * FROM advertise WHERE u_id = $id ";
+$resulta = mysqli_query($con, $sqla);
+$total_record = mysqli_num_rows($resulta);
+
+?>
+<div class="db-sidebar bg-white">
+    <nav class="navbar navbar-expand-xl navbar-light d-block px-0 header-sticky dashboard-nav py-0">
+        <div class="sticky-area shadow-xs-1 py-3">
+            <div class="d-flex px-3 px-xl-6 w-100">
+                <a class="navbar-brand" href="../index.php">
+                    <img src="../images/logo.png" alt="HomeID">
+                </a>
+                <div class="ml-auto d-flex align-items-center ">
+                    <div class="d-flex align-items-center d-xl-none">
+                        <div class="dropdown px-3">
+                            <a href="#" class="dropdown-toggle d-flex align-items-center text-heading" data-toggle="dropdown">
+                                <div class="w-48px">
+                                    <img src="../images/testimonial-5.jpg" alt="Ronald Hunter" class="rounded-circle">
+                                </div>
+                                <span class="fs-13 font-weight-500 d-none d-sm-inline ml-2">
+                                    Ronald Hunter
+                                </span>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">My Profile</a>
+                                <a class="dropdown-item" href="#">My Profile</a>
+                                <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="navbar-toggler border-0 px-0" type="button" data-toggle="collapse" data-target="#primaryMenuSidebar" aria-controls="primaryMenuSidebar" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </div>
+            <div class="collapse navbar-collapse bg-white" id="primaryMenuSidebar">
+                <ul class="list-group list-group-flush w-100">
+                    <!-- <li class="list-group-item pt-6 pb-4">
+                        <h5 class="fs-13 letter-spacing-087 text-muted mb-3 text-uppercase px-3">Main</h5>
+                        <ul class="list-group list-group-no-border rounded-lg">
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="dashboard.html" class="text-heading lh-1 sidebar-link">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 fs-20"><i class="fal fa-cog"></i></span>
+                                    <span class="sidebar-item-text">Dashboard</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li> -->
+                    <li class="list-group-item pt-6 pb-4">
+                        <h5 class="fs-13 letter-spacing-087 text-muted mb-3 text-uppercase px-3">รายการประกาศ</h5>
+                        <ul class="list-group list-group-no-border rounded-lg">
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="dashboard-add-property.php" class="text-heading lh-1 sidebar-link">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20 fs-20">
+                                        <svg class="icon icon-add-new">
+                                            <use xlink:href="#icon-add-new"></use>
+                                        </svg></span>
+                                    <span class="sidebar-item-text">ลงประกาศ</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="dashboard-properties.php" class="text-heading lh-1 sidebar-link d-flex align-items-center">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
+                                        <svg class="icon icon-my-properties">
+                                            <use xlink:href="#icon-my-properties"></use>
+                                        </svg>
+                                    </span>
+                                    <span class="sidebar-item-text">ประกาศของฉัน</span>
+                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold"><?php echo $total_record ?></span>
+                                </a>
+                            </li>
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="dashboard-my-favorites.html" class="text-heading lh-1 sidebar-link d-flex align-items-center">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
+                                        <svg class="icon icon-heart">
+                                            <use xlink:href="#icon-heart"></use>
+                                        </svg>
+                                    </span>
+                                    <span class="sidebar-item-text">รายการโปรด</span>
+                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold">5</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="list-group-item pt-6 pb-4">
+                        <h5 class="fs-13 letter-spacing-087 text-muted mb-3 text-uppercase px-3">จัดการบัญชีผู้ใช้</h5>
+                        <ul class="list-group list-group-no-border rounded-lg">
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="dashboard-profiles.php" class="text-heading lh-1 sidebar-link">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
+                                        <svg class="icon icon-my-profile">
+                                            <use xlink:href="#icon-my-profile"></use>
+                                        </svg>
+                                    </span>
+                                    <span class="sidebar-item-text">ข้อมูลส่วนตัว</span>
+                                </a>
+                            </li>
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="#" class="text-heading lh-1 sidebar-link">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
+                                        <svg class="icon icon-log-out">
+                                            <use xlink:href="#icon-log-out"></use>
+                                        </svg>
+                                    </span>
+                                    <span class="sidebar-item-text">ออกจากระบบ</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</div>

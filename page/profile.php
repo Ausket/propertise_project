@@ -78,7 +78,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <?php
                   // if ($_SESSION['level'] == 'admin' || $_SESSION['level'] == 'employee') {  
                   ?>
-                  <img class="d-block m-auto" style="border-radius:50%" src="../m_img/<?php echo $row['img']; ?>" width="100" alt="img">
+                  <img class="d-block m-auto" style="border-radius:50%" src="../image/m_img/<?php echo $row['img']; ?>" width="100" alt="img">
 
                   <?php
                   // }

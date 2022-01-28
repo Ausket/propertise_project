@@ -137,7 +137,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../p_img/<?php echo $row2['img_video'] ?>" style="border-radius:50%" width="100"></td>
+                                                <td><img src="../image/p_img/<?php echo $row2['img_video'] ?>" style="border-radius:50%" width="100"></td>
                                                 <td><?php echo $row2['p_type']; ?></td>
                                                 <td><?php echo $row2['project_name']; ?></td>
                                                 <td>

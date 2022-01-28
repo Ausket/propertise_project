@@ -123,7 +123,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <div class="form-row">
                                             <div class="form-group col-md-4">
                                                 <label>รูปภาพเดิม</label><br>
-                                                <img src="../a_img/<?php echo $row2['a_img']; ?>" width="40%"> &nbsp;&nbsp;
+                                                <img src="../image/a_img/<?php echo $row2['a_img']; ?>" width="40%"> &nbsp;&nbsp;
                                             </div>
                                             <div class="form-group col-md-4">
                                                 <script language="JavaScript">

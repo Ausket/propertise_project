@@ -39,7 +39,7 @@ $resultpr = mysqli_query($con, $sqlpr);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
+    <title>Advertise</title>
 </head>
 
 <body>
@@ -87,6 +87,9 @@ $resultpr = mysqli_query($con, $sqlpr);
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="favourite.php">รายการโปรด</a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="reset_pass.php">เปลี่ยนรหัสผ่าน</a>
                     </li>
                 </ul>
                 <div class="mt-3">
@@ -144,7 +147,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                         <div class="form-group">
 
                                             <label for="exampleInputEmail1">ราคา</label>
-                                            <input type="type" class="form-control" id="exampleInputEmail1" name="price" value="" placeholder="ราคา" required>
+                                            <input type="type" class="form-control" id="price" name="price" value="" placeholder="ราคา" required>
 
                                         </div>
                                         <div class="form-group">
@@ -216,6 +219,40 @@ $resultpr = mysqli_query($con, $sqlpr);
                                         <!-- /.card-body -->
                                     </div>
                                 </div>
+
+                                <div class="column m-auto " style="width: 700px;">
+                                    <div class="card card-dark">
+                                        <div class="card-header">
+                                            <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
+                                        </div>
+                                        <!-- /.card-header -->
+                                        <!-- form start -->
+
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="form-group col-md-12 ">
+                                                    <input type="checkbox" id="pool" name="facility[]" value="สระว่ายน้ำ">
+                                                    <label class="mr-5"> สระว่ายน้ำ</label>
+                                                    <input type="checkbox" id="library" name="facility[]" value="ห้องสมุด">
+                                                    <label class="mr-5"> ห้องสมุด</label>
+                                                    <input type="checkbox" id="park" name="facility[]" value="สวนสาธารณะ">
+                                                    <label class="mr-5"> สวนสาธารณะ</label>
+                                                    <input type="checkbox" id="fitnet" name="facility[]" value="ฟิตเนส">
+                                                    <label class="mr-5"> ฟิตเนส</label><br>
+                                                    <input type="checkbox" id="store" name="facility[]" value="ร้านสะดวกซื้อ">
+                                                    <label class="mr-4"> ร้านสะดวกซื้อ</label>
+                                                    <input type="checkbox" id="playground" name="facility[]" value="สนามเด็กเล่น">
+                                                    <label class="mr-4"> สนามเด็กเล่น</label>
+                                                    <input type="checkbox" id="air" name="facility[]" value="เครื่องปรับอากาศ">
+                                                    <label class="mr-4"> เครื่องปรับอากาศ</label>
+                                                    <input type="checkbox" id="wifi" name="facility[]" value="Wi-Fi">
+                                                    <label class="mr-5"> Wi-Fi</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="column m-auto" style="width: 700px;">
                                     <div class="card card-dark">
                                         <div class="card-header">
@@ -409,6 +446,32 @@ $resultpr = mysqli_query($con, $sqlpr);
                     });
 
                 });
+
+
+                function updateTextView(_obj) {
+                        var num = getNumber(_obj.val());
+                        if (num == 0) {
+                            _obj.val('');
+                        } else {
+                            _obj.val(num.toLocaleString());
+                        }
+                    }
+
+                    function getNumber(_str) {
+                        var arr = _str.split('');
+                        var out = new Array();
+                        for (var cnt = 0; cnt < arr.length; cnt++) {
+                            if (isNaN(arr[cnt]) == false) {
+                                out.push(arr[cnt]);
+                            }
+                        }
+                        return Number(out.join(''));
+                    }
+                    $(document).ready(function() {
+                        $('#price').on('keyup', function() {
+                            updateTextView($(this));
+                        });
+                    });
             </script>
 </body>
 

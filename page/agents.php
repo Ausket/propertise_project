@@ -95,7 +95,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($row2 = mysqli_fetch_array($result2)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../m_img/<?php echo $row2['img'] ?>" style="border-radius:50%" width="100"></td>
+                                                <td><img src="../image/m_img/<?php echo $row2['img'] ?>" style="border-radius:50%" width="100"></td>
                                                 <td><?php echo $row2['name']; ?></td>
                                                 <td><?php echo $row2['tel']; ?></td>
                                                 <td><?php echo $row2['email']; ?></td>

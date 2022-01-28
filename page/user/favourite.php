@@ -62,6 +62,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" href="favourite.php">รายการโปรด</a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="reset_pass.php">เปลี่ยนรหัสผ่าน</a>
+                    </li>
                 </ul>
                 <div class="mt-3">
                     <h3 style="text-transform: uppercase">รายการโปรด</h3>

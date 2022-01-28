@@ -5,7 +5,8 @@ $id = $_SESSION['u_id'];
 if (empty($id)) {
     header('Location:login.php');
 }
-$sql = "SELECT * FROM users WHERE u_id= $id";
+
+$sql = "SELECT * FROM users WHERE u_id= $id ";
 $result = mysqli_query($con, $sql);
 $row = mysqli_fetch_assoc($result);
 
@@ -22,54 +23,61 @@ $sqlpr = "SELECT * FROM provinces";
 $resultpr = mysqli_query($con, $sqlpr);
 
 $id2 = $_GET["id"];
-$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,advertise.date,
+
+$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
-FROM (((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE a_id =  $id2";
-
+    WHERE a_id =  $id2 ";
 $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 $row2 = mysqli_fetch_assoc($result2);
 
-
 $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
-    provinces.name_th,amphures.aname_th,districts.dname_th
+provinces.name_th,amphures.aname_th,districts.dname_th
 FROM (((location_property
 INNER  JOIN provinces ON location_property.province_id = provinces.id)
 INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
 INNER JOIN districts ON location_property.district_id = districts.id) 
- ";
+";
 $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 
+$facility_arr = array("สระว่ายน้ำ","ห้องสมุด","สวนสาธารณะ","ฟิตเนส","ร้านสะดวกซื้อ","สนามเด็กเล่น","เครื่องปรับอากาศ","Wi-Fi");
 
-$order = 1;
 ?>
+
 <!DOCTYPE html>
+<!--
+This is a starter template page. Use this page to start your new project from
+scratch. This page gets rid of all links and provides the needed markup only.
+-->
 <html lang="en">
-<!-- Google Font: Source Sans Pro -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-<!-- Font Awesome Icons -->
-<!-- <link rel="stylesheet" href="../css/all.min.css"> -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<!-- Theme style -->
-<link rel="stylesheet" href="../../css/adminlte.min.css">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agent</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Users</title>
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <!-- <link rel="stylesheet" href="../css/all.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Theme style -->
+    <link rel="stylesheet" href="../../css/adminlte.min.css">
+    <link rel="stylesheet" href="../../css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="../../css/buttons.bootstrap4.min.css">
+    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
 </head>
 
-<body>
-
-    <div class="container-fluid">
+<body class="hold-transition sidebar-mini">
+    
+<div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">MY HOME</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,20 +122,25 @@ $order = 1;
                     <li class="nav-item">
                         <a class="nav-link" href="favourite.php">รายการโปรด</a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="reset_pass.php">เปลี่ยนรหัสผ่าน</a>
+                    </li>
                 </ul>
                 <div class="mt-3">
-                    <h3 style="text-transform: uppercase">แก้ไขประกาศ</h3>
+                    <h3 style="text-transform: uppercase">เพิ่มประกาศ</h3>
                 </div>
             </div>
 
-            <div class="wrapper">
-                    <!-- /.card-header -->
-                    <section class="content">
+
+
+
+        <!-- Main content -->
+        <section class="content">
             <form action="../../backend/edit_advertise_db.php?id=<?php echo $row2['a_id']; ?>" enctype="multipart/form-data" method="POST">
                 <div class="container">
                     <div class="row m-auto">
                         <!-- general form elements -->
-                        <div class="column m-auto" style="width: 500px;">
+                        <div class="column m-auto" style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">รายละเอียดอสังหา</h3>
@@ -157,22 +170,24 @@ $order = 1;
                                         <label for="exampleInputPassword1">ชื่อโครงการ</label>
                                         <input type="text" class="form-control" id="exampleInputPassword1" name="project_name" value="<?php echo $row2['project_name']; ?>" placeholder="ชื่อโครงการ">
                                     </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">จำนวนห้องนอน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
-                                        <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                    <div class="row ">
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องนอน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bedroom" value="<?php echo $row2['bedroom']; ?>" placeholder="จำนวนห้องนอน" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนห้องน้ำ</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="bathroom" value="<?php echo $row2['bathroom']; ?>" placeholder="จำนวนห้องน้ำ" required>
+                                        </div>
+                                        <div class="form-group col-md-4">
+                                            <label for="exampleInputPassword1">จำนวนที่จอดรถ/คัน</label>
+                                            <input type="number" class="form-control" id="exampleInputPassword1" name="parking" value="<?php echo $row2['parking']; ?>" placeholder="จำนวนที่จอดรถ/คัน" required>
+                                        </div>
                                     </div>
                                     <div class="form-group">
 
                                         <label for="exampleInputEmail1">ราคา</label>
-                                        <input type="type" class="form-control" id="exampleInputEmail1" name="price" value="<?php echo $row2['price']; ?>" placeholder="ราคา" required>
+                                        <input type="type" class="form-control" id="price" name="price" value="<?php echo $row2['price']; ?>" placeholder="ราคา" required>
 
                                     </div>
                                     <div class="form-group">
@@ -185,7 +200,7 @@ $order = 1;
                                         <div class="form-group">
                                             <div class="form-group col-md-4">
                                                 <label>รูปภาพเดิม</label><br>
-                                                <img src="../../p_img/<?php echo $row2['img_video']; ?>" width="40%"> &nbsp;&nbsp;
+                                                <img src="../../image/p_img/<?php echo $row2['img_video']; ?>" width="40%"> &nbsp;&nbsp;
                                             </div>
                                             <div class="form-group col-md-3">
                                                 <script language="JavaScript">
@@ -224,7 +239,7 @@ $order = 1;
                         $resultd = mysqli_query($con, $sqld);
                         ?>
 
-                        <div class="row  m-auto " style="width: 500px;">
+                        <div class="column m-auto " style="width: 700px;">
                             <div class="card card-dark">
                                 <div class="card-header">
                                     <h3 class="card-title">ที่ตั้งอสังหา</h3>
@@ -296,62 +311,231 @@ $order = 1;
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="exampleInputEmail1">ไปรษณีย์</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" name="postal_code" value="<?php echo $row2['postal_code']; ?>" placeholder="ไปรษณีย์" required>
+                                        <label for="exampleInputEmail1">รหัสไปรษณีย์</label>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="postal_code" value="<?php echo $row2['postal_code']; ?>" placeholder="รหัสไปรษณีย์" required>
                                     </div>
 
                                     <!-- /.card-body -->
                                 </div>
                             </div>
-                        <div class="column  m-auto" style="width: 500px;">
-                            <div class="card card-dark">
-                                <div class="card-header">
-                                    <h3 class="card-title">รายละเอียดประกาศ</h3>
+
+                            <div class="column m-auto " style="width: 700px;">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
+
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 ">
+                                                <?php
+                                                $facility = explode(",", $row2['facility']); //array
+                                                foreach ($facility_arr as $value) {
+                                                    if (in_array($value, $facility)) {
+                                                        echo " <input type='checkbox' id='' name='facility[]' value='$value'checked >
+                                                        <label  class='mr-5'> $value</label>";
+                                                    } else {
+                                                        echo " <input type='checkbox' id='' name='facility[]' value='$value' >
+                                                        <label  class='mr-5'> $value</label>";
+                                                    }
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- /.card-header -->
-                                <!-- form start -->
+                            </div>
 
-                                <div class="card-body">
-                                    <div class="form-group">
+                            <div class="column  m-auto" style="width: 700px;">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">รายละเอียดประกาศ</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
 
-                                        <label for="exampleInputEmail1">ประเภทประกาศ</label>
-                                        <select class="custom-select" name="atype" id="atype">
-                                            <option class="text-center">เลือกประเภทประกาศ</option>
-                                            <?php foreach ($resulta as $value) {  ?>
-                                                <?php if ($value['at_status'] == '1') { ?>
-                                                    <option value="<?php echo $value['atype_id'] ?>" <?php if ($value['type'] == $row2['type']) {
-                                                                                                            echo "selected";
-                                                                                                        } ?>>
-                                                        <?php echo $value['type']; ?></option>
+                                    <div class="card-body">
+                                        <div class="form-group">
+
+                                            <label for="exampleInputEmail1">ประเภทประกาศ</label>
+                                            <select class="custom-select" name="atype" id="atype">
+                                                <option class="text-center">เลือกประเภทประกาศ</option>
+                                                <?php foreach ($resulta as $value) {  ?>
+                                                    <?php if ($value['at_status'] == '1') { ?>
+                                                        <option value="<?php echo $value['atype_id'] ?>" <?php if ($value['type'] == $row2['type']) {
+                                                                                                                echo "selected";
+                                                                                                            } ?>>
+                                                            <?php echo $value['type']; ?></option>
+                                                    <?php  } ?>
                                                 <?php  } ?>
-                                            <?php  } ?>
-                                        </select>
+                                            </select>
 
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">หัวข้อ</label>
-                                        <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="<?php echo $row2['title']; ?>" placeholder="หัวข้อ" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="exampleInputPassword1">บรรยาย</label>
-                                        <textarea type="text" class="form-control" id="exampleInputPassword1" name="describe" value="" placeholder="บรรยาย" required><?php echo $row2['note']; ?></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">หัวข้อ</label>
+                                            <input type="text" class="form-control" id="exampleInputPassword1" name="title" value="<?php echo $row2['title']; ?>" placeholder="หัวข้อ" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="exampleInputPassword1">รายละเอียดประกาศ</label>
+                                            <textarea type="text" class="form-control" id="describe" name="describe" value="" placeholder="บรรยาย" required><?php echo $row2['note']; ?></textarea>
+                                            <script>
+                                                CKEDITOR.replace('describe');
+
+                                                function CKupdate() {
+                                                    for (instance in CKEDITOR.instances)
+                                                        CKEDITOR.instances[instance].updateElement();
+                                                }
+                                            </script>
+                                        </div>
+                                        <!-- /.card-body -->
                                     </div>
 
-
-                                    <!-- /.card-body -->
                                 </div>
-
+                                <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">แก้ไขประกาศ</button>
                             </div>
-                            <button type="submit" name="submit" class="btn btn-success m-auto d-block" style="width: 150px;">แก้ไขประกาศ</button>
-                        </div>
             </form>
         </section>
         <!-- /.card-body -->
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
 
+
+
+    </div>
+    <!-- /.content-wrapper -->
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Control sidebar content goes here -->
+        <div class="p-3">
+            <h5>Title</h5>
+            <p>Sidebar content</p>
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+
+    <!-- Main Footer -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- REQUIRED SCRIPTS -->
+
+    <!-- jQuery -->
+    <script src="../../js/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../../js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../../js/adminlte.min.js"></script>
+
+    <script src="../../js/jquery.dataTables.min.js"></script>
+    <script src="../../js/dataTables.bootstrap4.min.js"></script>
+    <script src="../../js/dataTables.responsive.min.js"></script>
+    <script src="../../js/responsive.bootstrap4.min.js"></script>
+    <script src="../../js/dataTables.buttons.min.js"></script>
+    <script src="../../js/buttons.bootstrap4.min.js"></script>
+    <script src="../../js/jszip/jszip.min.js"></script>
+    <script src="../../js/pdfmake.min.js"></script>
+    <script src="../../js/vfs_fonts.js"></script>
+    <script src="../../js/buttons.html5.min.js"></script>
+    <script src="../../js/buttons.print.min.js"></script>
+    <script src="../../js/buttons.colVis.min.js"></script>
+
+    <script>
+        $(function() {
+            $("#example1").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": false,
+                "searching": false,
+                "ordering": true,
+                "info": true,
+                "autoWidth": false,
+                "responsive": true,
+            });
+        });
+
+        /* ---------------------------------------get_amphure  -------------------------------------------------   */
+
+        $('#province').change(function() {
+
+
+
+            var id = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "../../backend/get_amphure.php",
+                data: {
+                    province: id
+                },
+
+                success: function(data) {
+
+                    $('#amphure').html(data);
+
+                    console.log(data);
+
+                }
+            });
+
+            $('#district').html('<option value="" selected disabled class="text-center">เลือกตำบล</option>');
+
+        });
+
+        /* ---------------------------------------  -------------------------------------------------   */
+
+        $('#amphure').change(function() {
+
+
+
+            var id = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "../../backend/get_district.php",
+                data: {
+                    amphure: id
+                },
+
+                success: function(data) {
+
+                    $('#district').html(data);
+                    console.log(data);
+
+                }
+            });
+
+        });
+
+
+        function updateTextView(_obj) {
+                            var num = getNumber(_obj.val());
+                            if (num == 0) {
+                                _obj.val('');
+                            } else {
+                                _obj.val(num.toLocaleString());
+                            }
+                        }
+
+                        function getNumber(_str) {
+                            var arr = _str.split('');
+                            var out = new Array();
+                            for (var cnt = 0; cnt < arr.length; cnt++) {
+                                if (isNaN(arr[cnt]) == false) {
+                                    out.push(arr[cnt]);
+                                }
+                            }
+                            return Number(out.join(''));
+                        }
+                        $(document).ready(function() {
+                            $('#price').on('keyup', function() {
+                                updateTextView($(this));
+                            });
+                        });
+    </script>
 </body>
 
 </html>

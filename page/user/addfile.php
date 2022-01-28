@@ -89,6 +89,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <li class="nav-item">
                         <a class="nav-link" href="favourite.php">รายการโปรด</a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="reset_pass.php">เปลี่ยนรหัสผ่าน</a>
+                    </li>
                 </ul>
                 <div class="mt-3">
                     <h3 style="text-transform: uppercase">เพิ่มไฟล์</h3>
@@ -104,7 +107,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="../../backend/addfile_db.php?id=<?php echo $idf?>" enctype="multipart/form-data" method="POST">
+                <form action="../../backend/addfile_ad_db.php?id=<?php echo $idf?>" enctype="multipart/form-data" method="POST">
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">

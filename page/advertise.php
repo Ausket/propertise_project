@@ -12,7 +12,6 @@ $row = mysqli_fetch_assoc($result);
 $sqlp = "SELECT * FROM users_role  ";
 $resultp = mysqli_query($con, $sqlp);
 
-if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff') {
     $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.atype_id,advertise_type.type,advertise.date,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
@@ -23,7 +22,7 @@ FROM (((((advertise
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON advertise.u_id = users.u_id)
-    ORDER BY a_id DESC ";
+    WHERE ad_status in ('0','1') ORDER BY a_id DESC ";
     $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
     $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
     provinces.name_th,amphures.aname_th,districts.dname_th
@@ -33,28 +32,6 @@ INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
 INNER JOIN districts ON location_property.district_id = districts.id) 
  ";
     $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
-} else {
-    $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.ad_status,
-location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
-FROM (((((advertise
-    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
-    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
-    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
-    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE users.u_id = $id ORDER BY a_id DESC";
-    $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
-    $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
-    provinces.name_th,amphures.aname_th,districts.dname_th
-FROM (((location_property
-INNER  JOIN provinces ON location_property.province_id = provinces.id)
-INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
-INNER JOIN districts ON location_property.district_id = districts.id) 
- ";
-    $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
-}
 
 
 $order = 1;
@@ -140,7 +117,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../p_img/<?php echo $row2['img_video'] ?>" style="border-radius:50%" width="100"></td>
+                                                <td><img src="../image/p_img/<?php echo $row2['img_video'] ?>" style="border-radius:50%" width="100"></td>
                                                 <td><?php echo $row2['title']; ?></td>
                                                 <td><?php echo $row2['type']; ?></td>
                                                 <td><?php echo $row2['p_type']; ?></td>

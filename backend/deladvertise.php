@@ -15,20 +15,28 @@ $row6 = mysqli_fetch_assoc($result6);
 $utype = $row6['utype'];
 
 if ($utype == 'admin') {
-    echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-    header("Location:../page/advertise.php");
+    echo "<script>";
+    echo " alert('ลบข้อมูลเรียบร้อย')";
+    echo " </script>";
+    header('Refresh:0; url=../page/advertise.php');
 }
 if ($utype == 'staff') {
-    echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-    header("Location:../page/advertise.php");
+    echo "<script>";
+    echo " alert('ลบข้อมูลเรียบร้อย')";
+    echo " </script>";
+    header('Refresh:0; url=../page/advertise.php');
 }
 if ($utype == 'member') {
-    echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-    header("Location:../page/user/advertise.php");
+    echo "<script>";
+    echo " alert('ลบข้อมูลเรียบร้อย')";
+    echo " </script>";
+    header('Refresh:0; url=../frontend/dashboard-properties.php');
 }
 if ($utype == 'agent') {
-    echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-    header("Location:../page/user/advertise.php");
+    echo "<script>";
+    echo " alert('ลบข้อมูลเรียบร้อย')";
+    echo " </script>";
+    header('Refresh:0; url=../frontend/dashboard-properties.php');
 }         
 
 ?>

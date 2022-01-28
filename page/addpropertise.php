@@ -118,7 +118,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <div class="form-group">
 
                                         <label for="exampleInputEmail1">ราคา</label>
-                                        <input type="type" class="form-control" id="exampleInputEmail1" name="price" value="" placeholder="ราคา" required>
+                                        <input type="type" class="form-control" id="price" name="price" value="" placeholder="ราคา" required>
 
                                     </div>
                                     <div class="form-group">
@@ -438,6 +438,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
 
         });
+
+        function updateTextView(_obj) {
+                            var num = getNumber(_obj.val());
+                            if (num == 0) {
+                                _obj.val('');
+                            } else {
+                                _obj.val(num.toLocaleString());
+                            }
+                        }
+
+                        function getNumber(_str) {
+                            var arr = _str.split('');
+                            var out = new Array();
+                            for (var cnt = 0; cnt < arr.length; cnt++) {
+                                if (isNaN(arr[cnt]) == false) {
+                                    out.push(arr[cnt]);
+                                }
+                            }
+                            return Number(out.join(''));
+                        }
+                        $(document).ready(function() {
+                            $('#price').on('keyup', function() {
+                                updateTextView($(this));
+                            });
+                        });
     </script>
 
 </body>

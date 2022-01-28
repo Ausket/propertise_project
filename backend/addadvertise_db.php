@@ -9,7 +9,7 @@ $bathroom = $_POST['bathroom'];
 $parking = $_POST['parking'];
 $price = $_POST['price'];
 $space_area = $_POST['space_area'];
-$facility=implode(",",$_POST["facility"]);
+$facility = implode(",", $_POST["facility"]);
 
 $house_no = $_POST['house_no'];
 $village_no = $_POST['village_no'];
@@ -31,7 +31,7 @@ $files_r = strrchr($files_v, ".");
 $files = strrev($files_r);
 
 $nameDate = date('Ymd'); //เก็บวันที่
-$path = "../p_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
+$path = "../image/p_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
 date_default_timezone_set('Asia/Bangkok');
 $numrand = (mt_rand(1000, 9999));
 
@@ -42,10 +42,6 @@ $nameDateT = date('Ymd'); //เก็บวันที่
 $pathT = "../file/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
 $numrandT = (mt_rand(1000, 9999));
 
-$sql7 = "SELECT * FROM users WHERE u_id = $id";
-$result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
-$row7 = mysqli_fetch_assoc($result7);
-$utypeu = $row7['utype'];
 
 if ($file != '') {
     $type = strrchr($file, "."); //ตัดชื่อไฟล์เหลือแต่นามสกุล
@@ -57,30 +53,11 @@ if ($file != '') {
     if (isset($_POST['submit'])) {
 
         if ($hdnLine == 0) {
-            if ($utypeu == 'admin') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/addadvertise.php';";
-                echo "</script>";
-            }
-            if ($utypeu == 'staff') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/addadvertise.php';";
-                echo "</script>";
-            }
-            if ($utypeu == 'member') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/user/addadvertise.php';";
-                echo "</script>";
-            }
-            if ($utypeu == 'staff') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/user/addadvertise.php';";
-                echo "</script>";
-            }
+
+            echo "<script type='text/javascript'>";
+            echo "alert('กรุณาเลือกเพิ่มไฟล์');";
+            echo "window.location = '../page/addadvertise.php';";
+            echo "</script>";
         } else {
             $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
             $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
@@ -100,6 +77,7 @@ if ($file != '') {
 
             $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id') ";
             $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
+           
 
             for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
                 if ($_FILES["file"]["name"][$i] !== '') {
@@ -118,58 +96,19 @@ if ($file != '') {
                 }
             }
 
-
-            $sql6 = "SELECT * FROM users WHERE u_id = $id";
-            $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
-            $row6 = mysqli_fetch_assoc($result6);
-            $utype = $row6['utype'];
-
-            if ($utype == 'admin') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/advertise.php");
-            }
-            if ($utype == 'staff') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/advertise.php");
-            }
-            if ($utype == 'member') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/user/advertise.php");
-            }
-            if ($utype == 'agent') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/user/advertise.php");
-            }
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/advertise.php");
         }
     }
 } else {
     if (isset($_POST['submit'])) {
 
         if ($hdnLine == 0) {
-            if ($utypeu == 'admin') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/addadvertise.php';";
-                echo "</script>";
-            }
-            if ($utypeu == 'staff') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/addadvertise.php';";
-                echo "</script>";
-            }
-            if ($utypeu == 'member') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/user/addadvertise.php';";
-                echo "</script>";
-            }
-            if ($utypeu == 'staff') {
-                echo "<script type='text/javascript'>";
-                echo "alert('กรุณาเลือกเพิ่มไฟล์');";
-                echo "window.location = '../page/user/addadvertise.php';";
-                echo "</script>";
-            }
+
+            echo "<script type='text/javascript'>";
+            echo "alert('กรุณาเลือกเพิ่มไฟล์');";
+            echo "window.location = '../page/addadvertise.php';";
+            echo "</script>";
         } else {
 
             $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
@@ -190,7 +129,7 @@ if ($file != '') {
 
             $sql6 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id') ";
             $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
-            
+
             for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
                 if ($_FILES["file"]["name"][$i] !== '') {
                     $fileT[$i] = $_FILES["file"]["name"][$i];
@@ -207,29 +146,9 @@ if ($file != '') {
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
-           
 
-            $sql6 = "SELECT * FROM users WHERE u_id = $id";
-            $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
-            $row6 = mysqli_fetch_assoc($result6);
-            $utype = $row6['utype'];
-
-            if ($utype == 'admin') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/advertise.php");
-            }
-            if ($utype == 'staff') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/advertise.php");
-            }
-            if ($utype == 'member') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/user/advertise.php");
-            }
-            if ($utype == 'agent') {
-                echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-                header("Location:../page/user/advertise.php");
-            }
+            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+            header("Location:../page/advertise.php");
         }
     }
 }

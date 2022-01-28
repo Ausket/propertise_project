@@ -122,7 +122,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <div class="form-group">
 
                                         <label for="exampleInputEmail1">ราคา</label>
-                                        <input type="type" class="form-control" id="exampleInputEmail1" name="price" value="" placeholder="ราคา" required>
+                                        <input type="type" class="form-control" id="price" name="price" value="" placeholder="ราคา" required>
 
                                     </div>
                                     <div class="form-group">
@@ -196,136 +196,136 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             </div>
 
                             <div class="column m-auto " style="width: 700px;">
-                            <div class="card card-dark">
-                                <div class="card-header">
-                                    <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
-                                </div>
-                                <!-- /.card-header -->
-                                <!-- form start -->
-
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="form-group col-md-12 ">
-                                            <input type="checkbox" id="pool" name="facility[]" value="สระว่ายน้ำ" >
-                                            <label  class="mr-5"> สระว่ายน้ำ</label>
-                                            <input type="checkbox" id="library" name="facility[]" value="ห้องสมุด">
-                                            <label  class="mr-5"> ห้องสมุด</label>
-                                            <input type="checkbox" id="park" name="facility[]" value="สวนสาธารณะ">
-                                            <label class="mr-5"> สวนสาธารณะ</label>
-                                            <input type="checkbox" id="fitnet" name="facility[]" value="ฟิตเนส">
-                                            <label  class="mr-5"> ฟิตเนส</label><br>
-                                            <input type="checkbox" id="store" name="facility[]" value="ร้านสะดวกซื้อ">
-                                            <label  class="mr-4"> ร้านสะดวกซื้อ</label>
-                                            <input type="checkbox" id="playground" name="facility[]" value="สนามเด็กเล่น">
-                                            <label  class="mr-4"> สนามเด็กเล่น</label>
-                                            <input type="checkbox" id="air" name="facility[]" value="เครื่องปรับอากาศ">
-                                            <label  class="mr-4"> เครื่องปรับอากาศ</label>
-                                            <input type="checkbox" id="wifi" name="facility[]" value="Wi-Fi">
-                                            <label  class="mr-5"> Wi-Fi</label>
-                                        </div>
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">สิ่งอำนวยความสะดวก</h3>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
 
-                            <div class="column m-auto" style="width: 700px;">
-                            <div class="card card-dark">
-                                <div class="card-header">
-                                    <h3 class="card-title">รูปภาพ</h3>
-                                </div>
-                                <!-- /.card-header -->
-                                <!-- form start -->
-                            <div class="card-body">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label>
-                                            รูปภาพหลัก</label>
-                                        <input type="file" name="img" id="fileToUpload">
-                                    </div>
-                                    <div></div>
-                                </div>
-                                <hr>
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        <label>รูปภาพเพิ่มเติม</label>
-                                        <input type="text" name="ids" value="<?php echo $ids ?>" hidden>
-                                        <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
-                                                                                        echo date("Y-m-d\TH:i:s"); ?>>
-                                        <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
-                                        <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
-                                        <input name="hdnLine" id="hdnLine" type="hidden" value=0>
-
-                                        <div class="card">
-                                            <div class="card-body ">
-                                                <div id="mySpan" name="mySpan">(ไฟล์ต่างๆ) <br>
-                                                </div>
-                                                <script language="javascript">
-                                                    function fncCreateElement() {
-
-                                                        var mySpan = document.getElementById('mySpan');
-                                                        var myLine = document.getElementById('hdnLine');
-                                                        myLine.value++;
-
-                                                        var myElement4 = document.createElement('br');
-                                                        myElement4.setAttribute('name', "br" + myLine.value);
-                                                        myElement4.setAttribute('id', "br" + myLine.value);
-                                                        mySpan.appendChild(myElement4);
-
-                                                        var div = document.createElement('div');
-                                                        div.id = 'div' + myLine.value;
-                                                        div.className = 'card-body bg-light';
-                                                        div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
-
-
-                                                        var myElement4 = document.createElement('br');
-                                                        myElement4.setAttribute('name', "br" + myLine.value);
-                                                        myElement4.setAttribute('id', "br" + myLine.value);
-                                                        div.appendChild(myElement4);
-
-                                                        var myElement2 = document.createElement('input');
-                                                        myElement2.setAttribute('type', "file");
-                                                        myElement2.setAttribute('name', "file[]");
-                                                        myElement2.setAttribute('id', "file" + myLine.value);
-                                                        myElement2.setAttribute('required', 'true');
-                                                        div.appendChild(myElement2);
-
-                                                        var myElement4 = document.createElement('br');
-                                                        myElement4.setAttribute('name', "br" + myLine.value);
-                                                        myElement4.setAttribute('id', "br" + myLine.value);
-                                                        div.appendChild(myElement4);
-
-                                                        mySpan.appendChild(div);
-
-
-                                                    }
-
-                                                    function fncDeleteElement() {
-
-                                                        var mySpan = document.getElementById('mySpan');
-                                                        var myLine = document.getElementById('hdnLine');
-
-                                                        var deleteSpan = document.getElementById('div' + myLine.value);
-                                                        mySpan.removeChild(deleteSpan);
-
-                                                        var deleteBr = document.getElementById("br" + myLine.value);
-                                                        mySpan.removeChild(deleteBr);
-                                                        // var deleteFile = document.getElementById("file" + myLine.value);
-                                                        // mySpan.removeChild(deleteFile);
-                                                        // var deleteBr = document.getElementById("br" + myLine.value);
-                                                        // mySpan.removeChild(deleteBr);
-
-
-                                                        myLine.value--;
-
-                                                    }
-                                                </script>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 ">
+                                                <input type="checkbox" id="pool" name="facility[]" value="สระว่ายน้ำ">
+                                                <label class="mr-5"> สระว่ายน้ำ</label>
+                                                <input type="checkbox" id="library" name="facility[]" value="ห้องสมุด">
+                                                <label class="mr-5"> ห้องสมุด</label>
+                                                <input type="checkbox" id="park" name="facility[]" value="สวนสาธารณะ">
+                                                <label class="mr-5"> สวนสาธารณะ</label>
+                                                <input type="checkbox" id="fitnet" name="facility[]" value="ฟิตเนส">
+                                                <label class="mr-5"> ฟิตเนส</label><br>
+                                                <input type="checkbox" id="store" name="facility[]" value="ร้านสะดวกซื้อ">
+                                                <label class="mr-4"> ร้านสะดวกซื้อ</label>
+                                                <input type="checkbox" id="playground" name="facility[]" value="สนามเด็กเล่น">
+                                                <label class="mr-4"> สนามเด็กเล่น</label>
+                                                <input type="checkbox" id="air" name="facility[]" value="เครื่องปรับอากาศ">
+                                                <label class="mr-4"> เครื่องปรับอากาศ</label>
+                                                <input type="checkbox" id="wifi" name="facility[]" value="Wi-Fi">
+                                                <label class="mr-5"> Wi-Fi</label>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <!-- /.card-body -->
                                 </div>
                             </div>
+
+                            <div class="column m-auto" style="width: 700px;">
+                                <div class="card card-dark">
+                                    <div class="card-header">
+                                        <h3 class="card-title">รูปภาพ</h3>
+                                    </div>
+                                    <!-- /.card-header -->
+                                    <!-- form start -->
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <div class="form-group">
+                                                <label>
+                                                    รูปภาพหลัก</label>
+                                                <input type="file" name="img" id="imageUpload">
+                                            </div>
+                                            <div></div>
+                                        </div>
+                                        <hr>
+                                        <div class="form-row">
+                                            <div class="form-group col-md-12">
+                                                <label>รูปภาพเพิ่มเติม</label>
+                                                <input type="text" name="ids" value="<?php echo $ids ?>" hidden>
+                                                <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
+                                                                                                echo date("Y-m-d\TH:i:s"); ?>>
+                                                <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
+                                                <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
+                                                <input name="hdnLine" id="hdnLine" type="hidden" value=0>
+
+                                                <div class="card">
+                                                    <div class="card-body ">
+                                                        <div id="mySpan" name="mySpan">(ไฟล์ต่างๆ) <br>
+                                                        </div>
+                                                        <script language="javascript">
+                                                            function fncCreateElement() {
+
+                                                                var mySpan = document.getElementById('mySpan');
+                                                                var myLine = document.getElementById('hdnLine');
+                                                                myLine.value++;
+
+                                                                var myElement4 = document.createElement('br');
+                                                                myElement4.setAttribute('name', "br" + myLine.value);
+                                                                myElement4.setAttribute('id', "br" + myLine.value);
+                                                                mySpan.appendChild(myElement4);
+
+                                                                var div = document.createElement('div');
+                                                                div.id = 'div' + myLine.value;
+                                                                div.className = 'card-body bg-light';
+                                                                div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
+
+
+                                                                var myElement4 = document.createElement('br');
+                                                                myElement4.setAttribute('name', "br" + myLine.value);
+                                                                myElement4.setAttribute('id', "br" + myLine.value);
+                                                                div.appendChild(myElement4);
+
+                                                                var myElement2 = document.createElement('input');
+                                                                myElement2.setAttribute('type', "file");
+                                                                myElement2.setAttribute('name', "file[]");
+                                                                myElement2.setAttribute('id', "file" + myLine.value);
+                                                                myElement2.setAttribute('required', 'true');
+                                                                div.appendChild(myElement2);
+
+                                                                var myElement4 = document.createElement('br');
+                                                                myElement4.setAttribute('name', "br" + myLine.value);
+                                                                myElement4.setAttribute('id', "br" + myLine.value);
+                                                                div.appendChild(myElement4);
+
+                                                                mySpan.appendChild(div);
+
+
+                                                            }
+
+                                                            function fncDeleteElement() {
+
+                                                                var mySpan = document.getElementById('mySpan');
+                                                                var myLine = document.getElementById('hdnLine');
+
+                                                                var deleteSpan = document.getElementById('div' + myLine.value);
+                                                                mySpan.removeChild(deleteSpan);
+
+                                                                var deleteBr = document.getElementById("br" + myLine.value);
+                                                                mySpan.removeChild(deleteBr);
+                                                                // var deleteFile = document.getElementById("file" + myLine.value);
+                                                                // mySpan.removeChild(deleteFile);
+                                                                // var deleteBr = document.getElementById("br" + myLine.value);
+                                                                // mySpan.removeChild(deleteBr);
+
+
+                                                                myLine.value--;
+
+                                                            }
+                                                        </script>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <!-- /.card-body -->
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="column m-auto" style="width: 700px;">
                                     <div class="card card-dark">
@@ -482,6 +482,31 @@ scratch. This page gets rid of all links and provides the needed markup only.
             });
 
         });
+
+        function updateTextView(_obj) {
+                            var num = getNumber(_obj.val());
+                            if (num == 0) {
+                                _obj.val('');
+                            } else {
+                                _obj.val(num.toLocaleString());
+                            }
+                        }
+
+                        function getNumber(_str) {
+                            var arr = _str.split('');
+                            var out = new Array();
+                            for (var cnt = 0; cnt < arr.length; cnt++) {
+                                if (isNaN(arr[cnt]) == false) {
+                                    out.push(arr[cnt]);
+                                }
+                            }
+                            return Number(out.join(''));
+                        }
+                        $(document).ready(function() {
+                            $('#price').on('keyup', function() {
+                                updateTextView($(this));
+                            });
+                        });
     </script>
 </body>
 

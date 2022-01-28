@@ -32,7 +32,7 @@ $files_r = strrchr($files_v, ".");
 $files = strrev($files_r);
 
 $nameDate = date('Ymd'); //เก็บวันที่
-$path = "../p_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
+$path = "../image/p_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
 date_default_timezone_set('Asia/Bangkok');
 $numrand = (mt_rand(1000, 9999));
 
@@ -62,27 +62,10 @@ if ($file != '') {
         $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe' WHERE a_id = $id ";
         $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
 
-        $sql6 = "SELECT * FROM users WHERE u_id = $ids";
-        $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
-        $row6 = mysqli_fetch_assoc($result6);
-        $utype = $row6['utype'];
 
-        if ($utype == 'admin') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/advertise.php");
-        }
-        if ($utype == 'staff') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/advertise.php");
-        }
-        if ($utype == 'member') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/user/advertise.php");
-        }
-        if ($utype == 'agent') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/user/advertise.php");
-        }
+        echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+        header("Location:../page/advertise.php");
+        
     }
 }
 
@@ -107,27 +90,9 @@ if ($file == '') {
         $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe' WHERE a_id = $id ";
         $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
 
-
-        $sql6 = "SELECT * FROM users WHERE u_id = $ids";
-        $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
-        $row6 = mysqli_fetch_assoc($result6);
-        $utype = $row6['utype'];
-
-        if ($utype == 'admin') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/advertise.php");
-        }
-        if ($utype == 'staff') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/advertise.php");
-        }
-        if ($utype == 'member') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/user/advertise.php");
-        }
-        if ($utype == 'agent') {
-            echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
-            header("Location:../page/user/advertise.php");
-        }
+       
+        echo '<script> alert("แก้ไขข้อมูลเรียบร้อย") </script>';
+        header("Location:../page/advertise.php");
+        
     }
 }

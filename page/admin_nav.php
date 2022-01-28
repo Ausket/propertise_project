@@ -86,7 +86,7 @@ $resultrt = mysqli_query($con, $sqlrt);
                 if ($_SESSION['utype'] == 'member') {
                 ?>
 
-                    <img class="d-block m-auto" style="border-radius:50% ;  width:3rem;" src="../m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
+                    <img class="d-block m-auto" style="border-radius:50% ;  width:3rem;" src="../image/m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
 
                 <?php
                 }
@@ -94,7 +94,7 @@ $resultrt = mysqli_query($con, $sqlrt);
                 <?php
                 if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff' || $_SESSION['utype'] == 'agent') {
                 ?>
-                    <img class="d-block m-auto" style="border-radius:50% ; width:3rem;" src="../m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
+                    <img class="d-block m-auto" style="border-radius:50% ; width:3rem;" src="../image/m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
 
                 <?php
                 }

@@ -31,6 +31,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     <title>Users</title>
 
     <!-- Google Font: Source Sans Pro -->
@@ -95,7 +96,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($row2 = mysqli_fetch_array($result2)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../a_img/<?php echo $row2['a_img'] ?>"style="border-radius:50%" width="100"></td>
+                                                <td><img src="../image/a_img/<?php echo $row2['a_img'] ?>"style="border-radius:50%" width="100"></td>
                                                 <td><?php echo $row2['a_type']; ?></td>
                                                 <td><?php echo $row2['a_title']; ?></td>
                                                 <td><?php echo $row2['a_note']; ?></td>

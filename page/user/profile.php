@@ -77,6 +77,9 @@ $resultp = mysqli_query($con, $sqlp);
                     <li class="nav-item">
                         <a class="nav-link" href="favourite.php">รายการโปรด</a>
                     </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="reset_pass.php">เปลี่ยนรหัสผ่าน</a>
+                    </li>
                 </ul>
                 <div class="mt-3">
                     <h3 style="text-transform: uppercase">ข้อมูลส่วนตัว</h3>
@@ -94,7 +97,7 @@ $resultp = mysqli_query($con, $sqlp);
                     <div class="card card-warning card-outline">
                         <div class="card-body box-profile">
                             <div class="text-center">
-                                <img class="d-block m-auto" style="border-radius:50%" src="../../m_img/<?php echo $row['img']; ?>" width="100" alt="img">
+                                <img class="d-block m-auto" style="border-radius:50%" src="../../image/m_img/<?php echo $row['img']; ?>" width="100" alt="img">
                             </div>
 
                             <h3 class="profile-username text-center"><?php echo $row['name']; ?></h3>

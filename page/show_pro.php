@@ -21,7 +21,7 @@ FROM (((property_detail
     LEFT  JOIN location_property ON property_detail.l_id = location_property.l_id)
     LEFT  JOIN property_type ON property_detail.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON property_detail.u_id = users.u_id)
-    ORDER BY pd_id DESC ";
+    WHERE pd_id = $id2 ORDER BY pd_id DESC ";
 $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 $row2 = mysqli_fetch_array($result2);
 
