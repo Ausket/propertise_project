@@ -205,6 +205,9 @@ $resultd = mysqli_query($con, $sqld);
     .remove_file:before {
       content: "×";
     }
+    .red{
+      color: red;
+    }
   </style>
 
 </head>
@@ -250,7 +253,7 @@ $resultd = mysqli_query($con, $sqld);
                                     <h3 class="card-title mb-0 text-heading fs-22 lh-15"> รายละเอียดอสังหาริมทรัพย์ </h3>
                                     <hr>
                                     <div class="form-group mb-3">
-                                      <label for="status" class="text-heading">ประเภทอสังหาริมทรัพย์</label>
+                                      <label for="status" class="text-heading">ประเภทอสังหาริมทรัพย์ <span class="red">*</span></label>
                                       <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" data-style="btn-lg py-2 h-52" name="ptype" id="ptype">
                                         <?php foreach ($resultt as $value) {  ?>
                                           <?php if ($value['pt_status'] == '1') { ?>
@@ -269,31 +272,31 @@ $resultd = mysqli_query($con, $sqld);
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="price" class="text-heading"> จำนวนห้องนอน </label>
+                                          <label for="price" class="text-heading"> จำนวนห้องนอน <span class="red">*</span></label>
                                           <input type="number" class="form-control form-control-lg border-0" id="bedroom" name="bedroom" value="<?php echo $rowb['bedroom']; ?>" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="price" class="text-heading"> จำนวนห้องน้ำ </label>
+                                          <label for="price" class="text-heading"> จำนวนห้องน้ำ <span class="red">*</span></label>
                                           <input type="number" class="form-control form-control-lg border-0" id="bathroom" name="bathroom" value="<?php echo $rowb['bathroom']; ?>" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="price" class="text-heading"> ที่จอดรถ </label>
+                                          <label for="price" class="text-heading"> ที่จอดรถ <span class="red">*</span></label>
                                           <input type="number" class="form-control form-control-lg border-0" id="parking" name="parking" value="<?php echo $rowb['parking']; ?>" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="price" class="text-heading"> ขนาดพื้นที่ <span class="text-muted">( ตร.เมตร )</span> </label>
+                                          <label for="price" class="text-heading"> ขนาดพื้นที่ <span class="red">*</span><span class="text-muted">( ตร.เมตร )</span> </label>
                                           <input type="text" class="form-control form-control-lg border-0" id="space_area" name="space_area" value="<?php echo $rowb['space_area']; ?>" required>
                                         </div>
                                       </div>
                                     </div>
                                     <div class="form-group">
-                                      <label for="price" class="text-heading"> ราคา </label>
+                                      <label for="price" class="text-heading"> ราคา <span class="red">*</span><span class="text-muted">บาท</span></label>
                                       <input type="text" class="form-control form-control-lg border-0" id="price" name="price" value="<?php echo $rowb['price']; ?>" required>
                                     </div>
                                     <h3 class="card-title mt-6 mb-0 text-heading fs-22 lh-15"> สิ่งอำนวยความสะดวก </h3>
@@ -354,13 +357,13 @@ $resultd = mysqli_query($con, $sqld);
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="state" class="text-heading"> บ้านเลขที่ </label>
+                                          <label for="state" class="text-heading"> บ้านเลขที่ <span class="red">*</span></label>
                                           <input type="text" class="form-control form-control-lg border-0" id="house_no" name="house_no" value="<?php echo $rowb['house_no']; ?>" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="city" class="text-heading"> หมู่</label>
+                                          <label for="city" class="text-heading"> หมู่ <span class="red">*</span></label>
                                           <input type="text" class="form-control form-control-lg border-0" id="village_no" name="village_no" value="<?php echo $rowb['village_no']; ?>" required>
                                         </div>
                                       </div>
@@ -382,7 +385,7 @@ $resultd = mysqli_query($con, $sqld);
                                     <div class="form-row mx-n2 mb-3">
                                       <div class="col-md-4 col-lg-12 col-xxl-4 px-2 mb-4 mb-md-0">
                                         <div class="form-group mb-0">
-                                          <label for="category" class="text-heading"> จังหวัด </label>
+                                          <label for="category" class="text-heading"> จังหวัด <span class="red">*</span></label>
                                           <select class="form-control border-0 shadow-none form-control-lg " name="province_id" id="province" class="form-control">
                                             <option value="" selected disabled>เลือกจังหวัด</option>
                                             <?php while ($rowpr = mysqli_fetch_assoc($resultpr)) {
@@ -398,7 +401,7 @@ $resultd = mysqli_query($con, $sqld);
 
                                       <div class="col-md-4 col-lg-12 col-xxl-4 px-2 mb-4 mb-md-0">
                                         <div class="form-group mb-0">
-                                          <label for="amphure" class="text-heading">อำเภอ</label>
+                                          <label for="amphure" class="text-heading">อำเภอ <span class="red">*</span></label>
                                           <select class="form-control border-0 shadow-none form-control-lg " name="amphure_id" id="amphure" class="form-control">
                                             <?php while ($rowpa = mysqli_fetch_assoc($resultpa)) {
                                             ?>
@@ -411,7 +414,7 @@ $resultd = mysqli_query($con, $sqld);
                                       </div>
                                       <div class="col-md-4 col-lg-12 col-xxl-4 px-2 mb-4 mb-md-0">
                                         <div class="form-group mb-0">
-                                          <label for="district" class="text-heading"> ตำบล </label>
+                                          <label for="district" class="text-heading"> ตำบล <span class="red">*</span></label>
                                           <select class="form-control border-0 shadow-none form-control-lg " title="เลือก" data-style="btn-lg py-2 h-52" name="district_id" id="district">
                                             <?php while ($rowd = mysqli_fetch_assoc($resultd)) {
 
@@ -426,7 +429,7 @@ $resultd = mysqli_query($con, $sqld);
                                     <div class="form-row mx-n2">
                                       <div class="col-md-12 col-lg-12 col-xxl-12 px-2">
                                         <div class="form-group">
-                                          <label for="neighborhood" class="text-heading"> รหัสไปรษณีย์ </label>
+                                          <label for="neighborhood" class="text-heading"> รหัสไปรษณีย์ <span class="red">*</span></label>
                                           <input type="text" class="form-control form-control-lg border-0" id="postal_code" name="postal_code" value="<?php echo $rowb['postal_code']; ?>" required>
                                         </div>
                                       </div>
@@ -533,7 +536,7 @@ $resultd = mysqli_query($con, $sqld);
                                 <div class="row">
                                   <div class="col-lg-12">
                                     <div class="form-group">
-                                      <label for="structure-type" class="text-heading"> ประเภทประกาศ </label>
+                                      <label for="structure-type" class="text-heading"> ประเภทประกาศ <span class="red">*</span></label>
                                       <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" name="atype" id="atype">
                                         <option class="text-center">เลือกประเภทประกาศ</option>
                                         <?php foreach ($resultat as $value) {  ?>
@@ -549,7 +552,7 @@ $resultd = mysqli_query($con, $sqld);
                                   </div>
                                   <div class="col-lg-12">
                                     <div class="form-group">
-                                      <label for="size-in-ft" class="text-heading"> หัวข้อ </label>
+                                      <label for="size-in-ft" class="text-heading"> หัวข้อ <span class="red">*</span></label>
                                       <input type="text" class="form-control form-control-lg border-0" id="size-in-ft" name="title" value="<?php echo $rowb['title']; ?>" required>
                                     </div>
                                   </div>
@@ -557,7 +560,7 @@ $resultd = mysqli_query($con, $sqld);
                                 <div class="row">
                                   <div class="col-lg-12">
                                     <div class="form-group mb-0">
-                                      <label for="owner" class="text-heading"> บรรยาย (เกี่ยวกับอสังหาริมทรัพย์ของคุณ)</label>
+                                      <label for="owner" class="text-heading"> บรรยาย <span class="red">*</span> (เกี่ยวกับอสังหาริมทรัพย์ของคุณ)</label>
                                       <textarea class="form-control border-0" id="describe" name="describe" rows="8" required><?php echo $rowb['note']; ?></textarea>
                                       <script>
                                         CKEDITOR.replace('describe');

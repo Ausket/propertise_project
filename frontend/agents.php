@@ -81,27 +81,8 @@ $total_page = ceil($total_record / $perpage);
       <div class="bg-secondary">
         <div class="container">
           <div class="py-2">
-            <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-end">
-              <div class="form-group py-1 col-md-3 px-1 mb-0">
-                <label for="company" class="sr-only">Company</label>
-                <select class="form-control selectpicker" name="company" id="company" title="บริษัท" data-style="bg-white btn-lg rounded-lg">
-                  <option>Google</option>
-                  <option>Facebook</option>
-                  <option>Apple</option>
-                </select>
-              </div>
-              <div class="form-group py-1 col-md-3 px-1 mb-0">
-                <label for="region01" class="sr-only">Region</label>
-                <select class="form-control selectpicker" name="region" id="region01" title="ภูมิภาค" data-style="bg-white btn-lg rounded-lg">
-                  <option>ภาคเหนือ</option>
-                  <option>ภาคตะวันออกเฉียงเหนือ</option>
-                  <option>ภาคตะวันตก</option>
-                  <option>ภาคกลาง</option>
-                  <option>ภาคตะวันออก</option>
-                  <option>ภาคใต้</option>
-                </select>
-              </div>
-              <div class="form-group py-1 col-md-4 px-1 mb-0">
+            <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-center">
+              <div class="form-group py-1 col-md-10 px-1 mb-0">
                 <label for="search01" class="sr-only">Search</label>
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend mr-n1">
@@ -114,56 +95,6 @@ $total_page = ceil($total_record / $perpage);
                 <button type="submit" class="btn btn-primary btn-lg btn-block">
                   ค้นหา
                 </button>
-              </div>
-            </form>
-            <form class="d-block d-md-none">
-              <div class="d-flex align-items-center">
-                <a class="text-white hover-primary d-inline-block fs-24 lh-1 mr-5" data-toggle="collapse" href="#collapseMobileSearch-01" role="button" aria-expanded="false" aria-controls="collapseMobileSearch-01">
-                  <i class="fal fa-cog"></i>
-                </a>
-                <div class="form-group mb-0 w-100">
-                  <label for="search03" class="sr-only">Search</label>
-                  <div class="input-group input-group-lg">
-                    <input type="text" id="search03" class="form-control border-0 bg-white shadow-none" placeholder="Search by agent’s name…" name="search">
-                    <div class="input-group-append ml-n1">
-                      <span class="fs-18 input-group-text bg-white border-0"><i class="fal fa-search"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="collapse" id="collapseMobileSearch-01">
-                <div class="card card-body border-0 pr-0 pl-8 bg-transparent">
-                  <div class="form-group">
-                    <label for="language02" class="sr-only">Language</label>
-                    <select class="form-control selectpicker" name="language" id="language02" title="Language" data-style="bg-white btn-lg rounded-lg">
-                      <option>English</option>
-                      <option>France</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="company02" class="sr-only">Company</label>
-                    <select class="form-control selectpicker" name="company" id="company02" title="Company" data-style="bg-white btn-lg rounded-lg">
-                      <option>Google</option>
-                      <option>Facebook</option>
-                      <option>Apple</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label for="region03" class="sr-only">Region</label>
-                    <select class="form-control selectpicker" name="region" id="region03" title="Region" data-style="bg-white btn-lg rounded-lg">
-                      <option>Austin</option>
-                      <option>Boston</option>
-                      <option>Chicago</option>
-                      <option>Denver</option>
-                      <option>Los Angeles</option>
-                      <option>New York</option>
-                      <option>San Francisco</option>
-                    </select>
-                  </div>
-                  <button type="submit" class="btn btn-primary btn-lg btn-block">
-                    Search
-                  </button>
-                </div>
               </div>
             </form>
           </div>

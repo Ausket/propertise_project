@@ -107,7 +107,7 @@ $total_record = mysqli_num_rows($resulta);
                                 </a>
                             </li>
                             <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
-                                <a href="#" class="text-heading lh-1 sidebar-link">
+                                <a href="../page/logout.php" class="text-heading lh-1 sidebar-link">
                                     <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
                                         <svg class="icon icon-log-out">
                                             <use xlink:href="#icon-log-out"></use>

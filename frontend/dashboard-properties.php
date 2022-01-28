@@ -15,7 +15,6 @@ if (isset($_GET['page'])) {
 } else {
   $page = 1;
 }
-
 $start = ($page - 1) * $perpage;
 
 
@@ -152,29 +151,29 @@ $total_record = mysqli_num_rows($result2);
                             <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
                               <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
                             </a>
-                            <?php if ($row2['type'] == 'ขาย')
-                            { $type = 'ขาย';
-                            echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
-                            }?>
-                            <?php if ($row2['type'] == 'เช่า')
-                            { $type = 'เช่า';
-                            echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
-                            }?>
-                            <?php if ($row2['type'] == 'ขาย-เช่า')
-                            { $type = 'ขาย-เช่า';
-                            echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
-                            }?>
-                            <?php if ($row2['type'] == 'ขายดาวน์')
-                            { $type = 'ขายดาวน์';
-                            echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
-                            }?>
-                            <?php if ($row2['type'] == 'ใบจอง')
-                            { $type = 'ใบจอง';
-                            echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
-                            }?>
+                            <?php if ($row2['type'] == 'ขาย') {
+                              $type = 'ขาย';
+                              echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
+                            } ?>
+                            <?php if ($row2['type'] == 'เช่า') {
+                              $type = 'เช่า';
+                              echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
+                            } ?>
+                            <?php if ($row2['type'] == 'ขาย-เช่า') {
+                              $type = 'ขาย-เช่า';
+                              echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
+                            } ?>
+                            <?php if ($row2['type'] == 'ขายดาวน์') {
+                              $type = 'ขายดาวน์';
+                              echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
+                            } ?>
+                            <?php if ($row2['type'] == 'ใบจอง') {
+                              $type = 'ใบจอง';
+                              echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
+                            } ?>
                           </div>
                           <div class="media-body">
-                            <a href="single-property-1.html" class="text-dark hover-primary">
+                            <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
                               <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
                             </a>
                             <p class="mb-1 font-weight-500"><?php if ($row2['house_no'] != '') {
@@ -203,7 +202,8 @@ $total_record = mysqli_num_rows($result2);
                         <?php if ($row2['ad_status'] == '1') {
                           $status = 'กำลังลงประกาศ';
                           echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-yellow"> ' . $status . ' </span>';
-                        } if ($row2['ad_status'] == '0') {
+                        }
+                        if ($row2['ad_status'] == '0') {
                           $status = 'รออนุมัติ';
                           echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-blue"> ' . $status . ' </span>';
                         }
@@ -215,14 +215,14 @@ $total_record = mysqli_num_rows($result2);
                           $status = 'ประกาศหมดอายุ';
                           echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
                         } ?>
-                        
+
 
 
                       </td>
                       <td class="align-middle">2049</td>
                       <td class="align-middle">
                         <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
-                        <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>"  onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post"data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
+                        <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
                       </td>
                     <?php  } ?>
                     </tr>
@@ -241,12 +241,11 @@ $total_record = mysqli_num_rows($result2);
               <ul class="pagination rounded-active justify-content-center">
                 <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
                 <?php for ($i = 1; $i <= $total_page; $i++) { ?>
-                  <li class="page-item" ><a class="page-link" href="dashboard-properties.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                  <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                 <?php } ?>
                 <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
               </ul>
             </nav>
-
           </div>
         </main>
       </div>
@@ -270,6 +269,17 @@ $total_record = mysqli_num_rows($result2);
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.pagination').pagination({
+        items: <?php echo $total_records; ?>,
+        itemsOnPage: <?php echo $limit; ?>,
+        cssStyle: 'light-theme',
+        currentPage: <?php echo $page; ?>,
+        hrefTextPrefix: 'dashboard-properties.php?page='
+      });
+    });
+  </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <symbol id="icon-bedroom" viewBox="0 0 46 32">
