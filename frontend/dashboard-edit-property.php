@@ -188,6 +188,23 @@ $resultd = mysqli_query($con, $sqld);
     .remove_img_preview:before {
       content: "×";
     }
+
+    .remove_file {
+      position: relative;
+      top: -20px;
+      right: 5px;
+      background: black;
+      color: white;
+      border-radius: 50px;
+      font-size: 0.9em;
+      padding: 0 0.3em 0;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .remove_file:before {
+      content: "×";
+    }
   </style>
 
 </head>
@@ -468,7 +485,7 @@ $resultd = mysqli_query($con, $sqld);
                                       </div>
                                       <div class="custom-file">
                                         <label for="fileupload"> เรียกดูไฟล์ </label>
-                                        <input type="file" id="fileupload" name="img" class="custom-file-input" >
+                                        <input type="file" id="fileupload" name="img" class="custom-file-input">
                                         <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
                                       </div>
                                     </div>
@@ -481,11 +498,13 @@ $resultd = mysqli_query($con, $sqld);
                                       <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
                                                                                       echo date("Y-m-d\TH:i:s"); ?>>
                                       <input class="custom-file-input" id="fileupload2" type="file" name="file[]" multiple>
-                                      <p class="text-one ">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
-                                    </div>
-                                    <?php while($rowf = mysqli_fetch_array($resultf)){ ?>
-                                    <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150">
-                                    <?php }?>
+                                      <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
+                                    </div><br><br><br>                                                                  
+                                    <?php while ($rowf = mysqli_fetch_array($resultf)) { ?>
+                                      <span id="<?php echo $rowf['f_id']; ?>">
+                                      <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>" ><span class="remove_file"></span></a>
+                                      </span>                                     
+                                    <?php } ?>
                                     <div id="upload-img2"></div>
                                   </div>
                                 </div>
@@ -630,6 +649,24 @@ $resultd = mysqli_query($con, $sqld);
       console.log(event);
 
     })
+
+    $(document).on('click', '#file_del', function() {
+      var f_id = $(this).attr("name");
+      if (f_id != '') {
+        $.ajax({
+          url: "../backend/delfile_front.php",
+          method: "POST",
+          data: {
+            f_id: f_id
+          },
+          success: function(data) {
+            console.log(data);
+            $('span#'+data).remove();
+            
+          }
+        });
+      }
+    });
   </script>
 
   <script>

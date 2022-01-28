@@ -43,6 +43,7 @@ $pathT = "../file/"; //สร้างไฟล์สำหรับเก็บ
 $numrandT = (mt_rand(1000, 9999));
 $date = $_POST['date'];
 
+
 if ($file != '') {
     $type = strrchr($file, "."); //ตัดชื่อไฟล์เหลือแต่นามสกุล
     $newname = $files . $nameDate . $numrand . $type; //ประกอบเป็นชื่อใหม่
