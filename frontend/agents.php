@@ -1,27 +1,3 @@
-<?php
-require_once('../dbconnect.php');
-
-$perpage = 6;
-if (isset($_GET['page'])) {
-  $page = $_GET['page'];
-} else {
-  $page = 1;
-}
-
-$start = ($page - 1) * $perpage;
-
-$sqla = "SELECT * FROM users WHERE utype='agent' ORDER BY u_id DESC
-limit {$start} , {$perpage}";
-$resulta = mysqli_query($con, $sqla);
-
-
-$sql4 = "SELECT * FROM users WHERE utype='agent'";
-$result4 = mysqli_query($con, $sql4);
-$total_record = mysqli_num_rows($result4);
-$total_page = ceil($total_record / $perpage);
-?>
-
-
 <!doctype html>
 <html lang="en">
 
@@ -81,14 +57,14 @@ $total_page = ceil($total_record / $perpage);
       <div class="bg-secondary">
         <div class="container">
           <div class="py-2">
-            <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-center">
+            <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-center" action="" method="GET">
               <div class="form-group py-1 col-md-10 px-1 mb-0">
                 <label for="search01" class="sr-only">Search</label>
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend mr-n1">
                     <span class="fs-18 input-group-text bg-white border-0"><i class="fal fa-search"></i></span>
                   </div>
-                  <input type="text" id="search01" class="form-control border-0 bg-white shadow-none" placeholder="ค้นหาจากชื่อตัวแทน" name="search">
+                  <input type="text" id="search01" class="form-control border-0 bg-white shadow-none" placeholder="ค้นหาจากชื่อตัวแทนหรือบริษัท" name="search_agent">
                 </div>
               </div>
               <div class="col-md-2 py-1 px-1">
@@ -101,114 +77,283 @@ $total_page = ceil($total_record / $perpage);
         </div>
       </div>
     </section>
-    <section class="pt-8 pb-13 bg-gray-01">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-12">
-            <div class="row align-items-sm-center mb-7">
-              <div class="col-sm-6 mb-6 mb-sm-0">
-                <h2 class="fs-15 text-dark mb-0"> เราพบตัวแทน <span class="text-primary"><?php echo $total_record ?></span> คน
-                </h2>
-              </div>
-              <div class="col-sm-6 ml-auto">
-                <div class="d-flex align-items-center justify-content-sm-end">
-                  <div class="input-group border rounded input-group-lg w-auto mr-6">
-                    <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
-                    <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
-                      <option selected>ตัวอักษร</option>
-                      <option value="1">สุ่ม</option>
-                      <option value="1">เรตติ้ง</option>
-                      <option value="1">จำนวนทรัพย์สิน</option>
-                    </select>
-                  </div>
+    <?php
+
+    $agent = (isset($_GET['search_agent']) ? $_GET['search_agent'] : '');
+
+    if ($agent != '') {
+      require_once('../dbconnect.php');
+
+      $perpage = 6;
+      if (isset($_GET['page'])) {
+        $page = $_GET['page'];
+      } else {
+        $page = 1;
+      }
+
+      $start = ($page - 1) * $perpage;
+
+      $agent = $_GET['search_agent'];
+
+      $sqla = "SELECT * FROM users WHERE utype='agent' AND 
+          (name LIKE '%$agent%' OR company LIKE '%$agent%') ORDER BY u_id DESC
+          limit {$start} , {$perpage}";
+      $resulta = mysqli_query($con, $sqla);
+
+      $sqlsa = "SELECT * FROM users WHERE utype='agent' AND 
+      (name LIKE '%$agent%' OR company LIKE '%$agent%')";
+      $resultsa = mysqli_query($con, $sqlsa);
+      $total_record = mysqli_num_rows($resultsa);
+      $total_page = ceil($total_record / $perpage);
+    ?>
+
+
+      <section class="pt-8 pb-13 bg-gray-01">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row align-items-sm-center mb-7">
+                <div class="col-sm-6 mb-6 mb-sm-0">
+                  <h2 class="fs-15 text-dark mb-0"> เราพบตัวแทน <span class="text-primary"><?php echo $total_record ?></span> คน
+                  </h2>
                 </div>
-              </div>
-            </div>
-            <div class="row">
-              <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
-                <div class="col-md-4 mb-4">
-                  <div class="card border-0 shadow-hover-3 px-6">
-                    <div class="card-body text-center pt-6 pb-2 px-0">
-                      <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
-                        <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
-                      </a>
-                      <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
-                      <ul class="list-inline mb-0">
-                        <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
-                        </li>
-                        <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
-                          <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-0">
-                              <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                            </li>
-                            <li class="list-inline-item mr-0">
-                              <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                            </li>
-                            <li class="list-inline-item mr-0">
-                              <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                            </li>
-                            <li class="list-inline-item mr-0">
-                              <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                            </li>
-                            <li class="list-inline-item mr-0">
-                              <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card-footer bg-white px-0 pt-1 pb-6">
-                      <ul class="list-group list-group-no-border pb-1">
-                        <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                          <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
-                          <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                          <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
-                          <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
-                          <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
-                          <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
-                        </li>
-                        <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                          <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
-                          <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
-                            <li class="list-inline-item m-0">
-                              <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
-                            </li>
-                            <li class="list-inline-item mr-0 ml-2">
-                              <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
-                            </li>
-                            <li class="list-inline-item mr-0 ml-2">
-                              <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
-                            </li>
-                            <li class="list-inline-item mr-0 ml-2">
-                              <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
-                            </li>
-                          </ul>
-                        </li>
-                      </ul>
+                <div class="col-sm-6 ml-auto">
+                  <div class="d-flex align-items-center justify-content-sm-end">
+                    <div class="input-group border rounded input-group-lg w-auto mr-6">
+                      <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
+                      <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
+                        <option selected>ตัวอักษร</option>
+                        <option value="1">สุ่ม</option>
+                        <option value="1">เรตติ้ง</option>
+                        <option value="1">จำนวนทรัพย์สิน</option>
+                      </select>
                     </div>
                   </div>
                 </div>
-              <?php  } ?>
+              </div>
+              <div class="row">
+                <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
+                  <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-hover-3 px-6">
+                      <div class="card-body text-center pt-6 pb-2 px-0">
+                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
+                          <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
+                        </a>
+                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
+                        <ul class="list-inline mb-0">
+                          <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
+                          </li>
+                          <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
+                            <ul class="list-inline mb-0">
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="card-footer bg-white px-0 pt-1 pb-6">
+                        <ul class="list-group list-group-no-border pb-1">
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
+                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
+                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
+                            <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
+                            <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
+                              <li class="list-inline-item m-0">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                <?php  } ?>
+              </div>
+
+              <nav class="mt-4">
+                <ul class="pagination rounded-active justify-content-center">
+                  <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent?>&page=1"><i class="far fa-angle-double-left"></i></a></li>
+                  <?php for ($i = 1; $i <= $total_page; $i++) { ?>
+                    <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent?>&page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                  <?php } ?>
+                  <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent?>&page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                </ul>
+              </nav>
             </div>
 
-            <nav class="mt-4">
-              <ul class="pagination rounded-active justify-content-center">
-                <li class="page-item"><a class="page-link" href="agents.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
-                <?php for ($i = 1; $i <= $total_page; $i++) { ?>
-                  <li class="page-item"><a class="page-link" href="agents.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                <?php } ?>
-                <li class="page-item"><a class="page-link" href="agents.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
-              </ul>
-            </nav>
           </div>
-
         </div>
-      </div>
-    </section>
+      </section>
+    <?php } else {
+
+      require_once('../dbconnect.php');
+
+      $perpage = 6;
+      if (isset($_GET['page'])) {
+        $page = $_GET['page'];
+      } else {
+        $page = 1;
+      }
+
+      $start = ($page - 1) * $perpage;
+
+
+      $sqla = "SELECT * FROM users WHERE utype='agent' ORDER BY u_id DESC
+limit {$start} , {$perpage}";
+      $resulta = mysqli_query($con, $sqla);
+
+
+      $sql4 = "SELECT * FROM users WHERE utype='agent'";
+      $result4 = mysqli_query($con, $sql4);
+      $total_record = mysqli_num_rows($result4);
+      $total_page = ceil($total_record / $perpage);
+    ?>
+
+      <section class="pt-8 pb-13 bg-gray-01">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="row align-items-sm-center mb-7">
+                <div class="col-sm-6 mb-6 mb-sm-0">
+                  <h2 class="fs-15 text-dark mb-0"> เราพบตัวแทน <span class="text-primary"><?php echo $total_record ?></span> คน
+                  </h2>
+                </div>
+                <div class="col-sm-6 ml-auto">
+                  <div class="d-flex align-items-center justify-content-sm-end">
+                    <div class="input-group border rounded input-group-lg w-auto mr-6">
+                      <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
+                      <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
+                        <option selected value="1">ตัวอักษร</option>
+                        <option value="2">สุ่ม</option>
+                        <option value="3">เรตติ้ง</option>
+                        <option value="4">จำนวนทรัพย์สิน</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
+                  <div class="col-md-4 mb-4">
+                    <div class="card border-0 shadow-hover-3 px-6" id="agent">
+                      <div class="card-body text-center pt-6 pb-2 px-0">
+                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
+                          <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
+                        </a>
+                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
+                        <ul class="list-inline mb-0">
+                          <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
+                          </li>
+                          <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
+                            <ul class="list-inline mb-0">
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                      <div class="card-footer bg-white px-0 pt-1 pb-6">
+                        <ul class="list-group list-group-no-border pb-1">
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
+                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
+                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
+                            <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
+                            <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
+                              <li class="list-inline-item m-0">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                <?php  } ?>
+              </div>
+
+              <nav class="mt-4">
+                <ul class="pagination rounded-active justify-content-center">
+                  <li class="page-item"><a class="page-link" href="agents.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
+                  <?php for ($i = 1; $i <= $total_page; $i++) { ?>
+                    <li class="page-item"><a class="page-link" href="agents.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                  <?php } ?>
+                  <li class="page-item"><a class="page-link" href="agents.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                </ul>
+              </nav>
+
+
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+    <?php   }  ?>
   </main>
   <?php include 'templates/footer-two.php'; ?>
   <!-- Vendors scripts -->

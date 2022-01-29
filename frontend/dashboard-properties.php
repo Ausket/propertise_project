@@ -1,47 +1,3 @@
-<?php
-require_once('../dbconnect.php');
-
-$id = $_SESSION['u_id'];
-if (empty($id)) {
-  header('Location:login.php');
-}
-$sql = "SELECT * FROM users WHERE u_id= $id";
-$result = mysqli_query($con, $sql);
-$row = mysqli_fetch_assoc($result);
-
-$perpage = 4;
-if (isset($_GET['page'])) {
-  $page = $_GET['page'];
-} else {
-  $page = 1;
-}
-$start = ($page - 1) * $perpage;
-
-
-$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
-location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
-FROM (((((advertise
-    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
-    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
-    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
-    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE users.u_id = $id ORDER BY advertise.a_id DESC limit {$start} , {$perpage} ";
-$result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
-$sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
-    provinces.name_th,amphures.aname_th,districts.dname_th
-FROM (((location_property
-INNER  JOIN provinces ON location_property.province_id = provinces.id)
-INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
-INNER JOIN districts ON location_property.district_id = districts.id) 
- ";
-$result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
-
-$total_record = mysqli_num_rows($result2);
-
-?>
 <!doctype html>
 <html lang="en">
 
@@ -98,18 +54,20 @@ $total_record = mysqli_num_rows($result2);
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div class="mr-0 mr-md-auto">
-                <h2 class="mb-0 text-heading fs-22 lh-15">ประกาศของฉัน<span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $total_record ?></span>
-                </h2>
+                <a href="dashboard-properties.php"><h2 class="mb-0 text-heading fs-22 lh-15">ประกาศทั้งหมดของฉัน<span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $total_record ?></span>
+                </h2></a>
 
               </div>
               <div class="form-inline justify-content-md-end mx-n2">
                 <div class="p-2">
-                  <div class="input-group input-group-lg bg-white border">
-                    <div class="input-group-prepend">
-                      <button class="btn pr-0 shadow-none" type="button"><i class="far fa-search"></i></button>
+                  <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-center" action="" method="GET">
+                    <div class="input-group input-group-lg bg-white border">
+                      <div class="input-group-prepend">
+                        <button class="btn pr-0 shadow-none" type="button"><i class="far fa-search"></i></button>
+                      </div>
+                      <input type="text" class="form-control bg-transparent border-0 shadow-none text-body" placeholder="ค้นหา" name="search_ad">
                     </div>
-                    <input type="text" class="form-control bg-transparent border-0 shadow-none text-body" placeholder="ค้นหา" name="search">
-                  </div>
+                  </form>
                 </div>
                 <div class="p-2">
                   <div class="input-group input-group-lg bg-white border">
@@ -126,126 +84,359 @@ $total_record = mysqli_num_rows($result2);
                 </div>
               </div>
             </div>
-            <div class="table-responsive">
-              <table class="table table-hover bg-white border rounded-lg">
-                <thead class="thead-sm thead-black">
-                  <tr>
-                    <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
-                    <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
-                    <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
-                    <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
-                    <th scope="col" class="border-top-0 pt-5 pb-4"> </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <?php while ($row2 = mysqli_fetch_array($result2)) {
-                    $h_no = "เลขที่";
-                    $v_no = "หมู่";
+            <?php
+            $ad = (isset($_GET['search_ad']) ? $_GET['search_ad'] : '');
+            if ($ad != '') {
+              require_once('../dbconnect.php');
 
-                  ?>
+              $id = $_SESSION['u_id'];
+              if (empty($id)) {
+                header('Location:login.php');
+              }
+              $sql = "SELECT * FROM users WHERE u_id= $id";
+              $result = mysqli_query($con, $sql);
+              $row = mysqli_fetch_assoc($result);
 
-                    <tr class="shadow-hover-xs-2 bg-hover-white">
-                      <td class="align-middle pt-6 pb-4 px-6">
-                        <div class="media">
-                          <div class="w-120px mr-4 position-relative">
-                            <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
-                              <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
-                            </a>
-                            <?php if ($row2['type'] == 'ขาย') {
-                              $type = 'ขาย';
-                              echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
-                            } ?>
-                            <?php if ($row2['type'] == 'เช่า') {
-                              $type = 'เช่า';
-                              echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
-                            } ?>
-                            <?php if ($row2['type'] == 'ขาย-เช่า') {
-                              $type = 'ขาย-เช่า';
-                              echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
-                            } ?>
-                            <?php if ($row2['type'] == 'ขายดาวน์') {
-                              $type = 'ขายดาวน์';
-                              echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
-                            } ?>
-                            <?php if ($row2['type'] == 'ใบจอง') {
-                              $type = 'ใบจอง';
-                              echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
-                            } ?>
-                          </div>
-                          <div class="media-body">
-                            <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
-                              <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
-                            </a>
-                            <p class="mb-1 font-weight-500"><?php if ($row2['house_no'] != '') {
-                                                              echo $h_no . " " . $row2['house_no'];
-                                                            } ?> <?php if ($row2['village_no'] != '') {
-                                                                    echo $v_no . " " . $row2['village_no'];
-                                                                  } ?>
-                              <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
-                              <?php foreach ($result3 as $value) {
+              $perpage = 4;
+              if (isset($_GET['page'])) {
+                $page = $_GET['page'];
+              } else {
+                $page = 1;
+              }
+              $start = ($page - 1) * $perpage;
 
-                                if ($value['l_id'] == $row2['l_id']) {
+              $ad = $_GET['search_ad'];
 
-                                  echo 'ต.' . $value['dname_th'] . ' ';
-                                  echo 'อ.' . $value['aname_th'] . ' ';
-                                  echo 'จ.' . $value['name_th'] . ' ';
-                                }
-                              } ?>
-                              <?php echo $row2['postal_code']; ?></p>
-                            </p>
-                            <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $row2['price'] ?> บาท</span>
-                          </div>
-                        </div>
-                      </td>
-                      <td class="align-middle"><?php echo $row2['date']; ?></td>
-                      <td class="align-middle">
-                        <?php if ($row2['ad_status'] == '1') {
-                          $status = 'กำลังลงประกาศ';
-                          echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-yellow"> ' . $status . ' </span>';
-                        }
-                        if ($row2['ad_status'] == '0') {
-                          $status = 'รออนุมัติ';
-                          echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-blue"> ' . $status . ' </span>';
-                        }
-                        if ($row2['ad_status'] == '2') {
-                          $status = 'แบบร่าง';
-                          echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-green"> ' . $status . ' </span>';
-                        }
-                        if ($row2['ad_status'] == '3') {
-                          $status = 'ประกาศหมดอายุ';
-                          echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
-                        } ?>
+              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+            property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+            location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+            location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+            FROM (((((advertise
+                LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+                LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+                LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+                LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+                LEFT  JOIN users ON advertise.u_id = users.u_id)
+                WHERE users.u_id = $id AND 
+              (advertise.title LIKE '%$ad%' OR property_type.p_type LIKE '%$ad%' OR advertise_type.type LIKE '%$ad%' OR property_detail.price LIKE '%$ad%' ) 
+              ORDER BY advertise.a_id DESC limit {$start} , {$perpage} ";
+              $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+              $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+                provinces.name_th,amphures.aname_th,districts.dname_th
+            FROM (((location_property
+            INNER  JOIN provinces ON location_property.province_id = provinces.id)
+            INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
+            INNER JOIN districts ON location_property.district_id = districts.id) 
+             ";
+              $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 
+              $total_record = mysqli_num_rows($result2);
 
+              $sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+              property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+              location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+              location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+              FROM (((((advertise
+                  LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+                  LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+                  LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+                  LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+                  LEFT  JOIN users ON advertise.u_id = users.u_id)
+                  WHERE users.u_id = $id AND 
+                (advertise.title LIKE '%$ad%' OR property_type.p_type LIKE '%$ad%' OR advertise_type.type LIKE '%$ad%'OR property_detail.price LIKE '%$ad%' )";
+             $resultad = mysqli_query($con,$sqlad);
+             $total_recordad = mysqli_num_rows($resultad);
+             $total_page = ceil($total_recordad / $perpage);
 
-                      </td>
-                      <td class="align-middle">2049</td>
-                      <td class="align-middle">
-                        <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
-                        <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
-                      </td>
-                    <?php  } ?>
+            ?>
+
+              <div class="table-responsive">
+              <div class="col-sm-6 mb-6 mb-sm-3">
+                  <h2 class="fs-15 text-dark mb-0">ค้นพบ <span class="text-primary"><?php echo $ad ?></span> จำนวน <span class="text-primary"><?php echo $total_recordad ?></span> ประกาศ
+                  </h2>
+                </div>
+                <table class="table table-hover bg-white border rounded-lg">
+                  <thead class="thead-sm thead-black">
+                    <tr>
+                      <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">จัดการ</th>
                     </tr>
+                  </thead>
+                  <tbody>
+                    <?php while ($row2 = mysqli_fetch_array($result2)) {
+                      $h_no = "เลขที่";
+                      $v_no = "หมู่";
 
-                </tbody>
-              </table>
-              <?php
-              $sql4 = "SELECT * FROM (advertise  
-              INNER JOIN users ON advertise.u_id = users.u_id) WHERE users.u_id = $id ";
-              $result4 = mysqli_query($con, $sql4);
-              $total_record2 = mysqli_num_rows($result4);
-              $total_page = ceil($total_record2 / $perpage);
-              ?>
-            </div>
-            <nav class="mt-6">
-              <ul class="pagination rounded-active justify-content-center">
-                <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
-                <?php for ($i = 1; $i <= $total_page; $i++) { ?>
-                  <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                <?php } ?>
-                <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
-              </ul>
-            </nav>
+                    ?>
+
+                      <tr class="shadow-hover-xs-2 bg-hover-white">
+                        <td class="align-middle pt-6 pb-4 px-6">
+                          <div class="media">
+                            <div class="w-120px mr-4 position-relative">
+                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
+                                <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
+                              </a>
+                              <?php if ($row2['type'] == 'ขาย') {
+                                $type = 'ขาย';
+                                echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'เช่า') {
+                                $type = 'เช่า';
+                                echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'ขาย-เช่า') {
+                                $type = 'ขาย-เช่า';
+                                echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'ขายดาวน์') {
+                                $type = 'ขายดาวน์';
+                                echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'ใบจอง') {
+                                $type = 'ใบจอง';
+                                echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                            </div>
+                            <div class="media-body">
+                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                                <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
+                              </a>
+                              <p class="mb-1 font-weight-500"><?php if ($row2['house_no'] != '') {
+                                                                echo $h_no . " " . $row2['house_no'];
+                                                              } ?> <?php if ($row2['village_no'] != '') {
+                                                                      echo $v_no . " " . $row2['village_no'];
+                                                                    } ?>
+                                <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
+                                <?php foreach ($result3 as $value) {
+
+                                  if ($value['l_id'] == $row2['l_id']) {
+
+                                    echo 'ต.' . $value['dname_th'] . ' ';
+                                    echo 'อ.' . $value['aname_th'] . ' ';
+                                    echo 'จ.' . $value['name_th'] . ' ';
+                                  }
+                                } ?>
+                                <?php echo $row2['postal_code']; ?></p>
+                              </p>
+                              <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $row2['price'] ?> บาท</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="align-middle"><?php echo $row2['date']; ?></td>
+                        <td class="align-middle">
+                          <?php if ($row2['ad_status'] == '1') {
+                            $status = 'กำลังลงประกาศ';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-yellow"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '0') {
+                            $status = 'รออนุมัติ';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-blue"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '2') {
+                            $status = 'แบบร่าง';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-green"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '3') {
+                            $status = 'ประกาศหมดอายุ';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
+                          } ?>
+
+
+
+                        </td>
+                        <td class="align-middle">2049</td>
+                        <td class="align-middle">
+                          <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
+                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
+                        </td>
+                      <?php  } ?>
+                      </tr>
+
+                  </tbody>
+                </table>
+              
+              </div>
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center">
+                  <li class="page-item"><a class="page-link" href="dashboard-properties.php?search_ad=<?php echo $ad?>&page=1"><i class="far fa-angle-double-left"></i></a></li>
+                  <?php for ($i = 1; $i <= $total_page; $i++) { ?>
+                    <li class="page-item"><a class="page-link" href="dashboard-properties.php?search_ad=<?php echo $ad?>&page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                  <?php } ?>
+                  <li class="page-item"><a class="page-link" href="dashboard-properties.php?search_ad=<?php echo $ad?>&page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                </ul>
+              </nav>
+
+            <?php } else {
+
+              require_once('../dbconnect.php');
+
+              $id = $_SESSION['u_id'];
+              if (empty($id)) {
+                header('Location:login.php');
+              }
+              $sql = "SELECT * FROM users WHERE u_id= $id";
+              $result = mysqli_query($con, $sql);
+              $row = mysqli_fetch_assoc($result);
+
+              $perpage = 4;
+              if (isset($_GET['page'])) {
+                $page = $_GET['page'];
+              } else {
+                $page = 1;
+              }
+              $start = ($page - 1) * $perpage;
+
+              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+              property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+              location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+              location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+              FROM (((((advertise
+              LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+              LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
+              LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+              LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+              LEFT JOIN users ON advertise.u_id = users.u_id)
+              WHERE users.u_id = $id  ORDER BY advertise.a_id DESC limit {$start} , {$perpage} ";
+              $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+              $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+              provinces.name_th,amphures.aname_th,districts.dname_th
+              FROM (((location_property
+              INNER JOIN provinces ON location_property.province_id = provinces.id)
+              INNER JOIN amphures ON location_property.amphure_id = amphures.id)
+              INNER JOIN districts ON location_property.district_id = districts.id)
+              ";
+              $result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
+
+              $total_record = mysqli_num_rows($result2);
+
+            ?>
+
+              <div class="table-responsive">
+                <table class="table table-hover bg-white border rounded-lg">
+                  <thead class="thead-sm thead-black">
+                    <tr>
+                      <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php while ($row2 = mysqli_fetch_array($result2)) {
+                      $h_no = "เลขที่";
+                      $v_no = "หมู่";
+
+                    ?>
+
+                      <tr class="shadow-hover-xs-2 bg-hover-white">
+                        <td class="align-middle pt-6 pb-4 px-6">
+                          <div class="media">
+                            <div class="w-120px mr-4 position-relative">
+                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
+                                <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
+                              </a>
+                              <?php if ($row2['type'] == 'ขาย') {
+                                $type = 'ขาย';
+                                echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'เช่า') {
+                                $type = 'เช่า';
+                                echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'ขาย-เช่า') {
+                                $type = 'ขาย-เช่า';
+                                echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'ขายดาวน์') {
+                                $type = 'ขายดาวน์';
+                                echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                              <?php if ($row2['type'] == 'ใบจอง') {
+                                $type = 'ใบจอง';
+                                echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
+                              } ?>
+                            </div>
+                            <div class="media-body">
+                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                                <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
+                              </a>
+                              <p class="mb-1 font-weight-500"><?php if ($row2['house_no'] != '') {
+                                                                echo $h_no . " " . $row2['house_no'];
+                                                              } ?> <?php if ($row2['village_no'] != '') {
+                                                                      echo $v_no . " " . $row2['village_no'];
+                                                                    } ?>
+                                <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
+                                <?php foreach ($result3 as $value) {
+
+                                  if ($value['l_id'] == $row2['l_id']) {
+
+                                    echo 'ต.' . $value['dname_th'] . ' ';
+                                    echo 'อ.' . $value['aname_th'] . ' ';
+                                    echo 'จ.' . $value['name_th'] . ' ';
+                                  }
+                                } ?>
+                                <?php echo $row2['postal_code']; ?></p>
+                              </p>
+                              <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $row2['price'] ?> บาท</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="align-middle"><?php echo $row2['date']; ?></td>
+                        <td class="align-middle">
+                          <?php if ($row2['ad_status'] == '1') {
+                            $status = 'กำลังลงประกาศ';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-yellow"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '0') {
+                            $status = 'รออนุมัติ';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-blue"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '2') {
+                            $status = 'แบบร่าง';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-green"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '3') {
+                            $status = 'ประกาศหมดอายุ';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
+                          } ?>
+
+
+
+                        </td>
+                        <td class="align-middle">2049</td>
+                        <td class="align-middle">
+                          <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
+                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
+                        </td>
+                      <?php  } ?>
+                      </tr>
+
+                  </tbody>
+                </table>
+                <?php
+                $sql4 = "SELECT * FROM (advertise  
+INNER JOIN users ON advertise.u_id = users.u_id) WHERE users.u_id = $id ";
+                $result4 = mysqli_query($con, $sql4);
+                $total_record2 = mysqli_num_rows($result4);
+                $total_page = ceil($total_record2 / $perpage);
+                ?>
+              </div>
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center">
+                  <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
+                  <?php for ($i = 1; $i <= $total_page; $i++) { ?>
+                    <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                  <?php } ?>
+                  <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                </ul>
+              </nav>
+
+
+            <?php } ?>
           </div>
         </main>
       </div>

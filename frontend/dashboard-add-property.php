@@ -469,7 +469,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                                                                                 echo date("Y-m-d\TH:i:s"); ?>>
                                       <input class="custom-file-input" id="fileupload2" type="file" name="file[]" multiple>
                                       <p class="text-one ">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
-                                    </div>
+                                    </div><br><br><br>
                                     <div id="upload-img2"></div>
                                   </div>
                                 </div>
