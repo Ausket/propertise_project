@@ -1,3 +1,54 @@
+<?php
+
+require_once('../dbconnect.php');
+
+$id = $_GET['id'];
+
+$ida = $_GET['id'];
+$sqla = "SELECT * FROM users WHERE u_id = $ida";
+$resulta = mysqli_query($con, $sqla);
+$rowa = mysqli_fetch_array($resulta);
+
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+FROM (((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
+    WHERE a_id = $id  ";
+$resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
+$rowad = mysqli_fetch_array($resultad);
+$pd_id = $rowad['l_id'];
+
+if ($rowad['pd_status'] = '1') {
+  $status = 'พร้อมอยู่อาศัย';
+} else {
+  $status = 'ไม่พร้อมอยู่อาศัย';
+}
+
+$sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+    provinces.name_th,amphures.aname_th,districts.dname_th
+FROM (((location_property
+INNER  JOIN provinces ON location_property.province_id = provinces.id)
+INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
+INNER JOIN districts ON location_property.district_id = districts.id) 
+ ";
+$result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
+$total_record = mysqli_num_rows($resultad);
+
+$facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
+
+$sqlf = "SELECT file.f_name, file.f_date, file.f_id
+FROM (file
+INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
+WHERE file.pd_id = $pd_id ";
+$resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -7,7 +58,7 @@
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Single Property 2 - HomeID</title>
+  <title>Property Detail</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -177,96 +228,35 @@
             <div class="box">
               <div class="item item-size-3-2">
                 <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-lg-1.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-lg-1.jpg')">
+                  <a href="../image/p_img/<?php echo $rowad['img_video']; ?>" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../image/p_img/<?php echo $rowad['img_video']; ?>')">
                   </a>
                 </div>
               </div>
             </div>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-lg-4.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-lg-4.jpg')">
-                  </a>
+            <?php while ($rowf = mysqli_fetch_array($resultf)) { ?>
+              <div class="box">
+                <div class="item item-size-3-2">
+                  <div class="card p-0 hover-change-image">
+                    <a href="../file/<?php echo $rowf['f_name']; ?>" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../file/<?php echo $rowf['f_name']; ?>')">
+                    </a>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-17.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-17.jpg')">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-lg-3.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-lg-3.jpg')">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-7.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-7.jpg')">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-18.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-18.jpg')">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../images/single-property-8.jpg" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../images/single-property-8.jpg')">
-                  </a>
-                </div>
-              </div>
-            </div>
+            <?php } ?>
           </div>
           <div class="slick-slider slider-nav mt-1 mx-n1 arrow-haft-inner" data-slick-options='{"slidesToShow": 6, "autoplay":false,"dots":false,"arrows":true,"asNavFor": ".slider-for","focusOnSelect": true,"responsive":[{"breakpoint": 1200,"settings": {"slidesToShow": 4,"arrows":false}},{"breakpoint": 768,"settings": {"slidesToShow": 4,"arrows":false}},{"breakpoint": 576,"settings": {"slidesToShow": 2,"arrows":false}}]}'>
             <div class="box pb-6 px-0">
               <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-7.jpg" alt="Gallery 01" class="h-100 w-100 rounded-lg">
+                <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="Gallery 02" class="h-100 w-100 rounded-lg">
               </div>
             </div>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-2.jpg" alt="Gallery 02" class="h-100 w-100 rounded-lg">
+            <?php while ($rowf = mysqli_fetch_array($resultf)) { ?>
+              <div class="box pb-6 px-0">
+                <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
+                  <img src="../file/<?php echo $rowf['f_name']; ?>" alt="Gallery 02" class="h-100 w-100 rounded-lg">
+                </div>
               </div>
-            </div>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-3.jpg" alt="Gallery 03" class="h-100 w-100 rounded-lg">
-              </div>
-            </div>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-4.jpg" alt="Gallery 04" class="h-100 w-100 rounded-lg">
-              </div>
-            </div>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-5.jpg" alt="Gallery 05" class="h-100 w-100 rounded-lg">
-              </div>
-            </div>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-6.jpg" alt="Gallery 06" class="h-100 w-100 rounded-lg">
-              </div>
-            </div>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../images/single-property-sm-8.jpg" alt="Gallery 07" class="h-100 w-100 rounded-lg">
-              </div>
-            </div>
+            <?php } ?>
           </div>
         </div>
       </div>
@@ -277,29 +267,39 @@
           <article class="col-lg-12">
             <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
               <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
-                <li class="list-inline-item badge badge-orange mr-2">ยอดนิยม</li>
-                <li class="list-inline-item badge badge-primary mr-3">ขาย</li>
+                <li class="list-inline-item badge badge-primary mr-3"><?php echo $rowad['type']; ?></li>
                 <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i>2 เดือนที่แล้ว</li>
                 <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i>1039 ครั้ง</li>
               </ul>
               <div class="d-sm-flex justify-content-sm-between">
                 <div>
-                  <h2 class="fs-35 font-weight-600 lh-15 text-heading">เดอะรูท | The Root</h2>
-                  <p class="mb-0"><i class="fal fa-map-marker-alt mr-2"></i>ลาดพร้าว 1 แยก 27, แขวงจอมพล, จตุจักร, กรุงเทพ</p>
+                  <h2 class="fs-35 font-weight-600 lh-15 text-heading"><?php echo $rowad['title']; ?></h2>
+                  <p class="mb-0"><i class="fal fa-map-marker-alt mr-2"></i><?php $h_no = "เลขที่";
+                                                                            $v_no = "หมู่";
+                                                                            if ($rowad['house_no'] != '') {
+                                                                              echo $h_no . " " . $rowad['house_no'];
+                                                                            } ?> <?php if ($rowad['village_no'] != '') {
+                                                                                    echo $v_no . " " . $rowad['village_no'];
+                                                                                  } ?>
+                    <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
+                    <?php foreach ($result3 as $value) {
+
+                      if ($value['l_id'] == $rowad['l_id']) {
+
+                        echo 'ต.' . $value['dname_th'] . ' ';
+                        echo 'อ.' . $value['aname_th'] . ' ';
+                        echo 'จ.' . $value['name_th'] . ' ';
+                      }
+                    } ?>
+                    <?php echo $rowad['postal_code']; ?></p>
+                  </p>
                 </div>
                 <div class="mt-2 text-lg-right">
-                  <p class="fs-22 text-heading font-weight-bold mb-0">5,000,000 บาท</p>
-                  <p class="mb-0">10,000 บาท/ตร.เมตร</p>
+                  <p class="fs-22 text-heading font-weight-bold mb-0"><?php echo $rowad['price']; ?> บาท</p>
                 </div>
               </div>
               <h4 class="fs-22 text-heading mt-6 mb-0">รายละเอียด</h4>
-              <p class="mb-0 lh-214">Massa tempor nec feugiat nisl pretium. Egestas fringilla phasellus faucibus
-                scelerisque eleifend donec.
-                Porta nibh venenatis cras sed felis eget velit aliquet. Neque volutpat ac tincidunt vitae semper
-                quis lectus. Turpis in eu mi bibendum neque
-                egestas congue quisque. Sed elementum tempus egestas sed sed risus pretium quam. Dignissim sodales
-                ut eu sem. Nibh mauris cursus mattis molestie a
-                iaculis at erat pellentesque. Id interdum velit laoreet id donec ultrices tincidunt.</p>
+              <p class="mb-0 lh-214"><?php echo $rowad['note']; ?></p>
             </section>
             <section class="mt-0 pb-3 px-6 pt-5 bg-white rounded-lg">
               <div class="row">
@@ -312,46 +312,7 @@
                     </div>
                     <div class="media-body">
                       <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ประเภท</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">บ้านเดี่ยว</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-year fs-32 text-primary">
-                        <use xlink:href="#icon-year"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ปีที่สร้าง</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">2021</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-heating fs-32 text-primary">
-                        <use xlink:href="#icon-heating"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">เครื่องปรับอากาศ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">ติดผนัง</p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-price fs-32 text-primary">
-                        <use xlink:href="#icon-price"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ตร.เมตร</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">2300</p>
+                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['p_type']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -364,7 +325,7 @@
                     </div>
                     <div class="media-body">
                       <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ห้องนอน</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">3</p>
+                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['bedroom']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -377,7 +338,7 @@
                     </div>
                     <div class="media-body">
                       <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ห้องน้ำ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">2</p>
+                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['bathroom']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -390,7 +351,20 @@
                     </div>
                     <div class="media-body">
                       <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ที่จอดรถ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">1</p>
+                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['parking']; ?></p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-sm-4 mb-6">
+                  <div class="media">
+                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
+                      <svg class="icon icon-price fs-32 text-primary">
+                        <use xlink:href="#icon-price"></use>
+                      </svg>
+                    </div>
+                    <div class="media-body">
+                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ขนาดพื้นที่</h5>
+                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['space_area']; ?></p>
                     </div>
                   </div>
                 </div>
@@ -403,7 +377,7 @@
                     </div>
                     <div class="media-body">
                       <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">สถานะ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading">พร้อมอยู่อาศัย</p>
+                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $status; ?></p>
                     </div>
                   </div>
                 </div>
@@ -412,12 +386,16 @@
             <section class="mt-2 pb-7 px-6 pt-5 bg-white rounded-lg">
               <h4 class="fs-22 text-heading mb-4">สิ่งอำนวยความสะดวก</h4>
               <ul class="list-unstyled mb-0 row no-gutters">
-                <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i>ระเบียง</li>
-                <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i>เตาผิง</li>
-                <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i>ชั้นใต้ดิน</li>
-                <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i>คูลลิ่ง</li>
-                <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i>ห้องรับประทานอาหาร</li>
-                <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i>เครื่องล้างจาน</li>
+                <?php
+                $facility = explode(",", $rowad['facility']); //array
+                foreach ($facility_arr as $value) {
+                  if (in_array($value, $facility)) {
+                ?>
+                    <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i><?php echo $value ?></li>
+                  <?php } else { ?>
+                    <li class="col-sm-3 col-6 mb-2"><i class="fas fa-times mr-2 text-danger"></i><?php echo $value ?></li>
+                <?php }
+                } ?>
               </ul>
             </section>
             <!-- <section class="mt-2 pb-7 px-6 pt-6 bg-white rounded-lg">

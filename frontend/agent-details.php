@@ -1,10 +1,61 @@
 <?php
 require_once('../dbconnect.php');
 
-$ida= $_GET['id'];
+$ida = $_GET['id'];
 $sqla = "SELECT * FROM users WHERE u_id = $ida";
 $resulta = mysqli_query($con, $sqla);
-$rowa = mysqli_fetch_array($resulta)
+$rowa = mysqli_fetch_array($resulta);
+
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+FROM (((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
+    WHERE users.u_id = $ida ORDER BY advertise.a_id DESC ";
+$resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
+$sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+    provinces.name_th,amphures.aname_th,districts.dname_th
+FROM (((location_property
+INNER  JOIN provinces ON location_property.province_id = provinces.id)
+INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
+INNER JOIN districts ON location_property.district_id = districts.id) 
+ ";
+$result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
+$total_record = mysqli_num_rows($resultad);
+
+$sqlad2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+FROM (((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
+    WHERE users.u_id = $ida AND advertise_type.atype_id in ('1','3','4') ORDER BY advertise.a_id DESC ";
+$resultad2 = mysqli_query($con, $sqlad2) or die(mysqli_error($con));
+$total_record2 = mysqli_num_rows($resultad2);
+
+$sqlad3 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+FROM (((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
+    WHERE users.u_id = $ida AND advertise_type.atype_id = '2' ORDER BY advertise.a_id DESC ";
+$resultad3 = mysqli_query($con, $sqlad3) or die(mysqli_error($con));
+$total_record3 = mysqli_num_rows($resultad3);
+
 
 ?>
 
@@ -142,17 +193,17 @@ $rowa = mysqli_fetch_array($resulta)
               <ul class="nav nav-tabs text-uppercase d-none d-md-inline-flex agent-details-tabs" role="tablist">
                 <li class="nav-item">
                   <a href="#all" class="nav-link active shadow-none fs-13" data-toggle="tab" role="tab">
-                    ทั้งหมด (8)
+                    ทั้งหมด (<?php echo $total_record ?>)
                   </a>
                 </li>
                 <li class="nav-item ml-0">
                   <a href="#sale" class="nav-link shadow-none fs-13" data-toggle="tab" role="tab">
-                    ขาย (5)
+                    ขาย (<?php echo $total_record2 ?>)
                   </a>
                 </li>
                 <li class="nav-item ml-0">
                   <a href="#rent" class="nav-link shadow-none fs-13" data-toggle="tab" role="tab">
-                    เช่า (3)
+                    เช่า (<?php echo $total_record3 ?>)
                   </a>
                 </li>
               </ul>
@@ -170,560 +221,102 @@ $rowa = mysqli_fetch_array($resulta)
                       <div id="all-collapse-01" class="collapse show collapsible" aria-labelledby="headingAll-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
                           <div class="row">
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-35.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">ขาย</span>
+                            <?php
+                            if ($total_record != 0) {
+                              while ($rowad = mysqli_fetch_array($resultad)) {
+                                $h_no = "เลขที่";
+                                $v_no = "หมู่";
+
+                            ?>
+                                <div class="col-md-6 mb-7">
+                                  <div class="card border-0">
+                                    <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                                      <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="Home in Metric Way">
+                                      <div class="card-img-overlay d-flex flex-column">
+                                        <div class="mb-auto">
+                                          <span class="badge badge-primary"><?php echo $rowad['type']; ?></span>
+                                        </div>
+                                        <div class="d-flex hover-image">
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
+                                              <a href="#" class="text-white fs-20 hover-primary">
+                                                <i class="far fa-heart"></i>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
+                                              <a href="#" class="text-white fs-20 hover-primary">
+                                                <i class="fas fa-exchange-alt"></i>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
+                                    <div class="card-body pt-3 px-0 pb-1">
+                                      <h2 class="fs-16 mb-1"><a href="home-details.php?id=<?php echo $rowad['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad['title']; ?></a>
+                                      </h2>
+                                      <p class="font-weight-500 text-gray-light mb-0">
+                                        <?php if ($rowad['house_no'] != '') {
+                                          echo $h_no . " " . $rowad['house_no'];
+                                        } ?> <?php if ($rowad['village_no'] != '') {
+                                              echo $v_no . " " . $rowad['village_no'];
+                                            } ?>
+                                        <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
+                                        <?php foreach ($result3 as $value) {
+
+                                          if ($value['l_id'] == $rowad['l_id']) {
+
+                                            echo 'ต.' . $value['dname_th'] . ' ';
+                                            echo 'อ.' . $value['aname_th'] . ' ';
+                                            echo 'จ.' . $value['name_th'] . ' ';
+                                          }
+                                        } ?>
+                                        <?php echo $rowad['postal_code']; ?></p>
+
+                                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
+                                        <?php echo $rowad['price']; ?> บาท
+                                      </p>
                                     </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 ตร.เมตร
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-36.jpg" alt="Villa on Hollywood Boulevard">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-indigo">เช่า</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
+                                    <div class="card-footer bg-transparent px-0 pb-0 pt-2">
+                                      <ul class="list-inline mb-0">
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
+                                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-bedroom"></use>
+                                          </svg>
+                                          <?php echo $rowad['bedroom']; ?> ห้อง
                                         </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
+                                          <svg class="icon icon-shower fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-shower"></use>
+                                          </svg>
+                                          <?php echo $rowad['bathroom']; ?> ห้อง
                                         </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
+                                          <svg class="icon icon-square fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-square"></use>
+                                          </svg>
+                                          <?php echo $rowad['space_area']; ?>
                                         </li>
                                       </ul>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Villa on Hollywood Boulevard</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $550
-                                    <span class="fs-14 font-weight-500 text-gray-light"> ต่อเดือน </span>
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 ตร.เมตร
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-37.jpg" alt="Affordable Urban House">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Affordable Urban House</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 ตร.เมตร
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-73.jpg" alt="Explore Old Barcelona">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">ขาย</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Explore Old Barcelona</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 ห้อง
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 ตร.เมตร
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-67.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-68.jpg" alt="Garden Gingerbread House">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-indigo">for Rent</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Garden Gingerbread House</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $550
-                                    <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-49.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $550
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-19.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
+                              <?php } ?>
+                            <?php } else { ?>
+                              <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
+                            <?php } ?>
                           </div>
                         </div>
                       </div>
@@ -734,427 +327,108 @@ $rowa = mysqli_fetch_array($resulta)
                       <div class="card-header border-0 d-block d-md-none bg-transparent p-0" id="headingSale-01">
                         <h5 class="mb-0">
                           <button class="btn lh-2 fs-18 bg-white py-1 px-6 shadow-none w-100 collapse-parent border collapsed mb-4" data-toggle="collapse" data-target="#sale-collapse-01" aria-expanded="true" aria-controls="sale-collapse-01">
-                            For Sale (5)
+                            ขาย (5)
                           </button>
                         </h5>
                       </div>
                       <div id="sale-collapse-01" class="collapse collapsible" aria-labelledby="headingSale-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
                           <div class="row">
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-35.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
+                            <?php
+                            if ($total_record2 != 0) {
+                              while ($rowad2 = mysqli_fetch_array($resultad2)) {
+                                $h_no = "เลขที่";
+                                $v_no = "หมู่";
+
+                            ?>
+                                <div class="col-md-6 mb-7">
+                                  <div class="card border-0">
+                                    <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                                      <img src="../image/p_img/<?php echo $rowad2['img_video']; ?>" alt="Home in Metric Way">
+                                      <div class="card-img-overlay d-flex flex-column">
+                                        <div class="mb-auto">
+                                          <span class="badge badge-primary"><?php echo $rowad2['type']; ?></span>
+                                        </div>
+                                        <div class="d-flex hover-image">
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
+                                              <a href="#" class="text-white fs-20 hover-primary">
+                                                <i class="far fa-heart"></i>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
+                                              <a href="#" class="text-white fs-20 hover-primary">
+                                                <i class="fas fa-exchange-alt"></i>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
+                                    <div class="card-body pt-3 px-0 pb-1">
+                                      <h2 class="fs-16 mb-1"><a href="home-details.php?id=<?php echo $rowad2['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad2['title']; ?></a>
+                                      </h2>
+                                      <p class="font-weight-500 text-gray-light mb-0">
+                                        <?php if ($rowad2['house_no'] != '') {
+                                          echo $h_no . " " . $rowad2['house_no'];
+                                        } ?> <?php if ($rowad2['village_no'] != '') {
+                                              echo $v_no . " " . $rowad2['village_no'];
+                                            } ?>
+                                        <?php echo $rowad2['lane']; ?> <?php echo $rowad2['road']; ?>
+                                        <?php foreach ($result3 as $value) {
+
+                                          if ($value['l_id'] == $rowad2['l_id']) {
+
+                                            echo 'ต.' . $value['dname_th'] . ' ';
+                                            echo 'อ.' . $value['aname_th'] . ' ';
+                                            echo 'จ.' . $value['name_th'] . ' ';
+                                          }
+                                        } ?>
+                                        <?php echo $rowad2['postal_code']; ?></p>
+                                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
+                                        <?php echo $rowad2['price']; ?> บาท
+                                      </p>
                                     </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-37.jpg" alt="Affordable Urban House">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
+                                    <div class="card-footer bg-transparent px-0 pb-0 pt-2">
+                                      <ul class="list-inline mb-0">
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
+                                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-bedroom"></use>
+                                          </svg>
+                                          <?php echo $rowad2['bedroom']; ?> ห้อง
                                         </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
+                                          <svg class="icon icon-shower fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-shower"></use>
+                                          </svg>
+                                          <?php echo $rowad2['bathroom']; ?> ห้อง
                                         </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
+                                          <svg class="icon icon-square fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-square"></use>
+                                          </svg>
+                                          <?php echo $rowad2['space_area']; ?>
                                         </li>
                                       </ul>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Affordable Urban House</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-73.jpg" alt="Explore Old Barcelona">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Explore Old Barcelona</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-67.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-49.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $550
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-19.jpg" alt="Home in Metric Way">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-primary">For Sale</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Home in Metric Way</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $1.250.000
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
+                              <?php } ?>
+                            <?php } else { ?>
+                              <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
+                            <?php } ?>
                           </div>
                         </div>
                       </div>
@@ -1165,153 +439,110 @@ $rowa = mysqli_fetch_array($resulta)
                       <div class="card-header border-0 d-block d-md-none bg-transparent p-0" id="headingRent-01">
                         <h5 class="mb-0">
                           <button class="btn lh-2 fs-18 bg-white py-1 px-6 shadow-none w-100 collapse-parent border collapsed mb-4" data-toggle="collapse" data-target="#rent-collapse-01" aria-expanded="true" aria-controls="rent-collapse-01">
-                            For Rent (3)
+                            เช่า(3)
                           </button>
                         </h5>
                       </div>
                       <div id="rent-collapse-01" class="collapse collapsible" aria-labelledby="headingRent-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
                           <div class="row">
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-36.jpg" alt="Villa on Hollywood Boulevard">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-indigo">for Rent</span>
+                            <?php
+                            if ($total_record3 != 0) {
+                              while ($rowad3 = mysqli_fetch_array($resultad3)) {
+                                $h_no = "เลขที่";
+                                $v_no = "หมู่";
+
+                            ?>
+                                <div class="col-md-6 mb-7">
+                                  <div class="card border-0">
+                                    <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                                      <img src="../image/p_img/<?php echo $rowad3['img_video']; ?>" alt="Villa on Hollywood Boulevard">
+                                      <div class="card-img-overlay d-flex flex-column">
+                                        <div class="mb-auto">
+                                          <span class="badge badge-indigo"><?php echo $rowad3['type']; ?></span>
+                                        </div>
+                                        <div class="d-flex hover-image">
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
+                                              <a href="#" class="text-white fs-20 hover-primary">
+                                                <i class="far fa-heart"></i>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
+                                              <a href="#" class="text-white fs-20 hover-primary">
+                                                <i class="fas fa-exchange-alt"></i>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
                                     </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
-                                        </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
-                                        </li>
-                                      </ul>
+                                    <div class="card-body pt-3 px-0 pb-1">
+                                      <h2 class="fs-16 mb-1"><a href="home-details.php?id=<?php echo $rowad3['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad3['title']; ?></a>
+                                      </h2>
+                                      <p class="font-weight-500 text-gray-light mb-0">
+                                        <?php if ($rowad3['house_no'] != '') {
+                                          echo $h_no . " " . $rowad3['house_no'];
+                                        } ?> <?php if ($rowad3['village_no'] != '') {
+                                              echo $v_no . " " . $rowad3['village_no'];
+                                            } ?>
+                                        <?php echo $rowad2['lane']; ?> <?php echo $rowad3['road']; ?>
+                                        <?php foreach ($result3 as $value) {
+
+                                          if ($value['l_id'] == $rowad3['l_id']) {
+
+                                            echo 'ต.' . $value['dname_th'] . ' ';
+                                            echo 'อ.' . $value['aname_th'] . ' ';
+                                            echo 'จ.' . $value['name_th'] . ' ';
+                                          }
+                                        } ?>
+                                        <?php echo $rowad3['postal_code']; ?></p>
+                                      </p>
+                                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
+                                        <?php echo $rowad3['price']; ?> บาท
+                                        <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
+                                      </p>
                                     </div>
-                                  </div>
-                                </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Villa on Hollywood Boulevard</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $550
-                                    <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-7">
-                              <div class="card border-0">
-                                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                                  <img src="../images/properties-grid-68.jpg" alt="Garden Gingerbread House">
-                                  <div class="card-img-overlay d-flex flex-column">
-                                    <div class="mb-auto">
-                                      <span class="badge badge-indigo">for Rent</span>
-                                    </div>
-                                    <div class="d-flex hover-image">
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                        <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-images"></i><span class="pl-1">9</span>
-                                          </a>
+                                    <div class="card-footer bg-transparent px-0 pb-0 pt-2">
+                                      <ul class="list-inline mb-0">
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
+                                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-bedroom"></use>
+                                          </svg>
+                                          <?php echo $rowad3['bedroom']; ?> ห้อง
                                         </li>
-                                        <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                                          <a href="#" class="text-white hover-primary">
-                                            <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                                          </a>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
+                                          <svg class="icon icon-shower fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-shower"></use>
+                                          </svg>
+                                          <?php echo $rowad3['bathroom']; ?> ห้อง
                                         </li>
-                                      </ul>
-                                      <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="far fa-heart"></i>
-                                          </a>
-                                        </li>
-                                        <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                          <a href="#" class="text-white fs-20 hover-primary">
-                                            <i class="fas fa-exchange-alt"></i>
-                                          </a>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
+                                          <svg class="icon icon-square fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-square"></use>
+                                          </svg>
+                                          <?php echo $rowad3['space_area']; ?>
                                         </li>
                                       </ul>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="card-body pt-3 px-0 pb-1">
-                                  <h2 class="fs-16 mb-1"><a href="single-property-1.html" class="text-dark hover-primary">Garden Gingerbread House</a>
-                                  </h2>
-                                  <p class="font-weight-500 text-gray-light mb-0">
-                                    1421 San Pedro St, Los Angeles</p>
-                                  <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                    $550
-                                    <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
-                                  </p>
-                                </div>
-                                <div class="card-footer bg-transparent px-0 pb-0 pt-2">
-                                  <ul class="list-inline mb-0">
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
-                                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-bedroom"></use>
-                                      </svg>
-                                      3 Br
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
-                                      <svg class="icon icon-shower fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-shower"></use>
-                                      </svg>
-                                      3 Ba
-                                    </li>
-                                    <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
-                                      <svg class="icon icon-square fs-18 text-primary mr-1">
-                                        <use xlink:href="#icon-square"></use>
-                                      </svg>
-                                      2300 Sq.Ft
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
+                              <?php } ?>
+                            <?php } else { ?>
+                              <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
+                            <?php } ?>
                           </div>
                         </div>
                       </div>
@@ -1320,8 +551,8 @@ $rowa = mysqli_fetch_array($resulta)
                 </div>
               </div>
             </div>
+          </div>
         </div>
-      </div>
     </section>
   </main>
   <?php include 'templates/footer-two.php'; ?>

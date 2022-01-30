@@ -147,6 +147,7 @@
              $resultad = mysqli_query($con,$sqlad);
              $total_recordad = mysqli_num_rows($resultad);
              $total_page = ceil($total_recordad / $perpage);
+             
 
             ?>
 
@@ -176,7 +177,11 @@
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
-                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
+                            <?php if($row2['ad_status'] == '1'){?>
+                              <a href="home-details.php?id=<?php echo $row2['a_id']; ?>">
+                              <?php } else{?>
+                                <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
+                                <?php }?>
                                 <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
                               </a>
                               <?php if ($row2['type'] == 'ขาย') {
@@ -201,7 +206,11 @@
                               } ?>
                             </div>
                             <div class="media-body">
-                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                            <?php if($row2['ad_status'] == '1'){?>
+                              <a href="home-details.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                              <?php } else{?>
+                                <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                                <?php }?>
                                 <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
                               </a>
                               <p class="mb-1 font-weight-500"><?php if ($row2['house_no'] != '') {
@@ -330,13 +339,18 @@
                       $h_no = "เลขที่";
                       $v_no = "หมู่";
 
+
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
-                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
+                             <?php if($row2['ad_status'] == '1'){?>
+                              <a href="home-details.php?id=<?php echo $row2['a_id']; ?>">
+                              <?php } else{?>
+                                <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>">
+                                <?php }?>
                                 <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
                               </a>
                               <?php if ($row2['type'] == 'ขาย') {
@@ -361,7 +375,11 @@
                               } ?>
                             </div>
                             <div class="media-body">
-                              <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                            <?php if($row2['ad_status'] == '1'){?>
+                              <a href="home-details.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                              <?php } else{?>
+                                <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                                <?php }?>
                                 <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
                               </a>
                               <p class="mb-1 font-weight-500"><?php if ($row2['house_no'] != '') {

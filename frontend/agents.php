@@ -90,7 +90,6 @@
       } else {
         $page = 1;
       }
-
       $start = ($page - 1) * $perpage;
 
       $agent = $_GET['search_agent'];
@@ -204,11 +203,11 @@
 
               <nav class="mt-4">
                 <ul class="pagination rounded-active justify-content-center">
-                  <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent?>&page=1"><i class="far fa-angle-double-left"></i></a></li>
+                  <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent ?>&page=1"><i class="far fa-angle-double-left"></i></a></li>
                   <?php for ($i = 1; $i <= $total_page; $i++) { ?>
-                    <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent?>&page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                    <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent ?>&page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                   <?php } ?>
-                  <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent?>&page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                  <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent ?>&page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
                 </ul>
               </nav>
             </div>
@@ -229,16 +228,16 @@
 
       $start = ($page - 1) * $perpage;
 
-
       $sqla = "SELECT * FROM users WHERE utype='agent' ORDER BY u_id DESC
-limit {$start} , {$perpage}";
+      limit {$start} , {$perpage}";
       $resulta = mysqli_query($con, $sqla);
-
 
       $sql4 = "SELECT * FROM users WHERE utype='agent'";
       $result4 = mysqli_query($con, $sql4);
       $total_record = mysqli_num_rows($result4);
       $total_page = ceil($total_record / $perpage);
+
+
     ?>
 
       <section class="pt-8 pb-13 bg-gray-01">
@@ -252,19 +251,20 @@ limit {$start} , {$perpage}";
                 </div>
                 <div class="col-sm-6 ml-auto">
                   <div class="d-flex align-items-center justify-content-sm-end">
-                    <div class="input-group border rounded input-group-lg w-auto mr-6">
-                      <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
-                      <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
-                        <option selected value="1">ตัวอักษร</option>
-                        <option value="2">สุ่ม</option>
-                        <option value="3">เรตติ้ง</option>
-                        <option value="4">จำนวนทรัพย์สิน</option>
-                      </select>
-                    </div>
+                    <form class="" action="" method="post">
+                      <div class="input-group border rounded input-group-lg w-auto mr-6">
+                        <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
+                        <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
+                          <option selected value="asc"> ตัวอักษร</option>
+                          <option value="desc">สุ่ม</option>
+                          <option value="rate">เรตติ้ง</option>
+                          <option value="nump">จำนวนทรัพย์สิน</option>
+                        </select>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
-
               <div class="row">
                 <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
                   <div class="col-md-4 mb-4">
@@ -352,7 +352,6 @@ limit {$start} , {$perpage}";
           </div>
         </div>
       </section>
-
     <?php   }  ?>
   </main>
   <?php include 'templates/footer-two.php'; ?>
