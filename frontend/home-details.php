@@ -247,13 +247,13 @@ $resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
           <div class="slick-slider slider-nav mt-1 mx-n1 arrow-haft-inner" data-slick-options='{"slidesToShow": 6, "autoplay":false,"dots":false,"arrows":true,"asNavFor": ".slider-for","focusOnSelect": true,"responsive":[{"breakpoint": 1200,"settings": {"slidesToShow": 4,"arrows":false}},{"breakpoint": 768,"settings": {"slidesToShow": 4,"arrows":false}},{"breakpoint": 576,"settings": {"slidesToShow": 2,"arrows":false}}]}'>
             <div class="box pb-6 px-0">
               <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="Gallery 02" class="h-100 w-100 rounded-lg">
+                <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="<?php echo $rowad['img_video']; ?>" class="h-100 w-100 rounded-lg">
               </div>
             </div>
             <?php while ($rowf = mysqli_fetch_array($resultf)) { ?>
               <div class="box pb-6 px-0">
                 <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                  <img src="../file/<?php echo $rowf['f_name']; ?>" alt="Gallery 02" class="h-100 w-100 rounded-lg">
+                  <img src="../file/<?php echo $rowf['f_name']; ?>" alt="<?php echo $rowf['f_name']; ?>" class="h-100 w-100 rounded-lg">
                 </div>
               </div>
             <?php } ?>

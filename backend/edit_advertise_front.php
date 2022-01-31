@@ -43,6 +43,11 @@ $pathT = "../file/"; //สร้างไฟล์สำหรับเก็บ
 $numrandT = (mt_rand(1000, 9999));
 $date = $_POST['date'];
 
+$check = "SELECT * FROM advertise WHERE a_id =$id";
+$resultc = mysqli_query($con, $check);
+$rowc = mysqli_fetch_array($resultc);
+$status = $rowc['ad_status'];
+
 
 if ($file != '') {
     $type = strrchr($file, "."); //ตัดชื่อไฟล์เหลือแต่นามสกุล
@@ -66,10 +71,14 @@ if ($file != '') {
         $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
         $result = mysqli_query($con, $sql);
 
-
-        $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe',ad_status ='2' WHERE a_id = $id ";
-        $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
-
+        if ($status == '1') {
+            $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe',ad_status ='1' WHERE a_id = $id ";
+            $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
+        }
+        if ($status == '2') {
+            $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe',ad_status ='2' WHERE a_id = $id ";
+            $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
+        }
 
         if (isset($_FILES["file"])) {
 
@@ -161,8 +170,14 @@ if ($file == '') {
         $result = mysqli_query($con, $sql);
 
 
-        $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe',ad_status='2' WHERE a_id = $id ";
-        $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
+        if ($status == '1') {
+            $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe',ad_status ='1' WHERE a_id = $id ";
+            $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
+        }
+        if ($status == '2') {
+            $sql4 = "UPDATE advertise SET atype_id='$atype',ptype_id='$ptype',pd_id='$p_id',l_id='$l_id',title='$title',note='$describe',ad_status ='2' WHERE a_id = $id ";
+            $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
+        }
 
 
         if (isset($_FILES["file"])) {
