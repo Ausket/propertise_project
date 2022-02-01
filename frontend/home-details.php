@@ -24,6 +24,15 @@ $resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
 $rowad = mysqli_fetch_array($resultad);
 $pd_id = $rowad['l_id'];
 
+$date1 = $rowad['date'];
+$date2 = date('Y-m-d H:i:s');
+
+$diff = abs(strtotime($date2) - strtotime($date1));
+
+$years = floor($diff / (365 * 60 * 60 * 24));
+$months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+$days = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+
 if ($rowad['pd_status'] = '1') {
   $status = 'พร้อมอยู่อาศัย';
 } else {
@@ -47,6 +56,10 @@ FROM (file
 INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
 WHERE file.pd_id = $pd_id ";
 $resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
+
+$sqlfa = "SELECT * FROM favourite WHERE a_id = $ida";
+$resultfa = mysqli_query($con,$sqlfa) or die ;
+$num_row = mysqli_num_rows($resultfa);
 
 ?>
 <!doctype html>
@@ -191,7 +204,11 @@ $resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
           <div class="position-absolute pos-fixed-top-right z-index-3">
             <ul class="list-inline pt-4 pr-5">
               <li class="list-inline-item mr-2">
-                <a href="#" data-toggle="tooltip" title="" class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle" data-original-title="Favourite">
+                <?php if($num_row == 0) {?>
+                <a href=""  id="fav"  class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle" >
+                  <?php }else{ ?>
+                    <a href="" id="fav"  class="d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle" >
+                    <?php }?>
                   <i class="far fa-heart"></i></a>
               </li>
               <li class="list-inline-item mr-2">
@@ -268,12 +285,15 @@ $resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
             <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
               <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
                 <li class="list-inline-item badge badge-primary mr-3"><?php echo $rowad['type']; ?></li>
-                <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i>2 เดือนที่แล้ว</li>
+                <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i><?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
                 <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i>1039 ครั้ง</li>
               </ul>
               <div class="d-sm-flex justify-content-sm-between">
                 <div>
                   <h2 class="fs-35 font-weight-600 lh-15 text-heading"><?php echo $rowad['title']; ?></h2>
+                  <?php if($rowad['project_name'] != '') {?>
+                  <p class="fs-20 text-heading font-weight-bold mb-0">โครงการ <?php echo $rowad['project_name']; ?></p>
+                  <?php }?>
                   <p class="mb-0"><i class="fal fa-map-marker-alt mr-2"></i><?php $h_no = "เลขที่";
                                                                             $v_no = "หมู่";
                                                                             if ($rowad['house_no'] != '') {
@@ -558,6 +578,38 @@ $resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function($) {
+      $('a#fav').on('click', function(e) {
+
+        e.preventDefault();
+       
+        $.ajax({
+          url: '../backend/favourite.php',
+          type: 'POST',
+          data: {
+            u_id: <?= $_SESSION['u_id'] ?>,
+            ida :<?= $ida?> ,
+          },
+          cache: false,
+          success: function(data) {
+            
+          if(data == 1){
+            $("#fav").removeAttr("class");
+            $("a#fav").toggleClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle");
+
+          }else{
+
+            $("#fav").removeAttr("class");
+            $("#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle");
+          }
+
+
+          }
+        });
+      });
+    });
+  </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

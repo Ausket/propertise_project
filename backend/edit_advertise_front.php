@@ -56,7 +56,7 @@ if ($file != '') {
 
     move_uploaded_file($_FILES['img']['tmp_name'], $path_copy);
 
-    if (isset($_POST['submit1'])) {
+    if (isset($_POST['submit1']) || isset($_POST['submit2'])) {
 
         $sql5 = "SELECT * FROM advertise WHERE a_id =$id";
         $result5 = mysqli_query($con, $sql5);
@@ -154,7 +154,7 @@ if ($file != '') {
 
 if ($file == '') {
 
-    if (isset($_POST['submit1'])) {
+    if (isset($_POST['submit1']) || isset($_POST['submit2'])) {
 
         $sql5 = "SELECT * FROM advertise WHERE a_id =$id";
         $result5 = mysqli_query($con, $sql5);

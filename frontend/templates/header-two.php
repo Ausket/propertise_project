@@ -148,17 +148,17 @@ if (isset($_POST['submit'])) {
                     <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
                     <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') { 
                          $id = $_SESSION['u_id'];
-                         $sql2 = "SELECT * FROM users WHERE u_id= $id ";
-                         $result2 = mysqli_query($con, $sql2);
-                         $row2 = mysqli_fetch_assoc($result2);?>
+                         $sqlh = "SELECT * FROM users WHERE u_id= $id ";
+                         $resulth = mysqli_query($con, $sqlh);
+                         $rowh = mysqli_fetch_assoc($resulth);?>
                             <li class="nav-item ">
                                 <div class="dropdown border-md-right border-0 py-3 text-right">
                                     <a href="#" class="dropdown-toggle text-heading pr-3 pr-sm-6 d-flex align-items-center justify-content-end" data-toggle="dropdown">
                                         <div class="mr-4 w-48px">
-                                            <img  src="../image/m_img/<?php echo $row2['img'] ?>" width="50"  class="rounded-circle">
+                                            <img  src="../image/m_img/<?php echo $rowh['img'] ?>" width="50"  class="rounded-circle">
                                         </div>
                                         <div class="fs-13 font-weight-500 lh-1">
-                                        <h6><?php echo $row2['name'] ?></h6>
+                                        <h6><?php echo $rowh['name'] ?></h6>
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
@@ -170,15 +170,24 @@ if (isset($_POST['submit'])) {
                         <?php } else { ?>
 
                             <li class="nav-item ">
-                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
-                            <?php } ?>
+                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>              
                             </li>
+                            <li class="nav-item ">
+                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal" aria-labelledby="register-tab">สมัครสมาชิก</a>              
+                            </li>
+                            <?php } ?>
+                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                $id = $_SESSION['u_id'];
+                                $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                                $resultfa = mysqli_query($con,$sqlfa);
+                                $numf = mysqli_num_rows($resultfa); ?>
                             <li class="nav-item mr-auto mr-lg-6">
-                                <a class="nav-link px-2 position-relative" href="#">
+                                <a class="nav-link px-2 position-relative" href="favourite.php">
                                     <i class="fal fa-heart fs-large-4"></i>
-                                    <span class="badge badge-primary badge-circle badge-absolute">1</span>
+                                    <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf?></span>
                                 </a>
                             </li>
+                            <?php } ?>
                     </ul>
                 </div>
             </div>

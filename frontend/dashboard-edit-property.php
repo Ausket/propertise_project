@@ -21,7 +21,7 @@ $resultpr = mysqli_query($con, $sqlpr);
 
 $idb = $_GET["id"];
 $sqlb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
 location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
 FROM ((((advertise
@@ -579,8 +579,16 @@ $resultd = mysqli_query($con, $sqld);
                               <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
-                              <button class="btn btn-lg bg-white hover-primary rounded-lg mb-3 mr-3 " type="submit" name="submit1"> บันทึก </button>
-                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2"> ลงประกาศ </button>
+                              <?php if ($rowb['ad_status'] == '1') { ?>
+                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2"> บันทึกประกาศ </button>
+                              <?php } ?>  
+                              <?php  if ($rowb['ad_status'] == '0') {?>
+                              <button class="btn btn-lg btn-primary mb-3 " type="submit" name="submit1"> บันทึกข้อมูล </button>
+                              <?php } ?> 
+                              <?php  if ($rowb['ad_status'] == '2') {?> 
+                              <button class="btn btn-lg bg-white hover-primary rounded-lg mb-3 mr-3 " type="submit" name="submit1"> บันทึกข้อมูล </button>
+                              <button class="btn btn-lg btn-primary mb-3 " type="submit" name="submit3"> ลงประกาศ </button>  
+                              <?php } ?>                          
                             </div>
                           </div>
                         </div>

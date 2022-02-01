@@ -1,3 +1,92 @@
+<?php
+require_once('dbconnect.php');
+
+if (isset($_POST['submit'])) {
+
+  $email = $con->real_escape_string($_POST['email']);
+  $password = $con->real_escape_string($_POST['password']);
+
+  $sql = "SELECT * FROM users
+                WHERE  email='" . $email . "' 
+                AND  password='" . $password . "' ";
+
+  $result = $con->query($sql);
+  $row = $result->fetch_assoc();
+
+  if ($row["ustatus"] == '0') {
+      echo "<script>";
+      echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
+      echo "</script>";
+      header('Refresh:0; url=index.php');
+  } else {
+
+      if (!empty($row)) {
+
+          $_SESSION["u_id"] = $row["u_id"];
+          $_SESSION["email"] = $row["email"];
+          $_SESSION["password"] = $row["password"];
+          $_SESSION["name"] = $row["name"];
+          $_SESSION["address"] = $row["address"];
+          $_SESSION["tel"] = $row["tel"];
+          $_SESSION["id_card"] = $row["id_card"];
+          $_SESSION["company"] = $row["company"];
+          $_SESSION["birth_date"] = $row["birth_date"];
+          $_SESSION["img"] = $row["img"];
+          $_SESSION["utype"] = $row["utype"];
+          $_SESSION["ustatus"] = $row["ustatus"];
+
+          if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
+              header("location: page/profile.php");
+          }
+          if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
+              header("location: index.php");
+          }
+      } else {
+          echo "<script>";
+          echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
+          echo "</script>";
+          header('Refresh:0; url=index.php');
+      }
+  }
+}
+
+$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type
+FROM ((((advertise
+LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
+LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+WHERE advertise.ad_status = '1' ORDER BY advertise.a_id  DESC limit 6 ";
+$result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+
+$sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+provinces.name_th,amphures.aname_th,districts.dname_th
+FROM (((location_property
+INNER JOIN provinces ON location_property.province_id = provinces.id)
+INNER JOIN amphures ON location_property.amphure_id = amphures.id)
+INNER JOIN districts ON location_property.district_id = districts.id)
+";
+$result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
+
+$sqla = "SELECT * FROM users WHERE utype='agent' ORDER BY u_id DESC";
+$resulta = mysqli_query($con, $sqla);
+$total_agent = mysqli_num_rows($resulta);
+
+$sql4 = "SELECT property_detail.project_name,advertise.ad_status
+FROM (advertise
+LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+WHERE property_detail.project_name != '' AND advertise.ad_status = '1' ";
+$result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));
+$total_pro = mysqli_num_rows($result4);
+
+$sql5 = "SELECT * FROM advertise WHERE advertise.ad_status = '1' ";
+$result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));
+$total = mysqli_num_rows($result5);
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -42,10 +131,9 @@
   <meta property="og:image:height" content="630">
 </head>
 <?php include 'frontend/templates/header.php'; ?>
-
 <body>
   <main id="content">
-  <?php include 'frontend/templates/search-box.php'; ?>
+    <?php include 'frontend/templates/search-box.php'; ?>
     <section class="py-15 text-center bg-cover" style="background-image: url('images/bg-home-8.jpg')">
       <div class="container">
         <div data-animate="fadeInDown">
@@ -66,7 +154,6 @@
           <div class="col-md-6">
             <h2 class="text-heading">อสังหาริมทรัพย์ยอดนิยม</h2>
             <span class="heading-divider"></span>
-            <p class="mb-6">Lorem ipsum dolor sit amet, consec tetur cing elit. Suspe ndisse suscipit</p>
           </div>
           <div class="col-md-6 text-md-right">
             <a href="listing-grid-with-left-filter.html" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">ดูเพิ่มเติม
@@ -352,17 +439,17 @@
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">ลูกค้ามีความสุข</div>
           </div>
           <div class="col-sm-6 col-lg-3 mb-6 mb-sm-0 px-6 text-center" data-animate="fadeInUp">
-            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="491" data-decimals="0" data-duration="0" data-separator="">491
+            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="<?php echo $total_pro ?> " data-decimals="0" data-duration="0" data-separator=""><?php echo $total_pro ?>
             </div>
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">โครงการที่เสร็จแล้ว</div>
           </div>
           <div class="col-sm-6 col-lg-3 mb-6 mb-sm-0 px-6 text-center" data-animate="fadeInUp">
-            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="245" data-decimals="0" data-duration="0" data-separator="">245
+            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="<?php echo $total_agent ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $total_agent ?>
             </div>
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">ตัวแทน</div>
           </div>
           <div class="col-sm-6 col-lg-3 mb-6 mb-sm-0 px-6 text-center" data-animate="fadeInUp">
-            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="1090" data-decimals="0" data-duration="0" data-separator="">1090
+            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="<?php echo $total ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $total_record ?>
             </div>
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">โพสต์</div>
           </div>
@@ -375,281 +462,135 @@
           <div class="col-md-6">
             <h2 class="text-heading">อสังหาริมทรัพย์ล่าสุด</h2>
             <span class="heading-divider"></span>
-            <p class="mb-6">Lorem ipsum dolor sit amet, consec tetur cing elit. Suspe ndisse suscipit</p>
           </div>
           <div class="col-md-6 text-md-right">
-            <a href="listing-grid-with-left-filter.html" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">See all properties
+            <a href="listing-grid-with-left-filter.html" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">ดูเพิ่มเติม
               <i class="far fa-long-arrow-right ml-1"></i>
             </a>
           </div>
         </div>
         <div class="slick-slider slick-dots-mt-0 custom-arrow-spacing-30" data-slick-options='{"slidesToShow": 3,"dots":true,"arrows":false,"responsive":[{"breakpoint": 1600,"settings": {"slidesToShow":3}},{"breakpoint": 992,"settings": {"slidesToShow":2,"arrows":false}},{"breakpoint": 768,"settings": {"slidesToShow": 2,"arrows":false,"dots":true,"autoplay":true}},{"breakpoint": 576,"settings": {"slidesToShow": 1,"arrows":false,"dots":true,"autoplay":true}}]}'>
-          <div class="box pb-7 pt-2">
-            <div class="card shadow-hover-2" data-animate="zoomIn">
-              <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                <img src="images/properties-grid-02.jpg" alt="Home in Metric Way">
-                <div class="card-img-overlay p-2 d-flex flex-column">
-                  <div>
-                    <span class="badge mr-2 badge-orange">ยอดนิยม</span>
-                    <span class="badge mr-2 badge-primary">ขาย</span>
+          <?php while ($row2 = mysqli_fetch_array($result2)) {
+            $h_no = "เลขที่";
+            $v_no = "หมู่"; ?>
+            <div class="box pb-7 pt-2">
+              <div class="card shadow-hover-2" data-animate="zoomIn">
+                <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                  <img src="image/p_img/<?php echo $row2['img_video'] ?>" alt="<?php echo $row2['img_video'] ?>">
+                  <div class="card-img-overlay p-2 d-flex flex-column">
+                    <div>
+                      <?php if ($row2['type'] == 'ขาย') {
+                        $type = 'ขาย';
+                        echo "<span class='badge mr-2 badge-indigo '>$type</span>";
+                      } ?>
+                      <?php if ($row2['type'] == 'เช่า') {
+                        $type = 'เช่า';
+                        echo "<span class='badge mr-2 badge-info'>$type</span>";
+                      } ?>
+                      <?php if ($row2['type'] == 'ขาย-เช่า') {
+                        $type = 'ขาย-เช่า';
+                        echo "<span class='badge mr-2 badge-success '>$type</span>";
+                      } ?>
+                      <?php if ($row2['type'] == 'ขายดาวน์') {
+                        $type = 'ขายดาวน์';
+                        echo "<span class='badge mr-2 badge-warning '>$type</span>";
+                      } ?>
+                      <?php if ($row2['type'] == 'ใบจอง') {
+                        $type = 'ใบจอง';
+                        echo "<span class='badge mr-2 badge-danger '>$type</span>";
+                      } ?>
+
+                    </div>
+                    <ul class="list-inline mb-0 mt-auto hover-image">
+                      <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                        <a href="#" class="text-white hover-primary">
+                          <i class="far fa-images"></i><span class="pl-1">9</span>
+                        </a>
+                      </li>
+                      <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                        <a href="#" class="text-white hover-primary">
+                          <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                        </a>
+                      </li>
+                    </ul>
                   </div>
-                  <ul class="list-inline mb-0 mt-auto hover-image">
-                    <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-images"></i><span class="pl-1">9</span>
-                      </a>
+                </div>
+                <div class="card-body pt-3">
+                  <h2 class="card-title fs-16 lh-2 mb-0">
+                    <a href="frontend/home-details.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary"><?php echo $row2['title']; ?></a>
+                  </h2>
+                  <p class="card-text font-weight-500 text-gray-light mb-2"><?php if ($row2['house_no'] != '') {
+                                                                              echo $h_no . " " . $row2['house_no'];
+                                                                            } ?> <?php if ($row2['village_no'] != '') {
+                                                                                    echo $v_no . " " . $row2['village_no'];
+                                                                                  } ?>
+                    <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
+                    <?php foreach ($result3 as $value) {
+
+                      if ($value['l_id'] == $row2['l_id']) {
+
+                        echo 'ต.' . $value['dname_th'] . ' ';
+                        echo 'อ.' . $value['aname_th'] . ' ';
+                        echo 'จ.' . $value['name_th'] . ' ';
+                      }
+                    } ?>
+                    <?php echo $row2['postal_code']; ?>
+                  </p>
+                  <ul class="list-inline d-flex mb-0 flex-wrap mr-n5">
+                    <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
+                      <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                        <use xlink:href="#icon-bedroom"></use>
+                      </svg>
+                      <?php echo $row2['bedroom'] ?> ห้อง
                     </li>
-                    <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                      </a>
+                    <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
+                      <svg class="icon icon-shower fs-18 text-primary mr-1">
+                        <use xlink:href="#icon-shower"></use>
+                      </svg>
+                      <?php echo $row2['bathroom'] ?> ห้อง
+                    </li>
+                    <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
+                      <svg class="icon icon-square fs-18 text-primary mr-1">
+                        <use xlink:href="#icon-square"></use>
+                      </svg>
+                      <?php echo $row2['space_area'] ?>
+                    </li>
+                    <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
+                      <svg class="icon icon-Garage fs-18 text-primary mr-1">
+                        <use xlink:href="#icon-Garage"></use>
+                      </svg>
+                      <?php echo $row2['parking'] ?>
+                    </li>
+                  </ul>
+                </div>
+                <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
+                  <p class="fs-17 font-weight-bold text-heading mb-0"><?php echo $row2['price'] ?> บาท</p>
+                  <ul class="list-inline mb-0">
+                    <li class="list-inline-item">
+                      <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                        $ad = $row2['a_id'];
+                        $id = $_SESSION['u_id'];
+                        $sqlf = "SELECT * FROM favourite WHERE a_id = $ad ";
+                        $resultf = mysqli_query($con, $sqlf);
+                        $numf = mysqli_num_rows($resultf); ?>
+                        <?php if ($numf == 0) { ?>
+                          <a href="" name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"  ><i class="far fa-heart"></i></a>
+                        <?php } else { ?>
+                          <a href="" name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"  ><i class="fas fa-heart"></i></a>
+                        <?php } ?>
+                      <?php } else {?>
+                      <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" ><i class="far fa-heart"></i></a>
+                      <?php } ?>
+                    </li>
+                    <li class="list-inline-item">
+                      <a data-toggle="tooltip" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"  title="Compare"><i class="fas fa-exchange-alt"></i></a>
                     </li>
                   </ul>
                 </div>
               </div>
-              <div class="card-body pt-3">
-                <h2 class="card-title fs-16 lh-2 mb-0">
-                  <a href="frontend/home-detauls.php" class="text-dark hover-primary">เดอะรูท | The Root</a>
-                </h2>
-                <p class="card-text font-weight-500 text-gray-light mb-2">ลาดพร้าว 1 แยก 27, แขวงจอมพล, จตุจักร, กรุงเทพ
-                </p>
-                <ul class="list-inline d-flex mb-0 flex-wrap mr-n5">
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                    <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-bedroom"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                    <svg class="icon icon-shower fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-shower"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                    <svg class="icon icon-square fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-square"></use>
-                    </svg>
-                    213 ตร.เมตร
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                    <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-Garage"></use>
-                    </svg>
-                    1 คัน
-                  </li>
-                </ul>
-              </div>
-              <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">5,000,000 บาท</p>
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent" data-toggle="tooltip" title="Wishlist"><i class="fas fa-heart"></i></a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Compare"><i class="fas fa-exchange-alt"></i></a>
-                  </li>
-                </ul>
-              </div>
             </div>
-          </div>
-          <div class="box pb-7 pt-2">
-            <div class="card shadow-hover-2" data-animate="zoomIn">
-              <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                <img src="images/properties-grid-01.jpg" alt="Affordable Urban House">
-                <div class="card-img-overlay p-2 d-flex flex-column">
-                  <div>
-                    <span class="badge mr-2 badge-primary">ขาย</span>
-                  </div>
-                  <ul class="list-inline mb-0 mt-auto hover-image">
-                    <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-images"></i><span class="pl-1">9</span>
-                      </a>
-                    </li>
-                    <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card-body pt-3">
-                <h2 class="card-title fs-16 lh-2 mb-0"><a href="single-property-1.html" class="text-dark hover-primary">ทากะ เฮ้าส์ | Taka HAUS</a></h2>
-                <p class="card-text font-weight-500 text-gray-light mb-2">99 เอกมัย 10, วัฒนา, กรุงเทพ</p>
-                <ul class="list-inline d-flex mb-0 flex-wrap mr-n5">
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                    <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-bedroom"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                    <svg class="icon icon-shower fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-shower"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                    <svg class="icon icon-square fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-square"></use>
-                    </svg>
-                    213 ตร.เมตร
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                    <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-Garage"></use>
-                    </svg>
-                    1 คัน
-                  </li>
-                </ul>
-              </div>
-              <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">4,000,000 บาท</p>
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Wishlist"><i class="far fa-heart"></i></a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Compare"><i class="fas fa-exchange-alt"></i></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="box pb-7 pt-2">
-            <div class="card shadow-hover-2" data-animate="zoomIn">
-              <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                <img src="images/properties-grid-03.jpg" alt="Villa on Hollywood Boulevard">
-                <div class="card-img-overlay p-2 d-flex flex-column">
-                  <div>
-                    <span class="badge mr-2 badge-primary">ขาย</span>
-                  </div>
-                  <ul class="list-inline mb-0 mt-auto hover-image">
-                    <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-images"></i><span class="pl-1">9</span>
-                      </a>
-                    </li>
-                    <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card-body pt-3">
-                <h2 class="card-title fs-16 lh-2 mb-0"><a href="single-property-1.html" class="text-dark hover-primary">เดอะ ฮาร์โมนี | The Harmony</a></h2>
-                <p class="card-text font-weight-500 text-gray-light mb-2">ซ.รามอินทรา62 แยก1, คันนายาว, กรุงเทพ</p>
-                <ul class="list-inline d-flex mb-0 flex-wrap mr-n5">
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                    <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-bedroom"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                    <svg class="icon icon-shower fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-shower"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                    <svg class="icon icon-square fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-square"></use>
-                    </svg>
-                    176 ตร.เมตร
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                    <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-Garage"></use>
-                    </svg>
-                    1 คัน
-                  </li>
-                </ul>
-              </div>
-              <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">6,500,000 บาท</p>
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Wishlist"><i class="far fa-heart"></i></a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Compare"><i class="fas fa-exchange-alt"></i></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-          <div class="box pb-7 pt-2">
-            <div class="card shadow-hover-2" data-animate="zoomIn">
-              <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                <img src="images/properties-grid-04.jpg" alt="Home in Metric Way">
-                <div class="card-img-overlay p-2 d-flex flex-column">
-                  <div>
-                    <span class="badge mr-2 badge-orange">ยอดนิยม</span>
-                    <span class="badge mr-2 badge-primary">ขาย</span>
-                  </div>
-                  <ul class="list-inline mb-0 mt-auto hover-image">
-                    <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-images"></i><span class="pl-1">9</span>
-                      </a>
-                    </li>
-                    <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                      <a href="#" class="text-white hover-primary">
-                        <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-              <div class="card-body pt-3">
-                <h2 class="card-title fs-16 lh-2 mb-0"><a href="single-property-1.html" class="text-dark hover-primary">DHEPA Ramkhamhaeng 118 | เทพา รามคำแหง 118</a></h2>
-                <p class="card-text font-weight-500 text-gray-light mb-2">ซ.รามคำแหง 118 (44-2), สะพานสูง, สะพานสูง,
-                  กรุงเทพ</p>
-                <ul class="list-inline d-flex mb-0 flex-wrap mr-n5">
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                    <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-bedroom"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                    <svg class="icon icon-shower fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-shower"></use>
-                    </svg>
-                    3 ห้อง
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                    <svg class="icon icon-square fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-square"></use>
-                    </svg>
-                    2300 ตร.เมตร
-                  </li>
-                  <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                    <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                      <use xlink:href="#icon-Garage"></use>
-                    </svg>
-                    1 คัน
-                  </li>
-                </ul>
-              </div>
-              <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">8,800,000 บาท</p>
-                <ul class="list-inline mb-0">
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Wishlist"><i class="far fa-heart"></i></a>
-                  </li>
-                  <li class="list-inline-item">
-                    <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Compare"><i class="fas fa-exchange-alt"></i></a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+          <?php } ?>
+
         </div>
       </div>
     </section>
@@ -657,7 +598,6 @@
       <div class="container container-xxl">
         <h2 class="text-heading">ทำเลยอดนิยม</h2>
         <span class="heading-divider"></span>
-        <p class="mb-7">Lorem ipsum dolor sit amet, consec tetur cing elit. Suspe ndisse suscipit</p>
         <div class="slick-slider mx-n2" data-slick-options='{"slidesToShow": 4,"arrows":false, "autoplay":false,"dots":false,"responsive":[{"breakpoint": 1200,"settings": {"slidesToShow":3}},{"breakpoint": 992,"settings": {"slidesToShow":3}},{"breakpoint": 768,"settings": {"slidesToShow": 2}},{"breakpoint": 576,"settings": {"slidesToShow": 1}}]}'>
           <div class="box px-2" data-animate="fadeInUp">
             <div class="card text-white bg-overlay-gradient-8 hover-zoom-in">
@@ -734,7 +674,6 @@
                         </svg>
                       </span>
                     </a>
-                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
                   </div>
                 </div>
               </div>
@@ -756,7 +695,6 @@
                         </svg>
                       </span>
                     </a>
-                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
                   </div>
                 </div>
               </div>
@@ -778,7 +716,6 @@
                         </svg>
                       </span>
                     </a>
-                    <p class="mb-0">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor</p>
                   </div>
                 </div>
               </div>
@@ -888,6 +825,169 @@
     </div>
   </main>
   <?php include 'frontend/templates/footer.php'; ?>
+  <div class="modal fade login-register login-register-modal" id="login-register-modal" tabindex="-1" role="dialog" aria-labelledby="login-register-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mxw-571" role="document">
+        <div class="modal-content">
+            <div class="modal-header border-0 p-0">
+                <div class="nav nav-tabs row w-100 no-gutters" id="myTab" role="tablist">
+                    <a class="nav-item col-sm-4 ml-0 nav-link pr-6 py-4 pl-9 active fs-18" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">เข้าสู่ระบบ</a>
+                    <a class="nav-item col-sm-4 ml-0 nav-link py-4 px-6 fs-18" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">สมัครสมาชิก</a>
+                    <div class="nav-item col-sm-4 ml-0 d-flex align-items-center justify-content-end">
+                        <button type="button" class="close m-0 fs-30" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="margin-right: 35px;">&times;</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body p-4 py-sm-7 px-sm-8">
+                <div class="tab-content shadow-none p-0" id="myTabContent">
+                    <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                        <form action="" method="post">
+                            <div class="form-group mb-4">
+                                <label for="username" class="sr-only">Email</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text bg-gray-01 border-0 text-muted fs-18" id="inputGroup-sizing-lg">
+                                            <i class="far fa-user"></i></span>
+                                    </div>
+                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder=" อีเมล">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="password" class="sr-only">Password</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                                            <i class="far fa-lock"></i>
+                                        </span>
+                                    </div>
+                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
+                                            <i class="far fa-eye-slash"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex mb-4">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="" id="remember-me" name="remember-me">
+                                    <label class="form-check-label" for="remember-me">
+                                        บันทึกการเข้าสู่ระบบ
+                                    </label>
+                                </div>
+                                <a href="password-recovery.html" class="d-inline-block ml-auto text-orange fs-15">
+                                    ลืมรหัสผ่านใช่หรือไม่
+                                </a>
+                            </div>
+                            <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">เข้าสู่ระบบ</button>
+                        </form>
+                        <div class="divider text-center my-2">
+                            <span class="px-4 bg-white lh-17 text">
+                                หรือเชื่อมต่อผ่าน
+                            </span>
+                        </div>
+                        <div class="row no-gutters mx-n2">
+                            <div class="col-4 px-2 mb-4">
+                                <a href="frontend/dashboard-profiles.php" class="btn btn-lg btn-block facebook text-white px-0">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </div>
+                            <div class="col-4 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block google px-0">
+                                    <img src="images/google.png" alt="Google">
+                                </a>
+                            </div>
+                            <div class="col-4 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                    <form action="backend/regis_db.php" id="regisform" method="post">
+                            <div class="form-group mb-4">
+                                <label for="username01" class="sr-only">Email</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                                            <i class="far fa-user"></i></span>
+                                    </div>
+                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder="อีเมล">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="password01" class="sr-only">Password</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                                            <i class="far fa-lock"></i>
+                                        </span>
+                                    </div>
+                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
+                                            <i class="far fa-eye-slash"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="full-name" class="sr-only">Full name</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                                            <i class="far fa-address-card"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control border-0 shadow-none fs-13" id="name" name="name" required placeholder="ชื่อและนามสกุล">
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="phone01" class="sr-only">Phone</label>
+                                <div class="input-group input-group-lg">
+                                    <div class="input-group-prepend ">
+                                        <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                                            <i class="far fa-phone-alt"></i></span>
+                                    </div>
+                                    <input type="number" class="form-control border-0 shadow-none fs-13" id="tel" name="tel" required placeholder="เบอร์โทรศัพท์">
+                                </div>
+                            </div>
+                        
+                            <button type="submit" name="submit"  class="btn btn-primary btn-lg btn-block">สมัครสมาชิก</button>
+                        </form>
+                        <div class="divider text-center my-2">
+                            <span class="px-4 bg-white lh-17 text">
+                                หรือเชื่อมต่อผ่าน
+                            </span>
+                        </div>
+                        <div class="row no-gutters mx-n2">
+                            <div class="col-4 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block facebook text-white px-0">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                            </div>
+                            <div class="col-4 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block google px-0">
+                                    <i class="fab fa-google-g"></i>
+                                </a>
+                            </div>
+                            <div class="col-4 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="mt-2">การสร้างบัญชีแสดงว่าคุณยอมรับ
+                            <a class="text-heading" href="#"><u>ข้อกำหนดการใช้งาน</u> </a> และ
+                            <a class="text-heading" href="#"><u>นโยบายความเป็นส่วนตัว</u></a>.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
   <!-- Vendors scripts -->
   <script src="css/vendors/jquery.min.js"></script>
   <script src="css/vendors/jquery-ui/jquery-ui.min.js"></script>
@@ -904,6 +1004,36 @@
   <script src="css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('a#fav').on('click', function() {
+        var ida = $(this).attr("name");
+
+        $.ajax({
+          url: 'backend/favourite.php',
+          type: 'POST',
+          data: {
+            u_id: <?= $_SESSION['u_id'] ?>,
+            ida : ida ,
+          },
+          success: function(data) {
+
+          // if(data == 1){
+          //   $("#fav").removeAttr("class");
+          //   $("#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle");
+
+          // }else{
+
+          //   $("#fav").removeAttr("class");
+          //   $("#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle");
+          // }
+
+
+          }
+        });
+      });
+    });
+  </script>
   <!-- Theme scripts -->
   <script src="js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
