@@ -1,65 +1,60 @@
 <?php
-
 require_once('../dbconnect.php');
 
-$id = $_GET['id'];
-
-$ida = $_GET['id'];
-$sqla = "SELECT * FROM users WHERE u_id = $ida";
-$resulta = mysqli_query($con, $sqla);
-$rowa = mysqli_fetch_array($resulta);
-
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
-location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
-FROM (((((advertise
-    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
-    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
-    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
-    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE a_id = $id  ";
-$resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
-$rowad = mysqli_fetch_array($resultad);
-$pd_id = $rowad['l_id'];
-
-$date1 = $rowad['date'];
-$date2 = date('Y-m-d H:i:s');
-
-$diff = abs(strtotime($date2) - strtotime($date1));
-
-$years = floor($diff / (365 * 60 * 60 * 24));
-$months = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
-$days = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
-
-if ($rowad['pd_status'] = '1') {
-  $status = 'พร้อมอยู่อาศัย';
-} else {
-  $status = 'ไม่พร้อมอยู่อาศัย';
+$id = $_SESSION['u_id'];
+if (empty($id)) {
+  header('Location:../index.php');
 }
 
+$sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+$resultfa = mysqli_query($con, $sqlfa);
+$numf = mysqli_num_rows($resultfa);
+
+$perpage = 4;
+if (isset($_GET['page'])) {
+  $page = $_GET['page'];
+} else {
+  $page = 1;
+}
+$start = ($page - 1) * $perpage;
+
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type
+FROM (((((advertise
+LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
+LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+LEFT JOIN favourite ON advertise.a_id =  favourite.a_id)
+WHERE advertise.a_id = favourite.a_id ORDER BY advertise.a_id DESC limit {$start} , {$perpage} ";
+$resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
+
+$sql4 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type
+FROM (((((advertise
+LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
+LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+LEFT JOIN favourite ON advertise.a_id =  favourite.a_id)
+WHERE advertise.a_id = favourite.a_id";
+
+$result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));
+$total_record = mysqli_num_rows($result4);
+$total_page = ceil($total_record / $perpage);
+
 $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
-    provinces.name_th,amphures.aname_th,districts.dname_th
+provinces.name_th,amphures.aname_th,districts.dname_th
 FROM (((location_property
-INNER  JOIN provinces ON location_property.province_id = provinces.id)
-INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
-INNER JOIN districts ON location_property.district_id = districts.id) 
- ";
-$result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
-$total_record = mysqli_num_rows($resultad);
-
-$facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
-
-$sqlf = "SELECT file.f_name, file.f_date, file.f_id
-FROM (file
-INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
-WHERE file.pd_id = $pd_id ";
-$resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
-
-$sqlfa = "SELECT * FROM favourite WHERE a_id = $ida";
-$resultfa = mysqli_query($con,$sqlfa) or die ;
-$num_row = mysqli_num_rows($resultfa);
+INNER JOIN provinces ON location_property.province_id = provinces.id)
+INNER JOIN amphures ON location_property.amphure_id = amphures.id)
+INNER JOIN districts ON location_property.district_id = districts.id)
+";
+$result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
 
 ?>
 <!doctype html>
@@ -71,7 +66,7 @@ $num_row = mysqli_num_rows($resultfa);
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Property Detail</title>
+  <title>My Favourites </title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -94,475 +89,173 @@ $num_row = mysqli_num_rows($resultfa);
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@">
   <meta name="twitter:creator" content="@">
-  <meta name="twitter:title" content="Single Property 2">
+  <meta name="twitter:title" content="My Favourites">
   <meta name="twitter:description" content="Real Estate Html Template">
-  <meta name="twitter:image" content="../images/homeid-social-logo.png">
+  <meta name="twitter:image" content="images/homeid-social-logo.png">
   <!-- Facebook -->
-  <meta property="og:url" content="single-property-2.html">
-  <meta property="og:title" content="Single Property 2">
+  <meta property="og:url" content="dashboard-my-favorites.html">
+  <meta property="og:title" content="My Favourites">
   <meta property="og:description" content="Real Estate Html Template">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="../images/homeid-social.png">
+  <meta property="og:image" content="images/homeid-social.png">
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
 </head>
 
 <body>
-  <?php include 'templates/header-two.php'; ?>
-  <main id="content">
-    <section class="bg-secondary py-6 py-lg-0">
-      <div class="container">
-        <form class="search-form d-none d-lg-block">
-          <div class="row align-items-center">
-            <div class="col-lg-5">
-              <div class="row">
-                <div class="col-md-6">
-                  <label class="text-uppercase font-weight-500 opacity-7 text-white letter-spacing-093 mb-1">Home
-                    Type</label>
-                  <select class="form-control selectpicker bg-transparent border-bottom rounded-0 border-input-opacity-02" name="type" title="Select" data-style="p-0 h-24 lh-17 text-white">
-                    <option>Condominium</option>
-                    <option>Single-Family Home</option>
-                    <option>Townhouse</option>
-                    <option>Multi-Family Home</option>
-                  </select>
-                </div>
-                <div class="col-md-6 pl-md-3 pt-md-0 pt-6">
-                  <label class="text-uppercase font-weight-500 opacity-7 text-white letter-spacing-093 mb-1">Location</label>
-                  <select class="form-control selectpicker bg-transparent border-bottom rounded-0 border-input-opacity-02" name="location" title="Select" data-style="p-0 h-24 lh-17 text-white">
-                    <option>Austin</option>
-                    <option>Boston</option>
-                    <option>Chicago</option>
-                    <option>Denver</option>
-                    <option>Los Angeles</option>
-                    <option>New York</option>
-                    <option>San Francisco</option>
-                  </select>
-                </div>
+  <div class="wrapper dashboard-wrapper">
+    <div class="d-flex flex-wrap flex-xl-nowrap">
+      <?php include 'templates/dashboard-menu.php'; ?>
+      <div class="page-content">
+        <?php include 'templates/header-dashboard.php'; ?>
+        <main id="content" class="bg-gray-01">
+          <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
+            <div class="d-flex flex-wrap flex-md-nowrap mb-6">
+              <div class="mr-0 mr-md-auto">
+                <h2 class="mb-0 text-heading fs-22 lh-15"> รายการโปรด <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $numf ?></span>
+                </h2>
               </div>
-            </div>
-            <div class="col-12 col-lg-5 pt-lg-0 pt-6">
-              <label class="text-uppercase font-weight-500 opacity-7 text-white letter-spacing-093">Search</label>
-              <div class="position-relative">
-                <input type="text" name="search" class="form-control bg-transparent shadow-none border-top-0 border-right-0 border-left-0 border-bottom rounded-0 h-24 lh-17 p-0 pr-md-5 text-white placeholder-light font-weight-500 border-input-opacity-02" placeholder="Enter an address, neighbourhood...">
-                <i class="far fa-search position-absolute pos-fixed-right-center pr-0 fs-18 text-white pb-2 d-none d-md-block"></i>
-              </div>
-            </div>
-            <div class="col-12 col-lg-2 pt-lg-0 pt-7">
-              <button type="submit" class="btn bg-white-opacity-01 bg-white-hover-opacity-03 h-lg-100 w-100 shadow-none text-white rounded-0 fs-16 font-weight-600">
-                Search
-              </button>
-            </div>
-          </div>
-        </form>
-        <form class="property-search property-search-mobile d-lg-none">
-          <div class="row align-items-lg-center" id="accordion-mobile">
-            <div class="col-12">
-              <div class="form-group mb-0 position-relative">
-                <a href="#advanced-search-filters-mobile" class="icon-primary btn advanced-search shadow-none pr-3 pl-0 d-flex align-items-center position-absolute pos-fixed-left-center py-0 h-100 border-right collapsed" data-toggle="collapse" data-target="#advanced-search-filters-mobile" aria-expanded="true" aria-controls="advanced-search-filters-mobile">
-                </a>
-                <input type="text" class="form-control form-control-lg border-0 shadow-none pr-9 pl-11 bg-white placeholder-muted" name="key-word" placeholder="Search...">
-                <button type="submit" class="btn position-absolute pos-fixed-right-center p-0 text-heading fs-20 px-3 shadow-none h-100 border-left bg-white">
-                  <i class="far fa-search"></i>
-                </button>
-              </div>
-            </div>
-            <div id="advanced-search-filters-mobile" class="col-12 pt-2 collapse" data-parent="#accordion-mobile">
-              <div class="row mx-n2">
-                <div class="col-sm-6 pt-4 px-2">
-                  <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" title="Home Types" data-style="btn-lg py-2 h-52 bg-white" name="type">
-                    <option>Condominium</option>
-                    <option>Single-Family Home</option>
-                    <option>Townhouse</option>
-                    <option>Multi-Family Home</option>
-                  </select>
-                </div>
-                <div class="col-sm-6 pt-4 px-2">
-                  <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bedroom" title="Location" data-style="btn-lg py-2 h-52 bg-white">
-                    <option>Austin</option>
-                    <option>Boston</option>
-                    <option>Chicago</option>
-                    <option>Denver</option>
-                    <option>Los Angeles</option>
-                    <option>New York</option>
-                    <option>San Francisco</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-        </form>
-      </div>
-    </section>
-    <section class="bg-white shadow-5 pb-1">
-      <div class="container">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb py-3">
-          </ol>
-        </nav>
-        <div class="galleries position-relative" data-animate="zoomIn">
-          <div class="position-absolute pos-fixed-top-right z-index-3">
-            <ul class="list-inline pt-4 pr-5">
-              <li class="list-inline-item mr-2">
-                <?php if($num_row == 0) {?>
-                <a href=""  id="fav"  class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle" >
-                  <?php }else{ ?>
-                    <a href="" id="fav"  class="d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle" >
-                    <?php }?>
-                  <i class="far fa-heart"></i></a>
-              </li>
-              <li class="list-inline-item mr-2">
-                <button type="button" class="btn btn-white p-0 d-flex align-items-center justify-content-center w-40px h-40 text-heading bg-hover-primary hover-white rounded-circle border-0 shadow-none" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content=' <ul class="list-inline mb-0">
-                    <li class="list-inline-item">
-                      <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                class="fab fa-twitter"></i></a>
-                    </li>
-                    <li class="list-inline-item ">
-                      <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                class="fab fa-facebook-f"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                class="fab fa-instagram"></i></a>
-                    </li>
-                    <li class="list-inline-item">
-                      <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                class="fab fa-youtube"></i></a>
-                    </li>
-                  </ul>
-                  '>
-                  <i class="far fa-share-alt"></i>
-                </button>
-              </li>
-              <li class="list-inline-item">
-                <a href="#" data-toggle="tooltip" title="" class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle" data-original-title="Print">
-                  <i class="far fa-print"></i>
-                </a>
-              </li>
-            </ul>
-          </div>
-          <div class="slick-slider slider-for" data-slick-options='{"slidesToShow": 1, "autoplay":false,"dots":false,"arrows":false,"asNavFor": ".slider-nav"}'>
-            <div class="box">
-              <div class="item item-size-3-2">
-                <div class="card p-0 hover-change-image">
-                  <a href="../image/p_img/<?php echo $rowad['img_video']; ?>" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../image/p_img/<?php echo $rowad['img_video']; ?>')">
-                  </a>
-                </div>
-              </div>
-            </div>
-            <?php while ($rowf = mysqli_fetch_array($resultf)) { ?>
-              <div class="box">
-                <div class="item item-size-3-2">
-                  <div class="card p-0 hover-change-image">
-                    <a href="../file/<?php echo $rowf['f_name']; ?>" class="card-img" data-gtf-mfp="true" data-gallery-id="02" style="background-image:url('../file/<?php echo $rowf['f_name']; ?>')">
-                    </a>
+              <div class="form-inline justify-content-md-end mx-n2">
+                <div class="p-2">
+                  <div class="input-group input-group-lg bg-white border">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text bg-transparent letter-spacing-093 border-0 pr-0"><i class="far fa-align-left mr-2"></i>เรียงโดย:</span>
+                    </div>
+                    <select class="form-control bg-transparent pl-5 selectpicker d-flex align-items-center sortby" name="sort-by" data-style="bg-transparent px-1 py-0 lh-1 font-weight-600 text-body" id="status">
+                      <option>ตัวอักษร</option>
+                      <option>ยอดคำเข้าชม</option>
+                      <option>วันที่ลงประกาศ - เก่าไปใหม่</option>
+                      <option>วันที่ลงประกาศ - ใหม่ไปเก่า</option>
+                    </select>
                   </div>
                 </div>
               </div>
-            <?php } ?>
-          </div>
-          <div class="slick-slider slider-nav mt-1 mx-n1 arrow-haft-inner" data-slick-options='{"slidesToShow": 6, "autoplay":false,"dots":false,"arrows":true,"asNavFor": ".slider-for","focusOnSelect": true,"responsive":[{"breakpoint": 1200,"settings": {"slidesToShow": 4,"arrows":false}},{"breakpoint": 768,"settings": {"slidesToShow": 4,"arrows":false}},{"breakpoint": 576,"settings": {"slidesToShow": 2,"arrows":false}}]}'>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="<?php echo $rowad['img_video']; ?>" class="h-100 w-100 rounded-lg">
-              </div>
             </div>
-            <?php while ($rowf = mysqli_fetch_array($resultf)) {
-              echo $rowf['f_name']; ?>
-              <div class="box pb-6 px-0">
-                <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                  <img src="../file/<?php echo $rowf['f_name']; ?>" alt="<?php echo $rowf['f_name']; ?>" class="h-100 w-100 rounded-lg">
-                </div>
-              </div>
-            <?php } ?>
-          </div>
-        </div>
-      </div>
-    </section>
-    <div class="primary-content bg-gray-01 pt-7 pb-12">
-      <div class="container">
-        <div class="row">
-          <article class="col-lg-12">
-            <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
-              <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
-                <li class="list-inline-item badge badge-primary mr-3"><?php echo $rowad['type']; ?></li>
-                <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i><?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
-                <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i>1039 ครั้ง</li>
-              </ul>
-              <div class="d-sm-flex justify-content-sm-between">
-                <div>
-                  <h2 class="fs-35 font-weight-600 lh-15 text-heading"><?php echo $rowad['title']; ?></h2>
-                  <?php if($rowad['project_name'] != '') {?>
-                  <p class="fs-20 text-heading font-weight-bold mb-0">โครงการ <?php echo $rowad['project_name']; ?></p>
-                  <?php }?>
-                  <p class="mb-0"><i class="fal fa-map-marker-alt mr-2"></i><?php $h_no = "เลขที่";
-                                                                            $v_no = "หมู่";
-                                                                            if ($rowad['house_no'] != '') {
-                                                                              echo $h_no . " " . $rowad['house_no'];
-                                                                            } ?> <?php if ($rowad['village_no'] != '') {
-                                                                                    echo $v_no . " " . $rowad['village_no'];
-                                                                                  } ?>
-                    <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
-                    <?php foreach ($result3 as $value) {
+            <div class="row">
+              <?php while ($rowad = mysqli_fetch_array($resultad)) {
+                $ad = $rowad['a_id'];
+                $h_no = "เลขที่";
+                $v_no = "หมู่"; ?>
+                <div class="col-md-5 col-xxl-3 mb-5" id="favuser<?php echo $ad ?>">
+                  <div class="card shadow-hover-1">
+                    <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                      <img src="../image/p_img/<?php echo $rowad['img_video'] ?>" alt="<?php echo $rowad['img_video'] ?>">
+                      <div class="card-img-overlay p-2 d-flex flex-column">
+                        <div>
+                          <?php if ($rowad['type'] == 'ขาย') {
+                            $type = 'ขาย';
+                            echo "<span class='badge  badge-indigo '>$type</span>";
+                          } ?>
+                          <?php if ($rowad['type'] == 'เช่า') {
+                            $type = 'เช่า';
+                            echo "<span class='badge  badge-info'>$type</span>";
+                          } ?>
+                          <?php if ($rowad['type'] == 'ขาย-เช่า') {
+                            $type = 'ขาย-เช่า';
+                            echo "<span class='badge  badge-success '>$type</span>";
+                          } ?>
+                          <?php if ($rowad['type'] == 'ขายดาวน์') {
+                            $type = 'ขายดาวน์';
+                            echo "<span class='badge  badge-warning '>$type</span>";
+                          } ?>
+                          <?php if ($rowad['type'] == 'ใบจอง') {
+                            $type = 'ใบจอง';
+                            echo "<span class='badge  badge-danger '>$type</span>";
+                          } ?>
+                        </div>
+                        <div class="mt-auto hover-image">
+                          <ul class="list-inline mb-0 d-flex align-items-end">
+                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                              <a href="#" class="text-white hover-primary">
+                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                              </a>
+                            </li>
+                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                              <a href="#" class="text-white hover-primary">
+                                <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-body pt-3">
+                      <h2 class="card-title fs-16 lh-2 mb-0"><a href="home-details.php?id=<?php echo $rowad['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad['title']; ?></a>
+                      </h2>
+                      <p class="card-text font-weight-500 text-gray-light mb-2"><?php if ($rowad['house_no'] != '') {
+                                                                                  echo $h_no . " " . $rowad['house_no'];
+                                                                                } ?> <?php if ($rowad['village_no'] != '') {
+                                                                                        echo $v_no . " " . $rowad['village_no'];
+                                                                                      } ?>
+                        <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
+                        <?php foreach ($result3 as $value) {
 
-                      if ($value['l_id'] == $rowad['l_id']) {
+                          if ($value['l_id'] == $rowad['l_id']) {
 
-                        echo 'ต.' . $value['dname_th'] . ' ';
-                        echo 'อ.' . $value['aname_th'] . ' ';
-                        echo 'จ.' . $value['name_th'] . ' ';
-                      }
-                    } ?>
-                    <?php echo $rowad['postal_code']; ?></p>
-                  </p>
-                </div>
-                <div class="mt-2 text-lg-right">
-                  <p class="fs-22 text-heading font-weight-bold mb-0"><?php echo $rowad['price']; ?> บาท</p>
-                </div>
-              </div>
-              <h4 class="fs-22 text-heading mt-6 mb-0">รายละเอียด</h4>
-              <p class="mb-0 lh-214"><?php echo $rowad['note']; ?></p>
-            </section>
-            <section class="mt-0 pb-3 px-6 pt-5 bg-white rounded-lg">
-              <div class="row">
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-family fs-32 text-primary">
-                        <use xlink:href="#icon-family"></use>
-                      </svg>
+                            echo 'ต.' . $value['dname_th'] . ' ';
+                            echo 'อ.' . $value['aname_th'] . ' ';
+                            echo 'จ.' . $value['name_th'] . ' ';
+                          }
+                        } ?>
+                        <?php echo $rowad['postal_code']; ?></p>
+                      <ul class="list-inline d-flex mb-0 flex-wrap">
+                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2 " data-toggle="tooltip" title="3 Br">
+                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                            <use xlink:href="#icon-bedroom"></use>
+                          </svg>
+                          <?php echo $rowad['bedroom'] ?> ห้อง
+                        </li>
+                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2" data-toggle="tooltip" title="3 Ba">
+                          <svg class="icon icon-shower fs-18 text-primary mr-1">
+                            <use xlink:href="#icon-shower"></use>
+                          </svg>
+                          <?php echo $rowad['bathroom'] ?> ห้อง
+                        </li>
+                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center px-1 mr-2" data-toggle="tooltip" title="2300 Sq.Ft">
+                          <svg class="icon icon-square fs-18 text-primary mr-1">
+                            <use xlink:href="#icon-square"></use>
+                          </svg>
+                          <?php echo $rowad['space_area'] ?>
+                        </li>
+                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2" data-toggle="tooltip" title="1 Gr">
+                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
+                            <use xlink:href="#icon-Garage"></use>
+                          </svg>
+                          <?php echo $rowad['parking'] ?>
+                        </li>
+                      </ul>
                     </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ประเภท</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['p_type']; ?></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-bedroom fs-32 text-primary">
-                        <use xlink:href="#icon-bedroom"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ห้องนอน</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['bedroom']; ?></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-sofa fs-32 text-primary">
-                        <use xlink:href="#icon-sofa"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ห้องน้ำ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['bathroom']; ?></p>
+                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
+                      <div class="mr-auto">
+                        <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $rowad['price'] ?> บาท</span>
+                      </div>
+                      <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                          <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i class="fas fa-heart"></i></a>
+                        </li>
+                      </ul>
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-Garage fs-32 text-primary">
-                        <use xlink:href="#icon-Garage"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ที่จอดรถ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['parking']; ?></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-price fs-32 text-primary">
-                        <use xlink:href="#icon-price"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">ขนาดพื้นที่</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $rowad['space_area']; ?></p>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
-                  <div class="media">
-                    <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
-                      <svg class="icon icon-status fs-32 text-primary">
-                        <use xlink:href="#icon-status"></use>
-                      </svg>
-                    </div>
-                    <div class="media-body">
-                      <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">สถานะ</h5>
-                      <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $status; ?></p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
-            <section class="mt-2 pb-7 px-6 pt-5 bg-white rounded-lg">
-              <h4 class="fs-22 text-heading mb-4">สิ่งอำนวยความสะดวก</h4>
-              <ul class="list-unstyled mb-0 row no-gutters">
-                <?php
-                $facility = explode(",", $rowad['facility']); //array
-                foreach ($facility_arr as $value) {
-                  if (in_array($value, $facility)) {
-                ?>
-                    <li class="col-sm-3 col-6 mb-2"><i class="far fa-check mr-2 text-primary"></i><?php echo $value ?></li>
-                  <?php } else { ?>
-                    <li class="col-sm-3 col-6 mb-2"><i class="fas fa-times mr-2 text-danger"></i><?php echo $value ?></li>
-                <?php }
-                } ?>
+              <?php } ?>
+
+            </div>
+            <nav class="mt-6">
+              <ul class="pagination rounded-active justify-content-center">
+                <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
+                <?php for ($i = 1; $i <= $total_page; $i++) { ?>
+                  <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                <?php } ?>
+                <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
               </ul>
-            </section>
-            <!-- <section class="mt-2 pb-7 px-6 pt-6 bg-white rounded-lg">
-              <h4 class="fs-22 text-heading mb-6">แบบแปลน</h4>
-              <div class="accordion accordion-03 mb-3" id="accordion-01">
-                <div class="card border-0 shadow-xxs-5 bg-gray-01">
-                  <div class="card-header bg-gray-01 border-gray border-0 p-0" id="floor-plans-01">
-                    <div class="heading bg-gray-01 d-flex justify-content-between align-items-center px-6" data-toggle="collapse" data-target="#collapse-01" aria-expanded="true" aria-controls="collapse-01" role="button">
-                      <h2 class="mb-0 fs-16 text-heading font-weight-500 py-4 lh-13">ชั้นที่ 1</h2>
-                      <ul class="list-inline mb-0 d-none d-sm-block pr-2">
-                        <li class=" list-inline-item text-muted mr-4">ห้องนอน : <span class="font-weight-500 text-heading">2</span></li>
-                        <li class=" list-inline-item text-muted mr-4">ห้องน้ำ : <span class="font-weight-500 text-heading">2</span></li>
-                        <li class=" list-inline-item text-muted mr-4">ตร.เมตร : <span class="font-weight-500 text-heading">900</span></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div id="collapse-01" class="collapse show mx-6 mb-6 bg-white" aria-labelledby="floor-plans-01" data-parent="#accordion-01">
-                    <div class="card-body card-body col-sm-6 offset-sm-3 mb-3">
-                      <img src="../images/single-detail-property-01.jpg" class="card-img" alt="Floor Plans">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion accordion-03 mb-3" id="accordion-02">
-                <div class="card border-0 shadow-xxs-5 bg-gray-01">
-                  <div class="card-header bg-gray-01 border-gray border-0 p-0" id="floor-plans-02">
-                    <div class="heading bg-gray-01 d-flex justify-content-between align-items-center px-6" data-toggle="collapse" data-target="#collapse-02" aria-expanded="true" aria-controls="collapse-02" role="button">
-                      <h2 class="mb-0 fs-16 text-heading font-weight-500 py-4 lh-13">ชั้นที่ 2</h2>
-                      <ul class="list-inline mb-0 d-none d-sm-block pr-2">
-                        <li class=" list-inline-item text-muted mr-4">ห้องนอน : <span class="font-weight-500 text-heading">2</span></li>
-                        <li class=" list-inline-item text-muted mr-4">ห้องน้ำ : <span class="font-weight-500 text-heading">2</span></li>
-                        <li class=" list-inline-item text-muted mr-4">ตร.เมตร : <span class="font-weight-500 text-heading">900</span></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div id="collapse-02" class="collapse  mx-6 mb-6 bg-white" aria-labelledby="floor-plans-02" data-parent="#accordion-02">
-                    <div class="card-body card-body col-sm-6 offset-sm-3 mb-3">
-                      <img src="../images/single-detail-property-01.jpg" class="card-img" alt="Floor Plans">
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion accordion-03 mb-3" id="accordion-03">
-                <div class="card border-0 shadow-xxs-5 bg-gray-01">
-                  <div class="card-header bg-gray-01 border-gray border-0 p-0" id="floor-plans-03">
-                    <div class="heading bg-gray-01 d-flex justify-content-between align-items-center px-6" data-toggle="collapse" data-target="#collapse-03" aria-expanded="true" aria-controls="collapse-03" role="button">
-                      <h2 class="mb-0 fs-16 text-heading font-weight-500 py-4 lh-13">ชั้นที่ 3</h2>
-                      <ul class="list-inline mb-0 d-none d-sm-block pr-2">
-                        <li class=" list-inline-item text-muted mr-4">ห้องนอน : <span class="font-weight-500 text-heading">2</span></li>
-                        <li class=" list-inline-item text-muted mr-4">ห้องน้ำ : <span class="font-weight-500 text-heading">2</span></li>
-                        <li class=" list-inline-item text-muted mr-4">ตร.เมตร : <span class="font-weight-500 text-heading">900</span></li>
-                      </ul>
-                    </div>
-                  </div>
-                  <div id="collapse-03" class="collapse  mx-6 mb-6 bg-white" aria-labelledby="floor-plans-03" data-parent="#accordion-03">
-                    <div class="card-body card-body col-sm-6 offset-sm-3 mb-3">
-                      <img src="../images/single-detail-property-01.jpg" class="card-img" alt="Floor Plans">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section> -->
-            <!-- <section class="mt-2 pb-7 px-6 pt-6 bg-white rounded-lg">
-              <h4 class="fs-22 text-heading mb-6">เอกสารแนบทรัพย์สิน</h4>
-              <div class="d-sm-flex">
-                <div class="w-sm-170 mb-sm-0 mb-6 mr-sm-6">
-                  <div class="card text-center pt-4">
-                    <img src="../images/single-detail-property-05.png" class="card-img card-img w-78px mx-auto" alt="Villa Called Archangel Word Document">
-                    <div class="card-body p-0 mt-4">
-                      <p class="fs-13 lh-2  mb-0 py-0 px-2">เดอะรูท | The Root Word Document</p>
-                      <a href="#" class="btn btn-block bg-gray-01 border-0 fs-14 text-heading">Download<i class="far fa-arrow-alt-circle-down ml-1 text-primary"></i></a>
-                    </div>
-                  </div>
-                </div>
-                <div class="w-sm-170 mb-sm-0 mb-6 mr-sm-6">
-                  <div class="card text-center pt-4">
-                    <img src="../images/single-detail-property-06.png" class="card-img card-img w-78px mx-auto" alt="Villa Called Archangel PDF Document">
-                    <div class="card-body p-0 mt-4">
-                      <p class="fs-13 lh-2  mb-0 py-0 px-2">เดอะรูท | The Root PDF Document</p>
-                      <a href="#" class="btn btn-block bg-gray-01 border-0 fs-14 text-heading">Download<i class="far fa-arrow-alt-circle-down ml-1 text-primary"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section> -->
-            <section class="mt-2 pb-6 px-6 pt-6 bg-white rounded-lg">
-              <h4 class="fs-22 text-heading mb-6">แผนที่ตั้ง</h4>
-              <div class="position-relative">
-                <div id="map" class="mapbox-gl map-point-animate" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" data-mapbox-options='{"center":[-73.9927227, 40.6741035],"setLngLat":[-73.9927227, 40.6741035]}' data-mapbox-marker='[{"position":[-73.9927227, 40.6741035],"className":"marker","backgroundImage":"../images/googlle-market-01.png","backgroundRepeat":"no-repeat","width":"30px","height":"40px"}]'>
-                </div>
-                <p class="mb-0 p-3 bg-white shadow rounded-lg position-absolute pos-fixed-bottom mb-4 ml-4 lh-17 z-index-2">62 Gresham St, Victoria Park <br />
-                  WA 6100, Australia</p>
-              </div>
-            </section>
-          </article>
-        </div>
+            </nav>
+          </div>
+        </main>
       </div>
     </div>
-    <section>
-      <div class="d-flex bottom-bar-action bottom-bar-action-01 py-2 px-4 bg-gray-01 align-items-center position-fixed fixed-bottom d-sm-none">
-        <div class="media align-items-center">
-          <img src="../images/irene-wallace.png" alt="Irene Wallace" class="mr-4 rounded-circle">
-          <div class="media-body">
-            <a href="#" class="d-block text-dark fs-15 font-weight-500 lh-15">Irene Wallace</a>
-            <span class="fs-13 lh-2">Sales Excutive</span>
-          </div>
-        </div>
-        <div class="ml-auto">
-          <button type="button" class="btn btn-primary fs-18 p-2 lh-1 mr-1 mb-1 shadow-none" data-toggle="modal" data-target="#modal-messenger"><i class="fal fa-comment"></i></button>
-          <a href="tel:(+84)2388-969-888" class="btn btn-primary fs-18 p-2 lh-1 mb-1 shadow-none" target="_blank"><i class="fal fa-phone"></i></a>
-        </div>
-      </div>
-      <div class="modal fade" id="modal-messenger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header border-0 pb-0">
-              <h4 class="modal-title text-heading" id="exampleModalLabel">Contact Form</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body pb-6">
-              <div class="form-group mb-2">
-                <input type="text" class="form-control form-control-lg border-0" placeholder="First Name, Last Name">
-              </div>
-              <div class="form-group mb-2">
-                <input type="email" class="form-control form-control-lg border-0" placeholder="Your Email">
-              </div>
-              <div class="form-group mb-2">
-                <input type="tel" class="form-control form-control-lg border-0" placeholder="Your phone">
-              </div>
-              <div class="form-group mb-2">
-                <textarea class="form-control border-0" rows="4">Hello, I'm interested in Villa Called Archangel</textarea>
-              </div>
-              <div class="form-group form-check mb-4">
-                <input type="checkbox" class="form-check-input" id="exampleCheck3">
-                <label class="form-check-label fs-13" for="exampleCheck3">Egestas fringilla phasellus faucibus scelerisque eleifend donec.</label>
-              </div>
-              <button type="submit" class="btn btn-primary btn-lg btn-block rounded">Request Info</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-  <?php include 'templates/footer-two.php'; ?>
+  </div>
+
   <!-- Vendors scripts -->
   <script src="../css/vendors/jquery.min.js"></script>
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
@@ -580,36 +273,27 @@ $num_row = mysqli_num_rows($resultfa);
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <script>
-    $(document).ready(function($) {
-      $('a#fav').on('click', function(e) {
-
-        e.preventDefault();
-       
+    $(document).ready(function() {
+      $('a#fav').on('click', function() {
+        var ida = $(this).attr("name");
+        if (ida != '') {
+         
         $.ajax({
-          url: '../backend/favourite.php',
-          type: 'POST',
+          url: '../backend/del_favourite.php',
+          method: 'POST',
           data: {
-            u_id: <?= $_SESSION['u_id'] ?>,
-            ida :<?= $ida?> ,
+            ida: ida
           },
-          cache: false,
           success: function(data) {
-            
-          if(data == 1){
-            $("a#fav").removeAttr("class");
-            $("a#fav").toggleClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle");
-
-          }else{
-
-            $("a#fav").removeAttr("class");
-            $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle");
-          }
-
-
+            console.log(data);
+            $("#favuser"+data).remove();
+   
           }
         });
+      }
       });
     });
+
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
@@ -832,9 +516,6 @@ $num_row = mysqli_num_rows($resultfa);
       </symbol>
     </defs>
   </svg>
-  <div class="position-fixed pos-fixed-bottom-right p-6 z-index-10">
-    <a href="#" class="gtf-back-to-top bg-white text-primary hover-white bg-hover-primary shadow p-0 w-52px h-52 rounded-circle fs-20 d-flex align-items-center justify-content-center" title="Back To Top"><i class="fal fa-arrow-up"></i></a>
-  </div>
 </body>
 
 </html>

@@ -13,7 +13,10 @@ $sqla = "SELECT * FROM advertise WHERE u_id = $id ";
 $resulta = mysqli_query($con, $sqla);
 $total_record = mysqli_num_rows($resulta);
 
-?>
+$sqlf = "SELECT * FROM favourite WHERE u_id= $id";
+$resultf = mysqli_query($con,$sqlf);
+$numf = mysqli_num_rows($resultf); ?>
+
 <div class="db-sidebar bg-white">
     <nav class="navbar navbar-expand-xl navbar-light d-block px-0 header-sticky dashboard-nav py-0">
         <div class="sticky-area shadow-xs-1 py-3">
@@ -81,14 +84,14 @@ $total_record = mysqli_num_rows($resulta);
                                 </a>
                             </li>
                             <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
-                                <a href="dashboard-my-favorites.html" class="text-heading lh-1 sidebar-link d-flex align-items-center">
+                                <a href="dashboard-favourites.php" class="text-heading lh-1 sidebar-link d-flex align-items-center">
                                     <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
                                         <svg class="icon icon-heart">
                                             <use xlink:href="#icon-heart"></use>
                                         </svg>
                                     </span>
                                     <span class="sidebar-item-text">รายการโปรด</span>
-                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold">5</span>
+                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold"><?php echo $numf?></span>
                                 </a>
                             </li>
                         </ul>

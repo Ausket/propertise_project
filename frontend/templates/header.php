@@ -182,7 +182,7 @@ if (isset($_POST['submit'])) {
                                 $resultf = mysqli_query($con,$sqlf);
                                 $numf = mysqli_num_rows($resultf); ?>
                             <li class="nav-item mr-auto mr-lg-6">
-                                <a class="nav-link px-2 position-relative" href="favourite.php">
+                                <a class="nav-link px-2 position-relative" href="frontend/dashboard-favourites.php">
                                     <i class="fal fa-heart fs-large-4"></i>
                                     <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf?></span>
                                 </a>

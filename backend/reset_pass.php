@@ -21,6 +21,8 @@ if(isset($_POST['submit'])){
           if($result_pw){
             echo'<script> alert("เปลี่ยนรหัสผ่านใหม่สำเร็จ")</script>';
             header('Refresh:0; url= ../frontend/dashboard-profiles.php');
+
+            $_SESSION['password'] = $newpassword;
           }
           
        }else{
