@@ -43,11 +43,11 @@ INNER JOIN districts ON location_property.district_id = districts.id)
 ";
 $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 
-$sqlf = "SELECT file.f_name, file.f_date, file.f_id
+$sqlfi = "SELECT file.f_name, file.f_date, file.f_id
 FROM (file
 INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
 WHERE file.pd_id = $pd_id ";
-$resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
+$resultfi = mysqli_query($con, $sqlfi)  or die(mysqli_error($con));
 
 
 $facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
@@ -503,7 +503,7 @@ $resultd = mysqli_query($con, $sqld);
                                       <input class="custom-file-input" id="fileupload2" type="file" name="file[]" multiple>
                                       <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
                                     </div><br><br><br>                                                                  
-                                    <?php while ($rowf = mysqli_fetch_array($resultf)) { ?>
+                                    <?php while ($rowf = mysqli_fetch_array($resultfi)) { ?>
                                       <span id="<?php echo $rowf['f_id']; ?>">
                                       <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>" ><span class="remove_file"></span></a>
                                       </span>                                     

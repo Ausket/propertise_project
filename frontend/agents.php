@@ -94,16 +94,48 @@
 
       $agent = $_GET['search_agent'];
 
-      $sqla = "SELECT * FROM users WHERE utype='agent' AND 
-          (name LIKE '%$agent%' OR company LIKE '%$agent%') ORDER BY u_id DESC
-          limit {$start} , {$perpage}";
-      $resulta = mysqli_query($con, $sqla);
-
       $sqlsa = "SELECT * FROM users WHERE utype='agent' AND 
       (name LIKE '%$agent%' OR company LIKE '%$agent%')";
       $resultsa = mysqli_query($con, $sqlsa);
+
       $total_record = mysqli_num_rows($resultsa);
       $total_page = ceil($total_record / $perpage);
+
+      $sqla = "SELECT * FROM users 
+      LEFT  JOIN advertise ON users.u_id = advertise.u_id
+      WHERE utype='agent' AND 
+      (name LIKE '%$agent%' OR company LIKE '%$agent%') ";
+
+      $choice = 1;
+
+      if (isset($_POST['ch'])) {
+        $choice = $_POST['ch'];
+        if ($choice == 1) {
+          $text = 'ORDER BY users.name ASC ';
+        }
+        if ($choice == 2) {
+          $text = 'ORDER BY users.u_id ASC ';
+        }
+        if ($choice == 3) {
+          $text = ' ';
+        }
+        if ($choice == 4) {
+          $text = 'ORDER BY advertise.a_id DESC ';
+        }
+
+        $sqlc = $_POST['sql'];
+        $texts = $_POST['Order_text'];
+
+        $sqla = str_replace($texts, '', $sqlc);
+        $sqln = "$sqla" . $text ;
+        $resulta = mysqli_query($con, $sqln);
+      } else {
+
+        $text = 'ORDER BY users.name ASC   ';
+        $sqln = "$sqla" . $text ;
+        $resulta = mysqli_query($con, $sqln);
+      }
+
     ?>
 
 
@@ -118,16 +150,29 @@
                 </div>
                 <div class="col-sm-6 ml-auto">
                   <div class="d-flex align-items-center justify-content-sm-end">
-                    <div class="input-group border rounded input-group-lg w-auto mr-6">
-                      <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
-                      <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
-                        <option selected>ตัวอักษร</option>
-                        <option value="1">สุ่ม</option>
-                        <option value="1">เรตติ้ง</option>
-                        <option value="1">จำนวนทรัพย์สิน</option>
-                      </select>
-                    </div>
+                    <form class="" action="" method="post" name="test">
+                      <div class="input-group border rounded input-group-lg w-auto mr-6">
+                        <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
+                        <textarea hidden type='text' id='sql' name='sql'><?php echo $sqln ?></textarea>
+                        <textarea hidden id='Order_text' name='Order_text'><?php echo $text  ?></textarea>
+                        <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id='ch' name="ch" onchange="document.test.submit();">
+                          <option <?php if ($choice == "1") {
+                                    echo "selected";
+                                  } ?> value='1'>ตัวอักษร</option>
+                          <option <?php if ($choice == "2") {
+                                    echo "selected";
+                                  } ?> value='2'>ล่าสุด</option>
+                          <option <?php if ($choice == "3") {
+                                    echo "selected";
+                                  } ?> value='3'>เรตติ้ง</option>
+                          <option <?php if ($choice == "4") {
+                                    echo "selected";
+                                  } ?> value='4'>จำนวนทรัพย์สิน</option>
+
+                        </select>
+                      </div>
                   </div>
+                  </form>
                 </div>
               </div>
               <div class="row">
@@ -219,7 +264,7 @@
 
       require_once('../dbconnect.php');
 
-      $perpage = 6;
+      $perpage = 5;
       if (isset($_GET['page'])) {
         $page = $_GET['page'];
       } else {
@@ -228,14 +273,46 @@
 
       $start = ($page - 1) * $perpage;
 
-      $sqla = "SELECT * FROM users WHERE utype='agent' ORDER BY u_id DESC
-      limit {$start} , {$perpage}";
-      $resulta = mysqli_query($con, $sqla);
-
       $sql4 = "SELECT * FROM users WHERE utype='agent'";
       $result4 = mysqli_query($con, $sql4);
       $total_record = mysqli_num_rows($result4);
       $total_page = ceil($total_record / $perpage);
+
+      
+      $sqla = "SELECT * FROM (users 
+      LEFT JOIN advertise ON users.u_id = advertise.u_id)
+      WHERE utype='agent'";
+
+      $choice = 1;
+
+      if (isset($_POST['ch'])) {
+        $choice = $_POST['ch'];
+        if ($choice == 1) {
+          $text = 'ORDER BY users.name ASC ';
+        }
+        if ($choice == 2) {
+          $text = 'ORDER BY users.u_id ASC ';
+        }
+        if ($choice == 3) {
+          $text = ' ';
+        }
+        if ($choice == 4) {
+          $text = 'ORDER BY advertise.a_id DESC ';
+        }
+
+        $sqlc = $_POST['sql'];
+        $texts = $_POST['Order_text'];
+
+        $sqla = str_replace($texts, '', $sqlc);
+        $sqln = "$sqla" . $text  ;
+        $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
+
+      } else {
+
+        $text = 'ORDER BY users.name ASC  ';
+        $sqln = "$sqla" . $text  ;
+        $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
+      }
 
 
     ?>
@@ -251,14 +328,26 @@
                 </div>
                 <div class="col-sm-6 ml-auto">
                   <div class="d-flex align-items-center justify-content-sm-end">
-                    <form class="" action="" method="post">
+                    <form class="" action="" method="post" name="test">
                       <div class="input-group border rounded input-group-lg w-auto mr-6">
                         <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงลำดับ จาก</label>
-                        <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id="inputGroupSelect01" name="sortby">
-                          <option selected value="asc"> ตัวอักษร</option>
-                          <option value="desc">สุ่ม</option>
-                          <option value="rate">เรตติ้ง</option>
-                          <option value="nump">จำนวนทรัพย์สิน</option>
+                        <textarea hidden type='text' id='sql' name='sql'><?php echo $sqln ?></textarea>
+                        <textarea hidden id='Order_text' name='Order_text'><?php echo $text  ?></textarea>
+                        <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0" id='ch' name="ch" onchange="document.test.submit();">
+
+                          <option <?php if ($choice == "1") {
+                                    echo "selected";
+                                  } ?> value='1'>ตัวอักษร</option>
+                          <option <?php if ($choice == "2") {
+                                    echo "selected";
+                                  } ?> value='2'>ล่าสุด</option>
+                          <option <?php if ($choice == "3") {
+                                    echo "selected";
+                                  } ?> value='3'>เรตติ้ง</option>
+                          <option <?php if ($choice == "4") {
+                                    echo "selected";
+                                  } ?> value='4'>จำนวนทรัพย์สิน</option>
+
                         </select>
                       </div>
                     </form>
