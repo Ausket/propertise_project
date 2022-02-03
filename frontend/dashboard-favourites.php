@@ -21,28 +21,17 @@ $start = ($page - 1) * $perpage;
 $sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type
-FROM (((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.u_id,favourite.u_id,favourite.a_id
+FROM ((((((advertise
 LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
 LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
 LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
 LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
 LEFT JOIN favourite ON advertise.a_id =  favourite.a_id)
-WHERE advertise.a_id = favourite.a_id ORDER BY advertise.a_id DESC limit {$start} , {$perpage} ";
-$resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
+LEFT JOIN users ON advertise.u_id = users.u_id)
+WHERE advertise.a_id = favourite.a_id AND favourite.u_id = $id  ";
 
-$sql4 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
-location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type
-FROM (((((advertise
-LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
-LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
-LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
-LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-LEFT JOIN favourite ON advertise.a_id =  favourite.a_id)
-WHERE advertise.a_id = favourite.a_id";
-
+$sql4 = "SELECT * FROM favourite WHERE u_id= $id";
 $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));
 $total_record = mysqli_num_rows($result4);
 $total_page = ceil($total_record / $perpage);
@@ -55,6 +44,39 @@ INNER JOIN amphures ON location_property.amphure_id = amphures.id)
 INNER JOIN districts ON location_property.district_id = districts.id)
 ";
 $result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
+
+$choice = 1;
+
+if (isset($_POST['ch'])) {
+  $choice = $_POST['ch'];
+  if ($choice == 1) {
+    $text = 'ORDER BY advertise.title ASC ';
+  }
+  if ($choice == 2) {
+    $text = ' ';
+  }
+  if ($choice == 3) {
+    $text = 'ORDER BY advertise.date ASC ';
+  }
+  if ($choice == 4) {
+    $text = 'ORDER BY advertise.date DESC ';
+  }
+
+  $sqlc = $_POST['sql'];
+  $texts = $_POST['Order_text'];
+
+  $sqla = str_replace($texts, '', $sqlc);
+
+  $sqln = "$sqlad" . $text . "limit {$start} , {$perpage}";
+  $resultad = mysqli_query($con, $sqln) or die(mysqli_error($con));
+
+} else {
+
+  $text = 'ORDER BY advertise.title ASC ';
+  $sqln = "$sqlad" . $text . "limit {$start} , {$perpage}";
+  $resultad = mysqli_query($con, $sqln) or die(mysqli_error($con));
+}
+
 
 ?>
 <!doctype html>
@@ -118,138 +140,155 @@ $result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
               </div>
               <div class="form-inline justify-content-md-end mx-n2">
                 <div class="p-2">
-                  <div class="input-group input-group-lg bg-white border">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text bg-transparent letter-spacing-093 border-0 pr-0"><i class="far fa-align-left mr-2"></i>เรียงโดย:</span>
+                  <form class="" action="" method="post" name="test">
+                    <div class="input-group input-group-lg bg-white border">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text bg-transparent letter-spacing-093 border-0 pr-0"><i class="far fa-align-left mr-2"></i>เรียงโดย:</span>
+                      </div>
+                      <textarea hidden type='text' id='sql' name='sql'><?php echo $sqln ?></textarea>
+                      <textarea hidden id='Order_text' name='Order_text'><?php echo $text  ?></textarea>
+                      <select class="form-control bg-transparent pl-5 selectpicker d-flex align-items-center sortby" id='ch' name="ch" onchange="document.test.submit();" data-style="bg-transparent px-1 py-0 lh-1 font-weight-600 text-body" id="status">
+                      <option <?php if ($choice == "1") {
+                                  echo "selected";
+                                } ?> value='1'>ตัวอักษร</option>
+                        <option <?php if ($choice == "2") {
+                                  echo "selected";
+                                } ?> value='2'>ยอดคำเข้าชม</option>
+                        <option <?php if ($choice == "3") {
+                                  echo "selected";
+                                } ?> value='3'>วันที่ลงประกาศ - เก่าไปใหม่</option>
+                        <option <?php if ($choice == "4") {
+                                  echo "selected";
+                                } ?> value='4'>วันที่ลงประกาศ - ใหม่ไปเก่า</option>
+                      </select>
+                      </select>
                     </div>
-                    <select class="form-control bg-transparent pl-5 selectpicker d-flex align-items-center sortby" name="sort-by" data-style="bg-transparent px-1 py-0 lh-1 font-weight-600 text-body" id="status">
-                      <option>ตัวอักษร</option>
-                      <option>ยอดคำเข้าชม</option>
-                      <option>วันที่ลงประกาศ - เก่าไปใหม่</option>
-                      <option>วันที่ลงประกาศ - ใหม่ไปเก่า</option>
-                    </select>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <?php while ($rowad = mysqli_fetch_array($resultad)) {
-                $ad = $rowad['a_id'];
-                $h_no = "เลขที่";
-                $v_no = "หมู่"; ?>
-                <div class="col-md-5 col-xxl-3 mb-5" id="favuser<?php echo $ad ?>">
-                  <div class="card shadow-hover-1">
-                    <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                      <img src="../image/p_img/<?php echo $rowad['img_video'] ?>" alt="<?php echo $rowad['img_video'] ?>">
-                      <div class="card-img-overlay p-2 d-flex flex-column">
-                        <div>
-                          <?php if ($rowad['type'] == 'ขาย') {
-                            $type = 'ขาย';
-                            echo "<span class='badge  badge-indigo '>$type</span>";
-                          } ?>
-                          <?php if ($rowad['type'] == 'เช่า') {
-                            $type = 'เช่า';
-                            echo "<span class='badge  badge-info'>$type</span>";
-                          } ?>
-                          <?php if ($rowad['type'] == 'ขาย-เช่า') {
-                            $type = 'ขาย-เช่า';
-                            echo "<span class='badge  badge-success '>$type</span>";
-                          } ?>
-                          <?php if ($rowad['type'] == 'ขายดาวน์') {
-                            $type = 'ขายดาวน์';
-                            echo "<span class='badge  badge-warning '>$type</span>";
-                          } ?>
-                          <?php if ($rowad['type'] == 'ใบจอง') {
-                            $type = 'ใบจอง';
-                            echo "<span class='badge  badge-danger '>$type</span>";
-                          } ?>
-                        </div>
-                        <div class="mt-auto hover-image">
-                          <ul class="list-inline mb-0 d-flex align-items-end">
-                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                              <a href="#" class="text-white hover-primary">
-                                <i class="far fa-images"></i><span class="pl-1">9</span>
-                              </a>
-                            </li>
-                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
-                              <a href="#" class="text-white hover-primary">
-                                <i class="far fa-play-circle"></i><span class="pl-1">2</span>
-                              </a>
-                            </li>
-                          </ul>
+            <?php if ($numf == '0') { ?>
+              <h6 class="text-center text-gray font-weight-bold m-auto d-block">ไม่มีรายการโปรด</h6>
+            <?php } else { ?>
+              <div class="row">
+                <?php while ($rowad = mysqli_fetch_array($resultad)) {
+                  $ad = $rowad['a_id'];
+                  $h_no = "เลขที่";
+                  $v_no = "หมู่"; ?>
+                  <div class="col-md-5 col-xxl-3 mb-5" id="favuser<?php echo $ad ?>">
+                    <div class="card shadow-hover-1">
+                      <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                        <img src="../image/p_img/<?php echo $rowad['img_video'] ?>" alt="<?php echo $rowad['img_video'] ?>">
+                        <div class="card-img-overlay p-2 d-flex flex-column">
+                          <div>
+                            <?php if ($rowad['type'] == 'ขาย') {
+                              $type = 'ขาย';
+                              echo "<span class='badge  badge-indigo '>$type</span>";
+                            } ?>
+                            <?php if ($rowad['type'] == 'เช่า') {
+                              $type = 'เช่า';
+                              echo "<span class='badge  badge-info'>$type</span>";
+                            } ?>
+                            <?php if ($rowad['type'] == 'ขาย-เช่า') {
+                              $type = 'ขาย-เช่า';
+                              echo "<span class='badge  badge-success '>$type</span>";
+                            } ?>
+                            <?php if ($rowad['type'] == 'ขายดาวน์') {
+                              $type = 'ขายดาวน์';
+                              echo "<span class='badge  badge-warning '>$type</span>";
+                            } ?>
+                            <?php if ($rowad['type'] == 'ใบจอง') {
+                              $type = 'ใบจอง';
+                              echo "<span class='badge  badge-danger '>$type</span>";
+                            } ?>
+                          </div>
+                          <div class="mt-auto hover-image">
+                            <ul class="list-inline mb-0 d-flex align-items-end">
+                              <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                                <a href="#" class="text-white hover-primary">
+                                  <i class="far fa-images"></i><span class="pl-1">9</span>
+                                </a>
+                              </li>
+                              <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                <a href="#" class="text-white hover-primary">
+                                  <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div class="card-body pt-3">
-                      <h2 class="card-title fs-16 lh-2 mb-0"><a href="home-details.php?id=<?php echo $rowad['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad['title']; ?></a>
-                      </h2>
-                      <p class="card-text font-weight-500 text-gray-light mb-2"><?php if ($rowad['house_no'] != '') {
-                                                                                  echo $h_no . " " . $rowad['house_no'];
-                                                                                } ?> <?php if ($rowad['village_no'] != '') {
-                                                                                        echo $v_no . " " . $rowad['village_no'];
-                                                                                      } ?>
-                        <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
-                        <?php foreach ($result3 as $value) {
+                      <div class="card-body pt-3">
+                        <h2 class="card-title fs-16 lh-2 mb-0"><a href="home-details.php?id=<?php echo $rowad['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad['title']; ?></a>
+                        </h2>
+                        <p class="card-text font-weight-500 text-gray-light mb-2"><?php if ($rowad['house_no'] != '') {
+                                                                                    echo $h_no . " " . $rowad['house_no'];
+                                                                                  } ?> <?php if ($rowad['village_no'] != '') {
+                                                                                          echo $v_no . " " . $rowad['village_no'];
+                                                                                        } ?>
+                          <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
+                          <?php foreach ($result3 as $value) {
 
-                          if ($value['l_id'] == $rowad['l_id']) {
+                            if ($value['l_id'] == $rowad['l_id']) {
 
-                            echo 'ต.' . $value['dname_th'] . ' ';
-                            echo 'อ.' . $value['aname_th'] . ' ';
-                            echo 'จ.' . $value['name_th'] . ' ';
-                          }
-                        } ?>
-                        <?php echo $rowad['postal_code']; ?></p>
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2 " data-toggle="tooltip" title="3 Br">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          <?php echo $rowad['bedroom'] ?> ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2" data-toggle="tooltip" title="3 Ba">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          <?php echo $rowad['bathroom'] ?> ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center px-1 mr-2" data-toggle="tooltip" title="2300 Sq.Ft">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          <?php echo $rowad['space_area'] ?>
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2" data-toggle="tooltip" title="1 Gr">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          <?php echo $rowad['parking'] ?>
-                        </li>
-                      </ul>
-                    </div>
-                    <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                      <div class="mr-auto">
-                        <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $rowad['price'] ?> บาท</span>
+                              echo 'ต.' . $value['dname_th'] . ' ';
+                              echo 'อ.' . $value['aname_th'] . ' ';
+                              echo 'จ.' . $value['name_th'] . ' ';
+                            }
+                          } ?>
+                          <?php echo $rowad['postal_code']; ?></p>
+                        <ul class="list-inline d-flex mb-0 flex-wrap">
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2 " data-toggle="tooltip" title="3 Br">
+                            <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-bedroom"></use>
+                            </svg>
+                            <?php echo $rowad['bedroom'] ?> ห้อง
+                          </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2" data-toggle="tooltip" title="3 Ba">
+                            <svg class="icon icon-shower fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-shower"></use>
+                            </svg>
+                            <?php echo $rowad['bathroom'] ?> ห้อง
+                          </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center px-1 mr-2" data-toggle="tooltip" title="2300 Sq.Ft">
+                            <svg class="icon icon-square fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-square"></use>
+                            </svg>
+                            <?php echo $rowad['space_area'] ?>
+                          </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-2" data-toggle="tooltip" title="1 Gr">
+                            <svg class="icon icon-Garage fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-Garage"></use>
+                            </svg>
+                            <?php echo $rowad['parking'] ?>
+                          </li>
+                        </ul>
                       </div>
-                      <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                          <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i class="fas fa-heart"></i></a>
-                        </li>
-                      </ul>
+                      <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
+                        <div class="mr-auto">
+                          <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $rowad['price'] ?> บาท</span>
+                        </div>
+                        <ul class="list-inline mb-0">
+                          <li class="list-inline-item">
+                            <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i class="fas fa-heart"></i></a>
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
-                </div>
+                <?php } ?>
               <?php } ?>
 
-            </div>
-            <nav class="mt-6">
-              <ul class="pagination rounded-active justify-content-center">
-                <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
-                <?php for ($i = 1; $i <= $total_page; $i++) { ?>
-                  <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                <?php } ?>
-                <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
-              </ul>
-            </nav>
+              </div>
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center">
+                  <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
+                  <?php for ($i = 1; $i <= $total_page; $i++) { ?>
+                    <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+                  <?php } ?>
+                  <li class="page-item"><a class="page-link" href="dashboard-favourites.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                </ul>
+              </nav>
           </div>
         </main>
       </div>
@@ -277,23 +316,22 @@ $result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
       $('a#fav').on('click', function() {
         var ida = $(this).attr("name");
         if (ida != '') {
-         
-        $.ajax({
-          url: '../backend/del_favourite.php',
-          method: 'POST',
-          data: {
-            ida: ida
-          },
-          success: function(data) {
-            console.log(data);
-            $("#favuser"+data).remove();
-   
-          }
-        });
-      }
+
+          $.ajax({
+            url: '../backend/del_favourite.php',
+            method: 'POST',
+            data: {
+              ida: ida
+            },
+            success: function(data) {
+              console.log(data);
+              $("#favuser" + data).remove();
+
+            }
+          });
+        }
       });
     });
-
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>

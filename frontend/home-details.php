@@ -12,14 +12,14 @@ $rowa = mysqli_fetch_array($resulta);
 $sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company,users.img,users.utype,users.u_id
 FROM (((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE a_id = $id  ";
+    WHERE a_id = $id AND advertise.u_id = users.u_id ";
 $resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
 $rowad = mysqli_fetch_array($resultad);
 $pd_id = $rowad['l_id'];
@@ -57,9 +57,16 @@ INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
 WHERE file.pd_id = $pd_id ";
 $resultf = mysqli_query($con, $sqlf)  or die(mysqli_error($con));
 
+$sqlf2 = "SELECT file.f_name, file.f_date, file.f_id
+FROM (file
+INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
+WHERE file.pd_id = $pd_id ";
+$resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
+
 $sqlfa = "SELECT * FROM favourite WHERE a_id = $ida";
 $resultfa = mysqli_query($con,$sqlfa) or die ;
 $num_row = mysqli_num_rows($resultfa);
+
 
 ?>
 <!doctype html>
@@ -267,14 +274,13 @@ $num_row = mysqli_num_rows($resultfa);
                 <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="<?php echo $rowad['img_video']; ?>" class="h-100 w-100 rounded-lg">
               </div>
             </div>
-            <?php while ($rowf = mysqli_fetch_array($resultf)) {
-              echo $rowf['f_name']; ?>
-              <div class="box pb-6 px-0">
-                <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                  <img src="../file/<?php echo $rowf['f_name']; ?>" alt="<?php echo $rowf['f_name']; ?>" class="h-100 w-100 rounded-lg">
-                </div>
+            <?php while ($rowf2 = mysqli_fetch_array($resultf2)) { ?>
+            <div class="box pb-6 px-0">
+              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
+                <img src="../file/<?php echo $rowf2['f_name']; ?>" alt="<?php echo $rowf2['f_name']; ?>" class="h-100 w-100 rounded-lg">
               </div>
-            <?php } ?>
+            </div>
+            <?php } ?> 
           </div>
         </div>
       </div>
@@ -282,7 +288,77 @@ $num_row = mysqli_num_rows($resultfa);
     <div class="primary-content bg-gray-01 pt-7 pb-12">
       <div class="container">
         <div class="row">
-          <article class="col-lg-12">
+        <div class="col-lg-4 primary-sidebar sidebar-sticky" id="sidebar">
+            <div class="primary-sidebar-inner">
+              <div class="card p-6 mb-4">
+                <div class="card-body text-center p-0">
+                  <img src="../image/m_img/<?php echo $rowad['img']; ?>" class="mb-2" width="150">
+                  <?php if($rowad['utype'] == 'agent'){ ?>
+                    <a href="agent-details.php?id=<?php echo $rowad['u_id']; ?>" class="d-block fs-16 lh-214 text-primary mb-0 font-weight-500">นายหน้า</a>
+                  <?php }?>
+                  <p class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500"><?php echo $rowad['name']; ?></p>
+                  <ul class="list-inline mb-2">
+                    <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5</li>
+                    <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
+                      <ul class="list-inline mb-0">
+                        <li class="list-inline-item mr-0">
+                          <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                        </li>
+                        <li class="list-inline-item mr-0">
+                          <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                        </li>
+                        <li class="list-inline-item mr-0">
+                          <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                        </li>
+                        <li class="list-inline-item mr-0">
+                          <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                        </li>
+                        <li class="list-inline-item mr-0">
+                          <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                </div>
+                <div class="card-footer bg-white px-0 pt-1">
+                  <ul class="list-group list-group-no-border mb-7">
+                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                      <span class="col-4 p-0 fs-13">สำนักงาน</span>
+                      <span class="col-8 p-0 text-heading font-weight-500"><?php echo $rowad['company']; ?></span>
+                    </li>
+                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                      <span class="col-4 p-0 fs-13">โทรศัพท์มือถือ</span>
+                      <span class="col-8 p-0 text-heading font-weight-500"><?php echo $rowad['tel']; ?></span>
+                    </li>
+                    <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                      <span class="col-4 p-0 fs-13">อีเมล</span>
+                      <span class="col-8 p-0"><?php echo $rowad['email']; ?></span>
+                    </li>
+                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                      <span class="col-3 p-0 fs-13">Social</span>
+                      <ul class="col-9 list-inline text-gray-lighter m-0 p-0 z-index-2">
+                        <li class="list-inline-item m-0">
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                        </li>
+                        <li class="list-inline-item mr-0 ml-2">
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                        </li>
+                        <li class="list-inline-item mr-0 ml-2">
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                        </li>
+                        <li class="list-inline-item mr-0 ml-2">
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                        </li>
+                      </ul>
+                    </li>
+                  </ul>
+                  <button type="submit" class="btn btn-primary btn-lg btn-block shadow-none"> ส่งข้อความ
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <article class="col-lg-8 mb-6 mb-lg-0">
             <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
               <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
                 <li class="list-inline-item badge badge-primary mr-3"><?php echo $rowad['type']; ?></li>
@@ -315,12 +391,13 @@ $num_row = mysqli_num_rows($resultfa);
                     <?php echo $rowad['postal_code']; ?></p>
                   </p>
                 </div>
-                <div class="mt-2 text-lg-right">
-                  <p class="fs-22 text-heading font-weight-bold mb-0"><?php echo $rowad['price']; ?> บาท</p>
-                </div>
+                
               </div>
               <h4 class="fs-22 text-heading mt-6 mb-0">รายละเอียด</h4>
               <p class="mb-0 lh-214"><?php echo $rowad['note']; ?></p>
+              <div class="mt-2 text-lg-left">
+                  <p class="fs-22 text-heading font-weight-bold mb-0">ราคา <?php echo $rowad['price']; ?> บาท</p>
+                </div>
             </section>
             <section class="mt-0 pb-3 px-6 pt-5 bg-white rounded-lg">
               <div class="row">
@@ -597,12 +674,12 @@ $num_row = mysqli_num_rows($resultfa);
             
           if(data == 1){
             $("a#fav").removeAttr("class");
-            $("a#fav").toggleClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle");
+            $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading  rounded-circle");
 
           }else{
 
             $("a#fav").removeAttr("class");
-            $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle");
+            $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading  rounded-circle");
           }
 
 

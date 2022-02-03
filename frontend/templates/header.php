@@ -50,9 +50,7 @@ if (isset($_POST['submit'])) {
     }
 }
 
-
 ?>
-
 <!-- Google fonts -->
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Prompt:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
@@ -118,28 +116,11 @@ if (isset($_POST['submit'])) {
                         </ul>
                         <div class="d-block d-xl-none">
                             <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle mr-md-2 pr-2 pl-0 pl-lg-2" href="#" id="bd-versions-mobile" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        ENG
-                                    </a>
-                                    <div class="dropdown-menu dropdown-sm dropdown-menu-left" aria-labelledby="bd-versions-mobile">
-                                        <a class="dropdown-item" href="#">VN</a>
-                                        <a class="dropdown-item active" href="#">ENG</a>
-                                        <a class="dropdown-item" href="#">ARB</a>
-                                        <a class="dropdown-item" href="#">KR</a>
-                                        <a class="dropdown-item" href="#">JN</a>
-                                    </div>
-                                </li>
-                                <li class="divider"></li>
+                            
                                 <li class="nav-item ">
-                                    <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">SIGN IN</a>
+                                    <a class="nav-link " data-toggle="modal" href="#login-register-modal">SIGN IN</a>
                                 </li>
-                                <li class="nav-item ml-auto w-100 w-sm-auto">
-                                    <a class="btn btn-primary btn-lg" href="dashboard-add-new-property.html">
-                                        Add listing
-                                        <img src="../images/add-listing-icon.png" alt="Add listing" class="ml-1">
-                                    </a>
-                                </li>
+                                
                             </ul>
                         </div>
                     </div>

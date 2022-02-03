@@ -120,19 +120,19 @@
           $text = ' ';
         }
         if ($choice == 4) {
-          $text = 'ORDER BY advertise.a_id DESC ';
+          $text = ' ';
         }
 
         $sqlc = $_POST['sql'];
         $texts = $_POST['Order_text'];
 
         $sqla = str_replace($texts, '', $sqlc);
-        $sqln = "$sqla" . $text ;
+        $sqln = "$sqla" . $text . "limit {$start} , {$perpage}";
         $resulta = mysqli_query($con, $sqln);
       } else {
 
         $text = 'ORDER BY users.name ASC   ';
-        $sqln = "$sqla" . $text ;
+        $sqln = "$sqla" . $text . "limit {$start} , {$perpage}";
         $resulta = mysqli_query($con, $sqln);
       }
 
@@ -278,10 +278,16 @@
       $total_record = mysqli_num_rows($result4);
       $total_page = ceil($total_record / $perpage);
 
-      
+
       $sqla = "SELECT * FROM (users 
       LEFT JOIN advertise ON users.u_id = advertise.u_id)
       WHERE utype='agent'";
+
+      $sqlb = "SELECT * FROM (users 
+     LEFT JOIN advertise ON users.u_id = advertise.u_id)
+     WHERE utype='agent' AND users.u_id = advertise.u_id ";
+      $resultb = mysqli_query($con, $sqlb);
+      $num = mysqli_num_rows($resultb);
 
       $choice = 1;
 
@@ -297,20 +303,20 @@
           $text = ' ';
         }
         if ($choice == 4) {
-          $text = 'ORDER BY advertise.a_id DESC ';
+
+          $text = ' ';
         }
 
         $sqlc = $_POST['sql'];
         $texts = $_POST['Order_text'];
 
         $sqla = str_replace($texts, '', $sqlc);
-        $sqln = "$sqla" . $text  ;
+        $sqln = "$sqla" . $text . "limit {$start} , {$perpage}";
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
-
       } else {
 
         $text = 'ORDER BY users.name ASC  ';
-        $sqln = "$sqla" . $text  ;
+        $sqln = "$sqla" . $text . "limit {$start} , {$perpage}";
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       }
 

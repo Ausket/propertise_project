@@ -82,8 +82,8 @@ WHERE property_detail.project_name != '' AND advertise.ad_status = '1' ";
 $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));
 $total_pro = mysqli_num_rows($result4);
 
-$sql5 = "SELECT * FROM advertise WHERE advertise.ad_status = '1' ";
-$result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));
+$sql5 = "SELECT * FROM advertise WHERE ad_status = '1' ";
+$result5 = mysqli_query($con, $sql5);
 $total = mysqli_num_rows($result5);
 
 ?>
@@ -450,7 +450,7 @@ $total = mysqli_num_rows($result5);
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">ตัวแทน</div>
           </div>
           <div class="col-sm-6 col-lg-3 mb-6 mb-sm-0 px-6 text-center" data-animate="fadeInUp">
-            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="<?php echo $total ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $total_record ?>
+            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="<?php echo $total ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $total ?>
             </div>
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">โพสต์</div>
           </div>
@@ -571,20 +571,21 @@ $total = mysqli_num_rows($result5);
                       <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
                         $ad = $row2['a_id'];
                         $id = $_SESSION['u_id'];
-                        $sqlf = "SELECT * FROM favourite WHERE a_id = $ad ";
+                        $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $id";
                         $resultf = mysqli_query($con, $sqlf);
                         $numf = mysqli_num_rows($resultf); ?>
+
                         <?php if ($numf == 0) { ?>
-                          <a  name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="far fa-heart"></i></a>
+                          <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i name="favi" id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
                         <?php } else { ?>
-                          <a  name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i class="fas fa-heart"></i></a>
+                          <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i name="favi" id="favi<?php echo $ad ?>" class="fas fa-heart"></i></a>
                         <?php } ?>
                       <?php } else { ?>
-                        <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="far fa-heart"></i></a>
+                        <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
                       <?php } ?>
                     </li>
                     <li class="list-inline-item">
-                      <a id="more" name="<?php echo $ad ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
+                      <a id="<?php echo $ad ?>" name="" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
                     </li>
                   </ul>
                 </div>
@@ -1006,16 +1007,25 @@ $total = mysqli_num_rows($result5);
             ida: ida
           },
           success: function(data) {
-         
-            // if(data == 1){
-            //   $("a#fav").removeAttr("class");
-            //   $("a#fav").addClass(" text-body hover-secondary bg-hover-accent border-hover-accent");
 
-            // }else{
+            if (data == 1) {
 
-            //   $("a#fav").removeAttr("class");
-            //   $("a#fav").addClass(" text-secondary bg-accent border-accent");
-            // }
+              $('i#favi' + ida).removeAttr("class");
+              $('i#favi' + ida).addClass("fas fa-heart");
+
+              $("[name=" + ida + "]").removeAttr("class");
+              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent");
+             
+            } else {
+
+              $('i#favi' + ida).removeAttr("class");
+              $('i#favi' + ida).addClass("far fa-heart");
+
+              $("[name=" + ida + "]").removeAttr("class");
+              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body border-accent ");
+             
+            }
+
 
 
           }
