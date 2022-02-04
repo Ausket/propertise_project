@@ -477,7 +477,7 @@ $total = mysqli_num_rows($result5);
             <div class="box pb-7 pt-2">
               <div class="card shadow-hover-2" data-animate="zoomIn">
                 <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                  <img src="image/p_img/<?php echo $row2['img_video'] ?>" id="proimg" alt="<?php echo $row2['img_video'] ?>">
+                  <img src="image/p_img/<?php echo $row2['img_video'] ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video'] ?>">
                   <div class="card-img-overlay p-2 d-flex flex-column">
                     <div>
                       <?php if ($row2['type'] == 'ขาย') {
@@ -585,7 +585,7 @@ $total = mysqli_num_rows($result5);
                       <?php } ?>
                     </li>
                     <li class="list-inline-item">
-                      <a id="<?php echo $ad ?>" name="" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
+                      <a id="compa" name="<?php echo $ad ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
                     </li>
                   </ul>
                 </div>
@@ -788,7 +788,7 @@ $total = mysqli_num_rows($result5);
       </div>
     </section>
     <div id="compare" class="compare">
-      <button class="btn shadow btn-open bg-white bg-hover-accent text-secondary rounded-right-0 d-flex justify-content-center align-items-center w-30px h-140 p-0">
+      <button id="showcom" class="btn shadow btn-open bg-white bg-hover-accent text-secondary rounded-right-0 d-flex justify-content-center align-items-center w-30px h-140 p-0">
       </button>
       <div class="list-group list-group-no-border bg-dark py-3">
         <a href="#" class="list-group-item bg-transparent text-white fs-22 text-center py-0">
@@ -804,10 +804,10 @@ $total = mysqli_num_rows($result5);
               <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
             </div>
           </div>
-        </div>         -->
-        <div class="list-group-item card bg-transparent"></div>
+        </div> -->
+        <div id="com" class="list-group-item card bg-transparent"></div>
         <div class="list-group-item bg-transparent">
-          <a href="frontend/compare.php" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+          <a href="" id="subcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
             เปรียบเทียบ
           </a>
         </div>
@@ -1015,7 +1015,7 @@ $total = mysqli_num_rows($result5);
 
               $("[name=" + ida + "]").removeAttr("class");
               $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent");
-             
+
             } else {
 
               $('i#favi' + ida).removeAttr("class");
@@ -1023,7 +1023,7 @@ $total = mysqli_num_rows($result5);
 
               $("[name=" + ida + "]").removeAttr("class");
               $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body border-accent ");
-             
+
             }
 
 
@@ -1034,53 +1034,79 @@ $total = mysqli_num_rows($result5);
     });
 
     function getSelectedIds() {
-      return $("div.position-relative hover-change-image bg-hover-overlay").map(function() {
-        return $.trim($(this).text());
 
-      }).get();
+      return $('#parent #child').map(function() {
+        return $(this).text();
+      }).toArray();
     }
 
     function updateLinkAndCounter() {
       var ids = getSelectedIds().map(function(x, i) {
-        return ['P', ++i, '=', x].join('');
+        return ['id', ++i, '=', x].join('');
       });
-      // $('a#submit').attr('href', 'frontend/compare.php?' + ids.join('&'));
-      $("count").text(ids.length == 1 ? 'เลือก 1 จาก 3.' : 'เลือก ' + ids.length + ' จาก 3.')
+      $('a#subcom').attr('href', 'frontend/compare.php?' + ids.join('&'));
+      $("count").text(ids.length == 1 ? 'เลือก 1 จาก 3' : 'เลือก ' + ids.length + ' จาก 3');
+
     }
 
-    $("a#more").click(function() {
+    $("a#compa").click(function() {
       var id = $(this).attr('name');
       console.log(id);
-      var img = $('#proimg').attr('src');
+      var img = $('#proimg' + id).attr('src');
       console.log(img);
 
+     
       var selected = getSelectedIds();
-      if (selected.length == 3) return; // already 4 items added
+      if (selected.length == 3) return; // already 3 items added
       if (selected.indexOf(id) != -1) return; // item already added
       if (selected.indexOf(img) != -1) return; // item already added
+    
 
       $('<div/>', {
-          'class': 'position-relative hover-change-image bg-hover-overlay'
-
+          'class': 'position-relative hover-change-image bg-hover-overlay',
+          'id': 'parent'
         })
+        .append($('<span/>', {
+          text : id,
+          id: 'child',
+          class: 'd-none'
+        }))
+
         .append($('<img/>', {
           class: 'card-img',
           src: img
-        }))
-        .append($('<a/>', {
-          href: '#',
-          class: 'text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2'
-        }))
-        .append($('<i />', {
-          class: 'fal fa-minus-circle'
+
         }))
         .append($('<div />', {
-          class: 'card-img-overlay',
-        }))
-        .appendTo('div.list-group-item card bg-transparent');
+            class: 'card-img-overlay',
+          })
+          .append($('<a/>', {
+              class: 'text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2',
+              id: 'delcom' + id,
+              style: 'cursor:pointer'
+            })
+            .append($('<i />', {
+              class: 'fal fa-minus-circle',
+            }))
+          ))
 
-      // updateLinkAndCounter();
+        .appendTo('div#com');
+
+      $('#showcom').click();
+
+      setTimeout(function() {
+        $('#showcom').click()
+      }, 3500)
+
+      updateLinkAndCounter();
       // $("div.list-group-item card bg-transparent").removeClass("hidden");
+
+      $("a#delcom"+id).on("click", function(event) {
+        event.preventDefault();
+        $(this).parent().parent().remove();
+        updateLinkAndCounter();
+      });
+
     });
   </script>
   <!-- Theme scripts -->

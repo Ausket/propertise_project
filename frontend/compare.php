@@ -1,3 +1,81 @@
+<?php
+
+require_once('../dbconnect.php');
+
+$id1 = $_GET["id1"];
+
+if (isset($_GET["id2"]) ? $_GET["id2"] : '') {
+  $id2 = $_GET["id2"];
+}
+if (empty($id2)) {
+  echo '<script> window.location.href = "../index.php";alert("กรุณาเลือกอย่างน้อย 2 โพสต์") </script>';
+}
+
+if (isset($_GET["id3"]) ? $_GET["id3"] : '') {
+  $id3 = $_GET["id3"];
+
+  $sql32 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+FROM ((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    WHERE a_id =  $id3 ";
+  $result32 = mysqli_query($con, $sql32) or die(mysqli_error($con));
+  $row3 = mysqli_fetch_assoc($result32);
+  $pd_id = $row3['l_id'];
+}
+
+$h_no = "เลขที่";
+$v_no = "หมู่";
+
+$facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
+
+
+$sql1 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+FROM ((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    WHERE a_id =  $id1 ";
+$result1 = mysqli_query($con, $sql1) or die(mysqli_error($con));
+$row1 = mysqli_fetch_assoc($result1);
+$pd_id = $row1['l_id'];
+
+
+
+$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
+location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+FROM ((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    WHERE a_id =  $id2 ";
+$result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+$row2 = mysqli_fetch_assoc($result2);
+$pd_id = $row2['l_id'];
+
+
+$sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+provinces.name_th,amphures.aname_th,districts.dname_th
+FROM (((location_property
+INNER  JOIN provinces ON location_property.province_id = provinces.id)
+INNER  JOIN amphures ON location_property.amphure_id = amphures.id)
+INNER JOIN districts ON location_property.district_id = districts.id) 
+";
+$result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
+
+?>
 <!doctype html>
 <html lang="en">
 
@@ -62,94 +140,161 @@
               <tr class="bg-gray-03 h-90">
                 <th class="w-25" scope="col"></th>
                 <th scope="col">
-                  <div class="fs-16 font-weight-normal text-dark mb-0">เดอะรูท | The Root</div>
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row1['title'] ?></div>
                 </th>
                 <th scope="col">
-                  <div class="fs-16 font-weight-normal text-dark mb-0">ทากะ เฮ้าส์ | Taka HAUS</div>
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row2['title'] ?></div>
                 </th>
-                <th scope="col">
-                  <div class="fs-16 font-weight-normal text-dark mb-0">เดอะ ฮาร์โมนี | The Harmony</div>
-                </th>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
+                  <th scope="col">
+                    <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row3['title'] ?></div>
+                  </th>
+                <?php } ?>
               </tr>
               <tr>
                 <th scope="col"></th>
                 <th scope="col">
                   <div class="card border-0">
                     <div class="rounded-lg">
-                      <img class="card-img-top" src="../images/compare-04.jpg" alt="Home in Metric Way">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row1['img_video'] ?>">
                     </div>
                     <div class="card-body pt-2 pb-0 px-0">
-                      <p class="font-weight-500 text-gray-light mb-0">ลาดพร้าว 1 แยก 27, แขวงจอมพล, จตุจักร, กรุงเทพ</p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">5,000,000 บาท</p>
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row1['house_no'] != '') {
+                                                                        echo $h_no . " " . $row1['house_no'];
+                                                                      } ?> <?php if ($row1['village_no'] != '') {
+                                                                              echo $v_no . " " . $row1['village_no'];
+                                                                            } ?>
+                        <?php echo $row1['lane']; ?> <?php echo $row1['road']; ?>
+                        <?php foreach ($result3 as $value) {
+
+                          if ($value['l_id'] == $row1['l_id']) {
+
+                            echo 'ต.' . $value['dname_th'] . ' ';
+                            echo 'อ.' . $value['aname_th'] . ' ';
+                            echo 'จ.' . $value['name_th'] . ' ';
+                          }
+                        } ?>
+                        <?php echo $row1['postal_code']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row1['price'] ?> บาท</p>
                     </div>
                   </div>
                 </th>
                 <th scope="col">
                   <div class="card border-0">
                     <div class="rounded-lg">
-                      <img class="card-img-top" src="../images/compare-05.jpg" alt="Home in Metric Way">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="Home in Metric Way">
                     </div>
                     <div class="card-body pt-2 pb-0 px-0">
-                      <p class="font-weight-500 text-gray-light mb-0">99 เอกมัย 10, วัฒนา, กรุงเทพ</p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">4,000,000 บาท</p>
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row2['house_no'] != '') {
+                                                                        echo $h_no . " " . $row2['house_no'];
+                                                                      } ?> <?php if ($row2['village_no'] != '') {
+                                                                              echo $v_no . " " . $row2['village_no'];
+                                                                            } ?>
+                        <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
+                        <?php foreach ($result3 as $value) {
+
+                          if ($value['l_id'] == $row2['l_id']) {
+
+                            echo 'ต.' . $value['dname_th'] . ' ';
+                            echo 'อ.' . $value['aname_th'] . ' ';
+                            echo 'จ.' . $value['name_th'] . ' ';
+                          }
+                        } ?>
+                        <?php echo $row2['postal_code']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row2['price']; ?> บาท</p>
                     </div>
                   </div>
                 </th>
-                <th scope="col">
-                  <div class="card border-0">
-                    <div class="rounded-lg">
-                      <img class="card-img-top" src="../images/compare-06.jpg" alt="Home in Metric Way">
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
+                  <th scope="col">
+                    <div class="card border-0">
+                      <div class="rounded-lg">
+                        <img class="card-img-top" src="../image/p_img/<?php echo $row3['img_video'] ?>" alt="Home in Metric Way">
+                      </div>
+                      <div class="card-body pt-2 pb-0 px-0">
+                        <p class="font-weight-500 text-gray-light mb-0"><?php if ($row3['house_no'] != '') {
+                                                                          echo $h_no . " " . $row3['house_no'];
+                                                                        } ?> <?php if ($row3['village_no'] != '') {
+                                                                              echo $v_no . " " . $row3['village_no'];
+                                                                            } ?>
+                          <?php echo $row3['lane']; ?> <?php echo $row3['road']; ?>
+                          <?php foreach ($result3 as $value) {
+
+                            if ($value['l_id'] == $row3['l_id']) {
+
+                              echo 'ต.' . $value['dname_th'] . ' ';
+                              echo 'อ.' . $value['aname_th'] . ' ';
+                              echo 'จ.' . $value['name_th'] . ' ';
+                            }
+                          } ?>
+                          <?php echo $row3['postal_code']; ?></p>
+                        <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row3['price']; ?> บาท</p>
+                      </div>
                     </div>
-                    <div class="card-body pt-2 pb-0 px-0">
-                      <p class="font-weight-500 text-gray-light mb-0">ซ.รามอินทรา62 แยก1, คันนายาว, กรุงเทพ</p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">6,500,000 บาท</p>
-                    </div>
-                  </div>
-                </th>
+                  </th>
+                <?php } ?>
               </tr>
             </thead>
             <tbody class="text-center table-p-4">
               <tr>
                 <td>ประเภท</td>
-                <td>อพาร์ทเม้น</td>
-                <td>อพาร์ทเม้น</td>
-                <td>บ้านพักตากอากาศ</td>
+                <td><?php echo $row1['p_type'] ?></td>
+                <td><?php echo $row2['p_type'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['p_type'] ?></td><?php } ?>
               </tr>
               <tr>
                 <td>พื้นที่ที่ดิน</td>
-                <td>2300 ตร.เมตร</td>
-                <td>2300 ตร.เมตร</td>
-                <td>2300 ตร.เมตร</td>
+                <td><?php echo $row1['space_area'] ?> ตร.เมตร</td>
+                <td><?php echo $row2['space_area'] ?> ตร.เมตร</td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['space_area'] ?> ตร.เมตร</td><?php } ?>
               </tr>
               <tr>
                 <td>ห้อง</td>
                 <td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td>
                 <td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td>
-                <td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td><?php } ?>
               </tr>
               <tr>
                 <td>ห้องนอน</td>
-                <td>5</td>
-                <td>3</td>
-                <td>8</td>
+                <td><?php echo $row1['bedroom'] ?></td>
+                <td><?php echo $row2['bedroom'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
                 <td>ห้องน้ำ</td>
-                <td>5</td>
-                <td>1</td>
-                <td>6</td>
+                <td><?php echo $row1['bathroom'] ?></td>
+                <td><?php echo $row2['bedroom'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
                 <td>ที่จอดรถ</td>
-                <td>2</td>
-                <td>1</td>
-                <td>1</td>
+                <td><?php echo $row1['parking'] ?></td>
+                <td><?php echo $row2['bedroom'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
-                <td>พื้นที่ที่จอดรถ</td>
-                <td>230 ตร.เมตร</td>
-                <td>230 ตร.เมตร</td>
-                <td>230 ตร.เมตร</td>
+                <td>สิ่งอำนวยความสะดวก</td>
+                <td>
+                  <?php $facility = explode(",", $row1['facility']); //array
+                  foreach ($facility_arr as $value) {
+                    if (in_array($value, $facility)) { ?>
+                      <?php echo $value ?>
+                  <?php }
+                  }  ?></td>
+                <td>
+                  <?php $facility = explode(",", $row2['facility']); //array
+                  foreach ($facility_arr as $value) {
+                    if (in_array($value, $facility)) { ?>
+                      <?php echo $value ?>
+                  <?php }
+                  } ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?> <td>
+                    <?php $facility = explode(",", $row3['facility']); //array
+                    foreach ($facility_arr as $value) {
+                      if (in_array($value, $facility)) { ?>
+                        <?php echo $value ?>
+                    <?php }
+                    } ?></td><?php } ?>
               </tr>
             </tbody>
           </table>
