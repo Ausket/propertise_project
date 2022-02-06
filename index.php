@@ -53,7 +53,7 @@ if (isset($_POST['submit'])) {
 $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type
 FROM ((((advertise
 LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
 LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -567,25 +567,30 @@ $total = mysqli_num_rows($result5);
                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
                   <p class="fs-17 font-weight-bold text-heading mb-0"><?php echo $row2['price'] ?> บาท</p>
                   <ul class="list-inline mb-0">
+
                     <li class="list-inline-item">
                       <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
                         $ad = $row2['a_id'];
-                        $id = $_SESSION['u_id'];
-                        $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $id";
+                        $idu = $_SESSION['u_id'];
+                        $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
                         $resultf = mysqli_query($con, $sqlf);
                         $numf = mysqli_num_rows($resultf); ?>
 
                         <?php if ($numf == 0) { ?>
                           <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i name="favi" id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
-                        <?php } else { ?>
-                          <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i name="favi" id="favi<?php echo $ad ?>" class="fas fa-heart"></i></a>
-                        <?php } ?>
-                      <?php } else { ?>
-                        <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
-                      <?php } ?>
-                    </li>
                     <li class="list-inline-item">
-                      <a id="compa" name="<?php echo $ad ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
+                      <a id="compa" name="<?php echo $row2['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
+                    <?php } else { ?>
+                      <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i name="favi" id="favi<?php echo $ad ?>" class="fas fa-heart"></i></a>
+                    <li class="list-inline-item">
+                      <a id="compa" name="<?php echo $row2['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
+                    <?php } ?>
+                  <?php } else { ?>
+                    <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
+                    <li class="list-inline-item">
+                      <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
+                    <?php } ?>
+                    </li>
                     </li>
                   </ul>
                 </div>
@@ -997,6 +1002,8 @@ $total = mysqli_num_rows($result5);
   <script>
     $(document).ready(function() {
       $('a#fav').on('click', function() {
+
+
         var ida = $(this).attr("name");
 
         $.ajax({
@@ -1050,24 +1057,25 @@ $total = mysqli_num_rows($result5);
     }
 
     $("a#compa").click(function() {
+
       var id = $(this).attr('name');
       console.log(id);
       var img = $('#proimg' + id).attr('src');
       console.log(img);
 
-     
+
       var selected = getSelectedIds();
       if (selected.length == 3) return; // already 3 items added
       if (selected.indexOf(id) != -1) return; // item already added
       if (selected.indexOf(img) != -1) return; // item already added
-    
+
 
       $('<div/>', {
           'class': 'position-relative hover-change-image bg-hover-overlay',
           'id': 'parent'
         })
         .append($('<span/>', {
-          text : id,
+          text: id,
           id: 'child',
           class: 'd-none'
         }))
@@ -1101,7 +1109,7 @@ $total = mysqli_num_rows($result5);
       updateLinkAndCounter();
       // $("div.list-group-item card bg-transparent").removeClass("hidden");
 
-      $("a#delcom"+id).on("click", function(event) {
+      $("a#delcom" + id).on("click", function(event) {
         event.preventDefault();
         $(this).parent().parent().remove();
         updateLinkAndCounter();

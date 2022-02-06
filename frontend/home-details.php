@@ -12,7 +12,7 @@ $rowa = mysqli_fetch_array($resulta);
 $sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company,users.img,users.utype,users.u_id
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company,users.img,users.utype,users.u_id
 FROM (((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -63,9 +63,6 @@ INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
 WHERE file.pd_id = $pd_id ";
 $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
 
-$sqlfa = "SELECT * FROM favourite WHERE a_id = $ida";
-$resultfa = mysqli_query($con,$sqlfa) or die ;
-$num_row = mysqli_num_rows($resultfa);
 
 
 ?>
@@ -113,6 +110,7 @@ $num_row = mysqli_num_rows($resultfa);
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <script src="../js/map.js"></script>
 </head>
 
 <body>
@@ -211,12 +209,22 @@ $num_row = mysqli_num_rows($resultfa);
           <div class="position-absolute pos-fixed-top-right z-index-3">
             <ul class="list-inline pt-4 pr-5">
               <li class="list-inline-item mr-2">
-                <?php if($num_row == 0) {?>
-                <a href=""  id="fav"  class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle" >
-                  <?php }else{ ?>
-                    <a href="" id="fav"  class="d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle" >
-                    <?php }?>
-                  <i class="far fa-heart"></i></a>
+                <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                  $ad = $rowad['a_id'];
+                  $id = $_SESSION['u_id'];
+                  $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $id";
+                  $resultf = mysqli_query($con, $sqlf);
+                  $numf = mysqli_num_rows($resultf); ?>
+
+                  <?php if ($numf == 0) { ?>
+                    <a href="" id="fav" class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle">
+                    <?php } else { ?>
+                      <a href="" id="fav" class="d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle">
+                      <?php } ?>
+                    <?php } else { ?>
+                      <a href="#login-register-modal" data-toggle="modal" class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading rounded-circle">
+                      <?php } ?>
+                      <i class="far fa-heart"></i></a>
               </li>
               <li class="list-inline-item mr-2">
                 <button type="button" class="btn btn-white p-0 d-flex align-items-center justify-content-center w-40px h-40 text-heading bg-hover-primary hover-white rounded-circle border-0 shadow-none" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content=' <ul class="list-inline mb-0">
@@ -275,12 +283,12 @@ $num_row = mysqli_num_rows($resultfa);
               </div>
             </div>
             <?php while ($rowf2 = mysqli_fetch_array($resultf2)) { ?>
-            <div class="box pb-6 px-0">
-              <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
-                <img src="../file/<?php echo $rowf2['f_name']; ?>" alt="<?php echo $rowf2['f_name']; ?>" class="h-100 w-100 rounded-lg">
+              <div class="box pb-6 px-0">
+                <div class="bg-white p-1 shadow-hover-xs-3 h-100 rounded-lg">
+                  <img src="../file/<?php echo $rowf2['f_name']; ?>" alt="<?php echo $rowf2['f_name']; ?>" class="h-100 w-100 rounded-lg">
+                </div>
               </div>
-            </div>
-            <?php } ?> 
+            <?php } ?>
           </div>
         </div>
       </div>
@@ -288,14 +296,14 @@ $num_row = mysqli_num_rows($resultfa);
     <div class="primary-content bg-gray-01 pt-7 pb-12">
       <div class="container">
         <div class="row">
-        <div class="col-lg-4 primary-sidebar sidebar-sticky" id="sidebar">
+          <div class="col-lg-4 primary-sidebar sidebar-sticky" id="sidebar">
             <div class="primary-sidebar-inner">
               <div class="card p-6 mb-4">
                 <div class="card-body text-center p-0">
                   <img src="../image/m_img/<?php echo $rowad['img']; ?>" class="mb-2" width="150">
-                  <?php if($rowad['utype'] == 'agent'){ ?>
+                  <?php if ($rowad['utype'] == 'agent') { ?>
                     <a href="agent-details.php?id=<?php echo $rowad['u_id']; ?>" class="d-block fs-16 lh-214 text-primary mb-0 font-weight-500">นายหน้า</a>
-                  <?php }?>
+                  <?php } ?>
                   <p class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500"><?php echo $rowad['name']; ?></p>
                   <ul class="list-inline mb-2">
                     <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5</li>
@@ -368,9 +376,9 @@ $num_row = mysqli_num_rows($resultfa);
               <div class="d-sm-flex justify-content-sm-between">
                 <div>
                   <h2 class="fs-35 font-weight-600 lh-15 text-heading"><?php echo $rowad['title']; ?></h2>
-                  <?php if($rowad['project_name'] != '') {?>
-                  <p class="fs-20 text-heading font-weight-bold mb-0">โครงการ <?php echo $rowad['project_name']; ?></p>
-                  <?php }?>
+                  <?php if ($rowad['project_name'] != '') { ?>
+                    <p class="fs-20 text-heading font-weight-bold mb-0">โครงการ <?php echo $rowad['project_name']; ?></p>
+                  <?php } ?>
                   <p class="mb-0"><i class="fal fa-map-marker-alt mr-2"></i><?php $h_no = "เลขที่";
                                                                             $v_no = "หมู่";
                                                                             if ($rowad['house_no'] != '') {
@@ -391,13 +399,13 @@ $num_row = mysqli_num_rows($resultfa);
                     <?php echo $rowad['postal_code']; ?></p>
                   </p>
                 </div>
-                
+
               </div>
               <h4 class="fs-22 text-heading mt-6 mb-0">รายละเอียด</h4>
               <p class="mb-0 lh-214"><?php echo $rowad['note']; ?></p>
               <div class="mt-2 text-lg-left">
-                  <p class="fs-22 text-heading font-weight-bold mb-0">ราคา <?php echo $rowad['price']; ?> บาท</p>
-                </div>
+                <p class="fs-22 text-heading font-weight-bold mb-0">ราคา <?php echo $rowad['price']; ?> บาท</p>
+              </div>
             </section>
             <section class="mt-0 pb-3 px-6 pt-5 bg-white rounded-lg">
               <div class="row">
@@ -661,26 +669,26 @@ $num_row = mysqli_num_rows($resultfa);
       $('a#fav').on('click', function(e) {
 
         e.preventDefault();
-       
+
         $.ajax({
           url: '../backend/favourite.php',
           type: 'POST',
           data: {
             u_id: <?= $_SESSION['u_id'] ?>,
-            ida :<?= $ida?> ,
+            ida: <?= $ida ?>,
           },
           cache: false,
           success: function(data) {
-            
-          if(data == 1){
-            $("a#fav").removeAttr("class");
-            $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading  rounded-circle");
 
-          }else{
+            if (data == 1) {
+              $("a#fav").removeAttr("class");
+              $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading  rounded-circle");
 
-            $("a#fav").removeAttr("class");
-            $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading  rounded-circle");
-          }
+            } else {
+
+              $("a#fav").removeAttr("class");
+              $("a#fav").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading  rounded-circle");
+            }
 
 
           }
@@ -690,6 +698,10 @@ $num_row = mysqli_num_rows($resultfa);
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8cHZORdYKkrDwD8vHR4ng5rW5M74O0mY&callback=initMap&v=weekly" async></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <symbol id="icon-bedroom" viewBox="0 0 46 32">

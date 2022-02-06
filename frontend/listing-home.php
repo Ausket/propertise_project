@@ -9,6 +9,7 @@
   <meta name="generator" content="Jekyll">
   <title>Listing - Home </title>
   <!-- Google fonts -->
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="../css/vendors/fontawesome-pro-5/css/all.css">
@@ -22,6 +23,7 @@
   <link rel="stylesheet" href="../css/vendors/timepicker/bootstrap-timepicker.min.css">
   <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
+  <script src="../js/map.js"></script>
   <!-- Themes core CSS -->
   <link rel="stylesheet" href="../css/themes.css">
   <!-- Favicons -->
@@ -645,7 +647,7 @@
         <div class="row no-gutters">
           <div class="col-xl-6 col-xxl-7 primary-map map-sticky" id="map-sticky">
             <div class="primary-map-inner">
-              <div class="mapbox-gl map-grid-property-01 xl-vh-100" id="map" data-marker-target="#template-properties" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ">
+              <div class="mapbox-gl map-grid-property-01 xl-vh-100" id="map"  data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ">
               </div>
             </div>
           </div>
@@ -1456,6 +1458,10 @@
   </main>
   <?php include 'templates/footer-two.php' ?>
   <!-- Vendors scripts -->
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8cHZORdYKkrDwD8vHR4ng5rW5M74O0mY&callback=initMap&v=weekly" async></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script src="../css/vendors/jquery.min.js"></script>
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
   <script src="../css/vendors/bootstrap/bootstrap.bundle.js"></script>

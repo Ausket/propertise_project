@@ -72,6 +72,7 @@ $resultpr = mysqli_query($con, $sqlpr);
   <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
   <script src="../js/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="../js/map.js"></script>
 
 
   <style>
@@ -149,7 +150,8 @@ $resultpr = mysqli_query($con, $sqlpr);
     .remove_img_preview:before {
       content: "×";
     }
-    .red{
+
+    .red {
       color: red;
     }
   </style>
@@ -315,7 +317,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                               </div>
                             </div>
                             <div class="text-right">
-                              <button class="btn btn-lg btn-primary next-button" type="submit" > ขั้นตอนต่อไป
+                              <button class="btn btn-lg btn-primary next-button" type="submit"> ขั้นตอนต่อไป
                                 <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                               </button>
                             </div>
@@ -408,18 +410,18 @@ $resultpr = mysqli_query($con, $sqlpr);
                                 <div class="card mb-6">
                                   <div class="card-body p-6">
                                     <h3 class="card-title mb-6 text-heading fs-22 lh-15"> ปักหมุดที่ตั้งอสังหาริมทรัพย์ </h3>
-                                    <div id="map" class="mapbox-gl map-point-animate mb-6" style="height: 296px" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" data-mapbox-options='{"center":[-73.981566, 40.739011],"setLngLat":[-73.981566, 40.739011]}' data-mapbox-marker='[{"position":[-73.981566, 40.739011],"className":"marker","backgroundImage":"images/googlle-market-01.png","backgroundRepeat":"no-repeat","width":"32px","height":"40px"}]'></div>
+                                    <div id="map"  style="height: 296px" data-marker-target="#template-properties" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" ></div>
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
                                           <label for="latitude" class="text-heading"> ละติจูด </label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="latitude" name="latitude">
+                                          <input type="text" class="form-control form-control-lg border-0" id="lat" name="latitude" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
                                           <label for="longitude" class="text-heading"> ลองจิจูด </label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="longitude" name="longitude">
+                                          <input type="text" class="form-control form-control-lg border-0" id="lng" name="longitude" required>
                                         </div>
                                       </div>
                                     </div>
@@ -466,7 +468,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                         เรียกดูไฟล์
                                       </label>
                                       <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
-                                                                                                echo date("Y-m-d\TH:i:s"); ?>>
+                                                                                      echo date("Y-m-d\TH:i:s"); ?>>
                                       <input class="custom-file-input" id="fileupload2" type="file" name="file[]" multiple>
                                       <p class="text-one ">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
                                     </div><br><br><br>
@@ -582,18 +584,18 @@ $resultpr = mysqli_query($con, $sqlpr);
     })
 
     function handleFileSelect(event) {
-     
+
       var input = this;
       if (input.files) {
-       
+
         var filesAmount = input.files.length;
 
         for (i = 0; i < filesAmount; i++) {
           var reader = new FileReader();
-         
+
           reader.onload = (function(e) {
             var span = document.createElement('span');
-            span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name),'"/><span class="remove_img_preview"></span>'].join('');
+            span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview"></span>'].join('');
             document.getElementById('upload-img2').insertBefore(span, null);
           });
           reader.readAsDataURL(input.files[i]);
@@ -607,8 +609,6 @@ $resultpr = mysqli_query($con, $sqlpr);
       $(this).parent('span').remove();
       $(this).val("");
     });
-
-    
   </script>
 
   <script>
@@ -682,7 +682,9 @@ $resultpr = mysqli_query($con, $sqlpr);
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
-
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8cHZORdYKkrDwD8vHR4ng5rW5M74O0mY&callback=initMap&v=weekly" async></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

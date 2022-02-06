@@ -17,7 +17,7 @@ if (isset($_GET["id3"]) ? $_GET["id3"] : '') {
   $sql32 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
 FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -38,7 +38,7 @@ $facility_arr = array("สระว่ายน้ำ", "ห้องสมุ�
 $sql1 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
 FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -51,19 +51,19 @@ $pd_id = $row1['l_id'];
 
 
 
-$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sql22 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
 FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     WHERE a_id =  $id2 ";
-$result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
-$row2 = mysqli_fetch_assoc($result2);
-$pd_id = $row2['l_id'];
+$result22 = mysqli_query($con, $sql22) or die(mysqli_error($con));
+$row22 = mysqli_fetch_assoc($result22);
+$pd_id = $row22['l_id'];
 
 
 $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
@@ -143,7 +143,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                   <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row1['title'] ?></div>
                 </th>
                 <th scope="col">
-                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row2['title'] ?></div>
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row22['title'] ?></div>
                 </th>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
                   <th scope="col">
@@ -182,26 +182,26 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                 <th scope="col">
                   <div class="card border-0">
                     <div class="rounded-lg">
-                      <img class="card-img-top" src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="Home in Metric Way">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row22['img_video'] ?>" alt="Home in Metric Way">
                     </div>
                     <div class="card-body pt-2 pb-0 px-0">
-                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row2['house_no'] != '') {
-                                                                        echo $h_no . " " . $row2['house_no'];
-                                                                      } ?> <?php if ($row2['village_no'] != '') {
-                                                                              echo $v_no . " " . $row2['village_no'];
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row22['house_no'] != '') {
+                                                                        echo $h_no . " " . $row22['house_no'];
+                                                                      } ?> <?php if ($row22['village_no'] != '') {
+                                                                              echo $v_no . " " . $row22['village_no'];
                                                                             } ?>
-                        <?php echo $row2['lane']; ?> <?php echo $row2['road']; ?>
+                        <?php echo $row22['lane']; ?> <?php echo $row22['road']; ?>
                         <?php foreach ($result3 as $value) {
 
-                          if ($value['l_id'] == $row2['l_id']) {
+                          if ($value['l_id'] == $row22['l_id']) {
 
                             echo 'ต.' . $value['dname_th'] . ' ';
                             echo 'อ.' . $value['aname_th'] . ' ';
                             echo 'จ.' . $value['name_th'] . ' ';
                           }
                         } ?>
-                        <?php echo $row2['postal_code']; ?></p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row2['price']; ?> บาท</p>
+                        <?php echo $row22['postal_code']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row22['price']; ?> บาท</p>
                     </div>
                   </div>
                 </th>
@@ -239,13 +239,13 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
               <tr>
                 <td>ประเภท</td>
                 <td><?php echo $row1['p_type'] ?></td>
-                <td><?php echo $row2['p_type'] ?></td>
+                <td><?php echo $row22['p_type'] ?></td>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['p_type'] ?></td><?php } ?>
               </tr>
               <tr>
                 <td>พื้นที่ที่ดิน</td>
                 <td><?php echo $row1['space_area'] ?> ตร.เมตร</td>
-                <td><?php echo $row2['space_area'] ?> ตร.เมตร</td>
+                <td><?php echo $row22['space_area'] ?> ตร.เมตร</td>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['space_area'] ?> ตร.เมตร</td><?php } ?>
               </tr>
               <tr>
@@ -257,19 +257,19 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
               <tr>
                 <td>ห้องนอน</td>
                 <td><?php echo $row1['bedroom'] ?></td>
-                <td><?php echo $row2['bedroom'] ?></td>
+                <td><?php echo $row22['bedroom'] ?></td>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
                 <td>ห้องน้ำ</td>
                 <td><?php echo $row1['bathroom'] ?></td>
-                <td><?php echo $row2['bedroom'] ?></td>
+                <td><?php echo $row22['bedroom'] ?></td>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
                 <td>ที่จอดรถ</td>
                 <td><?php echo $row1['parking'] ?></td>
-                <td><?php echo $row2['bedroom'] ?></td>
+                <td><?php echo $row22['bedroom'] ?></td>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
@@ -282,7 +282,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                   <?php }
                   }  ?></td>
                 <td>
-                  <?php $facility = explode(",", $row2['facility']); //array
+                  <?php $facility = explode(",", $row22['facility']); //array
                   foreach ($facility_arr as $value) {
                     if (in_array($value, $facility)) { ?>
                       <?php echo $value ?>

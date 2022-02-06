@@ -20,6 +20,8 @@ $district = $_POST['district_id'];
 $amphure = $_POST['amphure_id'];
 $province = $_POST['province_id'];
 $postal_code = $_POST['postal_code'];
+$latitude = $_POST['latitude'];
+$longitude = $_POST['longitude'];
 
 $atype = $_POST['atype'];
 $title = $_POST['title'];
@@ -64,7 +66,7 @@ if ($file != '') {
         $l_id = $row5['l_id'];
         $p_id = $row5['pd_id'];
 
-        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code' WHERE l_id = $l_id ";
+        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
 
@@ -112,7 +114,7 @@ if ($file != '') {
         $l_id = $row5['l_id'];
         $p_id = $row5['pd_id'];
 
-        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code' WHERE l_id = $l_id ";
+        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
 
@@ -162,7 +164,7 @@ if ($file == '') {
         $l_id = $row5['l_id'];
         $p_id = $row5['pd_id'];
 
-        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code' WHERE l_id = $l_id ";
+        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
 
@@ -212,7 +214,7 @@ if ($file == '') {
         $l_id = $row5['l_id'];
         $p_id = $row5['pd_id'];
 
-        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code' WHERE l_id = $l_id ";
+        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
 

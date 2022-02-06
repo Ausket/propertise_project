@@ -23,7 +23,7 @@ $idb = $_GET["id"];
 $sqlb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type 
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
 FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -86,6 +86,7 @@ $resultd = mysqli_query($con, $sqld);
   <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
 
+
   <!-- Themes core CSS -->
   <link rel="stylesheet" href="../css/themes.css">
   <!-- Favicons -->
@@ -111,7 +112,7 @@ $resultd = mysqli_query($con, $sqld);
   <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
   <script src="../js/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
+  <script src="../js/map.js"></script>
 
   <style>
     .profile-images-card {
@@ -205,7 +206,8 @@ $resultd = mysqli_query($con, $sqld);
     .remove_file:before {
       content: "×";
     }
-    .red{
+
+    .red {
       color: red;
     }
   </style>
@@ -441,18 +443,18 @@ $resultd = mysqli_query($con, $sqld);
                                 <div class="card mb-6">
                                   <div class="card-body p-6">
                                     <h3 class="card-title mb-6 text-heading fs-22 lh-15"> ปักหมุดที่ตั้งอสังหาริมทรัพย์ </h3>
-                                    <div id="map" class="mapbox-gl map-point-animate mb-6" style="height: 296px" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" data-mapbox-options='{"center":[-73.981566, 40.739011],"setLngLat":[-73.981566, 40.739011]}' data-mapbox-marker='[{"position":[-73.981566, 40.739011],"className":"marker","backgroundImage":"images/googlle-market-01.png","backgroundRepeat":"no-repeat","width":"32px","height":"40px"}]'></div>
+                                    <div id="map"  style="height: 296px" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" data-mapbox-options='{"center":[-73.981566, 40.739011],"setLngLat":[-73.981566, 40.739011]}' data-mapbox-marker='[{"position":[-73.981566, 40.739011],"className":"marker","backgroundImage":"images/googlle-market-01.png","backgroundRepeat":"no-repeat","width":"32px","height":"40px"}]'></div>
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
                                           <label for="latitude" class="text-heading"> ละติจูด </label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="latitude" name="latitude">
+                                          <input type="text" class="form-control form-control-lg border-0" id="lat" name="latitude" value="<?php echo $rowb['lat']; ?>" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
                                           <label for="longitude" class="text-heading"> ลองจิจูด </label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="longitude" name="longitude">
+                                          <input type="text" class="form-control form-control-lg border-0" id="lng" name="longitude" value="<?php echo $rowb['lng']; ?>" required>
                                         </div>
                                       </div>
                                     </div>
@@ -502,11 +504,11 @@ $resultd = mysqli_query($con, $sqld);
                                                                                       echo date("Y-m-d\TH:i:s"); ?>>
                                       <input class="custom-file-input" id="fileupload2" type="file" name="file[]" multiple>
                                       <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
-                                    </div><br><br><br>                                                                  
+                                    </div><br><br><br>
                                     <?php while ($rowf = mysqli_fetch_array($resultfi)) { ?>
                                       <span id="<?php echo $rowf['f_id']; ?>">
-                                      <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>" ><span class="remove_file"></span></a>
-                                      </span>                                     
+                                        <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>"><span class="remove_file"></span></a>
+                                      </span>
                                     <?php } ?>
                                     <div id="upload-img2"></div>
                                   </div>
@@ -580,15 +582,15 @@ $resultd = mysqli_query($con, $sqld);
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
                               <?php if ($rowb['ad_status'] == '1') { ?>
-                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2"> บันทึกประกาศ </button>
-                              <?php } ?>  
-                              <?php  if ($rowb['ad_status'] == '0') {?>
-                              <button class="btn btn-lg btn-primary mb-3 " type="submit" name="submit1"> บันทึกข้อมูล </button>
-                              <?php } ?> 
-                              <?php  if ($rowb['ad_status'] == '2') {?> 
-                              <button class="btn btn-lg bg-white hover-primary rounded-lg mb-3 mr-3 " type="submit" name="submit1"> บันทึกข้อมูล </button>
-                              <button class="btn btn-lg btn-primary mb-3 " type="submit" name="submit3"> ลงประกาศ </button>  
-                              <?php } ?>                          
+                                <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2"> บันทึกประกาศ </button>
+                              <?php } ?>
+                              <?php if ($rowb['ad_status'] == '0') { ?>
+                                <button class="btn btn-lg btn-primary mb-3 " type="submit" name="submit1"> บันทึกข้อมูล </button>
+                              <?php } ?>
+                              <?php if ($rowb['ad_status'] == '2') { ?>
+                                <button class="btn btn-lg bg-white hover-primary rounded-lg mb-3 mr-3 " type="submit" name="submit1"> บันทึกข้อมูล </button>
+                                <button class="btn btn-lg btn-primary mb-3 " type="submit" name="submit3"> ลงประกาศ </button>
+                              <?php } ?>
                             </div>
                           </div>
                         </div>
@@ -672,8 +674,8 @@ $resultd = mysqli_query($con, $sqld);
           },
           success: function(data) {
             console.log(data);
-            $('span#'+data).remove();
-            
+            $('span#' + data).remove();
+
           }
         });
       }
@@ -751,7 +753,9 @@ $resultd = mysqli_query($con, $sqld);
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
-
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8cHZORdYKkrDwD8vHR4ng5rW5M74O0mY&callback=initMap&v=weekly" async></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

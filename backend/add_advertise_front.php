@@ -19,6 +19,8 @@ $district = $_POST['district_id'];
 $amphure = $_POST['amphure_id'];
 $province = $_POST['province_id'];
 $postal_code = $_POST['postal_code'];
+$latitude = $_POST['latitude'];
+$longitude = $_POST['longitude'];
 
 $atype = $_POST['atype'];
 $title = $_POST['title'];
@@ -50,7 +52,7 @@ if ($file != '') {
     if (isset($_POST['submit1'])) {
 
 
-        $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
+        $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id,lng,lat) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id','$longitude','$latitude') ";
         $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 
         $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
@@ -97,7 +99,7 @@ if ($file != '') {
         }
     } else {
 
-            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
+            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id,lng,lat) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id','$longitude','$latitude') ";
             $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 
             $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
@@ -147,7 +149,7 @@ if ($file != '') {
 
         
 
-            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
+            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id,lng,lat) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id','$longitude','$latitude') ";
             $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 
             $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
@@ -195,7 +197,7 @@ if ($file != '') {
     } else {
 
 
-            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id') ";
+            $sql2 = "INSERT INTO location_property(house_no,village_no,lane,road,district_id,amphure_id,province_id,postal_code,u_id,lng,lat) VALUES('$house_no','$village_no','$lane','$road','$district','$amphure','$province','$postal_code','$id','$longitude','$latitude') ";
             $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 
             $sql3 = "SELECT * FROM location_property ORDER BY l_id DESC LIMIT 1";
