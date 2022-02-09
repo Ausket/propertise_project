@@ -140,15 +140,16 @@ $resultpr = mysqli_query($con, $sqlpr);
       right: 5px;
       background: black;
       color: white;
-      border-radius: 50px;
-      font-size: 0.9em;
-      padding: 0 0.3em 0;
+      border-radius: 50%;
+      font-size: 1em;
+      padding: 0.3em 0.3em 0;
       text-align: center;
       cursor: pointer;
     }
 
     .remove_img_preview:before {
       content: "×";
+      font-size: 25px;
     }
 
     .red {
@@ -235,8 +236,8 @@ $resultpr = mysqli_query($con, $sqlpr);
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
-                                          <label for="price" class="text-heading"> ขนาดพื้นที่ <span class="red">*</span><span class="text-muted">( ตร.เมตร )</span> </label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
+                                          <label for="price" class="text-heading"> ขนาดพื้นที่ <span class="red">*</span><span class="text-muted">( ตร.วา )</span> </label>
+                                          <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
                                         </div>
                                       </div>
                                     </div>

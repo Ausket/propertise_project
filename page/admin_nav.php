@@ -6,6 +6,11 @@ $u_id = $_SESSION['u_id'];
 if (empty($id)) {
     header('Location:../index.php');
 }
+$type = $_SESSION['utype'];
+if ($type != 'admin' || $type != 'staff') {
+    header('Location:../index.php');
+}
+
 $sql_id = "SELECT * FROM users WHERE u_id = $u_id ";
 $result_id = mysqli_query($con, $sql_id);
 $row_id = mysqli_fetch_array($result_id);

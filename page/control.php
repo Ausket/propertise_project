@@ -3,7 +3,7 @@ require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location:login.php');
+    header('Location:../index.php');
 }
 if ($_SESSION['utype'] !== 'admin') {
     echo "<script type='text/javascript'>alert('คุณไม่มีสิทธิ์เข้าถึงหน้านี้');

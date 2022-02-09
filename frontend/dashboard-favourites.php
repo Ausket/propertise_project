@@ -266,7 +266,7 @@ if (isset($_POST['ch'])) {
                       </div>
                       <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
                         <div class="mr-auto">
-                          <span class="text-heading lh-15 font-weight-bold fs-17"><?php echo $rowad['price'] ?> บาท</span>
+                          <span class="text-heading lh-15 font-weight-bold fs-17">฿<?php echo $rowad['price'] ?></span>
                         </div>
                         <ul class="list-inline mb-0">
                           <li class="list-inline-item">

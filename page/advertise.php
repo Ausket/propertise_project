@@ -3,8 +3,13 @@ require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location:login.php');
+    header('Location:../index.php');
 }
+$type = $_SESSION['utype'];
+if ($type != 'admin' || $type != 'staff') {
+    header('Location:../index.php');
+}
+
 $sql = "SELECT * FROM users WHERE u_id= $id";
 $result = mysqli_query($con, $sql);
 $row = mysqli_fetch_assoc($result);
@@ -15,7 +20,7 @@ $resultp = mysqli_query($con, $sqlp);
     $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.atype_id,advertise_type.type,advertise.date,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,
-location_property.amphure_id,location_property.postal_code,location_property.latitude,location_property.longitude,property_type.p_type,users.name,users.tel,users.email,users.company
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
 FROM (((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)

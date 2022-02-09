@@ -1,7 +1,7 @@
 <?php
 require_once('../dbconnect.php');
 
-$choice = 1;
+$choice = 4;
 
 if (isset($_POST['ch'])) {
   $choice = $_POST['ch'];
@@ -24,7 +24,7 @@ if (isset($_POST['ch'])) {
   $sqla = str_replace($texts, '', $sqlc);
 } else {
 
-  $text = 'ORDER BY advertise.title ASC ';
+  $text = 'ORDER BY advertise.a_id DESC ';
 }
 
 
@@ -161,7 +161,7 @@ if (isset($_POST['ch'])) {
              ";
               $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
             
-              $choice = 1;
+              $choice = 4;
 
               $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
             property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,

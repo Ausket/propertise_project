@@ -86,6 +86,12 @@ $sql5 = "SELECT * FROM advertise WHERE ad_status = '1' ";
 $result5 = mysqli_query($con, $sql5);
 $total = mysqli_num_rows($result5);
 
+$sql6 = "SELECT * FROM favourite ";
+$result6 = mysqli_query($con, $sql6);
+$totalf = mysqli_num_rows($result6);
+
+
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -145,7 +151,7 @@ $total = mysqli_num_rows($result5);
           </h2>
           <img class="mxw-180 d-block mx-auto mt-4 mb-1" src="images/line-01.png" alt="">
         </div>
-        <a href="listing-full-width-list.html" class="btn btn-primary btn-lg mt-10 mb-4" data-animate="fadeInUp">ค้นหาบ้านของคุณที่นี่<i class="far fa-long-arrow-right ml-1"></i>
+        <a href="frontend/listing-home.php" class="btn btn-primary btn-lg mt-10 mb-4" data-animate="fadeInUp">ค้นหาบ้านของคุณที่นี่<i class="far fa-long-arrow-right ml-1"></i>
         </a>
       </div>
     </section>
@@ -157,7 +163,7 @@ $total = mysqli_num_rows($result5);
             <span class="heading-divider"></span>
           </div>
           <div class="col-md-6 text-md-right">
-            <a href="listing-grid-with-left-filter.html" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">ดูเพิ่มเติม
+            <a href="frontend/listing-grid.php" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">ดูเพิ่มเติม
               <i class="far fa-long-arrow-right ml-1"></i>
             </a>
           </div>
@@ -220,7 +226,7 @@ $total = mysqli_num_rows($result5);
                 </ul>
               </div>
               <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">5,000,000 บาท</p>
+                <p class="fs-17 font-weight-bold text-heading mb-0">฿5,000,000 </p>
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent" data-toggle="tooltip" title="Wishlist"><i class="fas fa-heart"></i></a>
@@ -285,7 +291,7 @@ $total = mysqli_num_rows($result5);
                 </ul>
               </div>
               <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">4,000,000 บาท</p>
+                <p class="fs-17 font-weight-bold text-heading mb-0">฿4,000,000 </p>
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Wishlist"><i class="far fa-heart"></i></a>
@@ -350,7 +356,7 @@ $total = mysqli_num_rows($result5);
                 </ul>
               </div>
               <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">6,500,000 บาท</p>
+                <p class="fs-17 font-weight-bold text-heading mb-0">฿6,500,000 </p>
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Wishlist"><i class="far fa-heart"></i></a>
@@ -416,7 +422,7 @@ $total = mysqli_num_rows($result5);
                 </ul>
               </div>
               <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                <p class="fs-17 font-weight-bold text-heading mb-0">8,800,000 บาท</p>
+                <p class="fs-17 font-weight-bold text-heading mb-0">฿8,800,000</p>
                 <ul class="list-inline mb-0">
                   <li class="list-inline-item">
                     <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Wishlist"><i class="far fa-heart"></i></a>
@@ -435,7 +441,7 @@ $total = mysqli_num_rows($result5);
       <div class="container">
         <div class="row no-gutters">
           <div class="col-sm-6 col-lg-3 mb-6 mb-sm-0 px-6 text-center" data-animate="fadeInUp">
-            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="1790" data-decimals="0" data-duration="0" data-separator="">1790
+            <div class="counterup fs-56 lh-1 mb-3 pt-2" data-start="0" data-end="<?php echo $totalf ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $totalf ?>
             </div>
             <div class="text-uppercase fs-13 lh-184 letter-spacing-163 opacity-7">ลูกค้ามีความสุข</div>
           </div>
@@ -465,7 +471,7 @@ $total = mysqli_num_rows($result5);
             <span class="heading-divider"></span>
           </div>
           <div class="col-md-6 text-md-right">
-            <a href="listing-grid-with-left-filter.html" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">ดูเพิ่มเติม
+            <a href="frontend/listing-grid.php" class="btn fs-14 text-secondary btn-accent py-3 lh-15 px-7 mb-6 mb-lg-0">ดูเพิ่มเติม
               <i class="far fa-long-arrow-right ml-1"></i>
             </a>
           </div>
@@ -565,7 +571,7 @@ $total = mysqli_num_rows($result5);
                   </ul>
                 </div>
                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                  <p class="fs-17 font-weight-bold text-heading mb-0"><?php echo $row2['price'] ?> บาท</p>
+                  <p class="fs-17 font-weight-bold text-heading mb-0">฿<?php echo $row2['price'] ?></p>
                   <ul class="list-inline mb-0">
 
                     <li class="list-inline-item">
@@ -1010,7 +1016,6 @@ $total = mysqli_num_rows($result5);
           url: 'backend/favourite.php',
           method: 'POST',
           data: {
-            u_id: <?= $_SESSION['u_id'] ?>,
             ida: ida
           },
           success: function(data) {
@@ -1094,9 +1099,12 @@ $total = mysqli_num_rows($result5);
               style: 'cursor:pointer'
             })
             .append($('<i />', {
-              class: 'fal fa-minus-circle',
+              class: 'fal fa-minus-circle'
             }))
           ))
+          .append($('<div />', {
+              style :'margin-bottom:20px'
+            }))
 
         .appendTo('div#com');
 

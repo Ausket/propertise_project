@@ -4,7 +4,11 @@ require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location:login.php');
+    header('Location:../index.php');
+}
+$type = $_SESSION['utype'];
+if ($type != 'admin' || $type != 'staff') {
+    header('Location:../index.php');
 }
 $sql = "SELECT * FROM users WHERE u_id= $id";
 $result = mysqli_query($con, $sql);
@@ -61,7 +65,7 @@ if (isset($_POST["p_id"])) {
                 <thead class="thead-dark">
                     <tr>
                         <th>ลำดับ</th>
-                        <th>ชื่อไฟล์</th>
+                        <th>รูปภาพ</th>
                         <th>วันที่เพิ่มไฟล์</th>
                         <th>ลบไฟล์</th>
                     </tr>

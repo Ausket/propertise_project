@@ -2,11 +2,11 @@
 
 require_once('../dbconnect.php');
 
-$u_id = $_POST['u_id'];
+$u_id = $_SESSION['u_id'];
  
 $ida = $_POST['ida'];
 
-$sql = "SELECT * FROM favourite WHERE a_id = $ida";
+$sql = "SELECT * FROM favourite WHERE a_id = $ida AND u_id = $u_id";
 $result = mysqli_query($con,$sql) or die ;
 $num_row = mysqli_num_rows($result);
 

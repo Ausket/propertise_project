@@ -10,6 +10,11 @@ if (empty($id)) {
     header('Location: ../index.php');
 }
 
+$type = $_SESSION['utype'];
+if ($type != 'admin' || $type != 'staff') {
+    header('Location:../index.php');
+}
+
 
 // if (isset($_POST['submit'])) {
 //     $path_api = $_POST['path-api'];

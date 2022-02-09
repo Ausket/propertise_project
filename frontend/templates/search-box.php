@@ -94,11 +94,11 @@
                                 <input id="price-2" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="price">
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-5 pt-6 slider-range slider-range-primary offset-lg-1">
-                            <label for="area-size-2" class="mb-4 text-white">ขนาดพื้นที่</label>
-                            <div data-slider="true" data-slider-options='{"min":0,"max":1000,"values":[0,1000],"type":"sqm"}'></div>
+                        <div class="col-md-6 pt-6 slider-range slider-range-primary">
+                            <label for="area-size-2-mobile" class="mb-4 text-white">ขนาดพื้นที่</label>
+                            <div data-slider="true" data-slider-options='{"min":0,"max":15000,"values":[0,12000],"type":"sqrwa"}'></div>
                             <div class="text-center mt-2">
-                                <input id="area-size-2" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="area">
+                                <input id="area-size-2-mobile" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="space_area">
                             </div>
                         </div>
                         <div class="col-12 pt-4 pb-2">

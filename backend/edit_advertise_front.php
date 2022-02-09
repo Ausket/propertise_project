@@ -10,7 +10,9 @@ $bathroom = $_POST['bathroom'];
 $parking = $_POST['parking'];
 $price = $_POST['price'];
 $space_area = $_POST['space_area'];
-$facility = implode(",", $_POST["facility"]);
+if (isset($_POST["facility"])) {
+    $facility = implode(",", $_POST["facility"]);
+}
 
 $house_no = $_POST['house_no'];
 $village_no = $_POST['village_no'];
@@ -44,11 +46,13 @@ $nameDateT = date('Ymd'); //เก็บวันที่
 $pathT = "../file/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
 $numrandT = (mt_rand(1000, 9999));
 $date = $_POST['date'];
+$file2 = $_FILES['file']['name'];
 
 $check = "SELECT * FROM advertise WHERE a_id =$id";
 $resultc = mysqli_query($con, $check);
 $rowc = mysqli_fetch_array($resultc);
 $status = $rowc['ad_status'];
+
 
 
 if ($file != '') {
@@ -82,10 +86,9 @@ if ($file != '') {
             $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
         }
 
-        if (isset($_FILES["file"])) {
-
-            for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
-                if (isset($_FILES["file"]["name"][$i]) !== '') {
+        if ($file2 !== '') {
+            for ($i = 0; $i < count($file2); $i++) {
+                if ($_FILES["file"]["name"][$i] !== '') {
                     $fileT[$i] = $_FILES["file"]["name"][$i];
                     $filesT[$i] = pathinfo($fileT[$i], PATHINFO_FILENAME);
 
@@ -96,17 +99,17 @@ if ($file != '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$p_id')";
+                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
-
-
-            echo "<script>";
-            echo "alert(\"แก้ไขข้อมูลเรียบร้อย\")";
-            echo "</script>";
-            header('Refresh:0; url=../frontend/dashboard-properties.php');
         }
+
+
+        echo "<script>";
+        echo "alert(\"แก้ไขข้อมูลเรียบร้อย\")";
+        echo "</script>";
+        header('Refresh:0; url=../frontend/dashboard-properties.php');
     } else {
         $sql5 = "SELECT * FROM advertise WHERE a_id =$id";
         $result5 = mysqli_query($con, $sql5);
@@ -126,10 +129,9 @@ if ($file != '') {
         $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
 
 
-        if (isset($_FILES["file"])) {
-
-            for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
-                if (isset($_FILES["file"]["name"][$i]) !== '') {
+        if ($file2 !== '') {
+            for ($i = 0; $i < count($file2); $i++) {
+                if ($_FILES["file"]["name"][$i] !== '') {
                     $fileT[$i] = $_FILES["file"]["name"][$i];
                     $filesT[$i] = pathinfo($fileT[$i], PATHINFO_FILENAME);
 
@@ -140,17 +142,17 @@ if ($file != '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$p_id' )";
+                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
-
-
-            echo "<script>";
-            echo "alert(\"เพิ่มข้อมูลเรียบร้อย กรุณารอแอดมินอนุมัติ\")";
-            echo "</script>";
-            header('Refresh:0; url=../frontend/dashboard-properties.php');
         }
+
+
+        echo "<script>";
+        echo "alert(\"เพิ่มข้อมูลเรียบร้อย กรุณารอแอดมินอนุมัติ\")";
+        echo "</script>";
+        header('Refresh:0; url=../frontend/dashboard-properties.php');
     }
 }
 
@@ -181,11 +183,9 @@ if ($file == '') {
             $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
         }
 
-
-        if (isset($_FILES["file"])) {
-
-            for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
-                if (isset($_FILES["file"]["name"][$i]) !== '') {
+        if ($file2 !== '') {
+            for ($i = 0; $i < count($file2); $i++) {
+                if ($_FILES["file"]["name"][$i] !== '') {
                     $fileT[$i] = $_FILES["file"]["name"][$i];
                     $filesT[$i] = pathinfo($fileT[$i], PATHINFO_FILENAME);
 
@@ -196,17 +196,17 @@ if ($file == '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$p_id' )";
+                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
-
-
-            echo "<script>";
-            echo "alert(\"แก้ไขข้อมูลเรียบร้อย\")";
-            echo "</script>";
-            header('Refresh:0; url=../frontend/dashboard-properties.php');
         }
+
+
+        echo "<script>";
+        echo "alert(\"แก้ไขข้อมูลเรียบร้อย\")";
+        echo "</script>";
+        header('Refresh:0; url=../frontend/dashboard-properties.php');
     } else {
         $sql5 = "SELECT * FROM advertise WHERE a_id =$id";
         $result5 = mysqli_query($con, $sql5);
@@ -226,10 +226,9 @@ if ($file == '') {
         $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));;
 
 
-        if (isset($_FILES["file"])) {
-
-            for ($i = 0; $i < count($_FILES["file"]["name"]); $i++) {
-                if (isset($_FILES["file"]["name"][$i]) !== '') {
+        if ($file2 !== '') {
+            for ($i = 0; $i < count($file2); $i++) {
+                if ($_FILES["file"]["name"][$i] !== '') {
                     $fileT[$i] = $_FILES["file"]["name"][$i];
                     $filesT[$i] = pathinfo($fileT[$i], PATHINFO_FILENAME);
 
@@ -240,16 +239,16 @@ if ($file == '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$p_id' )";
+                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
-
-
-            echo "<script>";
-            echo "alert(\"เพิ่มข้อมูลเรียบร้อย กรุณารอแอดมินอนุมัติ\")";
-            echo "</script>";
-            header('Refresh:0; url=../frontend/dashboard-properties.php');
         }
+
+
+        echo "<script>";
+        echo "alert(\"เพิ่มข้อมูลเรียบร้อย กรุณารอแอดมินอนุมัติ\")";
+        echo "</script>";
+        header('Refresh:0; url=../frontend/dashboard-properties.php');
     }
 }

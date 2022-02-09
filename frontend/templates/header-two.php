@@ -86,6 +86,12 @@ if (isset($_POST['submit'])) {
                                 </a>
                             </li>
                             <li id="navbar-item-listing" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
+                                <a class="nav-link p-0" href="listing-grid.php">
+                                    ค้นหาอสังหาริมทรัพย์
+                                    <span class="caret"></span>
+                                </a>
+                            </li>
+                            <li id="navbar-item-listing" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
                                 <a class="nav-link p-0" href="agents.php">
                                     ค้นหานายหน้า
                                     <span class="caret"></span>

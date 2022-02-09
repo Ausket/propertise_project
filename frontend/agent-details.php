@@ -16,7 +16,7 @@ FROM (((((advertise
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE users.u_id = $ida ORDER BY advertise.a_id DESC ";
+    WHERE users.u_id = $ida AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
 $resultad = mysqli_query($con, $sqlad) or die(mysqli_error($con));
 $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
     provinces.name_th,amphures.aname_th,districts.dname_th
@@ -38,7 +38,7 @@ FROM (((((advertise
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE users.u_id = $ida AND advertise_type.atype_id in ('1','3','4') ORDER BY advertise.a_id DESC ";
+    WHERE users.u_id = $ida AND advertise_type.atype_id in ('1','3','4') AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
 $resultad2 = mysqli_query($con, $sqlad2) or die(mysqli_error($con));
 $total_record2 = mysqli_num_rows($resultad2);
 
@@ -52,7 +52,7 @@ FROM (((((advertise
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE users.u_id = $ida AND advertise_type.atype_id = '2' ORDER BY advertise.a_id DESC ";
+    WHERE users.u_id = $ida AND advertise_type.atype_id = '2' AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
 $resultad3 = mysqli_query($con, $sqlad3) or die(mysqli_error($con));
 $total_record3 = mysqli_num_rows($resultad3);
 
@@ -286,7 +286,7 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         <?php echo $rowad['postal_code']; ?></p>
 
                                       <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                        <?php echo $rowad['price']; ?> บาท
+                                      ฿<?php echo $rowad['price']; ?> 
                                       </p>
                                     </div>
                                     <div class="card-footer bg-transparent px-0 pb-0 pt-2">

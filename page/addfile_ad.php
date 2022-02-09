@@ -3,7 +3,11 @@ require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location:login.php');
+    header('Location:../index.php');
+}
+$type = $_SESSION['utype'];
+if ($type != 'admin' || $type != 'staff') {
+    header('Location:../index.php');
 }
 $sql = "SELECT * FROM users WHERE u_id= $id ";
 $result = mysqli_query($con, $sql);

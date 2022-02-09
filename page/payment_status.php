@@ -9,6 +9,10 @@ $id = $_SESSION['u_id'];
 if (empty($id)) {
     header('Location: ../index.php');
 }
+$type = $_SESSION['utype'];
+if ($type != 'admin' || $type != 'staff') {
+    header('Location:../index.php');
+}
 
 $sqlData = "SELECT * FROM pay_status";
 $result = mysqli_query($con, $sqlData)
