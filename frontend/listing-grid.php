@@ -9,16 +9,16 @@ if (isset($_GET['page'])) {
 }
 $start = ($page - 1) * $perpage;
 
-if (isset($_POST['submits'])) { //เมื่อกด ค้นหา 
+if (isset($_GET['submits'])) { //เมื่อกด ค้นหา 
   //กำหนดตัวแปรเก็บค่าต่างๆ 
-  $project = $_POST['project'];
-  $province = $_POST['province'];
-  $ptype = $_POST['ptype'];
-  $adtype = $_POST['adtype'];
-  $bedroom = $_POST['bedroom'];
-  $bathroom = $_POST['bathroom'];
-  $price = $_POST['price'];
-  $space = $_POST['space_area'];
+  $project = $_GET['project'];
+  $province = $_GET['province'];
+  $ptype = $_GET['ptype'];
+  $adtype = $_GET['adtype'];
+  $bedroom = $_GET['bedroom'];
+  $bathroom = $_GET['bathroom'];
+  $price = $_GET['price'];
+  $space = $_GET['space_area'];
   
   // <--------- price ------>
   $min = strchr($price,"ถึง",true);
@@ -251,7 +251,7 @@ $resultat = mysqli_query($con, $sqlat);
               <div class="card mb-4">
                 <div class="card-body px-6 py-4">
                   <h4 class="card-title fs-16 lh-2 text-dark mb-3">ค้นหาบ้านของคุณ</h4>
-                  <form action="" method="POST">
+                  <form action="" method="GET">
                     <div class="form-group">
                       <label for="key-word" class="sr-only">ชื่อหมู่บ้านหรือโครงการ</label>
                       <input type="text" class="form-control form-control-lg border-0 shadow-none" id="key-word" placeholder="ชื่อหมู่บ้านหรือโครงการ" name="project">
