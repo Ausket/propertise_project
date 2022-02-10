@@ -73,6 +73,15 @@ if (isset($_POST['ch'])) {
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <style>
+    .pagination li:hover {
+      cursor: pointer;
+    }
+
+    table tbody tr {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -127,6 +136,21 @@ if (isset($_POST['ch'])) {
                     </div>
                   </form>
                 </div>
+                <div class="p-2">
+                  <div class="form-group">
+                    <!-- Show Numbers Of Rows -->
+                    <select class="form-control" name="state" id="maxRows">
+                      <option value="5000">ทั้งหมด</option>
+                      <option value="5">5</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="50">50</option>
+                      <option value="70">70</option>
+                      <option value="100">100</option>
+                    </select>
+                  </div>
+                </div>
               </div>
             </div>
             <?php
@@ -142,13 +166,6 @@ if (isset($_POST['ch'])) {
               $result = mysqli_query($con, $sql);
               $row = mysqli_fetch_assoc($result);
 
-              $perpage = 4;
-              if (isset($_GET['page'])) {
-                $page = $_GET['page'];
-              } else {
-                $page = 1;
-              }
-              $start = ($page - 1) * $perpage;
 
               $ad = $_GET['search_ad'];
 
@@ -160,7 +177,7 @@ if (isset($_POST['ch'])) {
             INNER JOIN districts ON location_property.district_id = districts.id) 
              ";
               $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
-            
+
               $choice = 4;
 
               $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
@@ -176,14 +193,11 @@ if (isset($_POST['ch'])) {
                 WHERE users.u_id = $id AND 
               (advertise.title LIKE '%$ad%' OR property_type.p_type LIKE '%$ad%' OR advertise_type.type LIKE '%$ad%' OR property_detail.price LIKE '%$ad%' ) ";
 
-              $sqln = "$sql2" . $text . "limit {$start} , {$perpage}";
+              $sqln = "$sql2" . $text ;
               $result2 = mysqli_query($con, $sqln) or die(mysqli_error($con));
 
 
-              $sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
-              property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
-              location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-              location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
+              $sqlad = "SELECT *
               FROM (((((advertise
                   LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
                   LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -194,7 +208,7 @@ if (isset($_POST['ch'])) {
                 (advertise.title LIKE '%$ad%' OR property_type.p_type LIKE '%$ad%' OR advertise_type.type LIKE '%$ad%'OR property_detail.price LIKE '%$ad%' )";
               $resultad = mysqli_query($con, $sqlad);
               $total_recordad = mysqli_num_rows($resultad);
-              $total_page = ceil($total_recordad / $perpage);
+             
 
 
             ?>
@@ -204,7 +218,7 @@ if (isset($_POST['ch'])) {
                   <h2 class="fs-15 text-dark mb-0">ค้นพบ <span class="text-primary"><?php echo $ad ?></span> จำนวน <span class="text-primary"><?php echo $total_recordad ?></span> ประกาศ
                   </h2>
                 </div>
-                <table class="table table-hover bg-white border rounded-lg">
+                <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
                       <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
@@ -316,7 +330,7 @@ if (isset($_POST['ch'])) {
                 </table>
 
               </div>
-              <nav class="mt-6">
+              <!-- <nav class="mt-6">
                 <ul class="pagination rounded-active justify-content-center">
                   <li class="page-item"><a class="page-link" href="dashboard-properties.php?search_ad=<?php echo $ad ?>&page=1"><i class="far fa-angle-double-left"></i></a></li>
                   <?php for ($i = 1; $i <= $total_page; $i++) { ?>
@@ -324,7 +338,25 @@ if (isset($_POST['ch'])) {
                   <?php } ?>
                   <li class="page-item"><a class="page-link" href="dashboard-properties.php?search_ad=<?php echo $ad ?>&page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
                 </ul>
-              </nav>
+              </nav> -->
+
+               
+              <nav class="mt-6">
+                    <ul class="pagination rounded-active justify-content-center mb-0">
+                      <li data-page="prev" class="page-item" >
+                        <span class="page-link">
+                          <i class="far fa-angle-double-left"></i><span ></span>
+                        </span>
+                      </li>
+                      <!-- Here the JS Function Will Add the Rows -->
+                      <li data-page="next" id="prev" class="page-item">
+                        <span class="page-link">
+                          <i class="far fa-angle-double-right"></i><span ></span>
+                        </span>
+                      </li>
+                    </ul>
+                  </nav>
+            
 
             <?php } else {
 
@@ -338,13 +370,6 @@ if (isset($_POST['ch'])) {
               $result = mysqli_query($con, $sql);
               $row = mysqli_fetch_assoc($result);
 
-              $perpage = 4;
-              if (isset($_GET['page'])) {
-                $page = $_GET['page'];
-              } else {
-                $page = 1;
-              }
-              $start = ($page - 1) * $perpage;
 
               $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
               provinces.name_th,amphures.aname_th,districts.dname_th
@@ -367,14 +392,14 @@ if (isset($_POST['ch'])) {
               LEFT JOIN users ON advertise.u_id = users.u_id)
               WHERE users.u_id = $id ";
 
-              $sqln = "$sql2" . $text . "limit {$start} , {$perpage}";
+              $sqln = "$sql2" . $text ;
               $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
 
 
             ?>
 
               <div class="table-responsive">
-                <table class="table table-hover bg-white border rounded-lg">
+                <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
                       <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
@@ -473,7 +498,6 @@ if (isset($_POST['ch'])) {
                           } ?>
 
 
-
                         </td>
                         <td class="align-middle">2049</td>
                         <td class="align-middle">
@@ -485,15 +509,9 @@ if (isset($_POST['ch'])) {
 
                   </tbody>
                 </table>
-                <?php
-                $sql4 = "SELECT * FROM (advertise  
-INNER JOIN users ON advertise.u_id = users.u_id) WHERE users.u_id = $id ";
-                $result4 = mysqli_query($con, $sql4);
-                $total_record2 = mysqli_num_rows($result4);
-                $total_page = ceil($total_record2 / $perpage);
-                ?>
+               
               </div>
-              <nav class="mt-6">
+              <!-- <nav class="mt-6">
                 <ul class="pagination rounded-active justify-content-center">
                   <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
                   <?php for ($i = 1; $i <= $total_page; $i++) { ?>
@@ -501,11 +519,26 @@ INNER JOIN users ON advertise.u_id = users.u_id) WHERE users.u_id = $id ";
                   <?php } ?>
                   <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
                 </ul>
-              </nav>
+              </nav> -->
+             
+              <nav class="mt-6">
+                    <ul class="pagination rounded-active justify-content-center mb-0">
+                      <li data-page="prev" class="page-item" >
+                        <span class="page-link">
+                          <i class="far fa-angle-double-left"></i><span ></span>
+                        </span>
+                      </li>
+                      <!-- Here the JS Function Will Add the Rows -->
+                      <li data-page="next" id="prev" class="page-item">
+                        <span class="page-link">
+                          <i class="far fa-angle-double-right"></i><span ></span>
+                        </span>
+                      </li>
+                    </ul>
+                  </nav>
 
-
-            <?php } ?>
-          </div>
+              <?php } ?>
+              </div>
         </main>
       </div>
     </div>
@@ -529,16 +562,149 @@ INNER JOIN users ON advertise.u_id = users.u_id) WHERE users.u_id = $id ";
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
   <script>
-    $(document).ready(function() {
-      $('.pagination').pagination({
-        items: <?php echo $total_records; ?>,
-        itemsOnPage: <?php echo $limit; ?>,
-        cssStyle: 'light-theme',
-        currentPage: <?php echo $page; ?>,
-        hrefTextPrefix: 'dashboard-properties.php?page='
-      });
-    });
+    getPagination('#table-id');
+
+
+    function getPagination(table) {
+      var lastPage = 1;
+
+      $('#maxRows')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+
+          if (maxRows == 5000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(table + ' tbody tr').length; // numbers of rows
+          console.log(totalRows);
+          $(table + ' tr:gt(0)').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(table + ' tr:gt(0)').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(5)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+
+    // $(function() {
+    //   // Just to append id number for each row
+    //   $('table tr:eq(0)').prepend('<th> ID </th>');
+
+    //   var id = 0;
+
+    //   $('table tr:gt(0)').each(function() {
+    //     id++;
+    //     $(this).prepend('<td>' + id + '</td>');
+    //   });
+    // });
   </script>
+
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <symbol id="icon-bedroom" viewBox="0 0 46 32">

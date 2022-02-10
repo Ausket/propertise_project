@@ -818,9 +818,14 @@ $totalf = mysqli_num_rows($result6);
         </div> -->
         <div id="com" class="list-group-item card bg-transparent"></div>
         <div class="list-group-item bg-transparent">
-          <a href="" id="subcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+          <div id="hidecom">
+            <a href="" id="subcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+              เปรียบเทียบ
+            </a>
+          </div>
+          <span id="clickcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
             เปรียบเทียบ
-          </a>
+          </span>
         </div>
       </div>
     </div>
@@ -1007,8 +1012,9 @@ $totalf = mysqli_num_rows($result6);
   <script src="css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <script>
     $(document).ready(function() {
-      $('a#fav').on('click', function() {
 
+      $('#hidecom').hide();
+      $('a#fav').on('click', function() {
 
         var ida = $(this).attr("name");
 
@@ -1061,6 +1067,20 @@ $totalf = mysqli_num_rows($result6);
 
     }
 
+    $("#clickcom").click(function() {
+      var selected = getSelectedIds();
+      if (selected.length == 1) {
+        alert('กรุณาเลือกอย่างน้อย 2 โพสต์');
+      } else {
+
+        let x = $('#subcom').attr('href');
+        window.location.href = x;
+
+      }
+
+    })
+
+
     $("a#compa").click(function() {
 
       var id = $(this).attr('name');
@@ -1102,9 +1122,9 @@ $totalf = mysqli_num_rows($result6);
               class: 'fal fa-minus-circle'
             }))
           ))
-          .append($('<div />', {
-              style :'margin-bottom:20px'
-            }))
+        .append($('<div />', {
+          style: 'margin-bottom:20px'
+        }))
 
         .appendTo('div#com');
 

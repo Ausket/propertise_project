@@ -7,9 +7,6 @@ $id1 = $_GET["id1"];
 if (isset($_GET["id2"]) ? $_GET["id2"] : '') {
   $id2 = $_GET["id2"];
 }
-if (empty($id2)) {
-  echo '<script> window.location.href = "../index.php";alert("กรุณาเลือกอย่างน้อย 2 โพสต์") </script>';
-}
 
 if (isset($_GET["id3"]) ? $_GET["id3"] : '') {
   $id3 = $_GET["id3"];

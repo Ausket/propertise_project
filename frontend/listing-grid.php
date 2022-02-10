@@ -19,31 +19,30 @@ if (isset($_GET['submits'])) { //เมื่อกด ค้นหา
   $bathroom = $_GET['bathroom'];
   $price = $_GET['price'];
   $space = $_GET['space_area'];
-  
+
   // <--------- price ------>
-  $min = strchr($price,"ถึง",true);
-  $max = strrchr($price,"ถึง");
-  $remax = substr($max,1);
-  $remin = substr($min,1);
-  $maxx = substr($remax,2);
-  $minn = substr($remin ,2);
-  
+  $min = strchr($price, "ถึง", true);
+  $max = strrchr($price, "ถึง");
+  $remax = substr($max, 1);
+  $remin = substr($min, 1);
+  $maxx = substr($remax, 2);
+  $minn = substr($remin, 2);
+
   // <--------- space ------>
-  $areamin = strchr($space," ตร.วา ถึง",true);
-  $aremax = strchr($space,"ถึง",false);
-  $aremax2 = substr($aremax,-22);
-  $aremax22 = substr($aremax2,4);
-  $areamax= strchr($aremax22," ตร.วา",true);
- 
+  $areamin = strchr($space, " ตร.วา ถึง", true);
+  $aremax = strchr($space, "ถึง", false);
+  $aremax2 = substr($aremax, -22);
+  $aremax22 = substr($aremax2, 4);
+  $areamax = strchr($aremax22, " ตร.วา", true);
+
   // echo "+".$areamin."+";
   // echo $aremax;
   // echo $aremax2;
   // echo $aremax22;
   // echo "+".$areamax."+";
-  
+
   if (isset($_POST['facility'])) {
     $facility = implode(",", $_POST["facility"]);
-  
   }
   // $conditions = array(); //กำหนด array เก็บเงื่อนไข
 
@@ -86,7 +85,7 @@ LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
 LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
 WHERE advertise.ad_status = '1' ";
 
-$choice = 1;
+  $choice = 1;
   if (count($conditions) > 0) { //ถ้า $conditions มีคามากกว่า 1
     $sql2 .= " AND " . implode(' AND ', $conditions); //ประกอบ  sql กับ where เข้า ด้วยกัน 
   }
@@ -105,13 +104,19 @@ $choice = 1;
       $text = ' ';
     }
 
-    $sqls = "$sql2" . $text;
+    $sqls = "$sql2" . $text . " " . "limit {$start} , {$perpage}";
+    $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
+    $total_record = mysqli_num_rows($result2);
+    $total_page = ceil($total_record / $perpage);
   } else {
 
-    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC'. " ". "limit {$start} , {$perpage}" ;
-  }
+    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ' . " " . "limit {$start} , {$perpage}";
+    $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
 
-  
+    $result3 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+    $total_record = mysqli_num_rows($result3);
+    $total_page = ceil($total_record / $perpage);
+  }
 } else {
 
   $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
@@ -142,22 +147,21 @@ WHERE advertise.ad_status = '1' ";
     }
 
     $sqls = "$sql2" . $text . " " . " limit {$start} , {$perpage} ";
+    $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
+    $total_record = mysqli_num_rows($result2);
+    $total_page = ceil($total_record / $perpage);
   } else {
 
-    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC' . " " . "limit {$start} , {$perpage}";
+    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ' . " "  . "limit {$start} , {$perpage}";
+    $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
+
+    $result3 = mysqli_query($con, $sql2) or die(mysqli_error($con));
+    $total_record = mysqli_num_rows($result3);
+    $total_page = ceil($total_record / $perpage);
   }
 }
 
-$result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
 
-
-
-
-$sql22 = "SELECT *
-FROM advertise WHERE advertise.ad_status = '1'  ";
-$result22 = mysqli_query($con, $sql22) or die(mysqli_error($con));
-$total_record = mysqli_num_rows($result22);
-$total_page = ceil($total_record / $perpage);
 
 $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
 provinces.name_th,amphures.aname_th,districts.dname_th
@@ -316,14 +320,14 @@ $resultat = mysqli_query($con, $sqlat);
                     </div>
                     <div class="form-group slider-range slider-range-secondary">
                       <label for="price" class="mb-4 text-gray-light">ขอบเขตราคา</label>
-                      <div data-slider="true" data-slider-options='{"min":0,"max":10000000,"values":[1300000,8000000],"type":"currency"}'  ></div>
+                      <div data-slider="true" data-slider-options='{"min":0,"max":10000000,"values":[1300000,8000000],"type":"currency"}'></div>
                       <div class="text-center mt-2">
                         <input id="price" type="text" readonly class="border-0 amount text-center text-body font-weight-500" name="price">
                       </div>
                     </div>
                     <div class="form-group slider-range slider-range-secondary">
                       <label for="area-size" class="mb-4 text-gray-light">ขอบเขตเนื้อที่</label>
-                      <div data-slider="true" data-slider-options='{"min":0,"max":1000,"values":[100,500],"type":"sqrwa"}' ></div>
+                      <div data-slider="true" data-slider-options='{"min":0,"max":1000,"values":[100,500],"type":"sqrwa"}'></div>
                       <div class="text-center mt-2">
                         <input id="area-size" type="text" readonly class="border-0 amount text-center text-body font-weight-500" name="space_area">
                       </div>
@@ -401,8 +405,7 @@ $resultat = mysqli_query($con, $sqlat);
                 <div class="d-flex justify-content-md-end align-items-center">
                   <div class="input-group border rounded input-group-lg w-auto bg-white">
                     <form name="test" method="post" action="">
-                      <textarea hidden type='text' id='sql' name='sql'><?php echo $sql ?></textarea>
-                      <textarea hidden id='Order_text' name='Order_text'><?php echo $text  ?></textarea>
+
                       <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงตาม:</label>
                       <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker sortby" id="ch" name="ch" onchange="document.test.submit();" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0 pr-6 pl-6">
                         <option <?php if ($choice == "1") {
@@ -430,7 +433,7 @@ $resultat = mysqli_query($con, $sqlat);
                 <div class="col-md-6 mb-6">
                   <div class="card border-0" data-animate="fadeInUp">
                     <div class="position-relative hover-change-image bg-hover-overlay rounded-lg card-img">
-                      <img src="../image/p_img/<?php echo $row2['img_video']; ?>" alt="Home in Metric Way">
+                      <img src="../image/p_img/<?php echo $row2['img_video']; ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video']; ?>">
                       <div class="card-img-overlay d-flex flex-column">
                         <div><?php if ($row2['type'] == 'ขาย') {
                                 $type = 'ขาย';
@@ -472,7 +475,7 @@ $resultat = mysqli_query($con, $sqlat);
                               </a>
                             </li>
                             <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                              <a href="#" class="text-white fs-20 hover-primary">
+                              <a id="compa" name="<?php echo $row2['a_id'] ?>" class="text-white fs-20 hover-primary">
                                 <i class="fas fa-exchange-alt"></i>
                               </a>
                             </li>
@@ -547,40 +550,26 @@ $resultat = mysqli_query($con, $sqlat);
       </div>
     </section>
     <div id="compare" class="compare">
-      <button class="btn shadow btn-open bg-white bg-hover-accent text-secondary rounded-right-0 d-flex justify-content-center align-items-center w-30px h-140 p-0">
+      <button id="showcom" class="btn shadow btn-open bg-white bg-hover-accent text-secondary rounded-right-0 d-flex justify-content-center align-items-center w-30px h-140 p-0">
       </button>
       <div class="list-group list-group-no-border bg-dark py-3">
         <a href="#" class="list-group-item bg-transparent text-white fs-22 text-center py-0">
           <i class="far fa-bars"></i>
         </a>
         <div class="list-group-item card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay">
-            <img src="../images/compare-01.jpg" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
+
+          <count>เลือก 0 จาก 3</count>
         </div>
-        <div class="list-group-item card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay">
-            <img src="../images/compare-02.jpg" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item card card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay ">
-            <img src="../images/compare-03.jpg" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
-        </div>
+        <div id="com" class="list-group-item card card bg-transparent"></div>
         <div class="list-group-item bg-transparent">
-          <a href="compare-details.html" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
-            Compare
-          </a>
+          <div id="hidecom">
+            <a href="" id="subcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+              เปรียบเทียบ
+            </a>
+          </div>
+          <span id="clickcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+            เปรียบเทียบ
+          </span>
         </div>
       </div>
     </div>
@@ -602,9 +591,143 @@ $resultat = mysqli_query($con, $sqlat);
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function() {
+
+      $('#hidecom').hide();
+
+      $('a#fav').on('click', function() {
+        var ida = $(this).attr("name");
+
+        $.ajax({
+          url: 'backend/favourite.php',
+          method: 'POST',
+          data: {
+            ida: ida
+          },
+          success: function(data) {
+
+            if (data == 1) {
+
+              $('i#favi' + ida).removeAttr("class");
+              $('i#favi' + ida).addClass("fas fa-heart");
+
+              $("[name=" + ida + "]").removeAttr("class");
+              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent");
+
+            } else {
+
+              $('i#favi' + ida).removeAttr("class");
+              $('i#favi' + ida).addClass("far fa-heart");
+
+              $("[name=" + ida + "]").removeAttr("class");
+              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body border-accent ");
+
+            }
+
+
+
+          }
+        });
+      });
+    });
+
+    function getSelectedIds() {
+
+      return $('#parent #child').map(function() {
+        return $(this).text();
+      }).toArray();
+    }
+
+    function updateLinkAndCounter() {
+      var ids = getSelectedIds().map(function(x, i) {
+        return ['id', ++i, '=', x].join('');
+      });
+      $('a#subcom').attr('href', 'compare.php?' + ids.join('&'));
+      $("count").text(ids.length == 1 ? 'เลือก 1 จาก 3' : 'เลือก ' + ids.length + ' จาก 3');
+
+    }
+
+    $("#clickcom").click(function() {
+      var selected = getSelectedIds();
+      if (selected.length == 1) {
+        alert('กรุณาเลือกอย่างน้อย 2 โพสต์');
+      } else {
+
+        let x = $('#subcom').attr('href');
+        window.location.href = x;
+
+      }
+
+    })
+
+    $("a#compa").click(function() {
+
+      var id = $(this).attr('name');
+      console.log(id);
+      var img = $('#proimg' + id).attr('src');
+      console.log(img);
+
+
+      var selected = getSelectedIds();
+      if (selected.length == 3) return; // already 3 items added
+      if (selected.indexOf(id) != -1) return; // item already added
+      if (selected.indexOf(img) != -1) return; // item already added
+
+
+      $('<div/>', {
+          'class': 'position-relative hover-change-image bg-hover-overlay',
+          'id': 'parent'
+        })
+        .append($('<span/>', {
+          text: id,
+          id: 'child',
+          class: 'd-none'
+        }))
+
+        .append($('<img/>', {
+          class: 'card-img',
+          src: img
+
+        }))
+        .append($('<div />', {
+            class: 'card-img-overlay',
+          })
+          .append($('<a/>', {
+              class: 'text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2',
+              id: 'delcom' + id,
+              style: 'cursor:pointer'
+            })
+            .append($('<i />', {
+              class: 'fal fa-minus-circle'
+            }))
+          ))
+        .append($('<div />', {
+          style: 'margin-bottom:20px'
+        }))
+
+        .appendTo('div#com');
+
+      $('#showcom').click();
+
+      setTimeout(function() {
+        $('#showcom').click()
+      }, 3500)
+
+      updateLinkAndCounter();
+      // $("div.list-group-item card bg-transparent").removeClass("hidden");
+
+      $("a#delcom" + id).on("click", function(event) {
+        event.preventDefault();
+        $(this).parent().parent().remove();
+        updateLinkAndCounter();
+      });
+
+    });
+  </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
-  
+
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <symbol id="icon-bedroom" viewBox="0 0 46 32">

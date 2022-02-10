@@ -42,6 +42,15 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <style>
+    .pagination li:hover {
+      cursor: pointer;
+    }
+
+    table tbody tr {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -84,14 +93,6 @@
     if ($agent != '') {
       require_once('../dbconnect.php');
 
-      $perpage = 6;
-      if (isset($_GET['page'])) {
-        $page = $_GET['page'];
-      } else {
-        $page = 1;
-      }
-      $start = ($page - 1) * $perpage;
-
       $agent = $_GET['search_agent'];
 
       $sqlsa = "SELECT * FROM users WHERE utype='agent' AND 
@@ -126,12 +127,12 @@
         $texts = $_POST['Order_text'];
 
         $sqla = str_replace($texts, '', $sqlc);
-        $sqln = "$sql5" . $text . "limit {$start} , {$perpage}";
+        $sqln = "$sql5" . $text ;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       } else {
 
         $text = 'ORDER BY users.name ASC   ';
-        $sqln = "$sql5" . $text . "limit {$start} , {$perpage}";
+        $sqln = "$sql5" . $text ;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       }
 
@@ -174,10 +175,10 @@
                   </form>
                 </div>
               </div>
-              <div class="row">
+              <div class="row" id="cardagent">
                 <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
-                  <div class="col-md-4 mb-4">
-                    <div class="card border-0 shadow-hover-3 px-6">
+                  <div class="col-md-4 mb-4" id="cragent">
+                    <div class="card border-0 shadow-hover-3 px-6" id="cdagent">
                       <div class="card-body text-center pt-6 pb-2 px-0">
                         <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
                           <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
@@ -245,7 +246,7 @@
                 <?php  } ?>
               </div>
 
-              <nav class="mt-4">
+              <!-- <nav class="mt-4">
                 <ul class="pagination rounded-active justify-content-center">
                   <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent ?>&page=1"><i class="far fa-angle-double-left"></i></a></li>
                   <?php for ($i = 1; $i <= $total_page; $i++) { ?>
@@ -253,7 +254,25 @@
                   <?php } ?>
                   <li class="page-item"><a class="page-link" href="agents.php?search_agent=<?php echo $agent ?>&page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
                 </ul>
+              </nav> -->
+
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center mb-0">
+                  <li data-page="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-left"></i><span></span>
+                    </span>
+                  </li>
+                  <!-- Here the JS Function Will Add the Rows -->
+                  <li data-page="next" id="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-right"></i><span></span>
+                    </span>
+                  </li>
+                </ul>
               </nav>
+
+
             </div>
 
           </div>
@@ -263,19 +282,12 @@
 
       require_once('../dbconnect.php');
 
-      $perpage = 6;
-      if (isset($_GET['page'])) {
-        $page = $_GET['page'];
-      } else {
-        $page = 1;
-      }
-
-      $start = ($page - 1) * $perpage;
+      
 
       $sql4 = "SELECT * FROM users WHERE utype='agent'";
       $result4 = mysqli_query($con, $sql4);
       $total_record = mysqli_num_rows($result4);
-      $total_page = ceil($total_record / $perpage);
+     
 
       $sql5 = "SELECT * FROM users WHERE utype='agent'";
 
@@ -301,13 +313,12 @@
         $texts = $_POST['Order_text'];
 
         $sqla = str_replace($texts, '', $sqlc);
-        $sqln = "$sql5" . $text . "limit {$start} , {$perpage}";
+        $sqln = "$sql5" . $text ;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
-
       } else {
 
-        $text = 'ORDER BY name ASC  ';
-        $sqln = "$sql5" . $text . "limit {$start} , {$perpage}";
+        $text = 'ORDER BY name ASC ';
+        $sqln = "$sql5" . $text ;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       }
 
@@ -349,86 +360,122 @@
                       </div>
                     </form>
                   </div>
-                </div>
-              </div>
-              <div class="row">
-                <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
-                  <div class="col-md-4 mb-4">
-                    <div class="card border-0 shadow-hover-3 px-6" id="agent">
-                      <div class="card-body text-center pt-6 pb-2 px-0">
-                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
-                          <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
-                        </a>
-                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
-                        <ul class="list-inline mb-0">
-                          <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
-                          </li>
-                          <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
-                            <ul class="list-inline mb-0">
-                              <li class="list-inline-item mr-0">
-                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                              </li>
-                              <li class="list-inline-item mr-0">
-                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                              </li>
-                              <li class="list-inline-item mr-0">
-                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                              </li>
-                              <li class="list-inline-item mr-0">
-                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                              </li>
-                              <li class="list-inline-item mr-0">
-                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
-                      <div class="card-footer bg-white px-0 pt-1 pb-6">
-                        <ul class="list-group list-group-no-border pb-1">
-                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
-                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
-                          </li>
-                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
-                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
-                          </li>
-                          <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
-                            <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
-                            <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
-                          </li>
-                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
-                            <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
-                              <li class="list-inline-item m-0">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
-                              </li>
-                              <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
-                              </li>
-                              <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
-                              </li>
-                              <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
-                              </li>
-                            </ul>
-                          </li>
-                        </ul>
-                      </div>
+                  </div>
+                  <div class="d-flex align-items-center justify-content-sm-end">
+                    <div class="form-group ">
+                      <select class="form-control" name="state" id="maxRows">
+                        <option value="6000">Show ALL Rows</option>
+                        <option value="6">6</option>
+                        <option value="12">12</option>
+                        <option value="18">18</option>
+                        <option value="30">30</option>
+                        <option value="60">60</option>
+                        <option value="90">90</option>
+                        <option value="150">150</option>
+                      </select>
+
                     </div>
                   </div>
+               
+              </div>
+              <div class="row" id="favcard">
+                <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
+                  <count>
+                    <cardbody>
+                      <div class="col-md-4 mb-4">
+                        <div class="card border-0 shadow-hover-3 px-6" id="agent">
+                          <div class="card-body text-center pt-6 pb-2 px-0">
+                            <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
+                              <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
+                            </a>
+                            <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
+                            <ul class="list-inline mb-0">
+                              <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
+                              </li>
+                              <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
+                                <ul class="list-inline mb-0">
+                                  <li class="list-inline-item mr-0">
+                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                                  </li>
+                                  <li class="list-inline-item mr-0">
+                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                                  </li>
+                                  <li class="list-inline-item mr-0">
+                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                                  </li>
+                                  <li class="list-inline-item mr-0">
+                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                                  </li>
+                                  <li class="list-inline-item mr-0">
+                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="card-footer bg-white px-0 pt-1 pb-6">
+                            <ul class="list-group list-group-no-border pb-1">
+                              <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                                <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
+                                <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
+                              </li>
+                              <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                                <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
+                                <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
+                              </li>
+                              <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                                <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
+                                <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
+                              </li>
+                              <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                                <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
+                                <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
+                                  <li class="list-inline-item m-0">
+                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                                  </li>
+                                  <li class="list-inline-item mr-0 ml-2">
+                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                                  </li>
+                                  <li class="list-inline-item mr-0 ml-2">
+                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                                  </li>
+                                  <li class="list-inline-item mr-0 ml-2">
+                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                                  </li>
+                                </ul>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </div>
+                    </cardbody>
+                  </count>
                 <?php  } ?>
               </div>
 
-              <nav class="mt-4">
+              <!-- <nav class="mt-4">
                 <ul class="pagination rounded-active justify-content-center">
                   <li class="page-item"><a class="page-link" href="agents.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
                   <?php for ($i = 1; $i <= $total_page; $i++) { ?>
                     <li class="page-item"><a class="page-link" href="agents.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
                   <?php } ?>
                   <li class="page-item"><a class="page-link" href="agents.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
+                </ul>
+              </nav> -->
+
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center mb-0">
+                  <li data-page="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-left"></i><span></span>
+                    </span>
+                  </li>
+                  <!-- Here the JS Function Will Add the Rows -->
+                  <li data-page="next" id="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-right"></i><span></span>
+                    </span>
+                  </li>
                 </ul>
               </nav>
 
@@ -457,6 +504,137 @@
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script>
+    getPagination('#favcard');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' count ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' cardbody ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' cardbody ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+  </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
