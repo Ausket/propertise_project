@@ -115,6 +115,15 @@ if (isset($_POST['ch'])) {
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <style>
+    .pagination li:hover {
+      cursor: pointer;
+    }
+
+    table tbody tr {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -182,10 +191,9 @@ if (isset($_POST['ch'])) {
                   $ad = $rowad['a_id'];
                   $h_no = "เลขที่";
                   $v_no = "หมู่"; ?>
-                  <count>
-                    <cardbody>
-                      <div class="col-md-6 col-xxl-6 mb-6" id="favuser<?php echo $ad ?>">
-                        <div class="card shadow-hover-1" id="cardthree">
+                      <div class="col-md-5 col-xxl-3 mb-5" id="favuser<?php echo $ad ?>">
+                        <div class="card shadow-hover-1" id="cardtwo">
+                          <span id="cardthree">
                           <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
                             <img src="../image/p_img/<?php echo $rowad['img_video'] ?>" alt="<?php echo $rowad['img_video'] ?>">
                             <div class="card-img-overlay p-2 d-flex flex-column">
@@ -283,10 +291,9 @@ if (isset($_POST['ch'])) {
                               </li>
                             </ul>
                           </div>
+                          </span>
                         </div>
                       </div>
-                    </cardbody>
-                  </count>
                 <?php } ?>
               <?php } ?>
               </div>
@@ -378,9 +385,9 @@ if (isset($_POST['ch'])) {
             $('.pagination').show();
           }
 
-          var totalRows = $(card + ' count ').length; // numbers of rows
+          var totalRows = $(card + ' #cardtwo ').length; // numbers of rows
           console.log(totalRows);
-          $(card + ' cardbody ').each(function() {
+          $(card + ' #cardthree '  ).each(function() {
             // each TR in  table and not the header
             trnum++; // Start Counter
             if (trnum > maxRows) {
@@ -439,7 +446,7 @@ if (isset($_POST['ch'])) {
             $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
             // $(this).addClass('active');					// add active class to the clicked
             limitPagging();
-            $(card + ' cardbody ').each(function() {
+            $(card + ' #cardthree ' ).each(function() {
               // each tr in table not the header
               trIndex++; // tr index counter
               // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out

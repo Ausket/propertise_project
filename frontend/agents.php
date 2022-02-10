@@ -100,7 +100,6 @@
       $resultsa = mysqli_query($con, $sqlsa);
 
       $total_record = mysqli_num_rows($resultsa);
-      $total_page = ceil($total_record / $perpage);
 
       $sql5 = "SELECT * FROM users 
       WHERE utype='agent' AND 
@@ -127,12 +126,12 @@
         $texts = $_POST['Order_text'];
 
         $sqla = str_replace($texts, '', $sqlc);
-        $sqln = "$sql5" . $text ;
+        $sqln = "$sql5" . $text;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       } else {
 
         $text = 'ORDER BY users.name ASC   ';
-        $sqln = "$sql5" . $text ;
+        $sqln = "$sql5" . $text;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       }
 
@@ -173,6 +172,21 @@
                       </div>
                   </div>
                   </form>
+                </div>
+                <div class="d-flex align-items-center justify-content-sm-end">
+                  <div class="form-group ">
+                    <select class="form-control" name="state" id="maxRows">
+                      <option value="6000">แสดงทั้งหมด</option>
+                      <option value="6">6</option>
+                      <option value="12">12</option>
+                      <option value="18">18</option>
+                      <option value="30">30</option>
+                      <option value="60">60</option>
+                      <option value="90">90</option>
+                      <option value="150">150</option>
+                    </select>
+
+                  </div>
                 </div>
               </div>
               <div class="row" id="cardagent">
@@ -282,12 +296,12 @@
 
       require_once('../dbconnect.php');
 
-      
+
 
       $sql4 = "SELECT * FROM users WHERE utype='agent'";
       $result4 = mysqli_query($con, $sql4);
       $total_record = mysqli_num_rows($result4);
-     
+
 
       $sql5 = "SELECT * FROM users WHERE utype='agent'";
 
@@ -313,12 +327,12 @@
         $texts = $_POST['Order_text'];
 
         $sqla = str_replace($texts, '', $sqlc);
-        $sqln = "$sql5" . $text ;
+        $sqln = "$sql5" . $text;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       } else {
 
         $text = 'ORDER BY name ASC ';
-        $sqln = "$sql5" . $text ;
+        $sqln = "$sql5" . $text;
         $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
       }
 
@@ -360,30 +374,28 @@
                       </div>
                     </form>
                   </div>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-sm-end">
-                    <div class="form-group ">
-                      <select class="form-control" name="state" id="maxRows">
-                        <option value="6000">Show ALL Rows</option>
-                        <option value="6">6</option>
-                        <option value="12">12</option>
-                        <option value="18">18</option>
-                        <option value="30">30</option>
-                        <option value="60">60</option>
-                        <option value="90">90</option>
-                        <option value="150">150</option>
-                      </select>
+                </div>
+                <div class="d-flex align-items-center justify-content-sm-end">
+                  <div class="form-group ">
+                    <select class="form-control" name="state" id="maxRows">
+                      <option value="6000">Show ALL Rows</option>
+                      <option value="6">6</option>
+                      <option value="12">12</option>
+                      <option value="18">18</option>
+                      <option value="30">30</option>
+                      <option value="60">60</option>
+                      <option value="90">90</option>
+                      <option value="150">150</option>
+                    </select>
 
-                    </div>
                   </div>
-               
+                </div>
+
               </div>
-              <div class="row" id="favcard">
+              <div class="row" id="cardagent">
                 <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
-                  <count>
-                    <cardbody>
-                      <div class="col-md-4 mb-4">
-                        <div class="card border-0 shadow-hover-3 px-6" id="agent">
+                      <div class="col-md-4 mb-4" id="cragent">
+                        <div class="card border-0 shadow-hover-3 px-6" id="cdagent">
                           <div class="card-body text-center pt-6 pb-2 px-0">
                             <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
                               <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
@@ -448,8 +460,6 @@
                           </div>
                         </div>
                       </div>
-                    </cardbody>
-                  </count>
                 <?php  } ?>
               </div>
 
@@ -505,7 +515,7 @@
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <script>
-    getPagination('#favcard');
+    getPagination('#cardagent');
 
     function getPagination(card) {
       var lastPage = 1;
@@ -529,9 +539,9 @@
             $('.pagination').show();
           }
 
-          var totalRows = $(card + ' count ').length; // numbers of rows
+          var totalRows = $(card + ' #cragent ').length; // numbers of rows
           console.log(totalRows);
-          $(card + ' cardbody ').each(function() {
+          $(card + ' #cdagent ').each(function() {
             // each TR in  table and not the header
             trnum++; // Start Counter
             if (trnum > maxRows) {
@@ -590,7 +600,7 @@
             $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
             // $(this).addClass('active');					// add active class to the clicked
             limitPagging();
-            $(card + ' cardbody ').each(function() {
+            $(card + ' #cdagent ').each(function() {
               // each tr in table not the header
               trIndex++; // tr index counter
               // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out

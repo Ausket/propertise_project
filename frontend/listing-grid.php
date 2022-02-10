@@ -1,14 +1,6 @@
 <?php
 require_once('../dbconnect.php');
 
-$perpage = 6;
-if (isset($_GET['page'])) {
-  $page = $_GET['page'];
-} else {
-  $page = 1;
-}
-$start = ($page - 1) * $perpage;
-
 if (isset($_GET['submits'])) { //เมื่อกด ค้นหา 
   //กำหนดตัวแปรเก็บค่าต่างๆ 
   $project = $_GET['project'];
@@ -104,18 +96,17 @@ WHERE advertise.ad_status = '1' ";
       $text = ' ';
     }
 
-    $sqls = "$sql2" . $text . " " . "limit {$start} , {$perpage}";
+    $sqls = "$sql2" . $text;
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
     $total_record = mysqli_num_rows($result2);
-    $total_page = ceil($total_record / $perpage);
+    
   } else {
 
-    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ' . " " . "limit {$start} , {$perpage}";
+    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ';
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
 
     $result3 = mysqli_query($con, $sql2) or die(mysqli_error($con));
     $total_record = mysqli_num_rows($result3);
-    $total_page = ceil($total_record / $perpage);
   }
 } else {
 
@@ -146,18 +137,16 @@ WHERE advertise.ad_status = '1' ";
       $text = ' ';
     }
 
-    $sqls = "$sql2" . $text . " " . " limit {$start} , {$perpage} ";
+    $sqls = "$sql2" . $text;
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
     $total_record = mysqli_num_rows($result2);
-    $total_page = ceil($total_record / $perpage);
   } else {
 
-    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ' . " "  . "limit {$start} , {$perpage}";
+    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ';
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
 
     $result3 = mysqli_query($con, $sql2) or die(mysqli_error($con));
     $total_record = mysqli_num_rows($result3);
-    $total_page = ceil($total_record / $perpage);
   }
 }
 
@@ -235,6 +224,15 @@ $resultat = mysqli_query($con, $sqlat);
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <style>
+    .pagination li:hover {
+      cursor: pointer;
+    }
+
+    table tbody tr {
+      display: none;
+    }
+  </style>
 </head>
 
 <body>
@@ -401,11 +399,11 @@ $resultat = mysqli_query($con, $sqlat);
               <div class="col-md-6">
                 <h2 class="fs-15 text-dark mb-0">พบ <span class="text-primary">45</span> แห่งสำหรับการค้นหา </h2>
               </div>
+
               <div class="col-md-6 col-xl-7 col-xxl-6 mt-6 mt-md-0">
                 <div class="d-flex justify-content-md-end align-items-center">
                   <div class="input-group border rounded input-group-lg w-auto bg-white">
                     <form name="test" method="post" action="">
-
                       <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงตาม:</label>
                       <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker sortby" id="ch" name="ch" onchange="document.test.submit();" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0 pr-6 pl-6">
                         <option <?php if ($choice == "1") {
@@ -425,13 +423,26 @@ $resultat = mysqli_query($con, $sqlat);
                   </div>
                 </div>
               </div>
+              <div class="form-group">
+                <!-- Show Numbers Of Rows -->
+                <select class="form-control" name="state" id="maxRows">
+                <option value="6000">แสดงทั้งหมด</option>
+                      <option value="6">6</option>
+                      <option value="12">12</option>
+                      <option value="18">18</option>
+                      <option value="30">30</option>
+                      <option value="60">60</option>
+                      <option value="90">90</option>
+                      <option value="150">150</option>
+                </select>
+              </div>
             </div>
-            <div class="row">
+            <div class="row" id="precard">
               <?php while ($row2 = mysqli_fetch_assoc($result2)) {
                 $h_no = "เลขที่";
                 $v_no = "หมู่"; ?>
-                <div class="col-md-6 mb-6">
-                  <div class="card border-0" data-animate="fadeInUp">
+                <div class="col-md-6 mb-6" id="cardtwo">
+                  <div class="card border-0" data-animate="fadeInUp" id="cardthree">
                     <div class="position-relative hover-change-image bg-hover-overlay rounded-lg card-img">
                       <img src="../image/p_img/<?php echo $row2['img_video']; ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video']; ?>">
                       <div class="card-img-overlay d-flex flex-column">
@@ -536,15 +547,23 @@ $resultat = mysqli_query($con, $sqlat);
               <?php } ?>
 
             </div>
+           
             <nav class="mt-6">
-              <ul class="pagination rounded-active justify-content-center">
-                <li class="page-item"><a class="page-link" href="listing-grid.php?page=1"><i class="far fa-angle-double-left"></i></a></li>
-                <?php for ($i = 1; $i <= $total_page; $i++) { ?>
-                  <li class="page-item"><a class="page-link" href="listing-grid.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-                <?php } ?>
-                <li class="page-item"><a class="page-link" href="listing-grid.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
-              </ul>
-            </nav>
+                <ul class="pagination rounded-active justify-content-center mb-0">
+                  <li data-page="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-left"></i><span></span>
+                    </span>
+                  </li>
+                  <!-- Here the JS Function Will Add the Rows -->
+                  <li data-page="next" id="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-right"></i><span></span>
+                    </span>
+                  </li>
+                </ul>
+              </nav>
+
           </div>
         </div>
       </div>
@@ -724,6 +743,137 @@ $resultat = mysqli_query($con, $sqlat);
       });
 
     });
+  </script>
+  <script>
+    getPagination('#precard');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' #cardtwo ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' #cardthree ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' #cardthree ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
