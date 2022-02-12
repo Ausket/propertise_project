@@ -583,20 +583,16 @@ $totalf = mysqli_num_rows($result6);
                         $numf = mysqli_num_rows($resultf); ?>
 
                         <?php if ($numf == 0) { ?>
-                          <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i name="favi" id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
-                    <li class="list-inline-item">
-                      <a id="compa" name="<?php echo $row2['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
-                    <?php } else { ?>
-                      <a name="<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i name="favi" id="favi<?php echo $ad ?>" class="fas fa-heart"></i></a>
-                    <li class="list-inline-item">
-                      <a id="compa" name="<?php echo $row2['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
-                    <?php } ?>
-                  <?php } else { ?>
-                    <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
-                    <li class="list-inline-item">
-                      <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
-                    <?php } ?>
+                          <a name="fav_<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i name="favi" id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
+                        <?php } else { ?>
+                          <a name="fav_<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i name="favi" id="favi<?php echo $ad ?>" class="fas fa-heart"></i></a>
+                        <?php } ?>
+                      <?php } else { ?>
+                        <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
+                      <?php } ?>
                     </li>
+                    <li class="list-inline-item">
+                      <a id="compa" name="<?php echo $row2['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
                     </li>
                   </ul>
                 </div>
@@ -1017,30 +1013,31 @@ $totalf = mysqli_num_rows($result6);
       $('a#fav').on('click', function() {
 
         var ida = $(this).attr("name");
+        let fav_data = ida.split("_");
 
         $.ajax({
           url: 'backend/favourite.php',
           method: 'POST',
           data: {
-            ida: ida
+            ida: fav_data[1]
           },
           success: function(data) {
 
             if (data == 1) {
 
-              $('i#favi' + ida).removeAttr("class");
-              $('i#favi' + ida).addClass("fas fa-heart");
+              $('i#favi' + fav_data[1]).removeAttr("class");
+              $('i#favi' + fav_data[1]).addClass("fas fa-heart");
 
-              $("[name=" + ida + "]").removeAttr("class");
-              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent");
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent");
 
             } else {
 
-              $('i#favi' + ida).removeAttr("class");
-              $('i#favi' + ida).addClass("far fa-heart");
+              $('i#favi' + fav_data[1]).removeAttr("class");
+              $('i#favi' + fav_data[1]).addClass("far fa-heart");
 
-              $("[name=" + ida + "]").removeAttr("class");
-              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body border-accent ");
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body border-accent ");
 
             }
 

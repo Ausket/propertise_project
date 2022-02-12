@@ -126,7 +126,7 @@ if (isset($_POST['submit'])) {
                             <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
                             
                                 <li class="nav-item ">
-                                    <a class="nav-link " data-toggle="modal" href="#login-register-modal">SIGN IN</a>
+                                    <a class="nav-link " data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
                                 </li>
                                
                             </ul>
@@ -161,9 +161,7 @@ if (isset($_POST['submit'])) {
                             <li class="nav-item ">
                                 <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>              
                             </li>
-                            <li class="nav-item ">
-                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal" aria-labelledby="register-tab">สมัครสมาชิก</a>              
-                            </li>
+        
                             <?php } ?>
                             <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
                                 $id = $_SESSION['u_id'];

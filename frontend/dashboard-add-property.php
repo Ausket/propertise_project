@@ -44,7 +44,7 @@ $resultpr = mysqli_query($con, $sqlpr);
   <link rel="stylesheet" href="../css/vendors/dropzone/css/dropzone.min.css">
   <link rel="stylesheet" href="../css/vendors/animate.css">
   <link rel="stylesheet" href="../css/vendors/timepicker/bootstrap-timepicker.min.css">
-  <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
+  <!-- <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css"> -->
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
 
   <!-- Themes core CSS -->
@@ -71,8 +71,10 @@ $resultpr = mysqli_query($con, $sqlpr);
   <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
   <script src="../js/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="../js/map.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 
 
   <style>
@@ -154,6 +156,11 @@ $resultpr = mysqli_query($con, $sqlpr);
 
     .red {
       color: red;
+    }
+    
+    #map {
+      height: 100%;
+      width: 100%;
     }
   </style>
 
@@ -407,11 +414,33 @@ $resultpr = mysqli_query($con, $sqlpr);
                                   </div>
                                 </div>
                               </div>
+                              <!-- <div class="col-lg-6">
+                                <div class="card mb-6">
+                                  <div class="card-body p-6">
+                                    <h3 class="card-title mb-6 text-heading fs-22 lh-15"> ปักหมุดที่ตั้งอสังหาริมทรัพย์ </h3>
+                                    <div id="map" style="height:300px;"></div>
+                                    <div class="form-row mx-n2">
+                                      <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                        <div class="form-group mb-md-0">
+                                          <label for="latitude" class="text-heading"> ละติจูด </label>
+                                          <input type="text" class="form-control form-control-lg border-0" id="lat" name="latitude" required>
+                                        </div>
+                                      </div>
+                                      <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                        <div class="form-group mb-md-0">
+                                          <label for="longitude" class="text-heading"> ลองจิจูด </label>
+                                          <input type="text" class="form-control form-control-lg border-0" id="lng" name="longitude" required>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div> -->
                               <div class="col-lg-6">
                                 <div class="card mb-6">
                                   <div class="card-body p-6">
                                     <h3 class="card-title mb-6 text-heading fs-22 lh-15"> ปักหมุดที่ตั้งอสังหาริมทรัพย์ </h3>
-                                    <div id="map"  style="height: 296px" data-marker-target="#template-properties" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" ></div>
+                                    <div id="map" style="height: 296px" ></div>
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
@@ -573,7 +602,7 @@ $resultpr = mysqli_query($con, $sqlpr);
   <script src="../css/vendors/timepicker/bootstrap-timepicker.min.js"></script>
   <script src="../css/vendors/hc-sticky/hc-sticky.min.js"></script>
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
-  <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
+  <!-- <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script> -->
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <script>
     $(function() {
@@ -683,10 +712,72 @@ $resultpr = mysqli_query($con, $sqlpr);
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8cHZORdYKkrDwD8vHR4ng5rW5M74O0mY&callback=initMap&v=weekly" async></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script>
+    /*     const marker1 = new mapboxgl.Marker()
+            .setLngLat([100.604274, 13.84786])
+            .addTo(map); */
+    mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      center: [100.604274, 13.84786],
+      style: 'mapbox://styles/mapbox/streets-v11',
+      zoom: 10
+    });
+    var marker = [];
+
+    console.log(marker)
+
+    map.on('style.load', function() {
+      map.on('click', function(e) {
+
+
+        if (marker.length !== 0) {
+
+          for (var i = marker.length - 1; i >= 0; i--) {
+            marker[i].remove();
+          }
+
+
+        } else {
+          console.log('test');
+
+        }
+
+        var coordinates = e.lngLat;
+        new mapboxgl.Popup()
+
+        document.getElementById("lng").value = coordinates.lng
+        document.getElementById("lat").value = coordinates.lat
+
+
+
+        var marker1 = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+
+        marker.push(marker1);
+
+      });
+    });
+
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+
+      })
+
+    );
+
+    map.on('idle', function() {
+      map.resize()
+    })
+
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.FullscreenControl());
+
+    
+  </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <symbol id="icon-bedroom" viewBox="0 0 46 32">

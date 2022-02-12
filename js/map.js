@@ -8,82 +8,12 @@ var locations = [
     ["ร้านน้องแจ๋ม", 13.86297, 100.613834],
 ];
 
-
-/* function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: position2,
-    zoom: 15,
-  }); */
-
-/*   var marker2 = new google.maps.Marker({
-    position: position,
-    map,
-    title: "Hello World!",
-    icon :"location.png"
-  });
-
-  const contentString =
-    '<div id="content">' +
-    '<div id="siteNotice">' +
-    "</div>" +
-    '<h5 id="firstHeading" class="firstHeading">TEERAPAT </h5>' +
-    '<div id="bodyContent">' +
-    "</div>" +
-    "</div>";
-
-  const infowindow = new google.maps.InfoWindow({
-    content: contentString,
-  });
-
-  marker2.addListener("click", () => {
-    infowindow.open({
-      anchor: marker2,
-      map,
-      shouldFocus: false,
-
-    });
-  }); */
-
-/*   var marker, i, info;
-  for (i = 0; i < locations.length; i++) {
-    marker = new google.maps.Marker({
-      position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-      map,
-      title: locations[i][0],
-      icon :"location.png"
-    });
-
-     info = new google.maps.InfoWindow();
-    google.maps.event.addListener(marker, 'click',(function(marker,i){
-
-      return function(){
-        info.setContent(locations[i][0]);
-        info.open(map,marker);
-      }
-    })(marker,i)); 
- 
-  } */
-
-/*   var marker, info;
-  var i;
-
-  $.each(jsonObj,function(i,item){
-    marker = new google.maps.Marker({
-      position: new google.maps.LatLng(item.lat,item.lng),
-      map:map,
-      icon :"location.png"
-    });
-
-    info = new google.maps.InfoWindow();
-
-    google.maps.event.addListener(marker,'click',(function(marker,i){
-
-      return function(){
-        info.setContent(item.location);
-        info.open(map,marker);
-      }
-    })(marker,i));
-  }); */
+var jsonObj = [
+    { location: "วัดเบญจามบพิตร", lat: "13.846876", lng: "100.604481" },
+    { location: "หมู่บ้านตั๊กแตน", lat: "13.847766", lng: "100.605768" },
+    { location: "มอเตอร์เวย์", lat: "13.845235", lng: "100.602711" },
+    { location: "ร้านน้องแจ๋ม", lat: "13.86297", lng: "100.613834" },
+];
 
 
 
@@ -93,10 +23,10 @@ function initMap() {
         zoom: 15,
     });
 
-    /* var geocoder = new google.maps.Geocoder();
+    var geocoder = new google.maps.Geocoder();
     document.getElementById("submit").addEventListener("click", function() {
         geocodeAdress(geocoder, map);
-    }); */
+    });
 
     let infoWindow = new google.maps.InfoWindow({
         content: "Click the map to get Lat/Lng!",
@@ -121,48 +51,41 @@ function initMap() {
         marker = new google.maps.Marker({
             position: mapsMouseEvent.latLng,
             map: map,
-            icon: "../image/location.png",
+            icon: "location.png",
         });
 
-        var lng = mapsMouseEvent.latLng.toJSON()
+        var lnglat = JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2);
 
-        console.log(lng);
-        document.getElementById("lng").value = lng.lng;
-        document.getElementById("lat").value = lng.lat;
+        console.log(lnglat);
+
+        document.getElementById("lng").value = lnglat;
 
         infoWindow.open(map);
     });
 
-
     var marker3, info3;
-    $.getJSON("../backend/map.php", function(jsonObj) {
-
+    $.getJSON("json.php", function(jsonObj) {
         $.each(jsonObj, function(i, item) {
             marker3 = new google.maps.Marker({
                 position: new google.maps.LatLng(item.lat, item.lng),
                 map: map,
-                icon: "../image/location.png"
+                icon: "location.png",
             });
 
             info3 = new google.maps.InfoWindow();
-            google.maps.event.addListener(marker3, 'click', (function(marker3, i) {
-
-                return function() {
-                    info3.setContent(item.name);
-                    info3.open(map, marker3);
-                }
-            })(marker3, i));
-
-
+            google.maps.event.addListener(
+                marker3,
+                "click",
+                (function(marker3, i) {
+                    return function() {
+                        info3.setContent(item.name);
+                        info3.open(map, marker3);
+                    };
+                })(marker3, i)
+            );
         });
     });
-
-
-
 }
-
-
-
 
 var marker;
 
@@ -176,11 +99,9 @@ function geocodeAdress(geocoder, resultsMap) {
                 marker.setMap(null);
             }
             marker = new google.maps.Marker({
-
                 map: resultsMap,
                 position: results[0].geometry.location,
                 icon: "location.png",
-
             });
         } else {
             alert("Geocode was not successful for the follwing reason: " + status);

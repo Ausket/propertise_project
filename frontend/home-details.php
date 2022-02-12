@@ -110,13 +110,18 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <script src="../js/map.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
+
 </head>
 
 <body>
   <?php include 'templates/header-two.php'; ?>
   <main id="content">
-  <?php include 'templates/search-box.php'; ?>
+    <?php include 'templates/search-box.php'; ?>
     <section class="bg-white shadow-5 pb-1">
       <div class="container">
         <nav aria-label="breadcrumb">
@@ -312,6 +317,11 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
                         echo 'ต.' . $value['dname_th'] . ' ';
                         echo 'อ.' . $value['aname_th'] . ' ';
                         echo 'จ.' . $value['name_th'] . ' ';
+
+
+                        $pop_d = $value['dname_th'];
+                        $pop_a = $value['aname_th'];
+                        $pop_p = $value['name_th'];
                       }
                     } ?>
                     <?php echo $rowad['postal_code']; ?></p>
@@ -508,10 +518,8 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
             <section class="mt-2 pb-6 px-6 pt-6 bg-white rounded-lg">
               <h4 class="fs-22 text-heading mb-6">แผนที่ตั้ง</h4>
               <div class="position-relative">
-                <div id="map" class="mapbox-gl map-point-animate" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" data-mapbox-options='{"center":[-73.9927227, 40.6741035],"setLngLat":[-73.9927227, 40.6741035]}' data-mapbox-marker='[{"position":[-73.9927227, 40.6741035],"className":"marker","backgroundImage":"../images/googlle-market-01.png","backgroundRepeat":"no-repeat","width":"30px","height":"40px"}]'>
+                <div id="map" >
                 </div>
-                <p class="mb-0 p-3 bg-white shadow rounded-lg position-absolute pos-fixed-bottom mb-4 ml-4 lh-17 z-index-2">62 Gresham St, Victoria Park <br />
-                  WA 6100, Australia</p>
               </div>
             </section>
           </article>
@@ -614,11 +622,50 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
       });
     });
   </script>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      center: [<?= $rowad['lng']; ?>, <?= $rowad['lat']; ?>],
+      style: 'mapbox://styles/mapbox/outdoors-v11',
+      zoom: 10
+    });
+
+
+    const popup = new mapboxgl.Popup({
+      offset: 25
+    }).setText(
+      'บ้านเลขที่' + ' <?= $rowad['house_no'] ?>' + ' หมู่' + ' <?= $rowad['village_no']  ?> ต.<?= $pop_d ?> ' +
+      'อ.<?= $pop_a ?> จ.<?= $pop_p ?>  <?= $rowad['postal_code'] ?>'
+    );
+
+
+    const marker1 = new mapboxgl.Marker()
+      .setLngLat([<?= $rowad['lng']; ?>, <?= $rowad['lat']; ?>])
+      .setPopup(popup).addTo(map)
+
+    
+
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+
+      })
+
+    );
+
+
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.FullscreenControl());
+
+
+
+    
+  </script>
+
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8cHZORdYKkrDwD8vHR4ng5rW5M74O0mY&callback=initMap&v=weekly" async></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

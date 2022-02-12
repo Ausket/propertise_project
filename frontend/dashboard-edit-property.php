@@ -112,7 +112,11 @@ $resultd = mysqli_query($con, $sqld);
   <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
   <script src="../js/jquery.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="../js/map.js"></script>
+  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+  <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+
 
   <style>
     .profile-images-card {
@@ -212,6 +216,13 @@ $resultd = mysqli_query($con, $sqld);
     .red {
       color: red;
     }
+
+    #map {
+      height: 100%;
+      width: 100%;
+    }
+
+   
   </style>
 
 </head>
@@ -312,13 +323,13 @@ $resultd = mysqli_query($con, $sqld);
                                         <ul class="list-group list-group-no-border">
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
-                                              <input type="checkbox" class="custom-control-input"  <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('สระว่ายน้ำ', $facility);
+                                              <input type="checkbox" class="custom-control-input" <?php
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('สระว่ายน้ำ', $facility);
 
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
 
-                                                  ?> name="facility[]" id="attic" value="สระว่ายน้ำ">
+                                                                                                                                      ?> name="facility[]" id="attic" value="สระว่ายน้ำ">
                                               <label class="custom-control-label" for="attic"> สระว่ายน้ำ </label>
                                             </div>
                                           </li>
@@ -330,13 +341,13 @@ $resultd = mysqli_query($con, $sqld);
 
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
-                                              <input type="checkbox" class="custom-control-input"  <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('ร้านสะดวกซื้อ', $facility);
+                                              <input type="checkbox" class="custom-control-input" <?php
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('ร้านสะดวกซื้อ', $facility);
 
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
 
-                                                  ?> name="facility[]" id="basketball-court" value="ร้านสะดวกซื้อ">
+                                                                                                                                      ?> name="facility[]" id="basketball-court" value="ร้านสะดวกซื้อ">
                                               <label class="custom-control-label" for="basketball-court"> ร้านสะดวกซื้อ </label>
                                             </div>
                                           </li>
@@ -351,12 +362,12 @@ $resultd = mysqli_query($con, $sqld);
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
                                               <input type="checkbox" class="custom-control-input" <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('ห้องสมุด', $facility);
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('ห้องสมุด', $facility);
 
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
 
-                                                  ?> name="facility[]" id="attic-01" value="ห้องสมุด">
+                                                                                                                                      ?> name="facility[]" id="attic-01" value="ห้องสมุด">
                                               <label class="custom-control-label" for="attic-01"> ห้องสมุด </label>
                                             </div>
                                           </li>
@@ -368,13 +379,13 @@ $resultd = mysqli_query($con, $sqld);
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
                                               <input type="checkbox" class="custom-control-input" <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('สนามเด็กเล่น', $facility);
-                                                  
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('สนามเด็กเล่น', $facility);
 
-                                                  ?> name="facility[]" id="basketball-court-01" value="สนามเด็กเล่น">
-                                              <label class="custom-control-label" for="basketball-court-01"> สนามเด็กเล่น  </label>
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
+
+                                                                                                                                      ?> name="facility[]" id="basketball-court-01" value="สนามเด็กเล่น">
+                                              <label class="custom-control-label" for="basketball-court-01"> สนามเด็กเล่น </label>
                                             </div>
                                           </li>
                                         </ul>
@@ -388,12 +399,12 @@ $resultd = mysqli_query($con, $sqld);
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
                                               <input type="checkbox" class="custom-control-input" <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('สวนสาธารณะ', $facility);
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('สวนสาธารณะ', $facility);
 
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
 
-                                                  ?> name="facility[]" id="attic-02" value="สวนสาธารณะ">
+                                                                                                                                      ?> name="facility[]" id="attic-02" value="สวนสาธารณะ">
                                               <label class="custom-control-label" for="attic-02"> สวนสาธารณะ </label>
                                             </div>
                                           </li>
@@ -403,19 +414,13 @@ $resultd = mysqli_query($con, $sqld);
 
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
-                                              <input type="checkbox" class="custom-control-input" id="basketball-court-02" 
-                                              
-                                              <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('เครื่องปรับอากาศ', $facility);
+                                              <input type="checkbox" class="custom-control-input" id="basketball-court-02" <?php
+                                                                                                                            $facility = explode(",", $rowb['facility']); //array
+                                                                                                                            $key = array_search('เครื่องปรับอากาศ', $facility);
 
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                                            if (is_numeric($key)) { ?> checked <?php   }
 
-                                                  ?>
-                                                  
-                                                  
-                                                  
-                                                  name="facility[]" id="basketball-court-02" value="เครื่องปรับอากาศ">
+                                                                                                                                                                ?> name="facility[]" id="basketball-court-02" value="เครื่องปรับอากาศ">
                                               <label class="custom-control-label" for="basketball-court-02"> เครื่องปรับอากาศ </label>
                                             </div>
                                           </li>
@@ -425,18 +430,18 @@ $resultd = mysqli_query($con, $sqld);
 
 
 
-                                      
+
                                       <div class="col-sm-6 col-lg-3">
                                         <ul class="list-group list-group-no-border">
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
                                               <input type="checkbox" class="custom-control-input" <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('ฟิตเนส', $facility);
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('ฟิตเนส', $facility);
 
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
 
-                                                  ?> name="facility[]" id="attic-03" value="ฟิตเนส">
+                                                                                                                                      ?> name="facility[]" id="attic-03" value="ฟิตเนส">
                                               <label class="custom-control-label" for="attic-03"> ฟิตเนส </label>
                                             </div>
                                           </li>
@@ -450,12 +455,12 @@ $resultd = mysqli_query($con, $sqld);
                                           <li class="list-group-item px-0 pt-0 pb-2">
                                             <div class="custom-control custom-checkbox">
                                               <input type="checkbox" class="custom-control-input" <?php
-                                                 $facility = explode(",", $rowb['facility']); //array
-                                                 $key = array_search('Wi-Fi', $facility);
-                                                  
-                                                  if (is_numeric($key)) { ?> checked <?php   }
+                                                                                                  $facility = explode(",", $rowb['facility']); //array
+                                                                                                  $key = array_search('Wi-Fi', $facility);
 
-                                                  ?> name="facility[]" id="basketball-court-03" value="Wi-Fi">
+                                                                                                  if (is_numeric($key)) { ?> checked <?php   }
+
+                                                                                                                                      ?> name="facility[]" id="basketball-court-03" value="Wi-Fi">
                                               <label class="custom-control-label" for="basketball-court-03"> Wi-Fi </label>
                                             </div>
                                           </li>
@@ -598,7 +603,7 @@ $resultd = mysqli_query($con, $sqld);
                                 <div class="card mb-6">
                                   <div class="card-body p-6">
                                     <h3 class="card-title mb-6 text-heading fs-22 lh-15"> ปักหมุดที่ตั้งอสังหาริมทรัพย์ </h3>
-                                    <div id="map" style="height: 296px" data-mapbox-access-token="pk.eyJ1IjoiZHVvbmdsaCIsImEiOiJjanJnNHQ4czExMzhyNDVwdWo5bW13ZmtnIn0.f1bmXQsS6o4bzFFJc8RCcQ" data-mapbox-options='{"center":[-73.981566, 40.739011],"setLngLat":[-73.981566, 40.739011]}' data-mapbox-marker='[{"position":[-73.981566, 40.739011],"className":"marker","backgroundImage":"images/googlle-market-01.png","backgroundRepeat":"no-repeat","width":"32px","height":"40px"}]'></div>
+                                      <div id="map" style="height: 296px"></div>
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
@@ -905,6 +910,68 @@ $resultd = mysqli_query($con, $sqld);
         updateTextView($(this));
       });
     });
+  </script>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      center: [<?= $rowb['lng']; ?>, <?= $rowb['lat']; ?>],
+      style: 'mapbox://styles/mapbox/streets-v11',
+      zoom: 10
+
+    });
+
+    const marker2 = new mapboxgl.Marker()
+      .setLngLat([<?= $rowb['lng']; ?>, <?= $rowb['lat']; ?>])
+      .addTo(map)
+
+
+    var marker = [];
+
+    map.on('style.load', function() {
+      map.on('click', function(e) {
+        marker2.remove();
+
+        if (marker.length !== 0) {
+
+          for (var i = marker.length - 1; i >= 0; i--) {
+            marker[i].remove();
+          }
+
+        } else {
+          console.log('test');
+
+        }
+
+        var coordinates = e.lngLat;
+        new mapboxgl.Popup()
+
+        document.getElementById("lng").value = coordinates.lng
+        document.getElementById("lat").value = coordinates.lat
+
+
+        var marker1 = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+
+        marker.push(marker1);
+
+
+      });
+    });
+
+
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+
+      })
+    );
+
+    map.on('idle', function() {
+      map.resize()
+    })
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.FullscreenControl());
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>

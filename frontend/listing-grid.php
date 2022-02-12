@@ -1,6 +1,55 @@
 <?php
 require_once('../dbconnect.php');
 
+if (isset($_POST['submit'])) {
+
+  $email = $con->real_escape_string($_POST['email']);
+  $password = $con->real_escape_string($_POST['password']);
+
+  $sql = "SELECT * FROM users
+                WHERE  email='" . $email . "' 
+                AND  password='" . $password . "' ";
+
+  $result = $con->query($sql);
+  $row = $result->fetch_assoc();
+
+  if ($row["ustatus"] == '0') {
+    echo "<script>";
+    echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
+    echo "</script>";
+    header('Refresh:0; url=index.php');
+  } else {
+
+    if (!empty($row)) {
+
+      $_SESSION["u_id"] = $row["u_id"];
+      $_SESSION["email"] = $row["email"];
+      $_SESSION["password"] = $row["password"];
+      $_SESSION["name"] = $row["name"];
+      $_SESSION["address"] = $row["address"];
+      $_SESSION["tel"] = $row["tel"];
+      $_SESSION["id_card"] = $row["id_card"];
+      $_SESSION["company"] = $row["company"];
+      $_SESSION["birth_date"] = $row["birth_date"];
+      $_SESSION["img"] = $row["img"];
+      $_SESSION["utype"] = $row["utype"];
+      $_SESSION["ustatus"] = $row["ustatus"];
+
+      if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
+        header("location: page/profile.php");
+      }
+      if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
+        header("location: index.php");
+      }
+    } else {
+      echo "<script>";
+      echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
+      echo "</script>";
+      header('Refresh:0; url=index.php');
+    }
+  }
+}
+
 if (isset($_GET['submits'])) { //เมื่อกด ค้นหา 
   //กำหนดตัวแปรเก็บค่าต่างๆ 
   $project = $_GET['project'];
@@ -98,15 +147,12 @@ WHERE advertise.ad_status = '1' ";
 
     $sqls = "$sql2" . $text;
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
-    $total_record = mysqli_num_rows($result2);
-    
+    $numrow = mysqli_num_rows($result2);
   } else {
 
     $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ';
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
-
-    $result3 = mysqli_query($con, $sql2) or die(mysqli_error($con));
-    $total_record = mysqli_num_rows($result3);
+    $numrow = mysqli_num_rows($result2);
   }
 } else {
 
@@ -139,14 +185,12 @@ WHERE advertise.ad_status = '1' ";
 
     $sqls = "$sql2" . $text;
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
-    $total_record = mysqli_num_rows($result2);
+    $numrow = mysqli_num_rows($result2);
   } else {
 
     $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ';
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
-
-    $result3 = mysqli_query($con, $sql2) or die(mysqli_error($con));
-    $total_record = mysqli_num_rows($result3);
+    $numrow = mysqli_num_rows($result2);
   }
 }
 
@@ -300,7 +344,9 @@ $resultat = mysqli_query($con, $sqlat);
                           <option value="4">4 ห้อง</option>
                           <option value="5">5 ห้อง</option>
                           <option value="6">6 ห้อง</option>
-                          <option value="7+">7 ห้องขึ้นไป</option>
+                          <option value="8">8 ห้อง</option>
+                          <option value="9">9 ห้อง</option>
+                          <option value="10">10 ห้อง</option>
                         </select>
                       </div>
                       <div class="col">
@@ -312,7 +358,10 @@ $resultat = mysqli_query($con, $sqlat);
                           <option value="4">4 ห้อง</option>
                           <option value="5">5 ห้อง</option>
                           <option value="6">6 ห้อง</option>
-                          <option value="7+">7 ห้องขึ้นไป</option>
+                          <option value="7">7 ห้อง</option>
+                          <option value="8">8 ห้อง</option>
+                          <option value="9">9 ห้อง</option>
+                          <option value="10">10 ห้อง</option>
                         </select>
                       </div>
                     </div>
@@ -397,7 +446,7 @@ $resultat = mysqli_query($con, $sqlat);
           <div class="col-lg-8 mb-8 mb-lg-0 order-1 order-lg-2">
             <div class="row align-items-sm-center mb-8">
               <div class="col-md-6">
-                <h2 class="fs-15 text-dark mb-0">พบ <span class="text-primary">45</span> แห่งสำหรับการค้นหา </h2>
+                <h2 class="fs-15 text-dark mb-0">พบ <span class="text-primary"><?php echo $numrow ?></span> แห่งสำหรับการค้นหา </h2>
               </div>
 
               <div class="col-md-6 col-xl-7 col-xxl-6 mt-6 mt-md-0">
@@ -423,18 +472,20 @@ $resultat = mysqli_query($con, $sqlat);
                   </div>
                 </div>
               </div>
-              <div class="form-group">
-                <!-- Show Numbers Of Rows -->
-                <select class="form-control" name="state" id="maxRows">
-                <option value="6000">แสดงทั้งหมด</option>
-                      <option value="6">6</option>
-                      <option value="12">12</option>
-                      <option value="18">18</option>
-                      <option value="30">30</option>
-                      <option value="60">60</option>
-                      <option value="90">90</option>
-                      <option value="150">150</option>
-                </select>
+              <div class="col-md-3">
+                <div class="form-group">
+                  <!-- Show Numbers Of Rows -->
+                  <select class="form-control" name="state" id="maxRows">
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="6">6</option>
+                    <option value="12">12</option>
+                    <option value="18">18</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="90">90</option>
+                    <option value="150">150</option>
+                  </select>
+                </div>
               </div>
             </div>
             <div class="row" id="precard">
@@ -479,12 +530,35 @@ $resultat = mysqli_query($con, $sqlat);
                               </a>
                             </li>
                           </ul>
+
                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                              <a href="#" class="text-white fs-20 hover-primary">
-                                <i class="far fa-heart"></i>
-                              </a>
-                            </li>
+                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                              $ad = $row2['a_id'];
+                              $idu = $_SESSION['u_id'];
+                              $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
+                              $resultf = mysqli_query($con, $sqlf);
+                              $numf = mysqli_num_rows($resultf); ?>
+
+                              <?php if ($numf == 0) { ?>
+                                <li class="list-inline-item mr-3 h-32">
+                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-white fs-20 hover-primary">
+                                    <i class="far fa-heart"></i>
+                                  </a>
+                                </li>
+                              <?php } else { ?>
+                                <li class="list-inline-item mr-3 h-32">
+                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-primary fs-20 ">
+                                    <i class="far fa-heart"></i>
+                                  </a>
+                                </li>
+                              <?php } ?>
+                            <?php } else { ?>
+                              <li class="list-inline-item mr-3 h-32">
+                                <a href="#login-register-modal" data-toggle="modal" class="text-white fs-20 hover-primary">
+                                  <i class="far fa-heart"></i>
+                                </a>
+                              </li>
+                            <?php } ?>
                             <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
                               <a id="compa" name="<?php echo $row2['a_id'] ?>" class="text-white fs-20 hover-primary">
                                 <i class="fas fa-exchange-alt"></i>
@@ -547,22 +621,22 @@ $resultat = mysqli_query($con, $sqlat);
               <?php } ?>
 
             </div>
-           
+
             <nav class="mt-6">
-                <ul class="pagination rounded-active justify-content-center mb-0">
-                  <li data-page="prev" class="page-item">
-                    <span class="page-link">
-                      <i class="far fa-angle-double-left"></i><span></span>
-                    </span>
-                  </li>
-                  <!-- Here the JS Function Will Add the Rows -->
-                  <li data-page="next" id="prev" class="page-item">
-                    <span class="page-link">
-                      <i class="far fa-angle-double-right"></i><span></span>
-                    </span>
-                  </li>
-                </ul>
-              </nav>
+              <ul class="pagination rounded-active justify-content-center mb-0">
+                <li data-page="prev" class="page-item">
+                  <span class="page-link">
+                    <i class="far fa-angle-double-left"></i><span></span>
+                  </span>
+                </li>
+                <!-- Here the JS Function Will Add the Rows -->
+                <li data-page="next" id="prev" class="page-item">
+                  <span class="page-link">
+                    <i class="far fa-angle-double-right"></i><span></span>
+                  </span>
+                </li>
+              </ul>
+            </nav>
 
           </div>
         </div>
@@ -592,8 +666,10 @@ $resultat = mysqli_query($con, $sqlat);
         </div>
       </div>
     </div>
+
   </main>
   <?php include 'templates/footer-two.php' ?>
+ 
   <!-- Vendors scripts -->
   <script src="../css/vendors/jquery.min.js"></script>
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
@@ -618,33 +694,27 @@ $resultat = mysqli_query($con, $sqlat);
       $('a#fav').on('click', function() {
         var ida = $(this).attr("name");
 
+        let fav_data = ida.split("_");
+
         $.ajax({
-          url: 'backend/favourite.php',
+          url: '../backend/favourite.php',
           method: 'POST',
           data: {
-            ida: ida
+            ida: fav_data[1]
           },
           success: function(data) {
 
             if (data == 1) {
 
-              $('i#favi' + ida).removeAttr("class");
-              $('i#favi' + ida).addClass("fas fa-heart");
-
-              $("[name=" + ida + "]").removeAttr("class");
-              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent");
+              $("[name=fav_"+ fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("text-primary fs-20 ");
 
             } else {
 
-              $('i#favi' + ida).removeAttr("class");
-              $('i#favi' + ida).addClass("far fa-heart");
-
-              $("[name=" + ida + "]").removeAttr("class");
-              $("[name=" + ida + "]").addClass("w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body border-accent ");
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("text-white fs-20 hover-primary ");
 
             }
-
-
 
           }
         });

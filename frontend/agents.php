@@ -173,7 +173,7 @@
                   </div>
                   </form>
                 </div>
-                <div class="d-flex align-items-center justify-content-sm-end">
+                <div class="d-flex align-items-center">
                   <div class="form-group ">
                     <select class="form-control" name="state" id="maxRows">
                       <option value="6000">แสดงทั้งหมด</option>
@@ -378,7 +378,7 @@
                 <div class="d-flex align-items-center justify-content-sm-end">
                   <div class="form-group ">
                     <select class="form-control" name="state" id="maxRows">
-                      <option value="6000">Show ALL Rows</option>
+                      <option value="6000">แสดงทั้งหมด</option>
                       <option value="6">6</option>
                       <option value="12">12</option>
                       <option value="18">18</option>
