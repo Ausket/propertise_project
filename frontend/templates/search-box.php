@@ -1,34 +1,210 @@
+<?php
+
+if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา 
+    //กำหนดตัวแปรเก็บค่าต่างๆ 
+    $project = $_GET['project'];
+    $province = $_GET['province'];
+    $ptype = $_GET['ptype'];
+    // $adtype = $_GET['adtype'];
+    $bedroom = $_GET['bedroom'];
+    $bathroom = $_GET['bathroom'];
+    $price = $_GET['price'];
+    $space = $_GET['space_area'];
+  
+    // <--------- price ------>
+    $min = strchr($price, "ถึง", true);
+    $max = strrchr($price, "ถึง");
+    $remax = substr($max, 1);
+    $remin = substr($min, 1);
+    $maxx = substr($remax, 2);
+    $minn = substr($remin, 2);
+  
+    // <--------- space ------>
+    $areamin = strchr($space, " ตร.วา ถึง", true);
+    $aremax = strchr($space, "ถึง", false);
+    $aremax2 = substr($aremax, -22);
+    $aremax22 = substr($aremax2, 4);
+    $areamax = strchr($aremax22, " ตร.วา", true);
+  
+    // echo "+".$areamin."+";
+    // echo $aremax;
+    // echo $aremax2;
+    // echo $aremax22;
+    // echo "+".$areamax."+";
+  
+    if (isset($_POST['facility'])) {
+      $facility = implode(",", $_POST["facility"]);
+    }
+    // $conditions = array(); //กำหนด array เก็บเงื่อนไข
+  
+    if (!empty($price)) {
+      $conditions[] = "property_detail.price BETWEEN '$minn' AND '$maxx' ";
+    }
+    if (!empty($project)) {
+      $conditions[] = "property_detail.project_name LIKE'%$project%'";
+    }
+    if (!empty($province)) {
+      $conditions[] = "location_property.province_id='$province'";
+    }
+    if (!empty($adtype)) {
+      $conditions[] = "advertise.atype_id='$adtype'";
+    }
+    if (!empty($ptype)) {
+      $conditions[] = "property_detail.ptype_id='$ptype'";
+    }
+    if (!empty($bedroom)) {
+      $conditions[] = "property_detail.bedroom='$bedroom'";
+    }
+    if (!empty($bathroom)) {
+      $conditions[] = "property_detail.bathroom='$bathroom'";
+    }
+    if (!empty($facility)) {
+      $conditions[] = "property_detail.facility LIKE '%$facility%'";
+    }
+    if (!empty($space)) {
+      $conditions[] = "property_detail.space_area BETWEEN '$areamin' AND '$areamax'";
+    }
+  
+    $sqlsb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+  property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+  location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+  location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price,property_detail.facility
+  FROM ((((advertise
+  LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+  LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
+  LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+  LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+  WHERE advertise.ad_status = '1' ";
+  
+    $choice = 1;
+    if (count($conditions) > 0) { //ถ้า $conditions มีคามากกว่า 1
+      $sqlsb .= " AND " . implode(' AND ', $conditions); //ประกอบ  sql กับ where เข้า ด้วยกัน 
+    }
+    if (isset($_POST['ch'])) {
+      $choice = $_POST['ch'];
+      if ($choice == 1) {
+        $text = 'ORDER BY advertise.a_id DESC';
+      }
+      if ($choice == 2) {
+        $text = 'ORDER BY property_detail.price DESC';
+      }
+      if ($choice == 3) {
+        $text = 'ORDER BY property_detail.price ASC';
+      }
+      if ($choice == 4) {
+        $text = ' ';
+      }
+  
+      $sqls = "$sqlsb" . $text;
+      $resultsb = mysqli_query($con, $sqls) or die(mysqli_error($con));
+      $numrow = mysqli_num_rows($resultsb);
+    } else {
+  
+      $sqls = "$sqlsb" . 'ORDER BY advertise.a_id DESC ';
+      $resultsb = mysqli_query($con, $sqls) or die(mysqli_error($con));
+      $numrow = mysqli_num_rows($resultsb);
+    }
+  } else {
+  
+    $sqlsb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+  property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+  location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+  location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price
+  FROM ((((advertise
+  LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+  LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
+  LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+  LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+  WHERE advertise.ad_status = '1' ";
+  
+    $choice = 1;
+    if (isset($_POST['ch'])) {
+      $choice = $_POST['ch'];
+      if ($choice == 1) {
+        $text = 'ORDER BY advertise.a_id DESC';
+      }
+      if ($choice == 2) {
+        $text = 'ORDER BY property_detail.price DESC';
+      }
+      if ($choice == 3) {
+        $text = 'ORDER BY property_detail.price ASC';
+      }
+      if ($choice == 4) {
+        $text = ' ';
+      }
+  
+      $sqls = "$sqlsb" . $text;
+      $resultsb = mysqli_query($con, $sqls) or die(mysqli_error($con));
+      $numrow = mysqli_num_rows($resultsb);
+    } else {
+  
+      $sqls = "$sqlsb" . 'ORDER BY advertise.a_id DESC ';
+      $resultsb = mysqli_query($con, $sqls) or die(mysqli_error($con));
+      $numrow = mysqli_num_rows($resultsb);
+    }
+  }
+  
+  
+  
+  $sql32 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,
+  provinces.name_th,amphures.aname_th,districts.dname_th
+  FROM (((location_property
+  INNER JOIN provinces ON location_property.province_id = provinces.id)
+  INNER JOIN amphures ON location_property.amphure_id = amphures.id)
+  INNER JOIN districts ON location_property.district_id = districts.id)
+  ";
+  $result32 = mysqli_query($con, $sql32) or die(mysqli_error($con));
+  
+  $sql4 = "SELECT * FROM advertise WHERE ad_status = '1' ";
+  $result4 = mysqli_query($con, $sql4);
+  $total = mysqli_num_rows($result4);
+  
+  $sql5 = "SELECT * FROM favourite ";
+  $result5 = mysqli_query($con, $sql5);
+  
+  
+  $sqlpr = "SELECT * FROM provinces";
+  $resultpr = mysqli_query($con, $sqlpr);
+  
+  $sqlt = "SELECT * FROM property_type  ";
+  $resultt = mysqli_query($con, $sqlt);
+  
+  $sqlat = "SELECT * FROM advertise_type  ";
+  $resultat = mysqli_query($con, $sqlat);
+  
+
+?>
 <section class="bg-secondary">
     <div class="container">
-        <form class="property-search d-none d-lg-block">
+        <form class="property-search d-none d-lg-block"  action="frontend/listing-home.php" method="GET">
             <div class="row align-items-lg-center" id="accordion-2">
-                <div class="col-xl-2 col-lg-3 col-md-4">
-                    <div class="property-search-status-tab d-flex flex-row">
-                        <input class="search-field" type="hidden" name="status" value="for-rent" data-default-value="">
-                        <button type="button" data-value="for-rent" class="btn shadow-none btn-active-primary text-white rounded-0 hover-white text-uppercase h-lg-80 border-right-0 border-top-0 border-bottom-0 border-left border-white-opacity-03 active flex-md-1">
-                            เช่า
-                        </button>
-                        <button type="button" data-value="for-sale" class="btn shadow-none btn-active-primary text-white rounded-0 hover-white text-uppercase h-lg-80 border-left-0 border-top-0 border-bottom-0 border-right border-white-opacity-03 flex-md-1">
-                            ขาย
-                        </button>
-                    </div>
-                </div>
                 <div class="col-xl-8 col-lg-7 d-md-flex">
-                    <select class="form-control shadow-none form-control-lg selectpicker rounded-right-md-0 rounded-md-top-left-0 rounded-lg-top-left flex-md-1 mt-3 mt-md-0" title="จังหวัด" data-style="btn-lg py-2 h-52 border-right bg-white" id="type-1" name="type">
-                        <option>กรุงเทพ</option>
-                        <option>นครปฐม</option>
-                        <option>เชียงใหม่</option>
-                        <option>ลำพูน</option>
+                    <select class="form-control shadow-none form-control-lg selectpicker rounded-right-md-0 rounded-md-top-left-0 rounded-lg-top-left flex-md-1 mt-3 mt-md-0" title="จังหวัด" data-style="btn-lg py-2 h-52 border-right bg-white" id="type-1" name="province">
+                    <?php while ($rowpr = mysqli_fetch_assoc($resultpr)) : ?>
+                          <option value="<?= $rowpr['id'] ?>"><?= $rowpr['name_th'] ?></option>
+                        <?php endwhile; ?>
                     </select>
-                    <select class="form-control shadow-none form-control-lg selectpicker rounded-right-md-0 rounded-md-top-left-0 rounded-lg-top-left flex-md-1 mt-3 mt-md-0" title="ประเภท" data-style="btn-lg py-2 h-52 border-right bg-white" id="type-1" name="type">
-                        <option>คอนโดมิเนียม</option>
-                        <option>บ้านเดี่ยว</option>
-                        <option>ทาวน์เฮ้าส์</option>
-                        <option>สำนักงาน</option>
+                    <select class="form-control shadow-none form-control-lg selectpicker rounded-right-md-0 rounded-md-top-left-0 rounded-lg-top-left flex-md-1 mt-3 mt-md-0" title="ประเภทอสังหา" data-style="btn-lg py-2 h-52 border-right bg-white" id="type-1" name="ptype">
+                    <?php while ($rowt = mysqli_fetch_array($resultt)) { ?>
+                          <?php
+                          if ($rowt['pt_status'] == '1') {
+                            echo " <option  value=" . $rowt['ptype_id'] . "> " . $rowt['p_type'] . " </option> ";
+                          }
+                          ?>
+                        <?php  } ?>
                     </select>
+                    <select class="form-control shadow-none form-control-lg selectpicker rounded-right-md-0 rounded-md-top-left-0 rounded-lg-top-left flex-md-1 mt-3 mt-md-0"  id="type-1" title="ประเภทประกาศ" data-style="btn-lg py-2 h-52"  name="adtype">
+                        <?php while ($rowat = mysqli_fetch_array($resultat)) { ?>
+                          <?php
+                          if ($rowat['at_status'] == '1') {
+                            echo " <option  value=" . $rowat['atype_id'] . "> " . $rowat['type'] . " </option> ";
+                          }
+                          ?>
+                        <?php  } ?>
+                      </select>
                     <div class="form-group mb-0 position-relative flex-md-3 mt-3 mt-md-0">
-                        <input type="text" class="form-control form-control-lg border-0 shadow-none rounded-left-md-0 pr-8 bg-white placeholder-muted" id="key-word-1" name="key-word" placeholder="ใส่ที่อยู่ ละแวกใกล้เคียง...">
-                        <button type="submit" class="btn position-absolute pos-fixed-right-center p-0 text-heading fs-20 mr-4 shadow-none">
+                        <input type="text" class="form-control form-control-lg border-0 shadow-none rounded-left-md-0 pr-8 bg-white placeholder-muted" id="keyword" name="project" placeholder="ใส่ชื่อหมู่บ้าน หรือโครงการ...">
+                        <button type="submit" name="submits2"class="btn position-absolute pos-fixed-right-center p-0 text-heading fs-20 mr-4 shadow-none">
                             <i class="far fa-search"></i>
                         </button>
                     </div>
@@ -43,60 +219,60 @@
                         <div class="col-sm-6 col-md-4 pt-4 px-2">
                             <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bedroom" title="ห้องนอน" data-style="btn-lg py-2 h-52 bg-white">
                                 <option>ห้องนอน</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-4 pt-4 px-2">
-                            <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bathrooms" title="ห้องน้ำ" data-style="btn-lg py-2 h-52 bg-white">
+                            <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bathroom" title="ห้องน้ำ" data-style="btn-lg py-2 h-52 bg-white">
                                 <option>ห้องน้ำ</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
                             </select>
                         </div>
                         <div class="col-sm-6 col-md-4 pt-4 px-2">
-                            <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bathrooms" title="ที่จอดรถ" data-style="btn-lg py-2 h-52 bg-white">
+                            <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="parking" title="ที่จอดรถ" data-style="btn-lg py-2 h-52 bg-white">
                                 <option>ที่จอดรถ</option>
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 col-lg-5 pt-6 slider-range slider-range-primary">
                             <label for="price-2" class="mb-4 text-white">ราคา</label>
-                            <div data-slider="true" data-slider-options='{"min":0,"max":5000000,"values":[800000,4000000],"type":"currency"}'></div>
+                            <div data-slider="true" data-slider-options='{"min":0,"max":5000000,"values":[0,8000000],"type":"currency"}'></div>
                             <div class="text-center mt-2">
                                 <input id="price-2" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="price">
                             </div>
                         </div>
                         <div class="col-md-6 pt-6 slider-range slider-range-primary">
                             <label for="area-size-2-mobile" class="mb-4 text-white">ขนาดพื้นที่</label>
-                            <div data-slider="true" data-slider-options='{"min":0,"max":15000,"values":[0,12000],"type":"sqrwa"}'></div>
+                            <div data-slider="true" data-slider-options='{"min":0,"max":1000,"values":[0,500],"type":"sqrwa"}'></div>
                             <div class="text-center mt-2">
                                 <input id="area-size-2-mobile" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="space_area">
                             </div>
@@ -109,49 +285,49 @@
                         <div class="collapse row mx-0 w-100" id="other-feature-2">
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check1-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check1-2" name="facility[]" value="สระว่ายน้ำ">
                                     <label class="custom-control-label text-white" for="check1-2"> สระว่ายน้ำ </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check2-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check2-2" name="facility[]" value="ห้องสมุด">
                                     <label class="custom-control-label text-white" for="check2-2"> ห้องสมุด </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check4-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check4-2" name="facility[]" value="สวนสาธารณะ">
                                     <label class="custom-control-label text-white" for="check4-2"> สวนสาธารณะ </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check5-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check5-2" name="facility[]" value="ฟิตเนส">
                                     <label class="custom-control-label text-white" for="check5-2"> ฟิตเนส </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check6-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check6-2" name="facility[]" value="ร้านสะดวกซื้อ">
                                     <label class="custom-control-label text-white" for="check6-2"> ร้านสะดวกซื้อ </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check7-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check7-2" name="facility[]" value="สนามเด็กเล่น">
                                     <label class="custom-control-label text-white" for="check7-2"> สนามเด็กเล่น </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check8-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check8-2" name="facility[]" value="เครื่องปรับอากาศ">
                                     <label class="custom-control-label text-white" for="check8-2"> เครื่องปรับอากาศ </label>
                                 </div>
                             </div>
                             <div class="col-sm-6 col-md-4 col-lg-3 py-2">
                                 <div class="custom-control custom-checkbox">
-                                    <input type="checkbox" class="custom-control-input" id="check9-2" name="feature[]">
+                                    <input type="checkbox" class="custom-control-input" id="check9-2" name="facility[]" value="Wi-Fi">
                                     <label class="custom-control-label text-white" for="check9-2"> Wi-Fi</label>
                                 </div>
                             </div>

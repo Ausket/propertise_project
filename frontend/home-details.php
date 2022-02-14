@@ -659,7 +659,7 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
 
-
+   
 
     
   </script>

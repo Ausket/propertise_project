@@ -1,54 +1,55 @@
 <?php
 require_once('dbconnect.php');
 
-if (isset($_POST['submit'])) {
 
-  $email = $con->real_escape_string($_POST['email']);
-  $password = $con->real_escape_string($_POST['password']);
+// if (isset($_POST['submit'])) {
 
-  $sql = "SELECT * FROM users
-                WHERE  email='" . $email . "' 
-                AND  password='" . $password . "' ";
+//   $email = $con->real_escape_string($_POST['email']);
+//   $password = $con->real_escape_string($_POST['password']);
 
-  $result = $con->query($sql);
-  $row = $result->fetch_assoc();
+//   $sql = "SELECT * FROM users
+//                 WHERE  email='" . $email . "' 
+//                 AND  password='" . $password . "' ";
 
-  if ($row["ustatus"] == '0') {
-    echo "<script>";
-    echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
-    echo "</script>";
-    header('Refresh:0; url=index.php');
-  } else {
+//   $result = $con->query($sql);
+//   $row = $result->fetch_assoc();
 
-    if (!empty($row)) {
+//   if ($row["ustatus"] == '0') {
+//     echo "<script>";
+//     echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
+//     echo "</script>";
+//     header('Refresh:0; url=index.php');
+//   } else {
 
-      $_SESSION["u_id"] = $row["u_id"];
-      $_SESSION["email"] = $row["email"];
-      $_SESSION["password"] = $row["password"];
-      $_SESSION["name"] = $row["name"];
-      $_SESSION["address"] = $row["address"];
-      $_SESSION["tel"] = $row["tel"];
-      $_SESSION["id_card"] = $row["id_card"];
-      $_SESSION["company"] = $row["company"];
-      $_SESSION["birth_date"] = $row["birth_date"];
-      $_SESSION["img"] = $row["img"];
-      $_SESSION["utype"] = $row["utype"];
-      $_SESSION["ustatus"] = $row["ustatus"];
+//     if (!empty($row)) {
 
-      if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
-        header("location: page/profile.php");
-      }
-      if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
-        header("location: index.php");
-      }
-    } else {
-      echo "<script>";
-      echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
-      echo "</script>";
-      header('Refresh:0; url=index.php');
-    }
-  }
-}
+//       $_SESSION["u_id"] = $row["u_id"];
+//       $_SESSION["email"] = $row["email"];
+//       $_SESSION["password"] = $row["password"];
+//       $_SESSION["name"] = $row["name"];
+//       $_SESSION["address"] = $row["address"];
+//       $_SESSION["tel"] = $row["tel"];
+//       $_SESSION["id_card"] = $row["id_card"];
+//       $_SESSION["company"] = $row["company"];
+//       $_SESSION["birth_date"] = $row["birth_date"];
+//       $_SESSION["img"] = $row["img"];
+//       $_SESSION["utype"] = $row["utype"];
+//       $_SESSION["ustatus"] = $row["ustatus"];
+
+//       if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
+//         header("location: page/profile.php");
+//       }
+//       if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
+//         header("location: index.php");
+//       }
+//     } else {
+//       echo "<script>";
+//       echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
+//       echo "</script>";
+//       header('Refresh:0; url=index.php');
+//     }
+//   }
+// }
 
 $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
@@ -151,7 +152,7 @@ $totalf = mysqli_num_rows($result6);
           </h2>
           <img class="mxw-180 d-block mx-auto mt-4 mb-1" src="images/line-01.png" alt="">
         </div>
-        <a href="frontend/listing-home.php" class="btn btn-primary btn-lg mt-10 mb-4" data-animate="fadeInUp">ค้นหาบ้านของคุณที่นี่<i class="far fa-long-arrow-right ml-1"></i>
+        <a type="submit" href="frontend/listing-home.php" class="btn btn-primary btn-lg mt-10 mb-4" data-animate="fadeInUp">ค้นหาบ้านของคุณที่นี่<i class="far fa-long-arrow-right ml-1"></i>
         </a>
       </div>
     </section>

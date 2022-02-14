@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="../css/vendors/dropzone/css/dropzone.min.css">
   <link rel="stylesheet" href="../css/vendors/animate.css">
   <link rel="stylesheet" href="../css/vendors/timepicker/bootstrap-timepicker.min.css">
-  <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
+  <!-- <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css"> -->
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
   <!-- <script src="../js/map.js"></script> -->
   <!-- Themes core CSS -->
@@ -44,615 +44,247 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-
-
   <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+  <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+  <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 
+  <style>
+    .pagination li:hover {
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
+
   <?php include 'templates/header-two.php' ?>
   <main id="content">
-  <?php include 'templates/search-box.php'; ?>
+    <form class="property-search d-none d-lg-block" action="" method="GET">
+      <?php include 'templates/search-box.php'; ?>
+    </form>
     <section class="position-relative">
       <div class="container-fluid px-0">
         <div class="row no-gutters">
           <div class="col-xl-6 col-xxl-7 primary-map map-sticky" id="map-sticky">
             <div class="primary-map-inner">
-              <div class="mapbox-gl map-grid-property-01 xl-vh-100" id="map" data-marker-target="#template-properties" data-mapbox-access-token="pk.eyJ1IjoiYXVzaXJpIiwiYSI6ImNremMyemZqNDBlZjIyb3A4ajU1YnpicTIifQ.7S75jQBEzPiRyAh3FW2uUQ">
+              <div class="map-grid-property-01 xl-vh-100 " id="map" >
               </div>
             </div>
           </div>
           <div class="col-xl-6 col-xxl-5 px-3 px-xxl-8 pt-7 pb-11">
             <div class="row align-items-sm-center mb-6">
               <div class="col-md-6 col-xl-5 col-xxl-6">
-                <h2 class="fs-15 text-dark mb-0"> พบ <span class="text-primary">45</span> แห่งสำหรับการค้นหา
+                <h2 class="fs-15 text-dark mb-0"> พบ <span class="text-primary"><?php echo $numrow ?></span> แห่งสำหรับการค้นหา
                 </h2>
               </div>
               <div class="col-md-6 col-xl-7 col-xxl-6 mt-6 mt-md-0">
                 <div class="d-flex justify-content-md-end align-items-center">
-                  <div class="input-group border rounded input-group-lg w-auto bg-white mr-3">
-                    <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงตาม:</label>
-                    <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker sortby" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0 pr-3" id="inputGroupSelect01" name="sortby">
-                      <option selected>ยอดขายสูงสุด</option>
-                      <option value="1">มีคนดูมากที่สุด</option>
-                      <option value="2">ราคา(ต่ำไปสูง)</option>
-                      <option value="3">ราคา (สูงไปต่ำ)</option>
+                  <form name="test" method="post" action="">
+                    <div class="input-group border rounded input-group-lg w-auto bg-white mr-3">
+                      <label class="input-group-text bg-transparent border-0 text-uppercase letter-spacing-093 pr-1 pl-3" for="inputGroupSelect01"><i class="fas fa-align-left fs-16 pr-2"></i>เรียงตาม:</label>
+                      <select class="form-control border-0 bg-transparent shadow-none p-0 selectpicker sortby" id="ch" name="ch" onchange="document.test.submit();" data-style="bg-transparent border-0 font-weight-600 btn-lg pl-0 pr-3" id="inputGroupSelect01" name="sortby">
+                        <option <?php if ($choice == "1") {
+                                  echo "selected";
+                                } ?> value='1'>อสังหาล่าสุด</option>
+                        <option <?php if ($choice == "2") {
+                                  echo "selected";
+                                } ?> value='2'>ราคาสูงไปต่ำ</option>
+                        <option <?php if ($choice == "3") {
+                                  echo "selected";
+                                } ?> value='3'>ราคาต่ำไปสูง</option>
+                        <option <?php if ($choice == "4") {
+                                  echo "selected";
+                                } ?> value='4'>ยอดขายสูงสุด</option>
+                      </select>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-6 col-xl-7 col-xxl-6 mt-6 mt-md-0">
+                <div class="d-flex justify-content-md-start align-items-center">
+                  <div class="form-group">
+                    <!-- Show Numbers Of Rows -->
+                    <select class="form-control" name="state" id="maxRows">
+                      <option value="6000">แสดงทั้งหมด</option>
+                      <option value="6">6</option>
+                      <option value="12">12</option>
+                      <option value="18">18</option>
+                      <option value="30">30</option>
+                      <option value="60">60</option>
+                      <option value="90">90</option>
+                      <option value="150">150</option>
                     </select>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-03.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
+            <div class="row" id="precard">
+              <?php while ($rowsb = mysqli_fetch_assoc($resultsb)) {
+                $h_no = "เลขที่";
+                $v_no = "หมู่"; ?>
+                <div class="col-12" data-animate="fadeInUp" id="cardtwo">
+                  <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white" id="cardthree">
+                    <div class="card-body p-0">
+                      <div class="row no-gutters">
+                        <div class="col-sm-3 mb-sm-5">
+                          <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" id="proimg<?php echo $rowsb['a_id'] ?>" name="../image/p_img/<?php echo $rowsb['img_video']; ?>" style="background-image: url('../image/p_img/<?php echo $rowsb['img_video']; ?>');">
+                            <div class="card-img-overlay p-2">
+                              <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
+                                <li class="list-inline-item">
+                                  <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                    $ad = $rowsb['a_id'];
+                                    $id = $_SESSION['u_id'];
+                                    $sqlfa = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $id";
+                                    $resultfa = mysqli_query($con, $sqlfa);
+                                    $numf = mysqli_num_rows($resultfa); ?>
+
+                                    <?php if ($numf == 0) { ?>
+                                      <a id="fav" name="fav_<?php echo $ad ?>" class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle">
+                                      <?php } else { ?>
+                                        <a id="fav" name="fav_<?php echo $ad ?>" class="d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle">
+                                        <?php } ?>
+                                      <?php } else { ?>
+                                        <a href="#login-register-modal" data-toggle="modal" class="d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading rounded-circle">
+                                        <?php } ?>
+                                        <i class="far fa-heart"></i></a>
+
+                                </li>
+                                <li class="list-inline-item">
+                                  <a id="compa" name="<?php echo $rowsb['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
+                                    <i class="fas fa-exchange-alt"></i>
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="home-detauls.php" class="fs-16 lh-2 text-dark hover-primary d-block">เดอะรูท | The Root</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          ลาดพร้าว 1 แยก 27, แขวงจอมพล, จตุจักร, กรุงเทพ</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          5,000,000 บาท
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
+                        <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
+                          <h2 class="card-title my-0"><a href="home-details.php?id=<?php echo $rowsb['a_id']; ?>" class="fs-16 lh-2 text-dark hover-primary d-block"><?php echo $rowsb['title'] ?></a>
+                          </h2>
+                          <p class="card-text mb-1 font-weight-500 text-gray-light">
+                            <?php if ($rowsb['house_no'] != '') {
+                              echo $h_no . " " . $rowsb['house_no'];
+                            } ?> <?php if ($rowsb['village_no'] != '') {
+                                    echo $v_no . " " . $rowsb['village_no'];
+                                  } ?>
+                            <?php echo $rowsb['lane']; ?> <?php echo $rowsb['road']; ?>
+                            <?php foreach ($result32 as $value) {
+
+                              if ($value['l_id'] == $rowsb['l_id']) {
+
+                                echo 'ต.' . $value['dname_th'] . ' ';
+                                echo 'อ.' . $value['aname_th'] . ' ';
+                                echo 'จ.' . $value['name_th'] . ' ';
+                              }
+                            } ?>
+                            <?php echo $rowsb['postal_code']; ?></p>
+                          <p class="card-text fs-17 font-weight-bold text-heading mb-1">
+                            <?php echo $rowsb['price']; ?> บาท
+                          </p>
+                          <p class="card-text mb-0 ml-0"> <?php echo $rowsb['note']; ?></p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 ตร.เมตร
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 คัน
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2021
-                        </li>
-                      </ul>
-                      <span class="badge badge-primary mr-xl-2 mt-3 mt-sm-0">ขาย</span>
+                    <div class="card-footer bg-transparent p-0 border-0 pt-2">
+                      <div class="d-sm-flex justify-content-sm-between">
+                        <ul class="list-inline d-flex mb-0 flex-wrap">
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
+                            <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-bedroom"></use>
+                            </svg>
+                            <?php echo $rowsb['bedroom']; ?> ห้อง
+                          </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
+                            <svg class="icon icon-shower fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-shower"></use>
+                            </svg>
+                            <?php echo $rowsb['bathroom']; ?>ห้อง
+                          </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
+                            <svg class="icon icon-square fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-square"></use>
+                            </svg>
+                            <?php echo $rowsb['space_area']; ?> ตร.วา
+                          </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
+                            <svg class="icon icon-Garage fs-18 text-primary mr-1">
+                              <use xlink:href="#icon-Garage"></use>
+                            </svg>
+                            <?php echo $rowsb['parking']; ?> คัน
+                          </li>
+                        </ul>
+                        <?php if ($rowsb['type'] == 'ขาย') {
+                          $type = 'ขาย';
+                          echo "<span class='badge badge-indigo mr-xl-2 mt-3 mt-sm-0 '>$type</span>";
+                        } ?>
+                        <?php if ($rowsb['type'] == 'เช่า') {
+                          $type = 'เช่า';
+                          echo "<span class='badge badge-info mr-xl-2 mt-3 mt-sm-0'>$type</span>";
+                        } ?>
+                        <?php if ($rowsb['type'] == 'ขาย-เช่า') {
+                          $type = 'ขาย-เช่า';
+                          echo "<span class='badge badge-success mr-xl-2 mt-3 mt-sm-0 '>$type</span>";
+                        } ?>
+                        <?php if ($rowsb['type'] == 'ขายดาวน์') {
+                          $type = 'ขายดาวน์';
+                          echo "<span class='badge badge-warning mr-xl-2 mt-3 mt-sm-0 '>$type</span>";
+                        } ?>
+                        <?php if ($rowsb['type'] == 'ใบจอง') {
+                          $type = 'ใบจอง';
+                          echo "<span class='badge badge-danger mr-xl-2 mt-3 mt-sm-0'>$type</span>";
+                        } ?>
+                        <!-- <span class="badge badge-primary mr-xl-2 mt-3 mt-sm-0">ขาย</span> -->
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-04.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="single-property-1.html" class="fs-16 lh-2 text-dark hover-primary d-block">ทากะ เฮ้าส์ | Taka HAUS</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          99 เอกมัย 10, วัฒนา, กรุงเทพ</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          4,000,000 บาท
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 ตร.เมตร
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 คัน
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2021
-                        </li>
-                      </ul>
-                      <span class="badge badge-primary mr-xl-2 mt-3 mt-sm-0"> ขาย </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-11.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="single-property-1.html" class="fs-16 lh-2 text-dark hover-primary d-block">เดอะ ฮาร์โมนี | The Harmony</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          ซ.รามอินทรา62 แยก1, คันนายาว, กรุงเทพ</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          100,000 บาท
-                          <span class="fs-14 font-weight-500 text-gray-light"> ต่อเดือน </span>
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 ห้อง
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 ตร.เมตร
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 คัน
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2021
-                        </li>
-                      </ul>
-                      <span class="badge badge-indigo mr-xl-2 mt-3 mt-sm-0">เช่า</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-12.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="single-property-1.html" class="fs-16 lh-2 text-dark hover-primary d-block">Villa on Hollywood Boulevard</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          1421 San Pedro St, Los Angeles</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          $1.250.000
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 Br
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 Ba
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 Sq.Ft
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 Gr
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2020
-                        </li>
-                      </ul>
-                      <span class="badge badge-primary mr-xl-2 mt-3 mt-sm-0">For Sale</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-13.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="single-property-1.html" class="fs-16 lh-2 text-dark hover-primary d-block">Explore Old Barcelona</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          1421 San Pedro St, Los Angeles</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          $2500
-                          <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 Br
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 Ba
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 Sq.Ft
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 Gr
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2020
-                        </li>
-                      </ul>
-                      <span class="badge badge-indigo mr-xl-2 mt-3 mt-sm-0">for Rent</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-14.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="single-property-1.html" class="fs-16 lh-2 text-dark hover-primary d-block">Home in Metric Way</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          1421 San Pedro St, Los Angeles</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          $2500
-                          <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 Br
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 Ba
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 Sq.Ft
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 Gr
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2020
-                        </li>
-                      </ul>
-                      <span class="badge badge-indigo mr-xl-2 mt-3 mt-sm-0">for Rent</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12" data-animate="fadeInUp">
-                <div class="card py-5 px-4 mb-4 shadow-hover-1 border-hover-white">
-                  <div class="card-body p-0">
-                    <div class="row no-gutters">
-                      <div class="col-sm-3 mb-sm-5">
-                        <div class="position-relative hover-change-image bg-hover-overlay h-100 pt-75 bg-img-cover-center rounded-lg" style="background-image: url('../images/properties-list-15.jpg');">
-                          <div class="card-img-overlay p-2">
-                            <ul class="list-inline mb-0 d-flex justify-content-center align-items-center h-100 hover-image">
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Wishlist">
-                                  <i class="far fa-heart"></i>
-                                </a>
-                              </li>
-                              <li class="list-inline-item">
-                                <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-heading bg-white border-white bg-hover-primary border-hover-primary hover-white" data-toggle="tooltip" title="Compare">
-                                  <i class="fas fa-exchange-alt"></i>
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="col-sm-9 mt-3 mt-sm-0 pl-sm-5">
-                        <h2 class="card-title my-0"><a href="single-property-1.html" class="fs-16 lh-2 text-dark hover-primary d-block">Garden Gingerbread House</a>
-                        </h2>
-                        <p class="card-text mb-1 font-weight-500 text-gray-light">
-                          1421 San Pedro St, Los Angeles</p>
-                        <p class="card-text fs-17 font-weight-bold text-heading mb-1">
-                          $1.250.000
-                        </p>
-                        <p class="card-text mb-0 ml-0">Lorem ipsum dolor sit amet, sectetur cing elit uspe ndisse suscorem ipsum dolor sitorem sit amet, sectetur cing elit uspe ndisse suscorem</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="card-footer bg-transparent p-0 border-0 pt-2">
-                    <div class="d-sm-flex justify-content-sm-between">
-                      <ul class="list-inline d-flex mb-0 flex-wrap">
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bedroom">
-                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-bedroom"></use>
-                          </svg>
-                          3 Br
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="3 Bathrooms">
-                          <svg class="icon icon-shower fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-shower"></use>
-                          </svg>
-                          3 Ba
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Size">
-                          <svg class="icon icon-square fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-square"></use>
-                          </svg>
-                          2300 Sq.Ft
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="1 Garage">
-                          <svg class="icon icon-Garage fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-Garage"></use>
-                          </svg>
-                          1 Gr
-                        </li>
-                        <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5" data-toggle="tooltip" title="Year">
-                          <svg class="icon icon-year fs-18 text-primary mr-1">
-                            <use xlink:href="#icon-year"></use>
-                          </svg>
-                          2020
-                        </li>
-                      </ul>
-                      <span class="badge badge-primary mr-xl-2 mt-3 mt-sm-0">For Sale</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="col-12">
-                <nav class="pt-4">
-                  <ul class="pagination rounded-active justify-content-center mb-0">
-                    <li class="page-item"><a class="page-link" href="#"><i class="far fa-angle-double-left"></i></a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item d-none d-sm-block"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">...</li>
-                    <li class="page-item"><a class="page-link" href="#">6</a></li>
-                    <li class="page-item"><a class="page-link" href="#"><i class="far fa-angle-double-right"></i></a></li>
-                  </ul>
-                </nav>
-              </div>
+              <?php } ?>
+
+            </div>
+
+            <div class="col-12">
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center mb-0">
+                  <li data-page="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-left"></i><span></span>
+                    </span>
+                  </li>
+                  <!-- Here the JS Function Will Add the Rows -->
+                  <li data-page="next" id="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-right"></i><span></span>
+                    </span>
+                  </li>
+                </ul>
+              </nav>
             </div>
           </div>
         </div>
       </div>
     </section>
     <div id="compare" class="compare">
-      <button class="btn shadow btn-open bg-white bg-hover-accent text-secondary rounded-right-0 d-flex justify-content-center align-items-center w-30px h-140 p-0">
+      <button id="showcom" class="btn shadow btn-open bg-white bg-hover-accent text-secondary rounded-right-0 d-flex justify-content-center align-items-center w-30px h-140 p-0">
       </button>
       <div class="list-group list-group-no-border bg-dark py-3">
         <a href="#" class="list-group-item bg-transparent text-white fs-22 text-center py-0">
           <i class="far fa-bars"></i>
         </a>
         <div class="list-group-item card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay">
-            <img src="../images/compare-01.jpg" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
+
+          <count>เลือก 0 จาก 3</count>
         </div>
-        <div class="list-group-item card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay">
-            <img src="../images/compare-02.jpg" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
-        </div>
-        <div class="list-group-item card card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay ">
-            <img src="../images/compare-03.jpg" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
-        </div>
+        <div id="com" class="list-group-item card card bg-transparent"></div>
         <div class="list-group-item bg-transparent">
-          <a href="compare-details.html" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
-            Compare
-          </a>
+          <div id="hidecom">
+            <a href="" id="subcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+              เปรียบเทียบ
+            </a>
+          </div>
+          <span id="clickcom" class="btn btn-lg btn-primary w-100 px-0 d-flex justify-content-center">
+            เปรียบเทียบ
+          </span>
         </div>
       </div>
     </div>
@@ -888,9 +520,317 @@
   <script src="../css/vendors/timepicker/bootstrap-timepicker.min.js"></script>
   <script src="../css/vendors/hc-sticky/hc-sticky.min.js"></script>
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
-  <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
+  <!-- <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script> -->
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function() {
+
+      $('#hidecom').hide();
+
+      $('a#fav').on('click', function() {
+        var ida = $(this).attr("name");
+
+        let fav_data = ida.split("_");
+
+        $.ajax({
+          url: '../backend/favourite.php',
+          method: 'POST',
+          data: {
+            ida: fav_data[1]
+          },
+          success: function(data) {
+
+            if (data == 1) {
+
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-primary text-heading bg-hover-white hover-primary rounded-circle ");
+
+            } else {
+
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("d-flex align-items-center justify-content-center w-40px h-40 bg-white text-heading bg-hover-primary hover-white rounded-circle ");
+
+            }
+
+          }
+        });
+      });
+    });
+
+    function getSelectedIds() {
+
+      return $('#parent #child').map(function() {
+        return $(this).text();
+      }).toArray();
+    }
+
+    function updateLinkAndCounter() {
+      var ids = getSelectedIds().map(function(x, i) {
+        return ['id', ++i, '=', x].join('');
+      });
+      $('a#subcom').attr('href', 'compare.php?' + ids.join('&'));
+      $("count").text(ids.length == 1 ? 'เลือก 1 จาก 3' : 'เลือก ' + ids.length + ' จาก 3');
+
+    }
+
+    $("#clickcom").click(function() {
+      var selected = getSelectedIds();
+      if (selected.length == 1) {
+        alert('กรุณาเลือกอย่างน้อย 2 โพสต์');
+      } else {
+
+        let x = $('#subcom').attr('href');
+        window.location.href = x;
+
+      }
+
+    })
+
+    $("a#compa").click(function() {
+
+      var id = $(this).attr('name');
+      console.log(id);
+      var img = $('#proimg' + id).attr('name');
+      console.log(img);
+
+
+      var selected = getSelectedIds();
+      if (selected.length == 3) return; // already 3 items added
+      if (selected.indexOf(id) != -1) return; // item already added
+      if (selected.indexOf(img) != -1) return; // item already added
+
+
+      $('<div/>', {
+          'class': 'position-relative hover-change-image bg-hover-overlay',
+          'id': 'parent'
+        })
+        .append($('<span/>', {
+          text: id,
+          id: 'child',
+          class: 'd-none'
+        }))
+
+        .append($('<img/>', {
+          class: 'card-img',
+          src: img
+
+        }))
+        .append($('<div />', {
+            class: 'card-img-overlay',
+          })
+          .append($('<a/>', {
+              class: 'text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2',
+              id: 'delcom' + id,
+              style: 'cursor:pointer'
+            })
+            .append($('<i />', {
+              class: 'fal fa-minus-circle'
+            }))
+          ))
+        .append($('<div />', {
+          style: 'margin-bottom:20px'
+        }))
+
+        .appendTo('div#com');
+
+      $('#showcom').click();
+
+      setTimeout(function() {
+        $('#showcom').click()
+      }, 3500)
+
+      updateLinkAndCounter();
+      // $("div.list-group-item card bg-transparent").removeClass("hidden");
+
+      $("a#delcom" + id).on("click", function(event) {
+        event.preventDefault();
+        $(this).parent().parent().remove();
+        updateLinkAndCounter();
+      });
+
+    });
+  </script>
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      center: [100.604274, 13.84786],
+      style: 'mapbox://styles/mapbox/outdoors-v11',
+      zoom: 15
+    });
+
+
+
+    map.addControl(
+      new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl
+
+      })
+
+    );
+
+    map.on('load', function() {
+      map.resize();
+    });
+    map.addControl(new mapboxgl.NavigationControl());
+    map.addControl(new mapboxgl.FullscreenControl());
+   
+
+    $.getJSON("../backend/map.php", function(jsonObj) {
+
+      $.each(jsonObj, function(i, item) {
+
+        const popup = new mapboxgl.Popup({
+          offset: 25
+        }).setText(
+          item.name
+        );
+
+        var marker2 = new mapboxgl.Marker().setLngLat([item.lng, item.lat]).setPopup(popup).addTo(map);
+
+
+      });
+    });
+  </script>
+  <script>
+    getPagination('#precard');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' #cardtwo ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' #cardthree ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
+          }
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' #cardthree ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+  </script>
+
+
   <!-- Theme scripts -->
+
   <script src="../js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

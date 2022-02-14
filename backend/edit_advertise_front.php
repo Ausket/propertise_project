@@ -99,7 +99,7 @@ if ($file != '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
+                               VALUES ('$newnameT[$i]','$date','$p_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
@@ -142,7 +142,7 @@ if ($file != '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
+                               VALUES ('$newnameT[$i]','$date','$p_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
@@ -196,7 +196,7 @@ if ($file == '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
+                               VALUES ('$newnameT[$i]','$date','$p_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }
@@ -239,7 +239,7 @@ if ($file == '') {
                     move_uploaded_file($_FILES['file']['tmp_name'][$i], $path_copyT[$i]);
 
                     $sql = "INSERT INTO file (f_name,f_date,pd_id) 
-                               VALUES ('$newnameT[$i]','$date','$pd_id' )";
+                               VALUES ('$newnameT[$i]','$date','$p_id' )";
                     $insert = mysqli_query($con, $sql) or die(mysqli_error($con));
                 }
             }

@@ -7,7 +7,7 @@ if (empty($id)) {
     header('Location:../index.php');
 }
 $type = $_SESSION['utype'];
-if ($type != 'admin' || $type != 'staff') {
+if ($type == 'member' || $type == 'agent') {
     header('Location:../index.php');
 }
 $sql = "SELECT * FROM users WHERE u_id= $id";

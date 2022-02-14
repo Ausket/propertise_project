@@ -913,6 +913,7 @@ $resultd = mysqli_query($con, $sqld);
   </script>
   <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+    
     var map = new mapboxgl.Map({
       container: 'map',
       center: [<?= $rowb['lng']; ?>, <?= $rowb['lat']; ?>],

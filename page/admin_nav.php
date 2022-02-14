@@ -3,11 +3,12 @@
 require_once('../dbconnect.php');
 
 $u_id = $_SESSION['u_id'];
-if (empty($id)) {
+if (empty($u_id)) {
     header('Location:../index.php');
 }
+ 
 $type = $_SESSION['utype'];
-if ($type != 'admin' || $type != 'staff') {
+if ($type == 'member' || $type == 'agent') {
     header('Location:../index.php');
 }
 

@@ -669,7 +669,7 @@ $resultat = mysqli_query($con, $sqlat);
 
   </main>
   <?php include 'templates/footer-two.php' ?>
- 
+
   <!-- Vendors scripts -->
   <script src="../css/vendors/jquery.min.js"></script>
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
@@ -706,7 +706,7 @@ $resultat = mysqli_query($con, $sqlat);
 
             if (data == 1) {
 
-              $("[name=fav_"+ fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
               $("[name=fav_" + fav_data[1] + "]").addClass("text-primary fs-20 ");
 
             } else {
@@ -872,8 +872,8 @@ $resultat = mysqli_query($con, $sqlat);
                 .show();
             } // end for i
           } // end if row count > max rows
-          if(totalRows <= maxRows){
-            $('.pagination ').hide();       
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
           }
           $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
           $('.pagination li').on('click', function(evt) {
