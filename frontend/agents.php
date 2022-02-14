@@ -572,6 +572,9 @@
                 .show();
             } // end for i
           } // end if row count > max rows
+          if(totalRows <= maxRows){
+            $('.pagination ').hide();       
+          }
           $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
           $('.pagination li').on('click', function(evt) {
             // on click each page
