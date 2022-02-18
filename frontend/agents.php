@@ -170,11 +170,11 @@
 
                         </select>
                       </div>
+                    </form>
                   </div>
-                  </form>
                 </div>
-                <div class="d-flex align-items-center">
-                  <div class="form-group ">
+                <div class="d-flex align-items-center ml-3">
+                  <div class="form-group">
                     <select class="form-control" name="state" id="maxRows">
                       <option value="6000">แสดงทั้งหมด</option>
                       <option value="6">6</option>
@@ -375,7 +375,7 @@
                     </form>
                   </div>
                 </div>
-                <div class="d-flex align-items-center justify-content-sm-end">
+                <div class="d-flex align-items-center ml-3 ">
                   <div class="form-group ">
                     <select class="form-control" name="state" id="maxRows">
                       <option value="6000">แสดงทั้งหมด</option>
@@ -394,72 +394,72 @@
               </div>
               <div class="row" id="cardagent">
                 <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
-                      <div class="col-md-4 mb-4" id="cragent">
-                        <div class="card border-0 shadow-hover-3 px-6" id="cdagent">
-                          <div class="card-body text-center pt-6 pb-2 px-0">
-                            <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
-                              <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
-                            </a>
-                            <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
+                  <div class="col-md-4 mb-4" id="cragent">
+                    <div class="card border-0 shadow-hover-3 px-6" id="cdagent">
+                      <div class="card-body text-center pt-6 pb-2 px-0">
+                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-inline-block mb-2">
+                          <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
+                        </a>
+                        <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
+                        <ul class="list-inline mb-0">
+                          <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
+                          </li>
+                          <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
                             <ul class="list-inline mb-0">
-                              <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
                               </li>
-                              <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
-                                <ul class="list-inline mb-0">
-                                  <li class="list-inline-item mr-0">
-                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                                  </li>
-                                  <li class="list-inline-item mr-0">
-                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                                  </li>
-                                  <li class="list-inline-item mr-0">
-                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                                  </li>
-                                  <li class="list-inline-item mr-0">
-                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                                  </li>
-                                  <li class="list-inline-item mr-0">
-                                    <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
-                                  </li>
-                                </ul>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
+                              </li>
+                              <li class="list-inline-item mr-0">
+                                <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
                               </li>
                             </ul>
-                          </div>
-                          <div class="card-footer bg-white px-0 pt-1 pb-6">
-                            <ul class="list-group list-group-no-border pb-1">
-                              <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                                <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
-                                <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
-                              </li>
-                              <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                                <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
-                                <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
-                              </li>
-                              <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
-                                <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
-                                <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
-                              </li>
-                              <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                                <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
-                                <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
-                                  <li class="list-inline-item m-0">
-                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
-                                  </li>
-                                  <li class="list-inline-item mr-0 ml-2">
-                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
-                                  </li>
-                                  <li class="list-inline-item mr-0 ml-2">
-                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
-                                  </li>
-                                  <li class="list-inline-item mr-0 ml-2">
-                                    <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
-                                  </li>
-                                </ul>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
+                          </li>
+                        </ul>
                       </div>
+                      <div class="card-footer bg-white px-0 pt-1 pb-6">
+                        <ul class="list-group list-group-no-border pb-1">
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">สำนักงาน</span>
+                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['company']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
+                            <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
+                            <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
+                          </li>
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
+                            <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
+                              <li class="list-inline-item m-0">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                              </li>
+                              <li class="list-inline-item mr-0 ml-2">
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                              </li>
+                            </ul>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 <?php  } ?>
               </div>
 
@@ -572,8 +572,8 @@
                 .show();
             } // end for i
           } // end if row count > max rows
-          if(totalRows <= maxRows){
-            $('.pagination ').hide();       
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
           }
           $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
           $('.pagination li').on('click', function(evt) {

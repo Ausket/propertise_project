@@ -1,20 +1,11 @@
 <?php
 require_once('../dbconnect.php');
 
-$perpage = 4;
-if (isset($_GET['page'])) {
-  $page = $_GET['page'];
-} else {
-  $page = 1;
-}
-
-$start = ($page - 1) * $perpage;
-
 $sqla = "SELECT article.a_title , article.a_note , article.a_img , article.a_img , article.a_status , article.a_id,
 article_type.a_type, article.a_date
 FROM (article
 INNER  JOIN  article_type ON article.at_id = article_type.at_id)
-ORDER BY a_id DESC limit {$start} , {$perpage}";
+ORDER BY a_id DESC ";
 $resulta = mysqli_query($con, $sqla);
 
 ?>

@@ -88,6 +88,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <input type="text" class="form-control" id="exampleInputEmail1" name="type" value="" placeholder="Advertise Type" required>
 
                                     </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">เลือกสีชนิดประกาศ</label>
+                                        <input type="color" id="favcolor" name="color" value="#ff0000"><br><br>
+                                    </div>
                                     <div class="card-footer">
                                         <button type="submit" name="submit" class="btn btn-primary d-block m-auto">บันทึก</button>
                                     </div>

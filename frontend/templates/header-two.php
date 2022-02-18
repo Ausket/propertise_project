@@ -67,13 +67,19 @@ if (isset($_POST['submit'])) {
             <div class="d-flex align-items-center">
                 <nav class="navbar navbar-expand-xl bg-transparent px-0 w-100 w-xl-auto">
                     <a class="navbar-brand mr-7" href="../index.php">
-                        <img src="../images/logo.png" alt="HomeID" class="normal-logo">
-                        <img src="../images/logo.png" alt="HomeID" class="sticky-logo">
+                        <img src="../images/logo.png" alt="HomeID" class="d-none d-lg-inline-block">
+                        <img src="../images/logo-white.png" alt="HomeID" class="d-inline-block d-lg-none">
                     </a>
-                    <a class="d-block d-xl-none ml-auto mr-4 position-relative text-white p-2" href="#">
-                        <i class="fal fa-heart fs-large-4"></i>
-                        <span class="badge badge-primary badge-circle badge-absolute">1</span>
-                    </a>
+                    <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                        $id = $_SESSION['u_id'];
+                        $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                        $resultfa = mysqli_query($con, $sqlfa);
+                        $numf = mysqli_num_rows($resultfa); ?>
+                        <a class="d-block d-xl-none ml-auto mr-4 position-relative text-white p-2" href="dashboard-favourites.php">
+                            <i class="fal fa-heart fs-large-4"></i>
+                            <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf ?></span>
+                        </a>
+                    <?php } ?>
                     <button class="navbar-toggler border-0 px-0" type="button" data-toggle="collapse" data-target="#primaryMenu02" aria-controls="primaryMenu02" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="text-white fs-24"><i class="fal fa-bars"></i></span>
                     </button>
@@ -124,30 +130,30 @@ if (isset($_POST['submit'])) {
                         </ul>
                         <div class="d-block d-xl-none">
                             <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
-                            
+
                                 <li class="nav-item ">
                                     <a class="nav-link " data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
                                 </li>
-                               
+
                             </ul>
                         </div>
                     </div>
                 </nav>
                 <div class="ml-auto d-none d-xl-block">
                     <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
-                    <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') { 
-                         $id = $_SESSION['u_id'];
-                         $sqlh = "SELECT * FROM users WHERE u_id= $id ";
-                         $resulth = mysqli_query($con, $sqlh);
-                         $rowh = mysqli_fetch_assoc($resulth);?>
+                        <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                            $id = $_SESSION['u_id'];
+                            $sqlh = "SELECT * FROM users WHERE u_id= $id ";
+                            $resulth = mysqli_query($con, $sqlh);
+                            $rowh = mysqli_fetch_assoc($resulth); ?>
                             <li class="nav-item ">
                                 <div class="dropdown border-md-right border-0 py-3 text-right">
                                     <a href="#" class="dropdown-toggle text-heading pr-3 pr-sm-6 d-flex align-items-center justify-content-end" data-toggle="dropdown">
                                         <div class="mr-4 w-48px">
-                                            <img  src="../image/m_img/<?php echo $rowh['img'] ?>" width="50"  class="rounded-circle">
+                                            <img src="../image/m_img/<?php echo $rowh['img'] ?>" width="50" class="rounded-circle">
                                         </div>
                                         <div class="fs-13 font-weight-500 lh-1">
-                                        <h6><?php echo $rowh['name'] ?></h6>
+                                            <h6><?php echo $rowh['name'] ?></h6>
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
@@ -159,22 +165,22 @@ if (isset($_POST['submit'])) {
                         <?php } else { ?>
 
                             <li class="nav-item ">
-                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>              
+                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
                             </li>
-        
-                            <?php } ?>
-                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
-                                $id = $_SESSION['u_id'];
-                                $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
-                                $resultfa = mysqli_query($con,$sqlfa);
-                                $numf = mysqli_num_rows($resultfa); ?>
+
+                        <?php } ?>
+                        <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                            $id = $_SESSION['u_id'];
+                            $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                            $resultfa = mysqli_query($con, $sqlfa);
+                            $numf = mysqli_num_rows($resultfa); ?>
                             <li class="nav-item mr-auto mr-lg-6">
                                 <a class="nav-link px-2 position-relative" href="dashboard-favourites.php">
                                     <i class="fal fa-heart fs-large-4"></i>
-                                    <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf?></span>
+                                    <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf ?></span>
                                 </a>
                             </li>
-                            <?php } ?>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -251,7 +257,7 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="col-4 px-2 mb-4">
                                 <a href="#" class="btn btn-lg btn-block google px-0">
-                                    <img src="images/google.png" alt="Google">
+                                    <img src="../images/google.png" alt="Google">
                                 </a>
                             </div>
                             <div class="col-4 px-2 mb-4">
@@ -262,7 +268,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                    <form action="../backend/regis_db.php" id="regisform" method="post">
+                        <form action="../backend/regis_db.php" id="regisform" method="post">
                             <div class="form-group mb-4">
                                 <label for="username01" class="sr-only">Username</label>
                                 <div class="input-group input-group-lg">
@@ -309,7 +315,7 @@ if (isset($_POST['submit'])) {
                                     <input type="number" class="form-control border-0 shadow-none fs-13" id="tel" name="tel" required placeholder="เบอร์โทรศัพท์">
                                 </div>
                             </div>
-                        
+
                             <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">สมัครสมาชิก</button>
                         </form>
                         <div class="divider text-center my-2">
@@ -325,7 +331,7 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="col-4 px-2 mb-4">
                                 <a href="#" class="btn btn-lg btn-block google px-0">
-                                    <i class="fab fa-google-g"></i>
+                                    <img src="../images/google.png" alt="Google">
                                 </a>
                             </div>
                             <div class="col-4 px-2 mb-4">

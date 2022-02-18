@@ -9,7 +9,7 @@ $sqla = "SELECT * FROM users WHERE u_id = $ida";
 $resulta = mysqli_query($con, $sqla);
 $rowa = mysqli_fetch_array($resulta);
 
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company,users.img,users.utype,users.u_id
@@ -121,7 +121,9 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
 <body>
   <?php include 'templates/header-two.php'; ?>
   <main id="content">
+  <form class="property-search d-none d-lg-block" action="listing-home.php" method="GET">
     <?php include 'templates/search-box.php'; ?>
+  </form>
     <section class="bg-white shadow-5 pb-1">
       <div class="container">
         <nav aria-label="breadcrumb">
@@ -292,7 +294,7 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
           <article class="col-lg-8 mb-6 mb-lg-0">
             <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
               <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
-                <li class="list-inline-item badge badge-primary mr-3"><?php echo $rowad['type']; ?></li>
+                <li class="list-inline-item badge mr-3" style="background-color : <?php echo $rowad['color']; ?>; color:white;"><?php echo $rowad['type']; ?></li>
                 <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i><?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
                 <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i>1039 ครั้ง</li>
               </ul>
@@ -526,52 +528,7 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
         </div>
       </div>
     </div>
-    <section>
-      <div class="d-flex bottom-bar-action bottom-bar-action-01 py-2 px-4 bg-gray-01 align-items-center position-fixed fixed-bottom d-sm-none">
-        <div class="media align-items-center">
-          <img src="../images/irene-wallace.png" alt="Irene Wallace" class="mr-4 rounded-circle">
-          <div class="media-body">
-            <a href="#" class="d-block text-dark fs-15 font-weight-500 lh-15">Irene Wallace</a>
-            <span class="fs-13 lh-2">Sales Excutive</span>
-          </div>
-        </div>
-        <div class="ml-auto">
-          <button type="button" class="btn btn-primary fs-18 p-2 lh-1 mr-1 mb-1 shadow-none" data-toggle="modal" data-target="#modal-messenger"><i class="fal fa-comment"></i></button>
-          <a href="tel:(+84)2388-969-888" class="btn btn-primary fs-18 p-2 lh-1 mb-1 shadow-none" target="_blank"><i class="fal fa-phone"></i></a>
-        </div>
-      </div>
-      <div class="modal fade" id="modal-messenger" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header border-0 pb-0">
-              <h4 class="modal-title text-heading" id="exampleModalLabel">Contact Form</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body pb-6">
-              <div class="form-group mb-2">
-                <input type="text" class="form-control form-control-lg border-0" placeholder="First Name, Last Name">
-              </div>
-              <div class="form-group mb-2">
-                <input type="email" class="form-control form-control-lg border-0" placeholder="Your Email">
-              </div>
-              <div class="form-group mb-2">
-                <input type="tel" class="form-control form-control-lg border-0" placeholder="Your phone">
-              </div>
-              <div class="form-group mb-2">
-                <textarea class="form-control border-0" rows="4">Hello, I'm interested in Villa Called Archangel</textarea>
-              </div>
-              <div class="form-group form-check mb-4">
-                <input type="checkbox" class="form-check-input" id="exampleCheck3">
-                <label class="form-check-label fs-13" for="exampleCheck3">Egestas fringilla phasellus faucibus scelerisque eleifend donec.</label>
-              </div>
-              <button type="submit" class="btn btn-primary btn-lg btn-block rounded">Request Info</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    
   </main>
   <?php include 'templates/footer-two.php'; ?>
   <!-- Vendors scripts -->

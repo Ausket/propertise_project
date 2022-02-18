@@ -4,10 +4,10 @@
 require('../dbconnect.php');
 
 $type = $_POST['type'];
+$color= $_POST['color'];
 
-
-$sql = "INSERT INTO advertise_type (type)
-VALUES ('$type' )"; 
+$sql = "INSERT INTO advertise_type (type,color)
+VALUES ('$type','$color' )"; 
 
 $result = mysqli_query($con,$sql) or die ;
 

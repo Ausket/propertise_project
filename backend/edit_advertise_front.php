@@ -29,7 +29,7 @@ $atype = $_POST['atype'];
 $title = $_POST['title'];
 $describe = $_POST['describe'];
 
-$file = $_FILES['img']['name'];
+$file = $_FILES['upload_image']['name'];
 //แต่งชื่อไฟล์
 $files_v = strrev($file);
 $files_r = strrchr($files_v, ".");
@@ -60,7 +60,7 @@ if ($file != '') {
     $newname = $files . $nameDate . $numrand . $type; //ประกอบเป็นชื่อใหม่
     $path_copy = $path . $newname; //กำหนด path ในการเก็บ
 
-    move_uploaded_file($_FILES['img']['tmp_name'], $path_copy);
+    move_uploaded_file($_FILES['upload_image']['tmp_name'], $path_copy);
 
     if (isset($_POST['submit1']) || isset($_POST['submit2'])) {
 

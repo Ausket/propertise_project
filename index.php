@@ -1,57 +1,7 @@
 <?php
 require_once('dbconnect.php');
 
-
-// if (isset($_POST['submit'])) {
-
-//   $email = $con->real_escape_string($_POST['email']);
-//   $password = $con->real_escape_string($_POST['password']);
-
-//   $sql = "SELECT * FROM users
-//                 WHERE  email='" . $email . "' 
-//                 AND  password='" . $password . "' ";
-
-//   $result = $con->query($sql);
-//   $row = $result->fetch_assoc();
-
-//   if ($row["ustatus"] == '0') {
-//     echo "<script>";
-//     echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
-//     echo "</script>";
-//     header('Refresh:0; url=index.php');
-//   } else {
-
-//     if (!empty($row)) {
-
-//       $_SESSION["u_id"] = $row["u_id"];
-//       $_SESSION["email"] = $row["email"];
-//       $_SESSION["password"] = $row["password"];
-//       $_SESSION["name"] = $row["name"];
-//       $_SESSION["address"] = $row["address"];
-//       $_SESSION["tel"] = $row["tel"];
-//       $_SESSION["id_card"] = $row["id_card"];
-//       $_SESSION["company"] = $row["company"];
-//       $_SESSION["birth_date"] = $row["birth_date"];
-//       $_SESSION["img"] = $row["img"];
-//       $_SESSION["utype"] = $row["utype"];
-//       $_SESSION["ustatus"] = $row["ustatus"];
-
-//       if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
-//         header("location: page/profile.php");
-//       }
-//       if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
-//         header("location: index.php");
-//       }
-//     } else {
-//       echo "<script>";
-//       echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
-//       echo "</script>";
-//       header('Refresh:0; url=index.php');
-//     }
-//   }
-// }
-
-$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type
@@ -487,27 +437,7 @@ $totalf = mysqli_num_rows($result6);
                   <img src="image/p_img/<?php echo $row2['img_video'] ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video'] ?>">
                   <div class="card-img-overlay p-2 d-flex flex-column">
                     <div>
-                      <?php if ($row2['type'] == 'ขาย') {
-                        $type = 'ขาย';
-                        echo "<span class='badge mr-2 badge-indigo '>$type</span>";
-                      } ?>
-                      <?php if ($row2['type'] == 'เช่า') {
-                        $type = 'เช่า';
-                        echo "<span class='badge mr-2 badge-info'>$type</span>";
-                      } ?>
-                      <?php if ($row2['type'] == 'ขาย-เช่า') {
-                        $type = 'ขาย-เช่า';
-                        echo "<span class='badge mr-2 badge-success '>$type</span>";
-                      } ?>
-                      <?php if ($row2['type'] == 'ขายดาวน์') {
-                        $type = 'ขายดาวน์';
-                        echo "<span class='badge mr-2 badge-warning '>$type</span>";
-                      } ?>
-                      <?php if ($row2['type'] == 'ใบจอง') {
-                        $type = 'ใบจอง';
-                        echo "<span class='badge mr-2 badge-danger '>$type</span>";
-                      } ?>
-
+                      <span class='badge mr-2' style="background-color:<?php echo $row2['color'] ?> ; color:white;"><?php echo $row2['type'] ?></span>
                     </div>
                     <ul class="list-inline mb-0 mt-auto hover-image">
                       <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
@@ -805,14 +735,6 @@ $totalf = mysqli_num_rows($result6);
         <div class="list-group-item bg-transparent">
           <count>เลือก 0 จาก 3</count>
         </div>
-        <!-- <div class="list-group-item card bg-transparent">
-          <div class="position-relative hover-change-image bg-hover-overlay">
-            <img src="" class="card-img" alt="properties">
-            <div class="card-img-overlay">
-              <a href="#" class="text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2"><i class="fal fa-minus-circle"></i></a>
-            </div>
-          </div>
-        </div> -->
         <div id="com" class="list-group-item card bg-transparent"></div>
         <div class="list-group-item bg-transparent">
           <div id="hidecom">

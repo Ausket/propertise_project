@@ -59,19 +59,26 @@ if (isset($_POST['submit'])) {
         font-family: 'Prompt', sans-serif;
     }
 </style>
+
 <header class="main-header navbar-light header-sticky header-sticky-smart header-mobile-lg">
     <div class=" sticky-area">
         <div class="container container-xxl">
             <div class="d-flex align-items-center">
                 <nav class="navbar navbar-expand-xl bg-transparent px-0 w-100 w-xl-auto">
                     <a class="navbar-brand mr-7" href="index.php">
-                        <img src="images/logo.png" alt="HomeID" class="normal-logo">
-                        <img src="images/logo.png" alt="HomeID" class="sticky-logo">
+                        <img src="images/logo.png" alt="HomeID" class="d-none d-lg-inline-block">
+                        <img src="images/logo-white.png" alt="HomeID" class="d-inline-block d-lg-none">
                     </a>
-                    <a class="d-block d-xl-none ml-auto mr-4 position-relative text-white p-2" href="#">
+                    <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                $id = $_SESSION['u_id'];
+                                $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                                $resultfa = mysqli_query($con,$sqlfa);
+                                $numf = mysqli_num_rows($resultfa); ?>
+                    <a class="d-block d-xl-none ml-auto mr-4 position-relative text-white p-2" href="frontend/dashboard-favourites.php">
                         <i class="fal fa-heart fs-large-4"></i>
-                        <span class="badge badge-primary badge-circle badge-absolute">1</span>
+                        <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf?></span>
                     </a>
+                    <?php } ?>
                     <button class="navbar-toggler border-0 px-0" type="button" data-toggle="collapse" data-target="#primaryMenu02" aria-controls="primaryMenu02" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="text-white fs-24"><i class="fal fa-bars"></i></span>
                     </button>
@@ -122,11 +129,19 @@ if (isset($_POST['submit'])) {
                         </ul>
                         <div class="d-block d-xl-none">
                             <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
-                            
+                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                $id = $_SESSION['u_id'];
+                                $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                                $resultfa = mysqli_query($con,$sqlfa);
+                                $numf = mysqli_num_rows($resultfa); ?>
+                                 <li class="nav-item ">
+                                    <a class="nav-link "  href="page/logout.php">ออกจากระบบ</a>
+                                </li>
+                                <?php }else {?>
                                 <li class="nav-item ">
                                     <a class="nav-link " data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
                                 </li>
-                                
+                                <?php }?>
                             </ul>
                         </div>
                     </div>

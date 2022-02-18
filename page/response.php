@@ -1,18 +1,19 @@
 <?php
 
 // require('../base_require.php');
-// require('../../../config.php');
+require('../config.php');
 // require('../connect.php');
 require('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location: ../index.php');
+    header('Location:../index.php');
 }
 $type = $_SESSION['utype'];
 if ($type == 'member' || $type == 'agent') {
     header('Location:../index.php');
 }
+
 
 ?>
 <!DOCTYPE html>
@@ -22,6 +23,8 @@ if ($type == 'member' || $type == 'agent') {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Response</title>
+
+    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <!-- <link rel="stylesheet" href="../css/all.min.css"> -->
@@ -31,13 +34,11 @@ if ($type == 'member' || $type == 'agent') {
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="../css/switch_insurance.css">
 </head>
 
-
 <body class="hold-transition sidebar-mini">
-    <?php
-    include('admin_nav.php');
-    ?>
+    <?php require('admin_nav.php') ?>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -217,28 +218,34 @@ if ($type == 'member' || $type == 'agent') {
     <!-- ./wrapper -->
 
     <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
     <script src="../js/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../js/adminlte.min.js"></script>
-    <script src="../js/buttons.bootstrap4.min.js"></script>
-    <script src="../js/jszip/jszip.min.js"></script>
-    <script src="../js/pdfmake.min.js"></script>
-    <script src="../js/vfs_fonts.js"></script>
-    <script src="../js/buttons.html5.min.js"></script>
-    <script src="../js/buttons.print.min.js"></script>
-    <script src="../js/buttons.colVis.min.js"></script>
+                <!-- Bootstrap 4 -->
+                <script src="../js/bootstrap.bundle.min.js"></script>
+                <!-- AdminLTE App -->
+                <script src="../js/adminlte.min.js"></script>
 
+                <script src="../js/jquery.dataTables.min.js"></script>
+                <script src="../js/dataTables.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.responsive.min.js"></script>
+                <script src="../js/responsive.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.buttons.min.js"></script>
+                <script src="../js/buttons.bootstrap4.min.js"></script>
+                <script src="../js/jszip/jszip.min.js"></script>
+                <script src="../js/pdfmake.min.js"></script>
+                <script src="../js/vfs_fonts.js"></script>
+                <script src="../js/buttons.html5.min.js"></script>
+                <script src="../js/buttons.print.min.js"></script>
+                <script src="../js/buttons.colVis.min.js"></script>
 
     <script>
         $(document).ready(function() {
             //API เรียกข้อมูล ReponseUrl มาแสดงในหน้าเพจ
             $.ajax({
-                url: "<?= $base_api_pay ?>insurance/setupResponse.php",
+                url: "<?= $base_api_pay ?>payment/setupResponse.php",
                 method: "GET",
                 success: function(data) {
-                    // console.log(data);
+                    console.log(data);
                     $('#full-back-url').val(data['full-back-url']);
                     $('#full-res-url').val(data['full-res-url']);
                     $('#mobile-back-url').val(data['mobile-back-url']);
@@ -252,7 +259,7 @@ if ($type == 'member' || $type == 'agent') {
         });
         $("#save").click(function() {
             $.ajax({
-                url: "<?= $base_api_pay ?>insurance/setupResponse.php",
+                url: "<?= $base_api_pay ?>payment/setupResponse.php",
                 method: "PUT",
                 data: JSON.stringify({
                     "full-back-url": $('#full-back-url').val(),

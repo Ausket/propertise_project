@@ -115,7 +115,7 @@ if (isset($_GET['submits'])) { //เมื่อกด ค้นหา
     $conditions[] = "property_detail.space_area BETWEEN '$areamin' AND '$areamax'";
   }
 
-  $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+  $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price,property_detail.facility
@@ -156,7 +156,7 @@ WHERE advertise.ad_status = '1' ";
   }
 } else {
 
-  $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+  $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price
@@ -497,26 +497,9 @@ $resultat = mysqli_query($con, $sqlat);
                     <div class="position-relative hover-change-image bg-hover-overlay rounded-lg card-img">
                       <img src="../image/p_img/<?php echo $row2['img_video']; ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video']; ?>">
                       <div class="card-img-overlay d-flex flex-column">
-                        <div><?php if ($row2['type'] == 'ขาย') {
-                                $type = 'ขาย';
-                                echo "<span class='badge mr-2 badge-indigo '>$type</span>";
-                              } ?>
-                          <?php if ($row2['type'] == 'เช่า') {
-                            $type = 'เช่า';
-                            echo "<span class='badge mr-2 badge-info'>$type</span>";
-                          } ?>
-                          <?php if ($row2['type'] == 'ขาย-เช่า') {
-                            $type = 'ขาย-เช่า';
-                            echo "<span class='badge mr-2 badge-success '>$type</span>";
-                          } ?>
-                          <?php if ($row2['type'] == 'ขายดาวน์') {
-                            $type = 'ขายดาวน์';
-                            echo "<span class='badge mr-2 badge-warning '>$type</span>";
-                          } ?>
-                          <?php if ($row2['type'] == 'ใบจอง') {
-                            $type = 'ใบจอง';
-                            echo "<span class='badge mr-2 badge-danger '>$type</span>";
-                          } ?></div>
+                        <div>
+                        <span class='badge mr-2' style="background-color:<?php echo $row2['color'] ?> ; color:white;" ><?php echo $row2['type'] ?></span>
+                        </div>
                         <div class="mt-auto d-flex hover-image">
                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
                             <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">

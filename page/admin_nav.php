@@ -1,6 +1,5 @@
 <?php
 /* @ini_set('display_errors', '0'); */
-require_once('../dbconnect.php');
 
 $u_id = $_SESSION['u_id'];
 if (empty($u_id)) {
@@ -87,18 +86,9 @@ $resultrt = mysqli_query($con, $sqlrt);
             <div class="user-panel mt-3 mb-3 d-block">
 
 
-
+               
                 <?php
-                if ($_SESSION['utype'] == 'member') {
-                ?>
-
-                    <img class="d-block m-auto" style="border-radius:50% ;  width:3rem;" src="../image/m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
-
-                <?php
-                }
-                ?>
-                <?php
-                if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff' || $_SESSION['utype'] == 'agent') {
+                if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff' ) {
                 ?>
                     <img class="d-block m-auto" style="border-radius:50% ; width:3rem;" src="../image/m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
 

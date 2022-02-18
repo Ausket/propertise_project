@@ -82,7 +82,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Compare</title>
+  <title>Compare - HomeID</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -143,9 +143,9 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                   <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row22['title'] ?></div>
                 </th>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-                  <th scope="col">
-                    <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row3['title'] ?></div>
-                  </th>
+                <th scope="col">
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row3['title'] ?></div>
+                </th>
                 <?php } ?>
               </tr>
               <tr>
@@ -153,7 +153,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                 <th scope="col">
                   <div class="card border-0">
                     <div class="rounded-lg">
-                      <img class="card-img-top" src="../image/p_img/<?php echo $row1['img_video'] ?>">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row1['img_video'] ?>" alt="">
                     </div>
                     <div class="card-body pt-2 pb-0 px-0">
                       <p class="font-weight-500 text-gray-light mb-0"><?php if ($row1['house_no'] != '') {
@@ -172,14 +172,14 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                           }
                         } ?>
                         <?php echo $row1['postal_code']; ?></p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row1['price'] ?> บาท</p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row1['price'] ?></p>
                     </div>
                   </div>
                 </th>
                 <th scope="col">
                   <div class="card border-0">
                     <div class="rounded-lg">
-                      <img class="card-img-top" src="../image/p_img/<?php echo $row22['img_video'] ?>" alt="Home in Metric Way">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row22['img_video'] ?>" alt="">
                     </div>
                     <div class="card-body pt-2 pb-0 px-0">
                       <p class="font-weight-500 text-gray-light mb-0"><?php if ($row22['house_no'] != '') {
@@ -203,13 +203,13 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                   </div>
                 </th>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-                  <th scope="col">
-                    <div class="card border-0">
-                      <div class="rounded-lg">
-                        <img class="card-img-top" src="../image/p_img/<?php echo $row3['img_video'] ?>" alt="Home in Metric Way">
-                      </div>
-                      <div class="card-body pt-2 pb-0 px-0">
-                        <p class="font-weight-500 text-gray-light mb-0"><?php if ($row3['house_no'] != '') {
+                <th scope="col">
+                  <div class="card border-0">
+                    <div class="rounded-lg">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row3['img_video'] ?>" alt="">
+                    </div>
+                    <div class="card-body pt-2 pb-0 px-0">
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row3['house_no'] != '') {
                                                                           echo $h_no . " " . $row3['house_no'];
                                                                         } ?> <?php if ($row3['village_no'] != '') {
                                                                               echo $v_no . " " . $row3['village_no'];
@@ -225,10 +225,10 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                             }
                           } ?>
                           <?php echo $row3['postal_code']; ?></p>
-                        <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row3['price']; ?> บาท</p>
-                      </div>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row3['price']; ?> บาท</p>
                     </div>
-                  </th>
+                  </div>
+                </th>
                 <?php } ?>
               </tr>
             </thead>
@@ -240,7 +240,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['p_type'] ?></td><?php } ?>
               </tr>
               <tr>
-                <td>พื้นที่ที่ดิน</td>
+                <td>ขนาดพื้นที่</td>
                 <td><?php echo $row1['space_area'] ?> ตร.เมตร</td>
                 <td><?php echo $row22['space_area'] ?> ตร.เมตร</td>
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['space_area'] ?> ตร.เมตร</td><?php } ?>
@@ -264,13 +264,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                 <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
               </tr>
               <tr>
-                <td>ที่จอดรถ</td>
-                <td><?php echo $row1['parking'] ?></td>
-                <td><?php echo $row22['bedroom'] ?></td>
-                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
-              </tr>
-              <tr>
-                <td>สิ่งอำนวยความสะดวก</td>
+              <td>สิ่งอำนวยความสะดวก</td>
                 <td>
                   <?php $facility = explode(",", $row1['facility']); //array
                   foreach ($facility_arr as $value) {
@@ -301,23 +295,23 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
   </main>
   <?php include 'templates/footer-two.php'; ?>
   <!-- Vendors scripts -->
-  <script src="vendors/jquery.min.js"></script>
-  <script src="vendors/jquery-ui/jquery-ui.min.js"></script>
-  <script src="vendors/bootstrap/bootstrap.bundle.js"></script>
-  <script src="vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
-  <script src="vendors/slick/slick.min.js"></script>
-  <script src="vendors/waypoints/jquery.waypoints.min.js"></script>
-  <script src="vendors/counter/countUp.js"></script>
-  <script src="vendors/magnific-popup/jquery.magnific-popup.min.js"></script>
-  <script src="vendors/chartjs/Chart.min.js"></script>
-  <script src="vendors/dropzone/js/dropzone.min.js"></script>
-  <script src="vendors/timepicker/bootstrap-timepicker.min.js"></script>
-  <script src="vendors/hc-sticky/hc-sticky.min.js"></script>
-  <script src="vendors/jparallax/TweenMax.min.js"></script>
-  <script src="vendors/mapbox-gl/mapbox-gl.js"></script>
-  <script src="vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script src="../css/vendors/jquery.min.js"></script>
+  <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
+  <script src="../css/vendors/bootstrap/bootstrap.bundle.js"></script>
+  <script src="../css/vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
+  <script src="../css/vendors/slick/slick.min.js"></script>
+  <script src="../css/vendors/waypoints/jquery.waypoints.min.js"></script>
+  <script src="../css/vendors/counter/countUp.js"></script>
+  <script src="../css/vendors/magnific-popup/jquery.magnific-popup.min.js"></script>
+  <script src="../css/vendors/chartjs/Chart.min.js"></script>
+  <script src="../css/vendors/dropzone/js/dropzone.min.js"></script>
+  <script src="../css/vendors/timepicker/bootstrap-timepicker.min.js"></script>
+  <script src="../css/vendors/hc-sticky/hc-sticky.min.js"></script>
+  <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
+  <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
+  <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <!-- Theme scripts -->
-  <script src="js/theme.js"></script>
+  <script src="../js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
       <symbol id="icon-bedroom" viewBox="0 0 46 32">

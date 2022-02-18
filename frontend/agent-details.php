@@ -6,7 +6,7 @@ $sqla = "SELECT * FROM users WHERE u_id = $ida";
 $resulta = mysqli_query($con, $sqla);
 $rowa = mysqli_fetch_array($resulta);
 
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -28,7 +28,7 @@ INNER JOIN districts ON location_property.district_id = districts.id)
 $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 $total_record = mysqli_num_rows($resultad);
 
-$sqlad2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -42,7 +42,7 @@ FROM (((((advertise
 $resultad2 = mysqli_query($con, $sqlad2) or die(mysqli_error($con));
 $total_record2 = mysqli_num_rows($resultad2);
 
-$sqlad3 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad3 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -55,6 +55,20 @@ FROM (((((advertise
     WHERE users.u_id = $ida AND advertise_type.atype_id = '2' AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
 $resultad3 = mysqli_query($con, $sqlad3) or die(mysqli_error($con));
 $total_record3 = mysqli_num_rows($resultad3);
+
+$sqlad4 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
+location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
+FROM (((((advertise
+    LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
+    LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
+    LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
+    LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
+    WHERE users.u_id = $ida AND advertise_type.atype_id = '5' AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
+$resultad4 = mysqli_query($con, $sqlad4) or die(mysqli_error($con));
+$total_record4 = mysqli_num_rows($resultad4);
 
 
 ?>
@@ -206,6 +220,11 @@ $total_record3 = mysqli_num_rows($resultad3);
                     เช่า (<?php echo $total_record3 ?>)
                   </a>
                 </li>
+                <li class="nav-item ml-0">
+                  <a href="#other" class="nav-link shadow-none fs-13" data-toggle="tab" role="tab">
+                    อื่นๆ (<?php echo $total_record4 ?>)
+                  </a>
+                </li>
               </ul>
               <div class="tab-content shadow-none pt-7 pb-0 px-6 bg-white">
                 <div id="collapse-tabs-accordion-01">
@@ -214,13 +233,27 @@ $total_record3 = mysqli_num_rows($resultad3);
                       <div class="card-header border-0 d-block d-md-none bg-transparent px-0 py-1" id="headingAll-01">
                         <h5 class="mb-0">
                           <button class="btn lh-2 fs-18 bg-white py-1 px-6 mb-4 shadow-none w-100 collapse-parent border" data-toggle="collapse" data-target="#all-collapse-01" aria-expanded="true" aria-controls="all-collapse-01">
-                            ทั้งหมด (8)
+                            ทั้งหมด (<?php echo $total_record ?>)
                           </button>
                         </h5>
                       </div>
                       <div id="all-collapse-01" class="collapse show collapsible" aria-labelledby="headingAll-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                          <div class="row">
+                          <div class="col-md-2 pl-0" >
+                            <div class="form-group">
+                              <select class="form-control" name="state" id="maxRows">
+                                <option value="6000">แสดงทั้งหมด</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                                <option value="18">18</option>
+                                <option value="30">30</option>
+                                <option value="60">60</option>
+                                <option value="90">90</option>
+                                <option value="150">150</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row" id="precard">
                             <?php
                             if ($total_record != 0) {
                               while ($rowad = mysqli_fetch_array($resultad)) {
@@ -228,13 +261,13 @@ $total_record3 = mysqli_num_rows($resultad3);
                                 $v_no = "หมู่";
 
                             ?>
-                                <div class="col-md-6 mb-7">
-                                  <div class="card border-0">
+                                <div class="col-md-6 mb-7" id="cardtwo">
+                                  <div class="card border-0" id="cardthree">
                                     <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
                                       <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="Home in Metric Way">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
-                                          <span class="badge badge-primary"><?php echo $rowad['type']; ?></span>
+                                          <span class='badge ' style="background-color:<?php echo $rowad['color']; ?>; color:white; "><?php echo $rowad['type']; ?></span>
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
@@ -250,13 +283,35 @@ $total_record3 = mysqli_num_rows($resultad3);
                                             </li>
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                              <a href="#" class="text-white fs-20 hover-primary">
-                                                <i class="far fa-heart"></i>
-                                              </a>
-                                            </li>
+                                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                              $ad = $rowad['a_id'];
+                                              $idu = $_SESSION['u_id'];
+                                              $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
+                                              $resultf = mysqli_query($con, $sqlf);
+                                              $numf = mysqli_num_rows($resultf); ?>
+
+                                              <?php if ($numf == 0) { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-white fs-20 hover-primary">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } else { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-primary fs-20 ">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } ?>
+                                            <?php } else { ?>
+                                              <li class="list-inline-item mr-3 h-32">
+                                                <a href="#login-register-modal" data-toggle="modal" class="text-white fs-20 hover-primary">
+                                                  <i class="far fa-heart"></i>
+                                                </a>
+                                              </li>
+                                            <?php } ?>
                                             <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                              <a href="#" class="text-white fs-20 hover-primary">
+                                              <a id="compa" name="<?php echo $row2['a_id'] ?>" class="text-white fs-20 hover-primary">
                                                 <i class="fas fa-exchange-alt"></i>
                                               </a>
                                             </li>
@@ -271,8 +326,8 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         <?php if ($rowad['house_no'] != '') {
                                           echo $h_no . " " . $rowad['house_no'];
                                         } ?> <?php if ($rowad['village_no'] != '') {
-                                              echo $v_no . " " . $rowad['village_no'];
-                                            } ?>
+                                                echo $v_no . " " . $rowad['village_no'];
+                                              } ?>
                                         <?php echo $rowad['lane']; ?> <?php echo $rowad['road']; ?>
                                         <?php foreach ($result3 as $value) {
 
@@ -286,7 +341,7 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         <?php echo $rowad['postal_code']; ?></p>
 
                                       <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                      ฿<?php echo $rowad['price']; ?> 
+                                        ฿<?php echo $rowad['price']; ?>
                                       </p>
                                     </div>
                                     <div class="card-footer bg-transparent px-0 pb-0 pt-2">
@@ -318,6 +373,21 @@ $total_record3 = mysqli_num_rows($resultad3);
                               <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
                             <?php } ?>
                           </div>
+                          <nav class="mt-6">
+                            <ul class="pagination rounded-active justify-content-center mb-0">
+                              <li data-page="prev" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-left"></i><span></span>
+                                </span>
+                              </li>
+                              <!-- Here the JS Function Will Add the Rows -->
+                              <li data-page="next" id="prev" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-right"></i><span></span>
+                                </span>
+                              </li>
+                            </ul>
+                          </nav>
                         </div>
                       </div>
                     </div>
@@ -327,13 +397,27 @@ $total_record3 = mysqli_num_rows($resultad3);
                       <div class="card-header border-0 d-block d-md-none bg-transparent p-0" id="headingSale-01">
                         <h5 class="mb-0">
                           <button class="btn lh-2 fs-18 bg-white py-1 px-6 shadow-none w-100 collapse-parent border collapsed mb-4" data-toggle="collapse" data-target="#sale-collapse-01" aria-expanded="true" aria-controls="sale-collapse-01">
-                            ขาย (5)
+                            ขาย (<?php echo $total_record2 ?>)
                           </button>
                         </h5>
                       </div>
                       <div id="sale-collapse-01" class="collapse collapsible" aria-labelledby="headingSale-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                          <div class="row">
+                        <div class="col-md-2 pl-0" >
+                            <div class="form-group">
+                              <select class="form-control" name="state" id="maxRows2">
+                                <option value="6000">แสดงทั้งหมด</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                                <option value="18">18</option>
+                                <option value="30">30</option>
+                                <option value="60">60</option>
+                                <option value="90">90</option>
+                                <option value="150">150</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row" id="precard2">
                             <?php
                             if ($total_record2 != 0) {
                               while ($rowad2 = mysqli_fetch_array($resultad2)) {
@@ -341,13 +425,13 @@ $total_record3 = mysqli_num_rows($resultad3);
                                 $v_no = "หมู่";
 
                             ?>
-                                <div class="col-md-6 mb-7">
-                                  <div class="card border-0">
+                                <div class="col-md-6 mb-7" id="cardtwo2">
+                                  <div class="card border-0" id="cardthree2">
                                     <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
                                       <img src="../image/p_img/<?php echo $rowad2['img_video']; ?>" alt="Home in Metric Way">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
-                                          <span class="badge badge-primary"><?php echo $rowad2['type']; ?></span>
+                                          <span class='badge ' style="background-color:<?php echo $rowad2['color']; ?>; color:white; "><?php echo $rowad2['type']; ?></span>
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
@@ -363,13 +447,35 @@ $total_record3 = mysqli_num_rows($resultad3);
                                             </li>
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                              <a href="#" class="text-white fs-20 hover-primary">
-                                                <i class="far fa-heart"></i>
-                                              </a>
-                                            </li>
+                                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                              $ad = $rowad2['a_id'];
+                                              $idu = $_SESSION['u_id'];
+                                              $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
+                                              $resultf = mysqli_query($con, $sqlf);
+                                              $numf = mysqli_num_rows($resultf); ?>
+
+                                              <?php if ($numf == 0) { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-white fs-20 hover-primary">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } else { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-primary fs-20 ">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } ?>
+                                            <?php } else { ?>
+                                              <li class="list-inline-item mr-3 h-32">
+                                                <a href="#login-register-modal" data-toggle="modal" class="text-white fs-20 hover-primary">
+                                                  <i class="far fa-heart"></i>
+                                                </a>
+                                              </li>
+                                            <?php } ?>
                                             <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                              <a href="#" class="text-white fs-20 hover-primary">
+                                              <a id="compa" name="<?php echo $row2['a_id'] ?>" class="text-white fs-20 hover-primary">
                                                 <i class="fas fa-exchange-alt"></i>
                                               </a>
                                             </li>
@@ -384,8 +490,8 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         <?php if ($rowad2['house_no'] != '') {
                                           echo $h_no . " " . $rowad2['house_no'];
                                         } ?> <?php if ($rowad2['village_no'] != '') {
-                                              echo $v_no . " " . $rowad2['village_no'];
-                                            } ?>
+                                                echo $v_no . " " . $rowad2['village_no'];
+                                              } ?>
                                         <?php echo $rowad2['lane']; ?> <?php echo $rowad2['road']; ?>
                                         <?php foreach ($result3 as $value) {
 
@@ -398,7 +504,7 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         } ?>
                                         <?php echo $rowad2['postal_code']; ?></p>
                                       <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                        ฿<?php echo $rowad2['price']; ?> 
+                                        ฿<?php echo $rowad2['price']; ?>
                                       </p>
                                     </div>
                                     <div class="card-footer bg-transparent px-0 pb-0 pt-2">
@@ -430,6 +536,21 @@ $total_record3 = mysqli_num_rows($resultad3);
                               <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
                             <?php } ?>
                           </div>
+                          <nav class="mt-6">
+                            <ul class="pagination rounded-active justify-content-center mb-0">
+                              <li data-page="prev" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-left"></i><span></span>
+                                </span>
+                              </li>
+                              <!-- Here the JS Function Will Add the Rows -->
+                              <li data-page="next" id="prev2" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-right"></i><span></span>
+                                </span>
+                              </li>
+                            </ul>
+                          </nav>
                         </div>
                       </div>
                     </div>
@@ -439,13 +560,27 @@ $total_record3 = mysqli_num_rows($resultad3);
                       <div class="card-header border-0 d-block d-md-none bg-transparent p-0" id="headingRent-01">
                         <h5 class="mb-0">
                           <button class="btn lh-2 fs-18 bg-white py-1 px-6 shadow-none w-100 collapse-parent border collapsed mb-4" data-toggle="collapse" data-target="#rent-collapse-01" aria-expanded="true" aria-controls="rent-collapse-01">
-                            เช่า(3)
+                            เช่า(<?php echo $total_record3 ?>)
                           </button>
                         </h5>
                       </div>
                       <div id="rent-collapse-01" class="collapse collapsible" aria-labelledby="headingRent-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                          <div class="row">
+                        <div class="col-md-2 pl-0" >
+                            <div class="form-group">
+                              <select class="form-control" name="state" id="maxRows3">
+                                <option value="6000">แสดงทั้งหมด</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                                <option value="18">18</option>
+                                <option value="30">30</option>
+                                <option value="60">60</option>
+                                <option value="90">90</option>
+                                <option value="150">150</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row" id="precard3">
                             <?php
                             if ($total_record3 != 0) {
                               while ($rowad3 = mysqli_fetch_array($resultad3)) {
@@ -453,13 +588,14 @@ $total_record3 = mysqli_num_rows($resultad3);
                                 $v_no = "หมู่";
 
                             ?>
-                                <div class="col-md-6 mb-7">
-                                  <div class="card border-0">
+                                <div class="col-md-6 mb-7" id="cardtwo3">
+                                  <div class="card border-0" id="cardthree3">
                                     <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
                                       <img src="../image/p_img/<?php echo $rowad3['img_video']; ?>" alt="Villa on Hollywood Boulevard">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
-                                          <span class="badge badge-indigo"><?php echo $rowad3['type']; ?></span>
+                                          <span class='badge ' style="background-color:<?php echo $rowad3['color']; ?>; color:white; "><?php echo $rowad3['type']; ?></span>
+
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
@@ -475,13 +611,35 @@ $total_record3 = mysqli_num_rows($resultad3);
                                             </li>
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
-                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Wishlist">
-                                              <a href="#" class="text-white fs-20 hover-primary">
-                                                <i class="far fa-heart"></i>
-                                              </a>
-                                            </li>
+                                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                              $ad = $rowad3['a_id'];
+                                              $idu = $_SESSION['u_id'];
+                                              $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
+                                              $resultf = mysqli_query($con, $sqlf);
+                                              $numf = mysqli_num_rows($resultf); ?>
+
+                                              <?php if ($numf == 0) { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-white fs-20 hover-primary">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } else { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-primary fs-20 ">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } ?>
+                                            <?php } else { ?>
+                                              <li class="list-inline-item mr-3 h-32">
+                                                <a href="#login-register-modal" data-toggle="modal" class="text-white fs-20 hover-primary">
+                                                  <i class="far fa-heart"></i>
+                                                </a>
+                                              </li>
+                                            <?php } ?>
                                             <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
-                                              <a href="#" class="text-white fs-20 hover-primary">
+                                              <a id="compa" name="<?php echo $row2['a_id'] ?>" class="text-white fs-20 hover-primary">
                                                 <i class="fas fa-exchange-alt"></i>
                                               </a>
                                             </li>
@@ -496,8 +654,8 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         <?php if ($rowad3['house_no'] != '') {
                                           echo $h_no . " " . $rowad3['house_no'];
                                         } ?> <?php if ($rowad3['village_no'] != '') {
-                                              echo $v_no . " " . $rowad3['village_no'];
-                                            } ?>
+                                                echo $v_no . " " . $rowad3['village_no'];
+                                              } ?>
                                         <?php echo $rowad2['lane']; ?> <?php echo $rowad3['road']; ?>
                                         <?php foreach ($result3 as $value) {
 
@@ -511,8 +669,7 @@ $total_record3 = mysqli_num_rows($resultad3);
                                         <?php echo $rowad3['postal_code']; ?></p>
                                       </p>
                                       <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
-                                      ฿<?php echo $rowad3['price']; ?>
-                                        <span class="fs-14 font-weight-500 text-gray-light"> /month</span>
+                                        ฿<?php echo $rowad3['price']; ?>
                                       </p>
                                     </div>
                                     <div class="card-footer bg-transparent px-0 pb-0 pt-2">
@@ -544,6 +701,184 @@ $total_record3 = mysqli_num_rows($resultad3);
                               <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
                             <?php } ?>
                           </div>
+                          <nav class="mt-6">
+                            <ul class="pagination rounded-active justify-content-center mb-0">
+                              <li data-page="prev" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-left"></i><span></span>
+                                </span>
+                              </li>
+                              <!-- Here the JS Function Will Add the Rows -->
+                              <li data-page="next" id="prev3" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-right"></i><span></span>
+                                </span>
+                              </li>
+                            </ul>
+                          </nav>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-pane tab-pane-parent fade" id="other" role="tabpanel">
+                    <div class="card border-0 bg-transparent">
+                      <div class="card-header border-0 d-block d-md-none bg-transparent p-0" id="headingSale-01">
+                        <h5 class="mb-0">
+                          <button class="btn lh-2 fs-18 bg-white py-1 px-6 shadow-none w-100 collapse-parent border collapsed mb-4" data-toggle="collapse" data-target="#sale-collapse-01" aria-expanded="true" aria-controls="sale-collapse-01">
+                            อื่นๆ (<?php echo $total_record4 ?>)
+                          </button>
+                        </h5>
+                      </div>
+                      <div id="sale-collapse-01" class="collapse collapsible" aria-labelledby="headingSale-01" data-parent="#collapse-tabs-accordion-01">
+                        <div class="card-body p-0">
+                        <div class="col-md-2 pl-0" >
+                            <div class="form-group">
+                              <select class="form-control" name="state" id="maxRows4">
+                                <option value="6000">แสดงทั้งหมด</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                                <option value="18">18</option>
+                                <option value="30">30</option>
+                                <option value="60">60</option>
+                                <option value="90">90</option>
+                                <option value="150">150</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="row" id="precard4">
+                            <?php
+                            if ($total_record4 != 0) {
+                              while ($rowad4 = mysqli_fetch_array($resultad4)) {
+                                $h_no = "เลขที่";
+                                $v_no = "หมู่";
+
+                            ?>
+                                <div class="col-md-6 mb-7" id="cardtwo4">
+                                  <div class="card border-0" id="cardthree4">
+                                    <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
+                                      <img src="../image/p_img/<?php echo $rowad4['img_video']; ?>" alt="Home in Metric Way">
+                                      <div class="card-img-overlay d-flex flex-column">
+                                        <div class="mb-auto">
+                                          <span class='badge ' style="background-color:<?php echo $rowad4['color']; ?>; color:white; "><?php echo $rowad4['type']; ?></span>
+                                        </div>
+                                        <div class="d-flex hover-image">
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                              </a>
+                                            </li>
+                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                              <a href="#" class="text-white hover-primary">
+                                                <i class="far fa-play-circle"></i><span class="pl-1">2</span>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                          <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
+                                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                              $ad = $rowad4['a_id'];
+                                              $idu = $_SESSION['u_id'];
+                                              $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
+                                              $resultf = mysqli_query($con, $sqlf);
+                                              $numf = mysqli_num_rows($resultf); ?>
+
+                                              <?php if ($numf == 0) { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-white fs-20 hover-primary">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } else { ?>
+                                                <li class="list-inline-item mr-3 h-32">
+                                                  <a name="fav_<?php echo $ad ?>" id="fav" class="text-primary fs-20 ">
+                                                    <i class="far fa-heart"></i>
+                                                  </a>
+                                                </li>
+                                              <?php } ?>
+                                            <?php } else { ?>
+                                              <li class="list-inline-item mr-3 h-32">
+                                                <a href="#login-register-modal" data-toggle="modal" class="text-white fs-20 hover-primary">
+                                                  <i class="far fa-heart"></i>
+                                                </a>
+                                              </li>
+                                            <?php } ?>
+                                            <li class="list-inline-item mr-3 h-32" data-toggle="tooltip" title="Compare">
+                                              <a id="compa" name="<?php echo $row2['a_id'] ?>" class="text-white fs-20 hover-primary">
+                                                <i class="fas fa-exchange-alt"></i>
+                                              </a>
+                                            </li>
+                                          </ul>
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="card-body pt-3 px-0 pb-1">
+                                      <h2 class="fs-16 mb-1"><a href="home-details.php?id=<?php echo $rowad4['a_id']; ?>" class="text-dark hover-primary"><?php echo $rowad4['title']; ?></a>
+                                      </h2>
+                                      <p class="font-weight-500 text-gray-light mb-0">
+                                        <?php if ($rowad4['house_no'] != '') {
+                                          echo $h_no . " " . $rowad4['house_no'];
+                                        } ?> <?php if ($rowad4['village_no'] != '') {
+                                                echo $v_no . " " . $rowad4['village_no'];
+                                              } ?>
+                                        <?php echo $rowad4['lane']; ?> <?php echo $rowad4['road']; ?>
+                                        <?php foreach ($result3 as $value) {
+
+                                          if ($value['l_id'] == $rowad4['l_id']) {
+
+                                            echo 'ต.' . $value['dname_th'] . ' ';
+                                            echo 'อ.' . $value['aname_th'] . ' ';
+                                            echo 'จ.' . $value['name_th'] . ' ';
+                                          }
+                                        } ?>
+                                        <?php echo $rowad4['postal_code']; ?></p>
+                                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">
+                                        ฿<?php echo $rowad4['price']; ?>
+                                      </p>
+                                    </div>
+                                    <div class="card-footer bg-transparent px-0 pb-0 pt-2">
+                                      <ul class="list-inline mb-0">
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Br">
+                                          <svg class="icon icon-bedroom fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-bedroom"></use>
+                                          </svg>
+                                          <?php echo $rowad4['bedroom']; ?> ห้อง
+                                        </li>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13 mr-sm-7" data-toggle="tooltip" title="3 Ba">
+                                          <svg class="icon icon-shower fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-shower"></use>
+                                          </svg>
+                                          <?php echo $rowad4['bathroom']; ?> ห้อง
+                                        </li>
+                                        <li class="list-inline-item text-gray font-weight-500 fs-13" data-toggle="tooltip" title="2300 Sq.Ft">
+                                          <svg class="icon icon-square fs-18 text-primary mr-1">
+                                            <use xlink:href="#icon-square"></use>
+                                          </svg>
+                                          <?php echo $rowad4['space_area']; ?> ตร.วา
+                                        </li>
+                                      </ul>
+                                    </div>
+                                  </div>
+                                </div>
+                              <?php } ?>
+                            <?php } else { ?>
+                              <p class="d-block m-auto text-primary font-weight-500"> <i class="fas fa-times-circle text-primary"></i> ไม่พบประกาศ</p><br><br>
+                            <?php } ?>
+                          </div>
+                          <nav class="mt-6">
+                            <ul class="pagination rounded-active justify-content-center mb-0">
+                              <li data-page="prev" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-left"></i><span></span>
+                                </span>
+                              </li>
+                              <!-- Here the JS Function Will Add the Rows -->
+                              <li data-page="next" id="prev4" class="page-item">
+                                <span class="page-link">
+                                  <i class="far fa-angle-double-right"></i><span></span>
+                                </span>
+                              </li>
+                            </ul>
+                          </nav>
                         </div>
                       </div>
                     </div>
@@ -572,6 +907,674 @@ $total_record3 = mysqli_num_rows($resultad3);
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script>
+    $(document).ready(function() {
+
+      $('#hidecom').hide();
+
+      $('a#fav').on('click', function() {
+        var ida = $(this).attr("name");
+
+        let fav_data = ida.split("_");
+
+        $.ajax({
+          url: '../backend/favourite.php',
+          method: 'POST',
+          data: {
+            ida: fav_data[1]
+          },
+          success: function(data) {
+
+            if (data == 1) {
+
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("text-primary fs-20 ");
+
+            } else {
+
+              $("[name=fav_" + fav_data[1] + "]").removeAttr("class");
+              $("[name=fav_" + fav_data[1] + "]").addClass("text-white fs-20 hover-primary ");
+
+            }
+
+
+          }
+        });
+      });
+    });
+
+    function getSelectedIds() {
+
+      return $('#parent #child').map(function() {
+        return $(this).text();
+      }).toArray();
+    }
+
+    function updateLinkAndCounter() {
+      var ids = getSelectedIds().map(function(x, i) {
+        return ['id', ++i, '=', x].join('');
+      });
+      $('a#subcom').attr('href', 'compare.php?' + ids.join('&'));
+      $("count").text(ids.length == 1 ? 'เลือก 1 จาก 3' : 'เลือก ' + ids.length + ' จาก 3');
+
+    }
+
+    $("#clickcom").click(function() {
+      var selected = getSelectedIds();
+      if (selected.length == 1) {
+        alert('กรุณาเลือกอย่างน้อย 2 โพสต์');
+      } else {
+
+        let x = $('#subcom').attr('href');
+        window.location.href = x;
+
+      }
+
+    })
+
+    $("a#compa").click(function() {
+
+      var id = $(this).attr('name');
+      console.log(id);
+      var img = $('#proimg' + id).attr('name');
+      console.log(img);
+
+
+      var selected = getSelectedIds();
+      if (selected.length == 3) return; // already 3 items added
+      if (selected.indexOf(id) != -1) return; // item already added
+      if (selected.indexOf(img) != -1) return; // item already added
+
+
+      $('<div/>', {
+          'class': 'position-relative hover-change-image bg-hover-overlay',
+          'id': 'parent'
+        })
+        .append($('<span/>', {
+          text: id,
+          id: 'child',
+          class: 'd-none'
+        }))
+
+        .append($('<img/>', {
+          class: 'card-img',
+          src: img
+
+        }))
+        .append($('<div />', {
+            class: 'card-img-overlay',
+          })
+          .append($('<a/>', {
+              class: 'text-white hover-image fs-16 lh-1 pos-fixed-top-right position-absolute m-2',
+              id: 'delcom' + id,
+              style: 'cursor:pointer'
+            })
+            .append($('<i />', {
+              class: 'fal fa-minus-circle'
+            }))
+          ))
+        .append($('<div />', {
+          style: 'margin-bottom:20px'
+        }))
+
+        .appendTo('div#com');
+
+      $('#showcom').click();
+
+      setTimeout(function() {
+        $('#showcom').click()
+      }, 3500)
+
+      updateLinkAndCounter();
+      // $("div.list-group-item card bg-transparent").removeClass("hidden");
+
+      $("a#delcom" + id).on("click", function(event) {
+        event.preventDefault();
+        $(this).parent().parent().remove();
+        updateLinkAndCounter();
+      });
+
+    });
+  </script>
+
+  <script>
+    getPagination('#precard');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' #cardtwo ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' #cardthree ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
+          }
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' #cardthree ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+  </script>
+   <script>
+    getPagination('#precard2');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows2')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' #cardtwo2 ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' #cardthree2 ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev2')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
+          }
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows2').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev2') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' #cardthree2 ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+  </script>
+  <script>
+    getPagination('#precard3');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows3')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' #cardtwo3 ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' #cardthree3 ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev3')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
+          }
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows3').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev3') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' #cardthree3 ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+  </script>
+  <script>
+    getPagination('#precard4');
+
+    function getPagination(card) {
+      var lastPage = 1;
+
+      $('#maxRows4')
+        .on('change', function(evt) {
+          //$('.paginationprev').html('');						// reset pagination
+
+          lastPage = 1;
+          $('.pagination')
+            .find('li')
+            .slice(1, -1)
+            .remove();
+          var trnum = 0; // reset tr counter
+          var maxRows = parseInt($(this).val()); // get Max Rows from select option
+          console.log(maxRows);
+
+          if (maxRows == 6000) {
+            $('.pagination').hide();
+          } else {
+            $('.pagination').show();
+          }
+
+          var totalRows = $(card + ' #cardtwo4 ').length; // numbers of rows
+          console.log(totalRows);
+          $(card + ' #cardthree4 ').each(function() {
+            // each TR in  table and not the header
+            trnum++; // Start Counter
+            if (trnum > maxRows) {
+              // if tr number gt maxRows
+
+              $(this).hide(); // fade it out
+            }
+            if (trnum <= maxRows) {
+              $(this).show();
+            } // else fade in Important in case if it ..
+          }); //  was fade out to fade it in
+          if (totalRows > maxRows) {
+            // if tr total rows gt max rows option
+            var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+            //	numbers of pages
+            for (var i = 1; i <= pagenum;) {
+              // for each page append pagination li
+              $('.pagination #prev4')
+                .before(
+                  '<li data-page="' +
+                  i +
+                  '">\
+								  <span class="page-link" >' +
+                  i++ +
+                  '<span ></span></span>\
+								</li>'
+                )
+                .show();
+            } // end for i
+          } // end if row count > max rows
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
+          }
+          $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
+          $('.pagination li').on('click', function(evt) {
+            // on click each page
+            evt.stopImmediatePropagation();
+            evt.preventDefault();
+            var pageNum = $(this).attr('data-page'); // get it's number
+
+            var maxRows = parseInt($('#maxRows4').val()); // get Max Rows from select option
+
+            if (pageNum == 'prev4') {
+              if (lastPage == 1) {
+                return;
+              }
+              pageNum = --lastPage;
+            }
+            if (pageNum == 'next') {
+              if (lastPage == $('.pagination li').length - 2) {
+                return;
+              }
+              pageNum = ++lastPage;
+            }
+
+            lastPage = pageNum;
+            var trIndex = 0; // reset tr counter
+            $('.pagination li').removeClass('page-item active'); // remove active class from all li
+            $('.pagination [data-page="' + lastPage + '"]').addClass('page-item active'); // add active class to the clicked
+            // $(this).addClass('active');					// add active class to the clicked
+            limitPagging();
+            $(card + ' #cardthree4 ').each(function() {
+              // each tr in table not the header
+              trIndex++; // tr index counter
+              // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+              if (
+                trIndex > maxRows * pageNum ||
+                trIndex <= maxRows * pageNum - maxRows
+              ) {
+                $(this).hide();
+              } else {
+                $(this).show();
+              } //else fade in
+            }); // end of for each tr in table
+          }); // end of on click pagination list
+          limitPagging();
+        })
+        .val(6)
+        .change();
+
+      // end of on select change
+
+      // END OF PAGINATION
+    }
+
+    function limitPagging() {
+      // alert($('.pagination li').length)
+
+      if ($('.pagination li').length > 7) {
+        if ($('.pagination li.page-item active').attr('data-page') <= 3) {
+          $('.pagination li:gt(5)').hide();
+          $('.pagination li:lt(5)').show();
+          $('.pagination [data-page="next"]').show();
+        }
+        if ($('.pagination li.page-item active').attr('data-page') > 3) {
+          $('.pagination li:gt(0)').hide();
+          $('.pagination [data-page="next"]').show();
+          for (let i = (parseInt($('.pagination li.page-item active').attr('data-page')) - 2); i <= (parseInt($('.pagination li.page-item active').attr('data-page')) + 2); i++) {
+            $('.pagination [data-page="' + i + '"]').show();
+
+          }
+
+        }
+      }
+    }
+  </script>
+
+
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

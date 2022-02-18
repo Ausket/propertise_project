@@ -67,16 +67,19 @@ $resultpr = mysqli_query($con, $sqlpr);
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
 
-  <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
   <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
-  <script src="../js/jquery.min.js"></script>
-  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+<!--   <script src="../js/jquery.min.js"></script>
+ -->  <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
   <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 
-
+  
   <style>
     .profile-images-card {
       margin: auto;
@@ -157,7 +160,7 @@ $resultpr = mysqli_query($con, $sqlpr);
     .red {
       color: red;
     }
-    
+
     #map {
       height: 100%;
       width: 100%;
@@ -440,7 +443,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                 <div class="card mb-6">
                                   <div class="card-body p-6">
                                     <h3 class="card-title mb-6 text-heading fs-22 lh-15"> ปักหมุดที่ตั้งอสังหาริมทรัพย์ </h3>
-                                    <div id="map" style="height: 296px" ></div>
+                                    <div id="map" style="height: 296px"></div>
                                     <div class="form-row mx-n2">
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group mb-md-0">
@@ -483,11 +486,11 @@ $resultpr = mysqli_query($con, $sqlpr);
                                     <p class="card-text mb-5"> รูปภาพหลัก </p>
                                     <div class="profile-images-card">
                                       <div class="profile-images">
-                                        <img src="../images/up-img.png" id="upload-img">
+                                        <img src="../images/up-img.png" id="uploaded_image">
                                       </div>
                                       <div class="custom-file">
-                                        <label for="fileupload"> เรียกดูไฟล์ </label>
-                                        <input type="file" id="fileupload" name="img" class="custom-file-input">
+                                        <label for="upload_image"> เรียกดูไฟล์ </label>
+                                        <input type="file" name="upload_image" id="upload_image" accept="image/*">
                                         <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
                                       </div>
                                     </div>
@@ -588,8 +591,36 @@ $resultpr = mysqli_query($con, $sqlpr);
       </div>
     </div>
   </div>
+  <div id="uploadimageModal" class="modal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Upload & Crop Image</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8 text-center">
+                            <div id="image_demo" style="width:350px; margin-top:30px"></div>
+                        </div>
+                        <div class="col-md-4" style="padding-top:30px;">
+                            <br />
+                            <br />
+                            <br />
+                            <button class="btn btn-success crop_image" id="img">Crop & Upload Image</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
   <!-- Vendors scripts -->
-  <script src="../css/vendors/jquery.min.js"></script>
+<!--   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+ -->
+  <!-- <script src="../css/vendors/jquery.min.js"></script> -->
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
   <script src="../css/vendors/bootstrap/bootstrap.bundle.js"></script>
   <script src="../css/vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
@@ -604,15 +635,61 @@ $resultpr = mysqli_query($con, $sqlpr);
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <!-- <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script> -->
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
-  <script>
-    $(function() {
-      $("#fileupload").change(function(event) {
-        var x = URL.createObjectURL(event.target.files[0]);
-        $("#upload-img").attr("src", x);
-        console.log(event);
-      });
-    })
+  
+<script>
+    $(document).ready(function() {
 
+        $image_crop = $('#image_demo').croppie({
+            enableExif: true,
+            viewport: {
+                width: 200,
+                height: 200,
+                type: 'square' //circle
+            },
+            boundary: {
+                width: 300,
+                height: 300
+            }
+        });
+
+        $('#upload_image').on('change', function() {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                $image_crop.croppie('bind', {
+                    url: event.target.result
+                }).then(function() {
+                    console.log('jQuery bind complete');
+                });
+            }
+            reader.readAsDataURL(this.files[0]);
+            $('#uploadimageModal').modal('show');
+        });
+
+        $('.crop_image').click(function(event) {
+            $image_crop.croppie('result', {
+                type: 'canvas',
+                size: 'viewport'
+            })
+            .then(function(response) {
+
+                $.ajax({
+                    url: "../backend/uploadimg.php",
+                    type: "POST",
+                    data: {
+                        "img": response
+                    },
+                    success: function(data) {
+                        $('#uploadimageModal').modal('hide');
+                        $('#uploaded_image').attr('src',data);
+                        console.log(data);
+                    }
+                });
+            })
+        });
+
+    });
+</script>
+  <script>
     function handleFileSelect(event) {
 
       var input = this;
@@ -713,7 +790,6 @@ $resultpr = mysqli_query($con, $sqlpr);
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <script>
     /*     const marker1 = new mapboxgl.Marker()
             .setLngLat([100.604274, 13.84786])
@@ -775,8 +851,6 @@ $resultpr = mysqli_query($con, $sqlpr);
 
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
-
-    
   </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

@@ -25,21 +25,14 @@ $numf = mysqli_num_rows($resultf); ?>
                     <img src="../images/logo.png" alt="HomeID">
                 </a>
                 <div class="ml-auto d-flex align-items-center ">
-                    <div class="d-flex align-items-center d-xl-none">
-                        <div class="dropdown px-3">
-                            <a href="#" class="dropdown-toggle d-flex align-items-center text-heading" data-toggle="dropdown">
+                    <div class="d-flex align-items-center d-xl-none pr-2">
+                        <div class="d-flex align-items-center text-heading">
                                 <div class="w-48px">
-                                    <img src="../images/testimonial-5.jpg" alt="Ronald Hunter" class="rounded-circle">
+                                    <img src="../image/m_img/<?php echo $rowu['img']; ?>" alt="Ronald Hunter" class="rounded-circle">
                                 </div>
                                 <span class="fs-13 font-weight-500 d-none d-sm-inline ml-2">
-                                    Ronald Hunter
+                                <?php echo $rowu['name']; ?>
                                 </span>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right">
-                                <a class="dropdown-item" href="#">My Profile</a>
-                                <a class="dropdown-item" href="#">My Profile</a>
-                                <a class="dropdown-item" href="#">Logout</a>
-                            </div>
                         </div>
                     </div>
                     <button class="navbar-toggler border-0 px-0" type="button" data-toggle="collapse" data-target="#primaryMenuSidebar" aria-controls="primaryMenuSidebar" aria-expanded="false" aria-label="Toggle navigation">

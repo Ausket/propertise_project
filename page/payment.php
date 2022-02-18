@@ -1,23 +1,24 @@
 <?php
 
 // require('../base_require.php');
-// require('../../../config.php');
+require('../config.php');
 // require('../connect.php');
-require('../dbconnect.php');
+require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location: ../index.php');
+    header('Location:../index.php');
 }
 $type = $_SESSION['utype'];
 if ($type == 'member' || $type == 'agent') {
     header('Location:../index.php');
 }
 
+
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://okjung.com/nack/api/payment/insurance/setupEnvironment',
+    CURLOPT_URL => 'https://okjung.com/au/payment/setupEnvironment',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -42,6 +43,8 @@ curl_close($curl);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Payment</title>
+
+    <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <!-- <link rel="stylesheet" href="../css/all.min.css"> -->
@@ -51,12 +54,13 @@ curl_close($curl);
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="../css/switch_insurance.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script></head>
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <?php
-    include('admin_nav.php');
-    ?>
+    <?php require('admin_nav.php') ?>
 
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -145,7 +149,7 @@ curl_close($curl);
                                     <div class="mr-5 ml-5">
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group" id="inputGroup-sizing">จำนวนเงิน</label>
-                                            <input class="form-control mb-2" id="amount-credit" type="number" maxlength="250" placeholder="amount" readonly><br />
+                                            <input class="form-control mb-2" id="amount-credit" type="number" maxlength="250" placeholder="price" readonly><br />
                                         </div>
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group" id="inputGroup-sizing">เลขอ้างอิง</label>
@@ -212,7 +216,7 @@ curl_close($curl);
                                         </div>
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group" id="inputGroup-sizing">ราคาสินค้า ทศนิยม 2 ตำแหน่ง</label>
-                                            <input class="form-control mb-1" type="text" id="amount-installment" name="amount" maxlength="13" placeholder="Amount" readonly>
+                                            <input class="form-control mb-1" type="text" id="amount-installment" name="price" maxlength="13" placeholder="Amount" readonly>
                                         </div>
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group" id="inputGroup-sizing">ธนาคาร</label>
@@ -320,21 +324,29 @@ curl_close($curl);
 
 
     <!-- REQUIRED SCRIPTS -->
+    <!-- jQuery -->
+    <script src="../js/gbPayment.js"></script>
     <script src="../js/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="../js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="../js/adminlte.min.js"></script>
-    <script src="../js/buttons.bootstrap4.min.js"></script>
-    <script src="../js/jszip/jszip.min.js"></script>
-    <script src="../js/pdfmake.min.js"></script>
-    <script src="../js/vfs_fonts.js"></script>
-    <script src="../js/buttons.html5.min.js"></script>
-    <script src="../js/buttons.print.min.js"></script>
-    <script src="../js/buttons.colVis.min.js"></script>
+                <!-- Bootstrap 4 -->
+                <script src="../js/bootstrap.bundle.min.js"></script>
+                <!-- AdminLTE App -->
+                <script src="../js/adminlte.min.js"></script>
+                 
+                <script src="../js/jquery.dataTables.min.js"></script>
+                <script src="../js/dataTables.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.responsive.min.js"></script>
+                <script src="../js/responsive.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.buttons.min.js"></script>
+                <script src="../js/buttons.bootstrap4.min.js"></script>
+                <script src="../js/jszip/jszip.min.js"></script>
+                <script src="../js/pdfmake.min.js"></script>
+                <script src="../js/vfs_fonts.js"></script>
+                <script src="../js/buttons.html5.min.js"></script>
+                <script src="../js/buttons.print.min.js"></script>
+                <script src="../js/buttons.colVis.min.js"></script>
+
 
     <script>
-        var backUrl = "";
         var resUrl = "";
 
         $(document).ready(function() {
@@ -365,12 +377,12 @@ curl_close($curl);
                 $("#referenceNo-installment").val($("#order-id").val());
                 $("#amount-installment").val($("#price").val());
                 $.ajax({
-                    url: "https://okjung.com/nack/api/payment/insurance/setupEnvironment.php",
+                    url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                     method: "GET",
                     success: function(dataEnvi) {
                         $("#publicKey-installment").val(dataEnvi["public-key"]);
                         $.ajax({
-                            url: "https://okjung.com/nack/api/payment/insurance/setupResponse.php",
+                            url: "<?= $base_api_pay ?>payment/setupResponse.php",
                             method: "GET",
                             success: function(dataRes) {
                                 // console.log(data);
@@ -391,7 +403,7 @@ curl_close($curl);
         function genChecksumInst() {
             //เรียกใช้ข้อมูล Environment
             $.ajax({
-                url: "https://okjung.com/nack/api/payment/insurance/setupEnvironment.php",
+                url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                 method: "GET",
                 success: function(dataEnvi) {
 
@@ -428,7 +440,7 @@ curl_close($curl);
         $("#charge-credit").click(function() {
 
             $.ajax({
-                url: "<?= $base_api_pay ?>insurance/setupResponse.php",
+                url: "<?= $base_api_pay ?>payment/setupResponse.php",
                 method: "GET",
                 success: function(data) {
                     console.log(data);
@@ -436,7 +448,7 @@ curl_close($curl);
                     // data['full-res-url'];
 
                     $.ajax({
-                        url: "https://okjung.com/nack/api/payment/insurance/setupResponse.php",
+                        url: "<?= $base_api_pay ?>payment/setupResponse.php",
                         method: "GET",
                         success: function(dataRes) {
                             console.log(dataRes);
@@ -444,7 +456,7 @@ curl_close($curl);
                             resUrl = dataRes["credit-res-url"];
                             //เรียกใช้ข้อมูล Environment
                             $.ajax({
-                                url: "https://okjung.com/nack/api/payment/insurance/setupEnvironment.php",
+                                url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                                 method: "GET",
                                 success: function(dataEnvi) {
                                     if (backUrl != "") {
@@ -460,11 +472,11 @@ curl_close($curl);
                                             $("#referenceNo-credit").val(),
                                             data['full-back-url'],
                                             data['full-res-url'],
-                                            "detail",
-                                            "cutName",
+                                            $("#order-detail").val(),
+                                            $("#cust-name").val(),
                                             "cutEmail",
                                             "cutAddress",
-                                            "cutPhone",
+                                            $("#cust-phone").val(),
                                             "defined1"
                                         )
                                     }
@@ -482,7 +494,7 @@ curl_close($curl);
         function genChecksumMoblie() {
             //เรียกใช้ข้อมูล Back and Response Url
             $.ajax({
-                url: "https://okjung.com/nack/api/payment/insurance/setupResponse.php",
+                url: "<?= $base_api_pay ?>payment/setupResponse.php",
                 method: "GET",
                 success: function(dataRes) {
                     // console.log(data);
@@ -494,7 +506,7 @@ curl_close($curl);
 
                     //เรียกใช้ข้อมูล Environment
                     $.ajax({
-                        url: "https://okjung.com/nack/api/payment/insurance/setupEnvironment.php",
+                        url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                         method: "GET",
                         success: function(dataEnvi) {
                             if (backUrl != "") {
@@ -588,7 +600,7 @@ curl_close($curl);
 
         function create_order() {
             $.ajax({
-                url: "<?= $base_api ?>create_order",
+                url: "<?= $base_api_pay ?>payment/create_order.php",
                 // url: "http://localhost/deena/project-api/v1/create_order.php",
                 method: "POST",
                 data: JSON.stringify({
@@ -596,6 +608,7 @@ curl_close($curl);
                     amount: $("#price").val(),
                 }),
                 success: function(data) {
+                    console.log(data);
                     Swal.fire({
                         position: 'top-center',
                         icon: 'success',

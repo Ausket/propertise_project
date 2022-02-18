@@ -83,6 +83,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <tr>
                                                 <th>ลำดับ</th>
                                                 <th>ประเภทประกาศ</th>
+                                                <th>สี</th>
                                                 <th>สถานะ</th>
                                                 <th>Action</th>
 
@@ -95,6 +96,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <tr>
                                                     <td><?php echo $order++ ?></td>
                                                     <td><?php echo $row2['type']; ?></td>
+                                                    <td><span class="badge badge-pill" style="background-color:<?php echo $row2['color'];?>"><?php echo $row2['color'];?></span></td>
                                                     <td>
                                                 <?php if ($row2['at_status'] == '1') {
 
@@ -173,8 +175,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             $("#example1").DataTable({
                                 "responsive": true,
                                 "lengthChange": false,
-                                "autoWidth": false,
-                                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                                "autoWidth": false
+                                // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                             }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
                             $('#example2').DataTable({
                                 "paging": true,

@@ -1,15 +1,14 @@
 <?php
 
 // require('../base_require.php');
-// require('../../../config.php');
+require('../config.php');
 // require('../connect.php');
 require('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-    header('Location: ../index.php');
+    header('Location:../index.php');
 }
-
 $type = $_SESSION['utype'];
 if ($type == 'member' || $type == 'agent') {
     header('Location:../index.php');
@@ -28,11 +27,14 @@ if ($type == 'member' || $type == 'agent') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Setup</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+
+    <!-- Google Font: Source Sans Pro -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
     <!-- Font Awesome Icons -->
     <!-- <link rel="stylesheet" href="../css/all.min.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -41,12 +43,11 @@ if ($type == 'member' || $type == 'agent') {
     <link rel="stylesheet" href="../css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
+    <link rel="stylesheet" href="../css/switch_insurance.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <?php
-    include('admin_nav.php');
-    ?>
+    <?php require('admin_nav.php') ?>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -138,7 +139,7 @@ if ($type == 'member' || $type == 'agent') {
                                 <div class="form-group row">
                                     <label class="col-sm-4 col-form-label"></label>
                                     <div class="col-sm-8">
-                                        <button type="button" id="check" class="btn btn-warning" data-toggle="modal" data-target="#save_config">
+                                        <button type="button" id="check" class="btn btn-primary" data-toggle="modal" data-target="#save_config">
                                             ตั้งค่าระบบ
                                         </button>
                                         <!-- Modal -->
@@ -184,6 +185,12 @@ if ($type == 'member' || $type == 'agent') {
                 <script src="../js/bootstrap.bundle.min.js"></script>
                 <!-- AdminLTE App -->
                 <script src="../js/adminlte.min.js"></script>
+
+                <script src="../js/jquery.dataTables.min.js"></script>
+                <script src="../js/dataTables.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.responsive.min.js"></script>
+                <script src="../js/responsive.bootstrap4.min.js"></script>
+                <script src="../js/dataTables.buttons.min.js"></script>
                 <script src="../js/buttons.bootstrap4.min.js"></script>
                 <script src="../js/jszip/jszip.min.js"></script>
                 <script src="../js/pdfmake.min.js"></script>
@@ -192,15 +199,14 @@ if ($type == 'member' || $type == 'agent') {
                 <script src="../js/buttons.print.min.js"></script>
                 <script src="../js/buttons.colVis.min.js"></script>
 
-
     <script>
         $(document).ready(function() {
             //API เรียกข้อมูล Environment มาแสดงในหน้าเพจ
             $.ajax({
-                url: "<?= $base_api_pay ?>insurance/setupEnvironment.php",
+                url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                 method: "GET",
                 success: function(data) {
-                    // console.log(data);
+                    console.log(data);
                     $('#path-api').val(data['path-api']);
                     $('#customer-key').val(data['customer-key']);
                     $('#secret-key').val(data['secret-key']);
@@ -210,7 +216,7 @@ if ($type == 'member' || $type == 'agent') {
         });
         $("#save").click(function() {
             $.ajax({
-                url: "<?= $base_api_pay ?>insurance/setupEnvironment.php",
+                url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                 method: "PUT",
                 data: JSON.stringify({
                     "path-api": $('#path-api').val(),
@@ -220,7 +226,7 @@ if ($type == 'member' || $type == 'agent') {
                 }),
                 success: function(res) {
                     // alert(data);
-                    // console.log(res);
+                    console.log(res);
                     $('#close_modal').click();
                     Swal.fire({
                         position: 'top-center',

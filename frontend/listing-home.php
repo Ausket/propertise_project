@@ -214,27 +214,8 @@
                             <?php echo $rowsb['parking']; ?> คัน
                           </li>
                         </ul>
-                        <?php if ($rowsb['type'] == 'ขาย') {
-                          $type = 'ขาย';
-                          echo "<span class='badge badge-indigo mr-xl-2 mt-3 mt-sm-0 '>$type</span>";
-                        } ?>
-                        <?php if ($rowsb['type'] == 'เช่า') {
-                          $type = 'เช่า';
-                          echo "<span class='badge badge-info mr-xl-2 mt-3 mt-sm-0'>$type</span>";
-                        } ?>
-                        <?php if ($rowsb['type'] == 'ขาย-เช่า') {
-                          $type = 'ขาย-เช่า';
-                          echo "<span class='badge badge-success mr-xl-2 mt-3 mt-sm-0 '>$type</span>";
-                        } ?>
-                        <?php if ($rowsb['type'] == 'ขายดาวน์') {
-                          $type = 'ขายดาวน์';
-                          echo "<span class='badge badge-warning mr-xl-2 mt-3 mt-sm-0 '>$type</span>";
-                        } ?>
-                        <?php if ($rowsb['type'] == 'ใบจอง') {
-                          $type = 'ใบจอง';
-                          echo "<span class='badge badge-danger mr-xl-2 mt-3 mt-sm-0'>$type</span>";
-                        } ?>
-                        <!-- <span class="badge badge-primary mr-xl-2 mt-3 mt-sm-0">ขาย</span> -->
+                        <span class='badge mr-xl-2 mt-3 mt-sm-0' style="background-color:<?php echo $rowsb['color'] ?> ; color:white;" ><?php echo $rowsb['type'] ?></span>
+                       
                       </div>
                     </div>
                   </div>
