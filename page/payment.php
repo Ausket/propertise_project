@@ -200,7 +200,7 @@ curl_close($curl);
             </div>
         </div>
 
-        <div id="installment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+        <!-- <div id="installment" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -244,13 +244,13 @@ curl_close($curl);
                                 <!-- <input class="mb-2" type="text" name="detail" placeholder="Detail" value="ข้อมูลรายละเอียด"><br /> -->
 
                                 <!-- debug checksum -->
-                                <input type="hidden" id="checksum-installment" name="checksum" placeholder="checksum" value=""><br />
+                                <!-- <input type="hidden" id="checksum-installment" name="checksum" placeholder="checksum" value=""><br />
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --> 
 
         <!-- Main content -->
         <div class="container mt-3">
@@ -298,7 +298,7 @@ curl_close($curl);
                     <button class="btn btn-primary" onclick="getBar()">Barcode สแกนชำระเงิน</button>
                     <button class="btn btn-primary" id="mobile-method" data-toggle="modal" data-target="#mobile">โอนเงิน Mobile Banking</button>
                     <button class="btn btn-primary" id="credit-method" data-toggle="modal" data-target="#credit">รูดบัตร Credit Card</button>
-                    <button class="btn btn-primary" id="installment-method" data-toggle="modal" data-target="#installment">ผ่อนชำระบัตร Credit</button>
+                    <!-- <button class="btn btn-primary" id="installment-method" data-toggle="modal" data-target="#installment">ผ่อนชำระบัตร Credit</button> -->
                 </div>
             </div>
 
@@ -374,62 +374,62 @@ curl_close($curl);
             // });            
         });
 
-        $("#installment-method").click(function() {
-            if ($("#order-id").val() == "" || $("#price").val() == "") {
-                // $('#close-mobile-modal').click();
-                alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
+        // $("#installment-method").click(function() {
+        //     if ($("#order-id").val() == "" || $("#price").val() == "") {
+        //         // $('#close-mobile-modal').click();
+        //         alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
 
-            } else {
-                $("#referenceNo-installment").val($("#order-id").val());
-                $("#amount-installment").val($("#price").val());
-                $.ajax({
-                    url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
-                    method: "GET",
-                    success: function(dataEnvi) {
-                        $("#publicKey-installment").val(dataEnvi["public-key"]);
-                        $.ajax({
-                            url: "<?= $base_api_pay ?>payment/setupResponse.php",
-                            method: "GET",
-                            success: function(dataRes) {
-                                // console.log(data);
-                                // กำหนดข้อมูล Back and Response Url ให้ form
-                                $("#responseUrl-installment").val(dataRes["install-res-url"]);
-                                $("#backgroundUrl-installment").val(dataRes["install-back-url"]);
+        //     } else {
+        //         $("#referenceNo-installment").val($("#order-id").val());
+        //         $("#amount-installment").val($("#price").val());
+        //         $.ajax({
+        //             url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
+        //             method: "GET",
+        //             success: function(dataEnvi) {
+        //                 $("#publicKey-installment").val(dataEnvi["public-key"]);
+        //                 $.ajax({
+        //                     url: "<?= $base_api_pay ?>payment/setupResponse.php",
+        //                     method: "GET",
+        //                     success: function(dataRes) {
+        //                         // console.log(data);
+        //                         // กำหนดข้อมูล Back and Response Url ให้ form
+        //                         $("#responseUrl-installment").val(dataRes["install-res-url"]);
+        //                         $("#backgroundUrl-installment").val(dataRes["install-back-url"]);
 
-                            },
-                        });
-                    },
-                });
-
-
-            }
-
-        });
-
-        function genChecksumInst() {
-            //เรียกใช้ข้อมูล Environment
-            $.ajax({
-                url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
-                method: "GET",
-                success: function(dataEnvi) {
-
-                    //กำหนค่า public key ให้กับ form-payfull
-                    let hashInstallment = CryptoJS.HmacSHA256(
-                        $("#amount-installment").val() +
-                        $("#referenceNo-installment").val() +
-                        $("#responseUrl-installment").val() +
-                        $("#backgroundUrl-installment").val() +
-                        $("#bankCode-installment").val() +
-                        $("#term-installment").val(), dataEnvi["secret-key"]);
-                    $("#checksum-installment").val(hashInstallment);
+        //                     },
+        //                 });
+        //             },
+        //         });
 
 
-                },
-            });
+        //     }
+
+        // });
+
+        // function genChecksumInst() {
+        //     //เรียกใช้ข้อมูล Environment
+        //     $.ajax({
+        //         url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
+        //         method: "GET",
+        //         success: function(dataEnvi) {
+
+        //             //กำหนค่า public key ให้กับ form-payfull
+        //             let hashInstallment = CryptoJS.HmacSHA256(
+        //                 $("#amount-installment").val() +
+        //                 $("#referenceNo-installment").val() +
+        //                 $("#responseUrl-installment").val() +
+        //                 $("#backgroundUrl-installment").val() +
+        //                 $("#bankCode-installment").val() +
+        //                 $("#term-installment").val(), dataEnvi["secret-key"]);
+        //             $("#checksum-installment").val(hashInstallment);
+
+
+        //         },
+        //     });
 
 
 
-        }
+        // }
 
         $("#credit-method").click(function() {
             if ($("#order-id").val() == "" || $("#price").val() == "") {
