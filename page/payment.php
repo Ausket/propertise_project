@@ -18,7 +18,7 @@ if ($type == 'member' || $type == 'agent') {
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://okjung.com/au/payment/setupEnvironment',
+    CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -56,7 +56,12 @@ curl_close($curl);
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/switch_insurance.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script></head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.min.js"></script>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -258,25 +263,25 @@ curl_close($curl);
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">ชื่อลูกค้า</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="cust-name" placeholder="กรุณากรอกชื่อลูกค้า">
+                    <input type="text" class="form-control" id="cust-name" placeholder="กรุณากรอกชื่อลูกค้า" value="ศิริพร">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">เบอร์โทรศัพท์ลูกค้า</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="cust-phone" maxlength="10" placeholder="กรุณากรอกเบอร์โทรศัพท์">
+                    <input type="text" class="form-control" id="cust-phone" maxlength="10" placeholder="กรุณากรอกเบอร์โทรศัพท์" value="0922766755">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="order-detail" placeholder="กรอกรายละเอียดสินค้า">
+                    <input type="text" class="form-control" id="order-detail" placeholder="กรอกรายละเอียดสินค้า" value="กระเป๋า">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">ราคาสินค้า</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" id="price" placeholder="กรุณากำหนดราคาสินค้า เป็นทศนิยม 2 ตำแหน่ง เช่น 95.00 หรือ 85.50">
+                    <input type="number" class="form-control" id="price" placeholder="กรุณากำหนดราคาสินค้า เป็นทศนิยม 2 ตำแหน่ง เช่น 95.00 หรือ 85.50" value="1200.00">
                     <label for="" class="mt-1" style="color:red"> *กรุณากรอกข้อมูลเป็นทศนิยม 2 ตำแหน่ง เช่น 95.00 หรือ 85.50</label>
                 </div>
             </div>
@@ -325,25 +330,26 @@ curl_close($curl);
 
     <!-- REQUIRED SCRIPTS -->
     <!-- jQuery -->
-    <script src="../js/gbPayment.js"></script>
+
     <script src="../js/jquery.min.js"></script>
-                <!-- Bootstrap 4 -->
-                <script src="../js/bootstrap.bundle.min.js"></script>
-                <!-- AdminLTE App -->
-                <script src="../js/adminlte.min.js"></script>
-                 
-                <script src="../js/jquery.dataTables.min.js"></script>
-                <script src="../js/dataTables.bootstrap4.min.js"></script>
-                <script src="../js/dataTables.responsive.min.js"></script>
-                <script src="../js/responsive.bootstrap4.min.js"></script>
-                <script src="../js/dataTables.buttons.min.js"></script>
-                <script src="../js/buttons.bootstrap4.min.js"></script>
-                <script src="../js/jszip/jszip.min.js"></script>
-                <script src="../js/pdfmake.min.js"></script>
-                <script src="../js/vfs_fonts.js"></script>
-                <script src="../js/buttons.html5.min.js"></script>
-                <script src="../js/buttons.print.min.js"></script>
-                <script src="../js/buttons.colVis.min.js"></script>
+    <script src="../js/gbPayment.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="../js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="../js/adminlte.min.js"></script>
+
+    <script src="../js/jquery.dataTables.min.js"></script>
+    <script src="../js/dataTables.bootstrap4.min.js"></script>
+    <script src="../js/dataTables.responsive.min.js"></script>
+    <script src="../js/responsive.bootstrap4.min.js"></script>
+    <script src="../js/dataTables.buttons.min.js"></script>
+    <script src="../js/buttons.bootstrap4.min.js"></script>
+    <script src="../js/jszip/jszip.min.js"></script>
+    <script src="../js/pdfmake.min.js"></script>
+    <script src="../js/vfs_fonts.js"></script>
+    <script src="../js/buttons.html5.min.js"></script>
+    <script src="../js/buttons.print.min.js"></script>
+    <script src="../js/buttons.colVis.min.js"></script>
 
 
     <script>
@@ -605,7 +611,7 @@ curl_close($curl);
                 method: "POST",
                 data: JSON.stringify({
                     referenceNo: $("#order-id").val(),
-                    amount: $("#price").val(),
+                    price: $("#price").val(),
                 }),
                 success: function(data) {
                     console.log(data);

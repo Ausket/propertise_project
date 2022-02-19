@@ -5,9 +5,6 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-if (!isset($_SESSION)) {
-    session_start();
-}
 // require('../base_require.php');
 require('../config.php');
 // require('../connect.php');
@@ -15,8 +12,11 @@ require('../dbconnect.php');
 
 if (!empty($_POST['resultCode'])) {
     $result = $_POST["resultCode"];
+    echo $result;
     $amount = $_POST["amount"];
+    echo $amount;
     $order_id = $_POST["referenceNo"];
+    echo $order_id;
     $gbp_ref = $_POST["gbpReferenceNo"];
     if (isset($_POST["date"])) {
         $date = $_POST["date"];
@@ -88,14 +88,13 @@ if (!empty($_POST['resultCode'])) {
     $sql = "UPDATE pay_status 
             SET
             gbpReferenceNo = '$gbp_ref',
-            amount = '$amount' ,
+            price = '$amount' ,
             resultCode = '$result' ,
             name = '$name',
             email = '$email',
             issuerBank = '$issuerBank',
             paymentType = '$paymentType' ,
             merchantDefined	 = '$merchantDefined',
-            detail = '$detail',
             date = '$date',
             time = '$time' 
             WHERE referenceNo = '$order_id'";

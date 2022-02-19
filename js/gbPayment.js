@@ -25,16 +25,21 @@ var backUrl = "";
 var resUrl = "";
 var payurl = "http://localhost/deena/propertise/page/";
 
+
 $.ajax({
-    url: payurl + "payment/setupEnvironment.php",
-    method: "GET",
-    success: function(data) {
-        path_api = data["path-api"];
-        customerID = data["customer-key"];
-        public_key = data["public-key"];
-        secret_key = data["secret-key"];
-    },
-});
+        url: payurl + "payment/setupEnvironment.php",
+        method: "GET",
+        success: function(data) {
+            path_api = data["path-api"];
+            customerID = data["customer-key"];
+            public_key = data["public-key"];
+            secret_key = data["secret-key"];
+        },
+    })
+    // .then(function(response) {
+    //     // alert(path_api);
+    // })
+
 
 function setAPI(arg_url, arg_request, arg_token = null) {
     var token = arg_token;
