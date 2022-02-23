@@ -36,7 +36,24 @@ if (isset($_POST['submit'])) {
             $_SESSION["ustatus"] = $row["ustatus"];
             $_SESSION['last_login_timestamp'] = time();
 
-            setcookie('user_login', $_SESSION['name'], time() + (1 * 24 * 60 * 60));
+            if (!empty($_POST['remember'])) {
+
+
+                // setcookie('user_login', $_POST['username'], time() + (10 * 365 * 24 * 60 * 60));
+                setcookie('user_login', $_POST['email'], time() + (1 * 24 * 60 * 60));
+
+                setcookie('user_password', $_POST['password'], time() + (1 * 24 * 60 * 60));
+            } else {
+
+                if (isset($_COOKIE['user_login'])) {
+                    setcookie('user_login', '');
+
+                    if (isset($_COOKIE['user_password'])) {
+                        setcookie('user_password', '');
+                    }
+                }
+            }
+
 
             if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
                 header("location: ../page/profile.php");
@@ -223,7 +240,9 @@ if (isset($_POST['submit'])) {
                                         <span class="input-group-text bg-gray-01 border-0 text-muted fs-18" id="inputGroup-sizing-lg">
                                             <i class="far fa-user"></i></span>
                                     </div>
-                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder="อีเมล">
+                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" value="<?php if(isset($_COOKIE['user_login'])){
+                                    
+                                    echo $_COOKIE['user_login']; } ?>" required placeholder="อีเมล">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -234,7 +253,7 @@ if (isset($_POST['submit'])) {
                                             <i class="far fa-lock"></i>
                                         </span>
                                     </div>
-                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
+                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" value="<?php if(isset($_COOKIE['user_login'])){ echo $_COOKIE['user_password'];} ?>" required placeholder="รหัสผ่าน">
                                     <div class="input-group-append">
                                         <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
                                             <i class="far fa-eye-slash"></i>
@@ -244,7 +263,7 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="d-flex mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="remember-me" name="remember-me">
+                                    <input class="form-check-input" type="checkbox" <?php if(isset($_COOKIE['user_login'])){?> checked <?php }  ?> id="remember-me" name="remember">
                                     <label class="form-check-label" for="remember-me">
                                         บันทึกการเข้าสู่ระบบ
                                     </label>

@@ -36,7 +36,25 @@ if (isset($_POST['submit'])) {
             $_SESSION["ustatus"] = $row["ustatus"];
             $_SESSION['last_login_timestamp'] = time();
 
-            setcookie('user_login', $_SESSION['name'], time() + (1 * 24 * 60 * 60));
+
+            if (!empty($_POST['remember'])) {
+
+
+                // setcookie('user_login', $_POST['username'], time() + (10 * 365 * 24 * 60 * 60));
+                setcookie('user_login', $_POST['email'], time() + (1 * 24 * 60 * 60));
+
+                setcookie('user_password', $_POST['password'], time() + (1 * 24 * 60 * 60));
+            } else {
+
+                if (isset($_COOKIE['user_login'])) {
+                    setcookie('user_login', '');
+
+                    if (isset($_COOKIE['user_password'])) {
+                        setcookie('user_password', '');
+                    }
+                }
+            }
+
 
             if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
                 header("location: page/profile.php");
@@ -83,14 +101,14 @@ if (isset($_POST['submit'])) {
                         <img src="images/logo-white.png" alt="HomeID" class="d-inline-block d-lg-none">
                     </a>
                     <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
-                                $id = $_SESSION['u_id'];
-                                $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
-                                $resultfa = mysqli_query($con,$sqlfa);
-                                $numf = mysqli_num_rows($resultfa); ?>
-                    <a class="d-block d-xl-none ml-auto mr-4 position-relative text-white p-2" href="frontend/dashboard-favourites.php">
-                        <i class="fal fa-heart fs-large-4"></i>
-                        <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf?></span>
-                    </a>
+                        $id = $_SESSION['u_id'];
+                        $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                        $resultfa = mysqli_query($con, $sqlfa);
+                        $numf = mysqli_num_rows($resultfa); ?>
+                        <a class="d-block d-xl-none ml-auto mr-4 position-relative text-white p-2" href="frontend/dashboard-favourites.php">
+                            <i class="fal fa-heart fs-large-4"></i>
+                            <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf ?></span>
+                        </a>
                     <?php } ?>
                     <button class="navbar-toggler border-0 px-0" type="button" data-toggle="collapse" data-target="#primaryMenu02" aria-controls="primaryMenu02" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="text-white fs-24"><i class="fal fa-bars"></i></span>
@@ -142,38 +160,38 @@ if (isset($_POST['submit'])) {
                         </ul>
                         <div class="d-block d-xl-none">
                             <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
-                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
-                                $id = $_SESSION['u_id'];
-                                $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
-                                $resultfa = mysqli_query($con,$sqlfa);
-                                $numf = mysqli_num_rows($resultfa); ?>
-                                 <li class="nav-item ">
-                                    <a class="nav-link "  href="page/logout.php">ออกจากระบบ</a>
-                                </li>
-                                <?php }else {?>
-                                <li class="nav-item ">
-                                    <a class="nav-link " data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
-                                </li>
-                                <?php }?>
+                                <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                                    $id = $_SESSION['u_id'];
+                                    $sqlfa = "SELECT * FROM favourite WHERE u_id= $id";
+                                    $resultfa = mysqli_query($con, $sqlfa);
+                                    $numf = mysqli_num_rows($resultfa); ?>
+                                    <li class="nav-item ">
+                                        <a class="nav-link " href="page/logout.php">ออกจากระบบ</a>
+                                    </li>
+                                <?php } else { ?>
+                                    <li class="nav-item ">
+                                        <a class="nav-link " data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
+                                    </li>
+                                <?php } ?>
                             </ul>
                         </div>
                     </div>
                 </nav>
                 <div class="ml-auto d-none d-xl-block">
                     <ul class="navbar-nav flex-row ml-auto align-items-center justify-content-lg-end flex-wrap py-2">
-                        <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') { 
+                        <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
                             $id = $_SESSION['u_id'];
                             $sqlh = "SELECT * FROM users WHERE u_id= $id ";
                             $resulth = mysqli_query($con, $sqlh);
-                            $rowh = mysqli_fetch_assoc($resulth);?>
+                            $rowh = mysqli_fetch_assoc($resulth); ?>
                             <li class="nav-item ">
                                 <div class="dropdown border-md-right border-0 py-3 text-right">
                                     <a href="#" class="dropdown-toggle text-heading pr-3 pr-sm-6 d-flex align-items-center justify-content-end" data-toggle="dropdown">
                                         <div class="mr-4 w-48px">
-                                            <img  src="image/m_img/<?php echo $rowh['img'] ?>" width="50"  class="rounded-circle">
+                                            <img src="image/m_img/<?php echo $rowh['img'] ?>" width="50" class="rounded-circle">
                                         </div>
                                         <div class="fs-13 font-weight-500 lh-1">
-                                        <h6><?php echo $rowh['name'] ?></h6>
+                                            <h6><?php echo $rowh['name'] ?></h6>
                                         </div>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
@@ -185,22 +203,22 @@ if (isset($_POST['submit'])) {
                         <?php } else { ?>
 
                             <li class="nav-item ">
-                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>              
+                                <a class="nav-link pl-3 pr-2" data-toggle="modal" href="#login-register-modal">เข้าสู่ระบบ</a>
                             </li>
-                           
-                            <?php } ?>
-                            <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
-                                $id = $_SESSION['u_id'];
-                                $sqlf = "SELECT * FROM favourite WHERE u_id= $id";
-                                $resultf = mysqli_query($con,$sqlf);
-                                $numf = mysqli_num_rows($resultf); ?>
+
+                        <?php } ?>
+                        <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                            $id = $_SESSION['u_id'];
+                            $sqlf = "SELECT * FROM favourite WHERE u_id= $id";
+                            $resultf = mysqli_query($con, $sqlf);
+                            $numf = mysqli_num_rows($resultf); ?>
                             <li class="nav-item mr-auto mr-lg-6">
                                 <a class="nav-link px-2 position-relative" href="frontend/dashboard-favourites.php">
                                     <i class="fal fa-heart fs-large-4"></i>
-                                    <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf?></span>
+                                    <span class="badge badge-primary badge-circle badge-absolute"><?php echo $numf ?></span>
                                 </a>
                             </li>
-                            <?php } ?>
+                        <?php } ?>
                     </ul>
                 </div>
             </div>
@@ -232,7 +250,9 @@ if (isset($_POST['submit'])) {
                                         <span class="input-group-text bg-gray-01 border-0 text-muted fs-18" id="inputGroup-sizing-lg">
                                             <i class="far fa-user"></i></span>
                                     </div>
-                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder=" อีเมล">
+                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" value="<?php if(isset($_COOKIE['user_login'])){
+                                    
+                                    echo $_COOKIE['user_login']; } ?>" required placeholder=" อีเมล">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -243,7 +263,7 @@ if (isset($_POST['submit'])) {
                                             <i class="far fa-lock"></i>
                                         </span>
                                     </div>
-                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
+                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" value="<?php if(isset($_COOKIE['user_login'])){ echo $_COOKIE['user_password'];} ?>" required placeholder="รหัสผ่าน">
                                     <div class="input-group-append">
                                         <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
                                             <i class="far fa-eye-slash"></i>
@@ -253,7 +273,7 @@ if (isset($_POST['submit'])) {
                             </div>
                             <div class="d-flex mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="remember-me" name="remember-me">
+                                    <input class="form-check-input" type="checkbox" <?php if(isset($_COOKIE['user_login'])){?> checked <?php }  ?> id="remember-me" name="remember">
                                     <label class="form-check-label" for="remember-me">
                                         บันทึกการเข้าสู่ระบบ
                                     </label>
@@ -288,7 +308,7 @@ if (isset($_POST['submit'])) {
                         </div>
                     </div>
                     <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                    <form action="backend/regis_db.php" id="regisform" method="post">
+                        <form action="backend/regis_db.php" id="regisform" method="post">
                             <div class="form-group mb-4">
                                 <label for="username01" class="sr-only">Email</label>
                                 <div class="input-group input-group-lg">
@@ -335,8 +355,8 @@ if (isset($_POST['submit'])) {
                                     <input type="number" class="form-control border-0 shadow-none fs-13" id="tel" name="tel" required placeholder="เบอร์โทรศัพท์">
                                 </div>
                             </div>
-                        
-                            <button type="submit" name="submit"  class="btn btn-primary btn-lg btn-block">สมัครสมาชิก</button>
+
+                            <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">สมัครสมาชิก</button>
                         </form>
                         <div class="divider text-center my-2">
                             <span class="px-4 bg-white lh-17 text">

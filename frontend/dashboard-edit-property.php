@@ -886,15 +886,16 @@ $resultd = mysqli_query($con, $sqld);
 
       input.files = dt.files;
       console.log(dt.items);
-      
+
       $('#upload-img2').on('click', '.remove_img_preview', function() {
         let img = $('img.thumb').attr('src');
-        console.log(img);
+        let name = $(this).next('img.thumb').text();
+        console.log(name);
         $(this).parent('span').remove();
     
         for (let i = 0; i < dt.items.length; i++) {
           // Correspondance du fichier et du nom
-          if (dt.items[i].kind === 'file') {
+          if (name === dt.items[i].getAsFile().name) {
             // Suppression du fichier dans l'objet DataTransfer
             dt.items.remove(i);
            

@@ -87,7 +87,7 @@
             // Mise à jour des fichiers de l'input file après ajout
             this.files = dt.files;
               
-            console.log(dt.items);
+            console.log(dt.items[i]);
             // EventListener pour le bouton de suppression créé
             $('span.file-delete').click(function() {
                 let name = $(this).next('span.name').text();
