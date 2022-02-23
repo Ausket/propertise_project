@@ -211,10 +211,24 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                   <p class="fs-17 font-weight-bold text-heading mb-0">฿<?php echo $row7['price']; ?> </p>
                   <ul class="list-inline mb-0">
                     <li class="list-inline-item">
-                      <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent" data-toggle="tooltip" title="Wishlist"><i class="fas fa-heart"></i></a>
+                      <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
+                        $ad = $row7['a_id'];
+                        $idu = $_SESSION['u_id'];
+                        $sqlf = "SELECT * FROM favourite WHERE a_id = $ad AND u_id = $idu";
+                        $resultf = mysqli_query($con, $sqlf);
+                        $numf = mysqli_num_rows($resultf); ?>
+
+                        <?php if ($numf == 0) { ?>
+                          <a name="fav_<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i name="favi" id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
+                        <?php } else { ?>
+                          <a name="fav_<?php echo $ad ?>" id="fav" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-secondary bg-accent border-accent"><i name="favi" id="favi<?php echo $ad ?>" class="fas fa-heart"></i></a>
+                        <?php } ?>
+                      <?php } else { ?>
+                        <a href="#login-register-modal" data-toggle="modal" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i id="favi<?php echo $ad ?>" class="far fa-heart"></i></a>
+                      <?php } ?>
                     </li>
                     <li class="list-inline-item">
-                      <a href="#" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent" data-toggle="tooltip" title="Compare"><i class="fas fa-exchange-alt"></i></a>
+                      <a id="compa" name="<?php echo $row7['a_id'] ?>" class="w-40px h-40 border rounded-circle d-inline-flex align-items-center justify-content-center text-body hover-secondary bg-hover-accent border-hover-accent"><i class="fas fa-exchange-alt"></i></a>
                     </li>
                   </ul>
                 </div>
@@ -587,169 +601,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
     </div>
   </main>
   <?php include 'frontend/templates/footer.php'; ?>
-  <div class="modal fade login-register login-register-modal" id="login-register-modal" tabindex="-1" role="dialog" aria-labelledby="login-register-modal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mxw-571" role="document">
-      <div class="modal-content">
-        <div class="modal-header border-0 p-0">
-          <div class="nav nav-tabs row w-100 no-gutters" id="myTab" role="tablist">
-            <a class="nav-item col-sm-4 ml-0 nav-link pr-6 py-4 pl-9 active fs-18" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">เข้าสู่ระบบ</a>
-            <a class="nav-item col-sm-4 ml-0 nav-link py-4 px-6 fs-18" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">สมัครสมาชิก</a>
-            <div class="nav-item col-sm-4 ml-0 d-flex align-items-center justify-content-end">
-              <button type="button" class="close m-0 fs-30" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true" style="margin-right: 35px;">&times;</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="modal-body p-4 py-sm-7 px-sm-8">
-          <div class="tab-content shadow-none p-0" id="myTabContent">
-            <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-              <form action="" method="post">
-                <div class="form-group mb-4">
-                  <label for="username" class="sr-only">Email</label>
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-prepend ">
-                      <span class="input-group-text bg-gray-01 border-0 text-muted fs-18" id="inputGroup-sizing-lg">
-                        <i class="far fa-user"></i></span>
-                    </div>
-                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder=" อีเมล">
-                  </div>
-                </div>
-                <div class="form-group mb-4">
-                  <label for="password" class="sr-only">Password</label>
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-prepend ">
-                      <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
-                        <i class="far fa-lock"></i>
-                      </span>
-                    </div>
-                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
-                    <div class="input-group-append">
-                      <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
-                        <i class="far fa-eye-slash"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="d-flex mb-4">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="remember-me" name="remember-me">
-                    <label class="form-check-label" for="remember-me">
-                      บันทึกการเข้าสู่ระบบ
-                    </label>
-                  </div>
-                  <a href="password-recovery.html" class="d-inline-block ml-auto text-orange fs-15">
-                    ลืมรหัสผ่านใช่หรือไม่
-                  </a>
-                </div>
-                <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">เข้าสู่ระบบ</button>
-              </form>
-              <div class="divider text-center my-2">
-                <span class="px-4 bg-white lh-17 text">
-                  หรือเชื่อมต่อผ่าน
-                </span>
-              </div>
-              <div class="row no-gutters mx-n2">
-                <div class="col-4 px-2 mb-4">
-                  <a href="frontend/dashboard-profiles.php" class="btn btn-lg btn-block facebook text-white px-0">
-                    <i class="fab fa-facebook-f"></i>
-                  </a>
-                </div>
-                <div class="col-4 px-2 mb-4">
-                  <a href="#" class="btn btn-lg btn-block google px-0">
-                    <img src="images/google.png" alt="Google">
-                  </a>
-                </div>
-                <div class="col-4 px-2 mb-4">
-                  <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-              <form action="backend/regis_db.php" id="regisform" method="post">
-                <div class="form-group mb-4">
-                  <label for="username01" class="sr-only">Email</label>
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-prepend ">
-                      <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
-                        <i class="far fa-user"></i></span>
-                    </div>
-                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder="อีเมล">
-                  </div>
-                </div>
-                <div class="form-group mb-4">
-                  <label for="password01" class="sr-only">Password</label>
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-prepend ">
-                      <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
-                        <i class="far fa-lock"></i>
-                      </span>
-                    </div>
-                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
-                    <div class="input-group-append">
-                      <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
-                        <i class="far fa-eye-slash"></i>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group mb-4">
-                  <label for="full-name" class="sr-only">Full name</label>
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-prepend ">
-                      <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
-                        <i class="far fa-address-card"></i></span>
-                    </div>
-                    <input type="text" class="form-control border-0 shadow-none fs-13" id="name" name="name" required placeholder="ชื่อและนามสกุล">
-                  </div>
-                </div>
-                <div class="form-group mb-4">
-                  <label for="phone01" class="sr-only">Phone</label>
-                  <div class="input-group input-group-lg">
-                    <div class="input-group-prepend ">
-                      <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
-                        <i class="far fa-phone-alt"></i></span>
-                    </div>
-                    <input type="number" class="form-control border-0 shadow-none fs-13" id="tel" name="tel" required placeholder="เบอร์โทรศัพท์">
-                  </div>
-                </div>
 
-                <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">สมัครสมาชิก</button>
-              </form>
-              <div class="divider text-center my-2">
-                <span class="px-4 bg-white lh-17 text">
-                  หรือเชื่อมต่อผ่าน
-                </span>
-              </div>
-              <div class="row no-gutters mx-n2">
-                <div class="col-4 px-2 mb-4">
-                  <a href="#" class="btn btn-lg btn-block facebook text-white px-0">
-                    <i class="fab fa-facebook-f"></i>
-                  </a>
-                </div>
-                <div class="col-4 px-2 mb-4">
-                  <a href="#" class="btn btn-lg btn-block google px-0">
-                    <i class="fab fa-google-g"></i>
-                  </a>
-                </div>
-                <div class="col-4 px-2 mb-4">
-                  <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                </div>
-              </div>
-              <div class="mt-2">การสร้างบัญชีแสดงว่าคุณยอมรับ
-                <a class="text-heading" href="#"><u>ข้อกำหนดการใช้งาน</u> </a> และ
-                <a class="text-heading" href="#"><u>นโยบายความเป็นส่วนตัว</u></a>.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- Vendors scripts -->
   <script src="css/vendors/jquery.min.js"></script>
   <script src="css/vendors/jquery-ui/jquery-ui.min.js"></script>

@@ -14,13 +14,12 @@ if (isset($_GET["id3"]) ? $_GET["id3"] : '') {
   $sql32 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.tel
-FROM (((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
+FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
     WHERE a_id =  $id3 ";
   $result32 = mysqli_query($con, $sql32) or die(mysqli_error($con));
   $row3 = mysqli_fetch_assoc($result32);
@@ -30,19 +29,18 @@ FROM (((((advertise
 $h_no = "เลขที่";
 $v_no = "หมู่";
 
-// $facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
+$facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
 
 
 $sql1 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.tel
-FROM (((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
+FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
     WHERE a_id =  $id1 ";
 $result1 = mysqli_query($con, $sql1) or die(mysqli_error($con));
 $row1 = mysqli_fetch_assoc($result1);
@@ -53,13 +51,12 @@ $pd_id = $row1['l_id'];
 $sql22 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.tel
-FROM (((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
+FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-    LEFT  JOIN users ON advertise.u_id = users.u_id)
     WHERE a_id =  $id2 ";
 $result22 = mysqli_query($con, $sql22) or die(mysqli_error($con));
 $row22 = mysqli_fetch_assoc($result22);
@@ -111,7 +108,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
   <meta name="twitter:creator" content="@">
   <meta name="twitter:title" content="Compare">
   <meta name="twitter:description" content="Real Estate Html Template">
-  <meta name="twitter:image" content="../images/homeid-social-logo.png">
+  <meta name="twitter:image" content="images/homeid-social-logo.png">
   <!-- Facebook -->
   <meta property="og:url" content="compare.php">
   <meta property="og:title" content="Compare">
@@ -248,238 +245,178 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
       }
     }
   </style>
+  <main id="content">
+    <section class="pb-8 page-title shadow">
+      <div class="container">
+        <nav aria-label="breadcrumb">
+          <h1 class="fs-30 lh-1 mb-0 text-heading font-weight-600">เปรียบเทียบ</h1>
+        </nav>
+      </div>
+    </section>
+    <section class="py-10">
+      <div class="container container-xxl">
+        <div class="table-responsive-xl">
+          <table class="table table-bordered table-hover text-dark table-border-gray table-align-middle table-th-min-width-300">
+            <thead class="table-p-6">
+              <tr class="bg-gray-03 h-90">
+                <th class="w-25" scope="col"></th>
+                <th scope="col">
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row1['title'] ?></div>
+                </th>
+                <th scope="col">
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row22['title'] ?></div>
+                </th>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
+                <th scope="col">
+                  <div class="fs-16 font-weight-normal text-dark mb-0"><?php echo $row3['title'] ?></div>
+                </th>
+                <?php } ?>
+              </tr>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">
+                  <div class="card border-0">
+                    <div class="rounded-lg">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row1['img_video'] ?>" alt="">
+                    </div>
+                    <div class="card-body pt-2 pb-0 px-0">
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row1['house_no'] != '') {
+                                                                        echo $h_no . " " . $row1['house_no'];
+                                                                      } ?> <?php if ($row1['village_no'] != '') {
+                                                                              echo $v_no . " " . $row1['village_no'];
+                                                                            } ?>
+                        <?php echo $row1['lane']; ?> <?php echo $row1['road']; ?>
+                        <?php foreach ($result3 as $value) {
 
-  <section class="mt-6">
-    <div class="container mb-6">
-      <p class="heading"> เปรียบเทียบ </p>
-      <span class="heading-divider"></span>
-    </div>
-    <div class="container container-xxl mb-6 img-slider">
-      <div class="slick-slider slick-dots-mt-0 custom-arrow-spacing-30" data-slick-options='{"slidesToShow": 3, "autoplay":true,"dots":true,"responsive":[{"breakpoint": 1600,"settings": {"slidesToShow":3,"arrows":false}},{"breakpoint": 992,"settings": {"slidesToShow":2,"arrows":false}},{"breakpoint": 768,"settings": {"slidesToShow": 2,"arrows":false,"dots":true,"autoplay":true}},{"breakpoint": 576,"settings": {"slidesToShow": 1,"arrows":false,"dots":true,"autoplay":true}}]}'>
-        <div class="box">
-          <div class="shadow-hover-2" data-animate="zoomIn">
-            <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-              <p> <?php echo $row1['title'] ?> </p>
-              <img src="../image/p_img/<?php echo $row1['img_video'] ?>" alt="">
-            </div>
-          </div>
-        </div>
-        <div class="box">
-          <div class="shadow-hover-2" data-animate="zoomIn">
-            <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-              <p><?php echo $row22['title'] ?> </p>
-              <img src="../image/p_img/<?php echo $row22['img_video'] ?>" alt="">
-            </div>
-          </div>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="box">
-            <div class="shadow-hover-2" data-animate="zoomIn">
-              <p> <?php echo $row3['title'] ?> </p>
-              <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                <img src="../image/p_img/<?php echo $row3['img_video'] ?>" alt="">
-              </div>
-            </div>
-          </div>
-        <?php } ?>
-      </div>
-    </div>
-    <div class="container container-xxl mb-12">
-      <div class="tables">
-        <div class="rows text-dark">
-          ชื่อหมู่บ้านหรือโครงการ
-        </div>
-        <div class="rows">
-          <?php echo $row1['title'] ?>
-        </div>
-        <div class="rows">
-          <?php echo $row22['title'] ?>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows">
-            <?php echo $row3['title'] ?>
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-three text-dark">
-          รูปภาพและรายละเอียด
-        </div>
-        <div class="rows-three">
-          <img src="../image/p_img/<?php echo $row1['img_video'] ?>">
-          <p><?php if ($row1['house_no'] != '') {
-                echo $h_no . " " . $row1['house_no'];
-              } ?> <?php if ($row1['village_no'] != '') {
-                      echo $v_no . " " . $row1['village_no'];
-                    } ?>
-            <?php echo $row1['lane']; ?> <?php echo $row1['road']; ?>
-            <?php foreach ($result3 as $value) {
+                          if ($value['l_id'] == $row1['l_id']) {
 
-              if ($value['l_id'] == $row1['l_id']) {
+                            echo 'ต.' . $value['dname_th'] . ' ';
+                            echo 'อ.' . $value['aname_th'] . ' ';
+                            echo 'จ.' . $value['name_th'] . ' ';
+                          }
+                        } ?>
+                        <?php echo $row1['postal_code']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row1['price'] ?> บาท</p>
+                    </div>
+                  </div>
+                </th>
+                <th scope="col">
+                  <div class="card border-0">
+                    <div class="rounded-lg">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row22['img_video'] ?>" alt="">
+                    </div>
+                    <div class="card-body pt-2 pb-0 px-0">
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row22['house_no'] != '') {
+                                                                        echo $h_no . " " . $row22['house_no'];
+                                                                      } ?> <?php if ($row22['village_no'] != '') {
+                                                                              echo $v_no . " " . $row22['village_no'];
+                                                                            } ?>
+                        <?php echo $row22['lane']; ?> <?php echo $row22['road']; ?>
+                        <?php foreach ($result3 as $value) {
 
-                echo 'ต.' . $value['dname_th'] . ' ';
-                echo 'อ.' . $value['aname_th'] . ' ';
-                echo 'จ.' . $value['name_th'] . ' ';
-              }
-            } ?>
-            <?php echo $row1['postal_code']; ?></p>
-        </div>
-        <div class="rows-three">
-          <img src="../image/p_img/<?php echo $row22['img_video'] ?>">
-          <p><?php if ($row22['house_no'] != '') {
-                echo $h_no . " " . $row22['house_no'];
-              } ?> <?php if ($row22['village_no'] != '') {
-                    echo $v_no . " " . $row22['village_no'];
-                  } ?>
-            <?php echo $row22['lane']; ?> <?php echo $row22['road']; ?>
-            <?php foreach ($result3 as $value) {
+                          if ($value['l_id'] == $row22['l_id']) {
 
-              if ($value['l_id'] == $row22['l_id']) {
+                            echo 'ต.' . $value['dname_th'] . ' ';
+                            echo 'อ.' . $value['aname_th'] . ' ';
+                            echo 'จ.' . $value['name_th'] . ' ';
+                          }
+                        } ?>
+                        <?php echo $row22['postal_code']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row22['price']; ?> บาท</p>
+                    </div>
+                  </div>
+                </th>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
+                <th scope="col">
+                  <div class="card border-0">
+                    <div class="rounded-lg">
+                      <img class="card-img-top" src="../image/p_img/<?php echo $row3['img_video'] ?>" alt="">
+                    </div>
+                    <div class="card-body pt-2 pb-0 px-0">
+                      <p class="font-weight-500 text-gray-light mb-0"><?php if ($row3['house_no'] != '') {
+                                                                          echo $h_no . " " . $row3['house_no'];
+                                                                        } ?> <?php if ($row3['village_no'] != '') {
+                                                                              echo $v_no . " " . $row3['village_no'];
+                                                                            } ?>
+                          <?php echo $row3['lane']; ?> <?php echo $row3['road']; ?>
+                          <?php foreach ($result3 as $value) {
 
-                echo 'ต.' . $value['dname_th'] . ' ';
-                echo 'อ.' . $value['aname_th'] . ' ';
-                echo 'จ.' . $value['name_th'] . ' ';
-              }
-            } ?>
-            <?php echo $row22['postal_code']; ?></p>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-three">
-            <img src="../image/p_img/<?php echo $row3['img_video'] ?>">
-            <p><?php if ($row3['house_no'] != '') {
-                  echo $h_no . " " . $row3['house_no'];
-                } ?> <?php if ($row3['village_no'] != '') {
-                      echo $v_no . " " . $row3['village_no'];
-                    } ?>
-              <?php echo $row3['lane']; ?> <?php echo $row3['road']; ?>
-              <?php foreach ($result3 as $value) {
+                            if ($value['l_id'] == $row3['l_id']) {
 
-                if ($value['l_id'] == $row3['l_id']) {
-
-                  echo 'ต.' . $value['dname_th'] . ' ';
-                  echo 'อ.' . $value['aname_th'] . ' ';
-                  echo 'จ.' . $value['name_th'] . ' ';
-                }
-              } ?>
-              <?php echo $row3['postal_code']; ?></p>
-          </div>
-        <?php } ?>
+                              echo 'ต.' . $value['dname_th'] . ' ';
+                              echo 'อ.' . $value['aname_th'] . ' ';
+                              echo 'จ.' . $value['name_th'] . ' ';
+                            }
+                          } ?>
+                          <?php echo $row3['postal_code']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row3['price']; ?> บาท</p>
+                    </div>
+                  </div>
+                </th>
+                <?php } ?>
+              </tr>
+            </thead>
+            <tbody class="text-center table-p-4">
+              <tr>
+                <td>ประเภท</td>
+                <td><?php echo $row1['p_type'] ?></td>
+                <td><?php echo $row22['p_type'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['p_type'] ?></td><?php } ?>
+              </tr>
+              <tr>
+                <td>ขนาดพื้นที่</td>
+                <td><?php echo $row1['space_area'] ?> ตร.เมตร</td>
+                <td><?php echo $row22['space_area'] ?> ตร.เมตร</td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['space_area'] ?> ตร.เมตร</td><?php } ?>
+              </tr>
+              <tr>
+                <td>ห้อง</td>
+                <td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td>
+                <td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><span class="w-32px h-2 bg-primary d-block m-auto"></span></td><?php } ?>
+              </tr>
+              <tr>
+                <td>ห้องนอน</td>
+                <td><?php echo $row1['bedroom'] ?></td>
+                <td><?php echo $row22['bedroom'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
+              </tr>
+              <tr>
+                <td>ห้องน้ำ</td>
+                <td><?php echo $row1['bathroom'] ?></td>
+                <td><?php echo $row22['bedroom'] ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?><td><?php echo $row3['bedroom'] ?></td><?php } ?>
+              </tr>
+              <tr>
+              <td>สิ่งอำนวยความสะดวก</td>
+                <td>
+                  <?php $facility = explode(",", $row1['facility']); //array
+                  foreach ($facility_arr as $value) {
+                    if (in_array($value, $facility)) { ?>
+                      <?php echo $value ?>
+                  <?php }
+                  }  ?></td>
+                <td>
+                  <?php $facility = explode(",", $row22['facility']); //array
+                  foreach ($facility_arr as $value) {
+                    if (in_array($value, $facility)) { ?>
+                      <?php echo $value ?>
+                  <?php }
+                  } ?></td>
+                <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?> <td>
+                    <?php $facility = explode(",", $row3['facility']); //array
+                    foreach ($facility_arr as $value) {
+                      if (in_array($value, $facility)) { ?>
+                        <?php echo $value ?>
+                    <?php }
+                    } ?></td><?php } ?>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ราคา
-        </div>
-        <div class="rows-two">
-          <?php echo $row1['price']; ?> บาท
-        </div>
-        <div class="rows-two">
-          <?php echo $row22['price']; ?> บาท
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <?php echo $row3['price']; ?> บาท
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ประเภท
-        </div>
-        <div class="rows-two">
-          <?php echo $row1['p_type']; ?>
-        </div>
-        <div class="rows-two">
-          <?php echo $row22['p_type']; ?>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <?php echo $row3['p_type']; ?>
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ขนาดพื้นที่
-        </div>
-        <div class="rows-two">
-          <?php echo $row1['space_area']; ?> ตร.วา
-        </div>
-        <div class="rows-two">
-          <?php echo $row22['space_area']; ?> ตร.วา
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <?php echo $row3['space_area']; ?> ตร.วา
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ห้องนอน
-        </div>
-        <div class="rows-two">
-          <?php echo $row1['bedroom'] ?>
-        </div>
-        <div class="rows-two">
-          <?php echo $row22['bedroom'] ?>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <?php echo $row3['bedroom'] ?>
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ห้องน้ำ
-        </div>
-        <div class="rows-two">
-          <?php echo $row1['bathroom'] ?>
-        </div>
-        <div class="rows-two">
-          <?php echo $row22['bathroom'] ?>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <?php echo $row3['bathroom'] ?>
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ที่จอดรถ
-        </div>
-        <div class="rows-two">
-          <?php echo $row1['parking'] ?>
-        </div>
-        <div class="rows-two">
-          <?php echo $row22['parking'] ?>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <?php echo $row3['parking'] ?>
-          </div>
-        <?php } ?>
-      </div>
-      <div class="tables">
-        <div class="rows-two text-dark">
-          ติดต่อ
-        </div>
-        <div class="rows-two">
-          <td><i class="fab fa-line icon-line"></i><i class="fad fa-mobile icon-mobile mr-2"></i><?php echo $row1['tel'] ?></td>
-        </div>
-        <div class="rows-two">
-          <td><i class="fab fa-line icon-line"></i><i class="fad fa-mobile icon-mobile mr-2"></i><?php echo $row22['tel'] ?></td>
-        </div>
-        <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-          <div class="rows-two">
-            <td><i class="fab fa-line icon-line"></i><i class="fad fa-mobile icon-mobile mr-2"></i><?php echo $row3['tel'] ?></td>
-          </div>
-        <?php } ?>
-      </div>
-    </div>
-  </section>
-
+    </section>
+  </main>
   <?php include 'templates/footer-two.php'; ?>
   <!-- Vendors scripts -->
   <script src="../css/vendors/jquery.min.js"></script>
