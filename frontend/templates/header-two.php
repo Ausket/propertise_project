@@ -34,6 +34,9 @@ if (isset($_POST['submit'])) {
             $_SESSION["img"] = $row["img"];
             $_SESSION["utype"] = $row["utype"];
             $_SESSION["ustatus"] = $row["ustatus"];
+            $_SESSION['last_login_timestamp'] = time();
+
+            setcookie('user_login', $_SESSION['name'], time() + (1 * 24 * 60 * 60));
 
             if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
                 header("location: ../page/profile.php");
@@ -49,8 +52,16 @@ if (isset($_POST['submit'])) {
         }
     }
 }
-
-
+// if (isset($_SESSION["name"])) {
+//     if ((time() - $_SESSION['last_login_timestamp']) > 120) //
+//     {
+//         header("location:../page/logout.php");
+//     } else {
+//         $_SESSION['last_login_timestamp'] = time();
+//     }
+// } else {
+//     header('href=#login-register-modal');
+// }
 
 ?>
 <!-- Google fonts -->

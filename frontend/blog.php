@@ -65,23 +65,23 @@ $resulta = mysqli_query($con, $sqla);
     </section>
 
     <section class="py-13">
-     
+
       <div class="container">
-      <div class="form-inline justify-content-md-end mx-n6">
-                  <div class="form-group">
-                    <!-- Show Numbers Of Rows -->
-                    <select class="form-control" name="state" id="maxRows">
-                      <option value="4000">ทั้งหมด</option>
-                      <option value="4">4</option>
-                      <option value="8">8</option>
-                      <option value="12">12</option>
-                      <option value="20">20</option>
-                      <option value="60">60</option>
-                      <option value="80">80</option>
-                      <option value="100">100</option>
-                    </select>
-                  </div>
-                </div>
+        <div class="form-inline justify-content-md-end mb-3">
+          <div class="form-group">
+            <!-- Show Numbers Of Rows -->
+            <select class="form-control" name="state" id="maxRows">
+              <option value="4000">ทั้งหมด</option>
+              <option value="4">4</option>
+              <option value="8">8</option>
+              <option value="12">12</option>
+              <option value="20">20</option>
+              <option value="60">60</option>
+              <option value="80">80</option>
+              <option value="100">100</option>
+            </select>
+          </div>
+        </div>
         <div class="row ml-xl-0 mr-xl-n6" id="precard">
           <?php while ($rowa = mysqli_fetch_array($resulta)) { ?>
             <?php if ($rowa['a_status'] == '1') { ?>
@@ -90,7 +90,7 @@ $resulta = mysqli_query($con, $sqla);
                   <div class="row no-gutters align-items-lg-center h-100">
                     <div class="d-flex align-items-end col-md-6 p-0">
                       <a href="blog-details-1.html" class="hover-shine">
-                        <img src="../image/a_img/<?php echo $rowa['a_img'] ?>" alt=""  class="card-img" >
+                        <img src="../image/a_img/<?php echo $rowa['a_img'] ?>" alt="" class="card-img">
                       </a>
                       <a href="blog-details-1.html" class="badge text-white bg-dark-opacity-04 fs-13 m-2 font-weight-500 bg-hover-primary hover-white position-absolute pos-fixed-bottom">
                         <?php echo $rowa['a_type']; ?>
@@ -108,7 +108,7 @@ $resulta = mysqli_query($con, $sqla);
                         <h3 class="fs-18 text-heading lh-194 mb-1">
                           <a href="blog-details.php?id=<?php echo $rowa['a_id']; ?>" class="text-heading hover-primary"><?php echo $rowa['a_title']; ?></a>
                         </h3>
-                        <p class="mb-lg-7"><?php echo substr($rowa['a_note'],0,250); ?></p>
+                        <p class="mb-lg-7"><?php echo substr($rowa['a_note'], 0, 250); ?></p>
                         <a class="text-heading font-weight-500" href="blog-details.php?id=<?php echo $rowa['a_id']; ?>"> ดูเพิ่มเติม <i class="far fa-long-arrow-right text-primary ml-1"></i></a>
                       </div>
                     </div>
@@ -117,20 +117,20 @@ $resulta = mysqli_query($con, $sqla);
               <?php  } ?>
             <?php  } ?>
             <nav class="mt-6">
-                <ul class="pagination rounded-active justify-content-center mb-0">
-                  <li data-page="prev" class="page-item">
-                    <span class="page-link">
-                      <i class="far fa-angle-double-left"></i><span></span>
-                    </span>
-                  </li>
-                  <!-- Here the JS Function Will Add the Rows -->
-                  <li data-page="next" id="prev" class="page-item">
-                    <span class="page-link">
-                      <i class="far fa-angle-double-right"></i><span></span>
-                    </span>
-                  </li>
-                </ul>
-              </nav>
+              <ul class="pagination rounded-active justify-content-center mb-0">
+                <li data-page="prev" class="page-item">
+                  <span class="page-link">
+                    <i class="far fa-angle-double-left"></i><span></span>
+                  </span>
+                </li>
+                <!-- Here the JS Function Will Add the Rows -->
+                <li data-page="next" id="prev" class="page-item">
+                  <span class="page-link">
+                    <i class="far fa-angle-double-right"></i><span></span>
+                  </span>
+                </li>
+              </ul>
+            </nav>
               </div>
 
         </div>
@@ -212,8 +212,8 @@ $resulta = mysqli_query($con, $sqla);
                 .show();
             } // end for i
           } // end if row count > max rows
-          if(totalRows <= maxRows){
-            $('.pagination ').hide();       
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
           }
           $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
           $('.pagination li').on('click', function(evt) {

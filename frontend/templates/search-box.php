@@ -32,8 +32,8 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
     // echo $aremax22;
     // echo "+".$areamax."+";
 
-    if (isset($_POST['facility'])) {
-        $facility = implode(",", $_POST["facility"]);
+    if (isset($_GET['facility'])) {
+        $facility = implode(",", $_GET["facility"]);
     }
     // $conditions = array(); //กำหนด array เก็บเงื่อนไข
 
@@ -59,13 +59,13 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
         $conditions[] = "property_detail.bathroom='$bathroom'";
     }
     if (!empty($facility)) {
-        $conditions[] = "property_detail.facility LIKE '%$facility%'";
+        $conditions[] = "property_detail.facility LIKE'%$facility%'";
     }
     if (!empty($space)) {
         $conditions[] = "property_detail.space_area BETWEEN '$areamin' AND '$areamax'";
     }
 
-    $sqlsb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+    $sqlsb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
   property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
   location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
   location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price,property_detail.facility
@@ -92,7 +92,7 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
             $text = 'ORDER BY property_detail.price ASC';
         }
         if ($choice == 4) {
-            $text = ' ';
+            $text = 'ORDER BY advertise.view DESC ';
         }
 
         $sqls = "$sqlsb" . $text;
@@ -106,7 +106,7 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
     }
 } else {
 
-    $sqlsb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+    $sqlsb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
   property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
   location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
   location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price
@@ -222,9 +222,9 @@ $resultat2 = mysqli_query($con, $sqlat2);
                         ค้นหาขั้นสูง
                     </a>
                 </div>
-                <div class="col-lg-2">
-                    <button type="submit" name="submits2" class="btn btn-primary border-0 shadow-xs-1 fs-14 text-white font-weight-500" data-toggle="collapse" data-target="#advanced-search-filters-5" aria-expanded="true" aria-controls="advanced-search-filters-5">
-                        <span> ค้นหา </span>
+                <div class="col-sm ">
+                    <button type="submit" name="submits2" class="btn btn-primary shadow-none fs-18 font-weight-100 w-100">
+                        ค้นหา
                     </button>
                 </div>
                 <div id="advanced-search-filters-2" class="col-12 pb-6 pt-lg-2 collapse" data-parent="#accordion-2">

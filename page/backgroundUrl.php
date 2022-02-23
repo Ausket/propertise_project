@@ -10,13 +10,13 @@ require('../config.php');
 // require('../connect.php');
 require('../dbconnect.php');
 
+//ข้อความ : ขาดการตรวจสอบเงื่อนไขป้องกันการเข้าถึงจากผู้ไม่ประสงค์ดี 
+
 if (!empty($_POST['resultCode'])) {
+
     $result = $_POST["resultCode"];
-    echo $result;
     $amount = $_POST["amount"];
-    echo $amount;
     $order_id = $_POST["referenceNo"];
-    echo $order_id;
     $gbp_ref = $_POST["gbpReferenceNo"];
     if (isset($_POST["date"])) {
         $date = $_POST["date"];
@@ -25,11 +25,8 @@ if (!empty($_POST['resultCode'])) {
         $date = date("d:m:y");
         $time = date("h:i");
     }
-
-
-
+    //เรียกใช้ api ตรวจสอบข้อมูลจากรหัสคำสั่งซื้อ (referentNo) 
     $curl = curl_init();
-
     curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://api.globalprimepay.com/v1/check_status_txn',
         CURLOPT_RETURNTRANSFER => true,
@@ -45,66 +42,70 @@ if (!empty($_POST['resultCode'])) {
             'Content-Type: application/json'
         ),
     ));
-
     $response = curl_exec($curl);
     curl_close($curl);
     $res = json_decode($response);
-    // print_r( $res);
-    // print_r ($res->txn->customerName);
+    // print_r($res);
 
+    //ตรวจสอบเงื่อนไข tnxs เป็น response ช่่องทางชำระเงินที่ต้อง เรียกใช้ Token API ก่อน 
+    //tnx เป็น response ช่่องทางชำระเงินที่เรียกผ่าน form action โดยตรง
+    if (isset($res->txns)) {
+        $paymentType = $res->txns[0]->paymentType;
+        $issuerBank = $res->txns[0]->issuerBank;
+        $merchantDefined = $res->txns[0]->merchantDefined1;
+       
+    }
 
-    $paymentType = $res->txn->paymentType;
-    if($paymentType == 'C'){
+    if(isset($res->txn)) {
+        $paymentType = $res->txn->paymentType;
+        $issuerBank = $res->txn->issuerBank;
+        $merchantDefined = $res->txn->merchantDefined1;
+       
+    }
+
+    //ตรวจสอบช่องทางชำระเงิน ตามตัวอักษรย่อที่ได้รับจาก response
+    if ($paymentType == 'C') {
         $paymentType = "Credit Card Full payment";
-    }else if($paymentType == 'R'){
+    } else if ($paymentType == 'R') {
         $paymentType = "Recurring";
-    }else if($paymentType == 'I'){
+    } else if ($paymentType == 'I') {
         $paymentType = "Credit Card Installment";
-    }else if($paymentType == 'Q'){
+    } else if ($paymentType == 'Q') {
         $paymentType = "Qr Cash";
-    }else if($paymentType == 'B'){
+    } else if ($paymentType == 'B') {
         $paymentType = "Bill Payment";
-    }else if($paymentType == 'W'){
+    } else if ($paymentType == 'W') {
         $paymentType = "Wechat";
-    }else if($paymentType == 'L'){
+    } else if ($paymentType == 'L') {
         $paymentType = "Line Payment";
-    }else if($paymentType == 'T'){
+    } else if ($paymentType == 'T') {
         $paymentType = "True Wallet";
-    }else if($paymentType == 'M'){
+    } else if ($paymentType == 'M') {
         $paymentType = "Mobile Banking";
-    }else if($paymentType == 'D'){
+    } else if ($paymentType == 'D') {
         $paymentType = "Direct Debit";
     }
 
-    $name =  $res->txn->customerName;
-    $email = $res->txn->customerEmail; 
-    $issuerBank = $res->txn->issuerBank;  
-    $merchantDefined = $res->txn->merchantDefined1; 
-    $detail = $res->txn->detail; 
-
-    
-
-
+    //เขียน sql อัพเดทฐานข้อมูลใน table ข้อมูลคำสั่งซื้อ ให้อัพเดทสถานะการชำระ
     $sql = "UPDATE pay_status 
             SET
             gbpReferenceNo = '$gbp_ref',
             price = '$amount' ,
-            resultCode = '$result' ,
-            name = '$name',
-            email = '$email',
+            resultCode = '$result' ,    
             issuerBank = '$issuerBank',
             paymentType = '$paymentType' ,
             merchantDefined	 = '$merchantDefined',
             date = '$date',
             time = '$time' 
             WHERE referenceNo = '$order_id'";
-
     $res_qurey = mysqli_query($con, $sql);
 
+    //ตรวจสอบเงื่อนไขการเรียกใช้ query ข้อมูลว่าสำเร็จหรือไม่
     if ($res_qurey) {
-        echo 'บันทึกข้อมูลแล้ว';
+        echo 'บันทึกข้อมูลแล้ว'; 
+        // header("location : ".$base_url."pages/default/inventory-detail?code=".$merchantDefined."&status=success");
     } else {
-        echo 'เกิดปัญหา';
+        echo 'เกิดข้อผิดพลาดระหว่างบันทึกข้อมูล';
     }
-    // header("location : ".$base_url."pages/management/login.php");
+    
 }

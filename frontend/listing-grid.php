@@ -1,54 +1,6 @@
 <?php
 require_once('../dbconnect.php');
 
-if (isset($_POST['submit'])) {
-
-  $email = $con->real_escape_string($_POST['email']);
-  $password = $con->real_escape_string($_POST['password']);
-
-  $sql = "SELECT * FROM users
-                WHERE  email='" . $email . "' 
-                AND  password='" . $password . "' ";
-
-  $result = $con->query($sql);
-  $row = $result->fetch_assoc();
-
-  if ($row["ustatus"] == '0') {
-    echo "<script>";
-    echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
-    echo "</script>";
-    header('Refresh:0; url=index.php');
-  } else {
-
-    if (!empty($row)) {
-
-      $_SESSION["u_id"] = $row["u_id"];
-      $_SESSION["email"] = $row["email"];
-      $_SESSION["password"] = $row["password"];
-      $_SESSION["name"] = $row["name"];
-      $_SESSION["address"] = $row["address"];
-      $_SESSION["tel"] = $row["tel"];
-      $_SESSION["id_card"] = $row["id_card"];
-      $_SESSION["company"] = $row["company"];
-      $_SESSION["birth_date"] = $row["birth_date"];
-      $_SESSION["img"] = $row["img"];
-      $_SESSION["utype"] = $row["utype"];
-      $_SESSION["ustatus"] = $row["ustatus"];
-
-      if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
-        header("location: page/profile.php");
-      }
-      if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
-        header("location: index.php");
-      }
-    } else {
-      echo "<script>";
-      echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
-      echo "</script>";
-      header('Refresh:0; url=index.php');
-    }
-  }
-}
 
 if (isset($_GET['submits'])) { //เมื่อกด ค้นหา 
   //กำหนดตัวแปรเก็บค่าต่างๆ 
@@ -82,9 +34,10 @@ if (isset($_GET['submits'])) { //เมื่อกด ค้นหา
   // echo $aremax22;
   // echo "+".$areamax."+";
 
-  if (isset($_POST['facility'])) {
-    $facility = implode(",", $_POST["facility"]);
+  if (isset($_GET['facility'])) {
+    $facility = implode(",", $_GET["facility"]);
   }
+
   // $conditions = array(); //กำหนด array เก็บเงื่อนไข
 
   if (!empty($price)) {
@@ -109,13 +62,13 @@ if (isset($_GET['submits'])) { //เมื่อกด ค้นหา
     $conditions[] = "property_detail.bathroom='$bathroom'";
   }
   if (!empty($facility)) {
-    $conditions[] = "property_detail.facility LIKE '%$facility%'";
+    $conditions[] = "property_detail.facility LIKE'%$facility%'";
   }
   if (!empty($space)) {
     $conditions[] = "property_detail.space_area BETWEEN '$areamin' AND '$areamax'";
   }
 
-  $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+  $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,property_detail.price,property_detail.facility
@@ -142,7 +95,7 @@ WHERE advertise.ad_status = '1' ";
       $text = 'ORDER BY property_detail.price ASC';
     }
     if ($choice == 4) {
-      $text = ' ';
+      $text = 'ORDER BY advertise.view DESC';
     }
 
     $sqls = "$sql2" . $text;
@@ -180,7 +133,7 @@ WHERE advertise.ad_status = '1' ";
       $text = 'ORDER BY property_detail.price ASC';
     }
     if ($choice == 4) {
-      $text = ' ';
+      $text = 'ORDER BY advertise.view DESC';
     }
 
     $sqls = "$sql2" . $text;
@@ -466,7 +419,7 @@ $resultat = mysqli_query($con, $sqlat);
                                 } ?> value='3'>ราคาต่ำไปสูง</option>
                         <option <?php if ($choice == "4") {
                                   echo "selected";
-                                } ?> value='4'>ยอดขายสูงสุด</option>
+                                } ?> value='4'>ยอดผู้เข้าชมสูงสุด</option>
                       </select>
                     </form>
                   </div>
@@ -498,7 +451,7 @@ $resultat = mysqli_query($con, $sqlat);
                       <img src="../image/p_img/<?php echo $row2['img_video']; ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video']; ?>">
                       <div class="card-img-overlay d-flex flex-column">
                         <div>
-                        <span class='badge mr-2' style="background-color:<?php echo $row2['color'] ?> ; color:white;" ><?php echo $row2['type'] ?></span>
+                          <span class='badge mr-2' style="background-color:<?php echo $row2['color'] ?> ; color:white;"><?php echo $row2['type'] ?></span>
                         </div>
                         <div class="mt-auto d-flex hover-image">
                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">

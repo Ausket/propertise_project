@@ -3,7 +3,7 @@ require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-  header('Location:login.php');
+  header('Location:../index.php');
 }
 $sql = "SELECT * FROM users WHERE u_id= $id ";
 $result = mysqli_query($con, $sql);
@@ -109,7 +109,7 @@ $resultd = mysqli_query($con, $sqld);
   <meta property="og:image:height" content="630">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
 
   <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
   <!-- <script src="../js/jquery.min.js"></script> -->
@@ -766,31 +766,31 @@ $resultd = mysqli_query($con, $sqld);
     </div>
   </div>
   <div id="uploadimageModal" class="modal" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Upload & Crop Image</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-8 text-center">
-                            <div id="image_demo" style="width:350px; margin-top:30px"></div>
-                        </div>
-                        <div class="col-md-4" style="padding-top:30px;">
-                            <br />
-                            <br />
-                            <br />
-                            <button class="btn btn-success crop_image" id="img">Crop & Upload Image</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>
-            </div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Upload & Crop Image</h4>
         </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-8 text-center">
+              <div id="image_demo" style="width:350px; margin-top:30px"></div>
+            </div>
+            <div class="col-md-4" style="padding-top:30px;">
+              <br />
+              <br />
+              <br />
+              <button class="btn btn-success crop_image" id="img">Crop & Upload Image</button>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
     </div>
+  </div>
   <!-- Vendors scripts -->
   <!-- <script src="../css/vendors/jquery.min.js"></script> -->
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
@@ -810,84 +810,101 @@ $resultd = mysqli_query($con, $sqld);
   <script>
     $(document).ready(function() {
 
-        $image_crop = $('#image_demo').croppie({
-            enableExif: true,
-            viewport: {
-                width: 200,
-                height: 200,
-                type: 'square' //circle
-            },
-            boundary: {
-                width: 300,
-                height: 300
-            }
-        });
+      $image_crop = $('#image_demo').croppie({
+        enableExif: true,
+        viewport: {
+          width: 200,
+          height: 200,
+          type: 'square' //circle
+        },
+        boundary: {
+          width: 300,
+          height: 300
+        }
+      });
 
-        $('#upload_image').on('change', function() {
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                $image_crop.croppie('bind', {
-                    url: event.target.result
-                }).then(function() {
-                    console.log('jQuery bind complete');
-                });
-            }
-            reader.readAsDataURL(this.files[0]);
-            $('#uploadimageModal').modal('show');
-        });
+      $('#upload_image').on('change', function() {
+        var reader = new FileReader();
+        reader.onload = function(event) {
+          $image_crop.croppie('bind', {
+            url: event.target.result
+          }).then(function() {
+            console.log('jQuery bind complete');
+          });
+        }
+        reader.readAsDataURL(this.files[0]);
+        $('#uploadimageModal').modal('show');
+      });
 
-        $('.crop_image').click(function(event) {
-            $image_crop.croppie('result', {
-                type: 'canvas',
-                size: 'viewport'
-            })
-            .then(function(response) {
+      $('.crop_image').click(function(event) {
+        $image_crop.croppie('result', {
+            type: 'canvas',
+            size: 'viewport'
+          })
+          .then(function(response) {
 
-                $.ajax({
-                    url: "../backend/uploadimg.php",
-                    type: "POST",
-                    data: {
-                        "img": response
-                    },
-                    success: function(data) {
-                        $('#uploadimageModal').modal('hide');
-                        $('#uploaded_image').attr('src',data);
-                        console.log(data);
-                    }
-                });
-            })
-        });
+            $.ajax({
+              url: "../backend/uploadimg.php",
+              type: "POST",
+              data: {
+                "img": response
+              },
+              success: function(data) {
+                $('#uploadimageModal').modal('hide');
+                $('#uploaded_image').attr('src', data);
+                console.log(data);
+              }
+            });
+          })
+      });
 
     });
-</script>
+  </script>
   <script>
-    
+    const dt = new DataTransfer();
 
-    function handleFileSelect(event) {
+    $("#fileupload2").on('change', function(c) {
 
       var input = this;
-      if (input.files) {
+      var filesAmount = input.files.length;
 
-        var filesAmount = input.files.length;
+      for (i = 0; i < filesAmount; i++) {
+        var reader = new FileReader();
 
-        for (i = 0; i < filesAmount; i++) {
-          var reader = new FileReader();
-
-          reader.onload = (function(e) {
-            var span = document.createElement('span');
-            span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview"></span>'].join('');
-            document.getElementById('upload-img2').insertBefore(span, null);
-          });
-          reader.readAsDataURL(input.files[i]);
-        }
+        reader.onload = (function(e) {
+          var span = document.createElement('span');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview"></span>'].join('');
+          document.getElementById('upload-img2').insertBefore(span, null);
+        });
+        reader.readAsDataURL(input.files[i]);
+        // console.log(reader);
       }
-    }
 
-    $('#fileupload2').change(handleFileSelect);
+      for (let file of input.files) {
+        dt.items.add(file);
+      }
 
-    $('#upload-img2').on('click', '.remove_img_preview', function() {
-      $(this).parent('span').remove();
-      $(this).val("");
+      input.files = dt.files;
+      console.log(dt.items);
+      
+      $('#upload-img2').on('click', '.remove_img_preview', function() {
+        let img = $('img.thumb').attr('src');
+        console.log(img);
+        $(this).parent('span').remove();
+    
+        for (let i = 0; i < dt.items.length; i++) {
+          // Correspondance du fichier et du nom
+          if (dt.items[i].kind === 'file') {
+            // Suppression du fichier dans l'objet DataTransfer
+            dt.items.remove(i);
+           
+            continue;
+          }
+        }
+        // Mise à jour des fichiers de l'input file après suppression
+        document.getElementById('fileupload2').files = dt.files;
+      });
+
     });
 
     $(function() {

@@ -9,7 +9,7 @@ $sqla = "SELECT * FROM users WHERE u_id = $ida";
 $resulta = mysqli_query($con, $sqla);
 $rowa = mysqli_fetch_array($resulta);
 
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company,users.img,users.utype,users.u_id
@@ -63,7 +63,8 @@ INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
 WHERE file.pd_id = $pd_id ";
 $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
 
-
+$sqlv = "UPDATE advertise SET view=view+1 WHERE a_id = $id ";
+$resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
 
 ?>
 <!doctype html>
@@ -296,7 +297,7 @@ $resultf2 = mysqli_query($con, $sqlf2)  or die(mysqli_error($con));
               <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
                 <li class="list-inline-item badge mr-3" style="background-color : <?php echo $rowad['color']; ?>; color:white;"><?php echo $rowad['type']; ?></li>
                 <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i><?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
-                <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i>1039 ครั้ง</li>
+                <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i><?php echo $rowad['view']; ?> ครั้ง</li>
               </ul>
               <div class="d-sm-flex justify-content-sm-between">
                 <div>

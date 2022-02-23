@@ -9,7 +9,7 @@ if (isset($_POST['ch'])) {
     $text = 'ORDER BY advertise.title ASC ';
   }
   if ($choice == 2) {
-    $text = ' ';
+    $text = 'ORDER BY advertise.view DESC ';
   }
   if ($choice == 3) {
     $text = 'ORDER BY advertise.date ASC ';
@@ -125,7 +125,7 @@ if (isset($_POST['ch'])) {
                                 } ?> value='1'>ตัวอักษร</option>
                         <option <?php if ($choice == "2") {
                                   echo "selected";
-                                } ?> value='2'>ยอดคำเข้าชม</option>
+                                } ?> value='2'>ยอดผู้เข้าชม</option>
                         <option <?php if ($choice == "3") {
                                   echo "selected";
                                 } ?> value='3'>วันที่ลงประกาศ - เก่าไปใหม่</option>
@@ -180,7 +180,7 @@ if (isset($_POST['ch'])) {
 
               $choice = 4;
 
-              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
             property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
             location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
             location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -246,26 +246,7 @@ if (isset($_POST['ch'])) {
                                   <?php } ?>
                                   <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
                                   </a>
-                                  <?php if ($row2['type'] == 'ขาย') {
-                                    $type = 'ขาย';
-                                    echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'เช่า') {
-                                    $type = 'เช่า';
-                                    echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'ขาย-เช่า') {
-                                    $type = 'ขาย-เช่า';
-                                    echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'ขายดาวน์') {
-                                    $type = 'ขายดาวน์';
-                                    echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'ใบจอง') {
-                                    $type = 'ใบจอง';
-                                    echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
+                                  <span class='badge  position-absolute pos-fixed-top' style="background-color:<?php echo $row2['color'] ?> ; color:white;"><?php echo $row2['type'] ?></span>
                             </div>
                             <div class="media-body">
                               <?php if ($row2['ad_status'] == '1') { ?>
@@ -318,7 +299,7 @@ if (isset($_POST['ch'])) {
 
 
                         </td>
-                        <td class="align-middle">2049</td>
+                        <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
                           <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
                           <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
@@ -380,7 +361,7 @@ if (isset($_POST['ch'])) {
               ";
               $result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
 
-              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
               property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
               location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
               location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -428,26 +409,7 @@ if (isset($_POST['ch'])) {
                                   <?php } ?>
                                   <img src="../image/p_img/<?php echo $row2['img_video'] ?>" alt="">
                                   </a>
-                                  <?php if ($row2['type'] == 'ขาย') {
-                                    $type = 'ขาย';
-                                    echo "<span class='badge badge-indigo position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'เช่า') {
-                                    $type = 'เช่า';
-                                    echo "<span class='badge badge-info position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'ขาย-เช่า') {
-                                    $type = 'ขาย-เช่า';
-                                    echo "<span class='badge badge-success position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'ขายดาวน์') {
-                                    $type = 'ขายดาวน์';
-                                    echo "<span class='badge badge-warning position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
-                                  <?php if ($row2['type'] == 'ใบจอง') {
-                                    $type = 'ใบจอง';
-                                    echo "<span class='badge badge-danger position-absolute pos-fixed-top'>$type</span>";
-                                  } ?>
+                                  <span class='badge  position-absolute pos-fixed-top' style="background-color:<?php echo $row2['color'] ?> ; color:white;"><?php echo $row2['type'] ?></span>
                             </div>
                             <div class="media-body">
                               <?php if ($row2['ad_status'] == '1') { ?>
@@ -499,7 +461,7 @@ if (isset($_POST['ch'])) {
 
 
                         </td>
-                        <td class="align-middle">2049</td>
+                        <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
                           <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
                           <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>

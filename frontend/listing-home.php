@@ -95,7 +95,7 @@
                                 } ?> value='3'>ราคาต่ำไปสูง</option>
                         <option <?php if ($choice == "4") {
                                   echo "selected";
-                                } ?> value='4'>ยอดขายสูงสุด</option>
+                                } ?> value='4'>ยอดผู้เข้าชมสูงสุด</option>
                       </select>
                     </div>
                   </form>

@@ -239,7 +239,7 @@ $total_record4 = mysqli_num_rows($resultad4);
                       </div>
                       <div id="all-collapse-01" class="collapse show collapsible" aria-labelledby="headingAll-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                          <div class="col-md-2 pl-0" >
+                          <div class="col-md-2 pl-0">
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows">
                                 <option value="6000">แสดงทั้งหมด</option>
@@ -403,7 +403,7 @@ $total_record4 = mysqli_num_rows($resultad4);
                       </div>
                       <div id="sale-collapse-01" class="collapse collapsible" aria-labelledby="headingSale-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                        <div class="col-md-2 pl-0" >
+                          <div class="col-md-2 pl-0">
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows2">
                                 <option value="6000">แสดงทั้งหมด</option>
@@ -566,7 +566,7 @@ $total_record4 = mysqli_num_rows($resultad4);
                       </div>
                       <div id="rent-collapse-01" class="collapse collapsible" aria-labelledby="headingRent-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                        <div class="col-md-2 pl-0" >
+                          <div class="col-md-2 pl-0">
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows3">
                                 <option value="6000">แสดงทั้งหมด</option>
@@ -731,7 +731,7 @@ $total_record4 = mysqli_num_rows($resultad4);
                       </div>
                       <div id="sale-collapse-01" class="collapse collapsible" aria-labelledby="headingSale-01" data-parent="#collapse-tabs-accordion-01">
                         <div class="card-body p-0">
-                        <div class="col-md-2 pl-0" >
+                          <div class="col-md-2 pl-0">
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows4">
                                 <option value="6000">แสดงทั้งหมด</option>
@@ -1171,7 +1171,7 @@ $total_record4 = mysqli_num_rows($resultad4);
       }
     }
   </script>
-   <script>
+  <script>
     getPagination('#precard2');
 
     function getPagination(card) {

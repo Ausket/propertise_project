@@ -11,7 +11,7 @@ $resultfa = mysqli_query($con, $sqlfa);
 $numf = mysqli_num_rows($resultfa);
 
 
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.u_id,favourite.u_id,favourite.a_id
@@ -46,7 +46,7 @@ if (isset($_POST['ch'])) {
     $text = 'ORDER BY advertise.title ASC ';
   }
   if ($choice == 2) {
-    $text = ' ';
+    $text = 'ORDER BY advertise.view DESC ';
   }
   if ($choice == 3) {
     $text = 'ORDER BY advertise.date ASC ';
@@ -154,7 +154,7 @@ if (isset($_POST['ch'])) {
                                 } ?> value='1'>ตัวอักษร</option>
                         <option <?php if ($choice == "2") {
                                   echo "selected";
-                                } ?> value='2'>ยอดคำเข้าชม</option>
+                                } ?> value='2'>ยอดผู้เข้าชม</option>
                         <option <?php if ($choice == "3") {
                                   echo "selected";
                                 } ?> value='3'>วันที่ลงประกาศ - เก่าไปใหม่</option>

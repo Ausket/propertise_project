@@ -172,7 +172,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                           }
                         } ?>
                         <?php echo $row1['postal_code']; ?></p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row1['price'] ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row1['price'] ?> บาท</p>
                     </div>
                   </div>
                 </th>

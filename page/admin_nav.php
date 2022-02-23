@@ -5,7 +5,14 @@ $u_id = $_SESSION['u_id'];
 if (empty($u_id)) {
     header('Location:../index.php');
 }
- 
+
+if ((time() - $_SESSION['last_login_timestamp']) > 3000) //
+{
+    header("location:logout.php");
+} else {
+    $_SESSION['last_login_timestamp'] = time();
+}
+
 $type = $_SESSION['utype'];
 if ($type == 'member' || $type == 'agent') {
     header('Location:../index.php');
@@ -21,6 +28,9 @@ $resultr = mysqli_query($con, $sqlr);
 
 $sqlrt = "SELECT * FROM user_role_type  ";
 $resultrt = mysqli_query($con, $sqlrt);
+
+
+
 
 
 ?>
@@ -86,9 +96,9 @@ $resultrt = mysqli_query($con, $sqlrt);
             <div class="user-panel mt-3 mb-3 d-block">
 
 
-               
+
                 <?php
-                if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff' ) {
+                if ($_SESSION['utype'] == 'admin' || $_SESSION['utype'] == 'staff') {
                 ?>
                     <img class="d-block m-auto" style="border-radius:50% ; width:3rem;" src="../image/m_img/<?php echo $row_id['img'] ?>" width="150" alt="img">
 
