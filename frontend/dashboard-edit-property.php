@@ -20,7 +20,7 @@ $sqlpr = "SELECT * FROM provinces";
 $resultpr = mysqli_query($con, $sqlpr);
 
 $idb = $_GET["id"];
-$sqlb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,advertise.ad_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
@@ -236,7 +236,7 @@ $resultd = mysqli_query($con, $sqld);
         <main id="content" class="bg-gray-01">
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10 my-profile">
             <div class="mb-6">
-              <h2 class="mb-0 text-heading fs-22 lh-15">แก้ไขประกาศ
+              <h2 class="mb-0 text-heading fs-22 lh-15">แก้ไขประกาศ <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"> <?php echo $rowb['ad_id']; ?></span>
               </h2>
             </div>
             <div class="collapse-tabs new-property-step">

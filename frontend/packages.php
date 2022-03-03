@@ -510,9 +510,14 @@ curl_close($curl);
                                   <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                                 </a>
 
-                                <button class="btn btn-lg btn-primary mb-3" id="nextbtn" style="display:none;" onclick="checkPay()"> ขั้นตอนต่อไป
+                                <button class="btn btn-lg btn-primary mb-3" id="next" onclick="checkPay()"> ขั้นตอนต่อไป
                                   <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                                 </button>
+                                <button class="btn btn-lg btn-primary mb-3 next-button" id="nextbtn" style="display:none;"> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </button>
+                                
+                             
 
                               </div>
                             </div>
@@ -829,7 +834,7 @@ curl_close($curl);
           timer: 1000
         })
       }
-      document.getElementById('nextbtn').style.display = "block";
+      // document.getElementById('nextbtn').style.display = "block";
     }
 
     function submitFormMobile() {
@@ -857,7 +862,7 @@ curl_close($curl);
           timer: 1000
         })
       }
-      document.getElementById('nextbtn').style.display = "block";
+      // document.getElementById('nextbtn').style.display = "block";
 
     }
 
@@ -889,10 +894,10 @@ curl_close($curl);
 
 
     $('#mobile-method').on('click', function() {
-      document.getElementById('nextbtn').style.display = "none";
+      document.getElementById('next').style.display = "none";
     })
     $('#credit-method').on('click', function() {
-      document.getElementById('nextbtn').style.display = "none";
+      document.getElementById('next').style.display = "none";
     })
 
     
@@ -907,10 +912,12 @@ curl_close($curl);
         success: function(dataCheck) {
           // console.log(dataCheck)
           // // alert($('#referenceNo').val())
+         
           console.log('สถานะการชำระเงิน');
           console.log(dataCheck['resultCode']);
           if (dataCheck['resultCode'] == '00') {
-
+            
+            $('#nextbtn').click()
             $('#success').attr('style', 'opacity: 1; display: block;');
             // $('#fieldset').attr('style', 'position: relative; opacity: 0; display: none;');
             // $('#confirm').attr('class', 'active');

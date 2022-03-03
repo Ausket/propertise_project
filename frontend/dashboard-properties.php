@@ -180,7 +180,7 @@ if (isset($_POST['ch'])) {
 
               $choice = 4;
 
-              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise.ad_id,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
             property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
             location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
             location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -221,6 +221,7 @@ if (isset($_POST['ch'])) {
                 <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">ไอดีประกาศ</th>
                       <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
@@ -236,6 +237,7 @@ if (isset($_POST['ch'])) {
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
+                      <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
@@ -250,9 +252,9 @@ if (isset($_POST['ch'])) {
                             </div>
                             <div class="media-body">
                               <?php if ($row2['ad_status'] == '1') { ?>
-                                <a href="home-details.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                                <a href="home-details.php?id=<?php echo $row2['a_id']; ?>" class="text-muted hover-primary">
                                 <?php } else { ?>
-                                  <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-dark hover-primary">
+                                  <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id']; ?>" class="text-muted hover-primary">
                                   <?php } ?>
                                   <h5 class="fs-16 mb-0 lh-18"><?php echo $row2['title']; ?></h5>
                                   </a>
@@ -301,8 +303,8 @@ if (isset($_POST['ch'])) {
                         </td>
                         <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
-                          <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
-                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
+                          <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-3"><i class="fal fa-pencil-alt"></i></a>
+                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
                         </td>
                       <?php  } ?>
                       </tr>
@@ -361,7 +363,7 @@ if (isset($_POST['ch'])) {
               ";
               $result3 = mysqli_query($con, $sql3) or die(mysqli_error($con));
 
-              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+              $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise.ad_id,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
               property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
               location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
               location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
@@ -383,6 +385,7 @@ if (isset($_POST['ch'])) {
                 <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
+                      <th scope="col" class="border-top-0 pt-5 pb-4">ไอดีประกาศ</th>
                       <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
@@ -399,6 +402,7 @@ if (isset($_POST['ch'])) {
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
+                      <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
@@ -463,8 +467,8 @@ if (isset($_POST['ch'])) {
                         </td>
                         <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
-                          <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-pencil-alt"></i></a>
-                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary"><i class="fal fa-trash-alt"></i></a>
+                          <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-3"><i class="fal fa-pencil-alt"></i></a>
+                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
                         </td>
                       <?php  } ?>
                       </tr>

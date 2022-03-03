@@ -9,7 +9,7 @@ $sqla = "SELECT * FROM users WHERE u_id = $ida";
 $resulta = mysqli_query($con, $sqla);
 $rowa = mysqli_fetch_array($resulta);
 
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.ad_id,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,property_detail.pd_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,property_detail.facility,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company,users.img,users.utype,users.u_id
@@ -112,7 +112,7 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
   <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
 
@@ -292,11 +292,18 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
           </div>
           <article class="col-lg-8 mb-6 mb-lg-0">
             <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
-              <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
-                <li class="list-inline-item badge mr-3" style="background-color : <?php echo $rowad['color']; ?>; color:white;"><?php echo $rowad['type']; ?></li>
-                <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i><?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
-                <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i><?php echo $rowad['view']; ?> ครั้ง</li>
-              </ul>
+              <div class="row">
+                <div class="col-8">
+                  <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
+                    <li class="list-inline-item badge mr-3" style="background-color : <?php echo $rowad['color']; ?>; color:white;"><?php echo $rowad['type']; ?></li>
+                    <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i><?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
+                    <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i><?php echo $rowad['view']; ?> ครั้ง</li>
+                  </ul>
+                </div>
+                <div class="col-4 text-right ">
+                  <span class="badge badge-pill text-primary fs-18 font-weight-bold ml-2 "> <?php echo $rowad['ad_id']; ?></span>
+                </div>
+              </div>
               <div class="d-sm-flex justify-content-sm-between">
                 <div>
                   <h2 class="fs-35 font-weight-600 lh-15 text-heading"><?php echo $rowad['title']; ?></h2>
@@ -519,7 +526,7 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
             <section class="mt-2 pb-6 px-6 pt-6 bg-white rounded-lg">
               <h4 class="fs-22 text-heading mb-6">แผนที่ตั้ง</h4>
               <div class="position-relative">
-                <div id="map" >
+                <div id="map">
                 </div>
               </div>
             </section>
@@ -527,7 +534,7 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
         </div>
       </div>
     </div>
-    
+
   </main>
   <?php include 'templates/footer-two.php'; ?>
   <!-- Vendors scripts -->
@@ -600,7 +607,7 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
       .setLngLat([<?= $rowad['lng']; ?>, <?= $rowad['lat']; ?>])
       .setPopup(popup).addTo(map)
 
-    
+
 
     map.addControl(
       new MapboxGeocoder({
@@ -614,10 +621,6 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
 
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
-
-   
-
-    
   </script>
 
   <!-- Theme scripts -->

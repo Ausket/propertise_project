@@ -42,6 +42,9 @@ $numrandT = (mt_rand(1000, 9999));
 $date = $_POST['date'];
 $file2 = $_FILES['file']['name'];
 
+//---------------------------------------------------------
+
+
 if ($file != '') {
     $type = strrchr($file, "."); //ตัดชื่อไฟล์เหลือแต่นามสกุล
     $newname = $files . $nameDate . $numrand . $type; //ประกอบเป็นชื่อใหม่
@@ -71,6 +74,28 @@ if ($file != '') {
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
+        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+
+        $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
+        $qry = mysqli_query($con, $check) or die(mysqli_error($con));
+        $rs = mysqli_fetch_assoc($qry);
+        $a_id = $rs['a_id'];
+
+        $namep = "SELECT * FROM property_type";
+        $qry2 = mysqli_query($con, $namep) or die(mysqli_error($con));
+        foreach ($qry2 as $value) {
+
+            if ($rs['ptype_id'] == $value['ptype_id']) {
+                $code = $value['name_short'];
+            }
+        }
+
+        $maxId = substr($rs['a_id'], -5);
+        $maxId = substr("00000" . $maxId, -5);
+        $nextId = $code . $yearMonth . $maxId;
+
+        $sql7 = "UPDATE advertise SET ad_id ='$nextId' WHERE a_id = $a_id ";
+        $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));;
 
         if ($file2 !== '') {
             for ($i = 0; $i < count($file2); $i++) {
@@ -115,6 +140,29 @@ if ($file != '') {
 
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
+
+        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+
+        $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
+        $qry = mysqli_query($con, $check) or die(mysqli_error($con));
+        $rs = mysqli_fetch_assoc($qry);
+        $a_id = $rs['a_id'];
+
+        $namep = "SELECT * FROM property_type";
+        $qry2 = mysqli_query($con, $namep) or die(mysqli_error($con));
+        foreach ($qry2 as $value) {
+
+            if ($rs['ptype_id'] == $value['ptype_id']) {
+                $code = $value['name_short'];
+            }
+        }
+
+        $maxId = substr($rs['a_id'], -5);
+        $maxId = substr("00000" . $maxId, -5);
+        $nextId = $code . $yearMonth . $maxId;
+
+        $sql7 = "UPDATE advertise SET ad_id ='$nextId' WHERE a_id = $a_id ";
+        $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));;
 
 
         if ($file2 !== '') {
@@ -162,6 +210,29 @@ if ($file != '') {
         $sql6 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2') ";
         $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
 
+        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+
+        $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
+        $qry = mysqli_query($con, $check) or die(mysqli_error($con));
+        $rs = mysqli_fetch_assoc($qry);
+        $a_id = $rs['a_id'];
+
+        $namep = "SELECT * FROM property_type";
+        $qry2 = mysqli_query($con, $namep) or die(mysqli_error($con));
+        foreach ($qry2 as $value) {
+
+        if ($rs['ptype_id'] == $value['ptype_id']) {
+            $code = $value['name_short'];
+        }
+    }
+
+        $maxId = substr($rs['a_id'], -5);
+        $maxId = substr("00000" . $maxId, -5);
+        $nextId = $code . $yearMonth . $maxId;
+
+        $sql7 = "UPDATE advertise SET ad_id ='$nextId' WHERE a_id = $a_id ";
+        $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));;
+
 
         if ($file2 !== '') {
             for ($i = 0; $i < count($file2); $i++) {
@@ -207,6 +278,28 @@ if ($file != '') {
 
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
+
+        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+
+        $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
+        $qry = mysqli_query($con, $check) or die(mysqli_error($con));
+        $rs = mysqli_fetch_assoc($qry);
+        $a_id = $rs['a_id'];
+
+        $namep = "SELECT * FROM property_type";
+        $qry2 = mysqli_query($con, $namep) or die(mysqli_error($con));
+        foreach ($qry2 as $value) {
+
+            if ($rs['ptype_id'] == $value['ptype_id']) {
+                $code = $value['name_short'];
+            }
+        }
+        $maxId = substr($rs['a_id'], -5);
+        $maxId = substr("00000" . $maxId, -5);
+        $nextId = $code . $yearMonth . $maxId;
+
+        $sql7 = "UPDATE advertise SET ad_id ='$nextId' WHERE a_id = $a_id ";
+        $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));;
 
         if ($file2 !== '') {
             for ($i = 0; $i < count($file2); $i++) {
