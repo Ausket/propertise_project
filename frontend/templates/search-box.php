@@ -183,10 +183,10 @@ $sqlat2 = "SELECT * FROM advertise_type  ";
 $resultat2 = mysqli_query($con, $sqlat2);
 ?>
 <section class="bg-secondary">
-    <div class="container">
-        <form class="property-search d-none d-lg-block" action="frontend/listing-home.php" method="GET">
+    <div class="container container-xxl">
+        <form class="property-search d-none d-lg-block" action="listing-home.php" method="GET">
             <div class="row align-items-lg-center" id="accordion-2">
-                <div class="col-xl-8 col-lg-7 d-md-flex">
+                <div class="col-xl-8 col-lg-7 d-md-flex pt-4 pb-4">
                     <select class="form-control shadow-none form-control-lg selectpicker rounded-right-md-0 rounded-md-top-left-0 rounded-lg-top-left flex-md-1 mt-3 mt-md-0" title="จังหวัด" data-style="btn-lg py-2 h-52 border-right bg-white" id="type-1" name="province">
                         <?php while ($rowpr = mysqli_fetch_assoc($resultpr)) : ?>
                             <option value="<?= $rowpr['id'] ?>"><?= $rowpr['name_th'] ?></option>
@@ -229,7 +229,7 @@ $resultat2 = mysqli_query($con, $sqlat2);
                 </div>
                 <div id="advanced-search-filters-2" class="col-12 pb-6 pt-lg-2 collapse" data-parent="#accordion-2">
                     <div class="row mx-n2">
-                        <div class="col-sm-6 col-md-4 pt-4 px-2">
+                        <div class="col-sm-6 col-md-4 pt-0 px-2">
                             <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bedroom" title="ห้องนอน" data-style="btn-lg py-2 h-52 bg-white">
                                 <option>ห้องนอน</option>
                                 <option value="1">1</option>
@@ -244,7 +244,7 @@ $resultat2 = mysqli_query($con, $sqlat2);
                                 <option value="10">10</option>
                             </select>
                         </div>
-                        <div class="col-sm-6 col-md-4 pt-4 px-2">
+                        <div class="col-sm-6 col-md-4 pt-0 px-2">
                             <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="bathroom" title="ห้องน้ำ" data-style="btn-lg py-2 h-52 bg-white">
                                 <option>ห้องน้ำ</option>
                                 <option value="1">1</option>
@@ -259,7 +259,7 @@ $resultat2 = mysqli_query($con, $sqlat2);
                                 <option value="10">10</option>
                             </select>
                         </div>
-                        <div class="col-sm-6 col-md-4 pt-4 px-2">
+                        <div class="col-sm-6 col-md-4 pt-0 px-2">
                             <select class="form-control border-0 shadow-none form-control-lg selectpicker bg-white" name="parking" title="ที่จอดรถ" data-style="btn-lg py-2 h-52 bg-white">
                                 <option>ที่จอดรถ</option>
                                 <option value="1">1</option>
@@ -276,11 +276,11 @@ $resultat2 = mysqli_query($con, $sqlat2);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-lg-5 pt-6 slider-range slider-range-primary">
-                            <label for="price-2" class="mb-4 text-white">ราคา</label>
-                            <div data-slider="true" data-slider-options='{"min":0,"max":50000000,"values":[0,8000000],"type":"currency"}'></div>
+                        <div class="col-md-6 col-lg-6 pt-6 slider-range slider-range-primary">
+                            <label for="price-1-3" class="mb-4 text-white font-weight-400"> ขอบเขตราคา </label>
+                            <div data-slider="true" data-slider-options='{"min":0,"max":10000000,"values":[1000000,8000000],"type":"currency"}'></div>
                             <div class="text-center mt-2">
-                                <input id="price-2" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="price">
+                                <input id="price-1-3" type="text" readonly name="price" class="border-0 amount text-center text-body text-white bg-transparent font-weight-400" style="color: #ffffff !important">
                             </div>
                         </div>
                         <div class="col-md-6 pt-6 slider-range slider-range-primary">
@@ -349,7 +349,7 @@ $resultat2 = mysqli_query($con, $sqlat2);
                 </div>
             </div>
         </form>
-        <form class="property-search property-search-mobile d-lg-none py-6" action="frontend/listing-home.php" method="GET">
+        <form class="property-search property-search-mobile d-lg-none py-6 " action="listing-home.php" method="GET">
             <div class="row align-items-lg-center" id="accordion-2-mobile">
                 <div class="col-12">
                     <div class="form-group mb-0 position-relative">
@@ -436,18 +436,18 @@ $resultat2 = mysqli_query($con, $sqlat2);
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-lg-5 pt-6 slider-range slider-range-primary">
-                            <label for="price-2" class="mb-4 text-white">ราคา</label>
-                            <div data-slider="true" data-slider-options='{"min":0,"max":50000000,"values":[0,8000000],"type":"currency"}'></div>
+                        <div class="col-md-6 col-lg-6 pt-6 slider-range slider-range-primary">
+                            <label for="price-1-3" class="mb-4 text-white font-weight-400"> ขอบเขตราคา </label>
+                            <div data-slider="true" data-slider-options='{"min":0,"max":10000000,"values":[1000000,8000000],"type":"currency"}'></div>
                             <div class="text-center mt-2">
-                                <input id="price-2" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="price">
+                                <input id="price-1-3" type="text" readonly name="price" class="border-0 amount text-center text-body text-white bg-transparent font-weight-400" style="color: #ffffff !important">
                             </div>
                         </div>
-                        <div class="col-md-6 col-lg-5 pt-6 slider-range slider-range-primary offset-lg-1">
-                            <label for="area-size-2" class="mb-4 text-white">ขนาดพื้นที่</label>
+                        <div class="col-md-6 pt-6 slider-range slider-range-primary">
+                            <label for="area-size-2-mobile" class="mb-4 text-white">ขนาดพื้นที่</label>
                             <div data-slider="true" data-slider-options='{"min":0,"max":1000,"values":[0,500],"type":"sqrwa"}'></div>
                             <div class="text-center mt-2">
-                                <input id="area-size-2" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="space_area">
+                                <input id="area-size-2-mobile" type="text" readonly class="border-0 amount text-center text-white bg-transparent font-weight-500" name="space_area">
                             </div>
                         </div>
                         <div class="col-12 pt-4 pb-2">

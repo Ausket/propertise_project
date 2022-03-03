@@ -39,15 +39,13 @@ if ($requestMethod === 'GET') {
 } elseif ($requestMethod === 'PUT') {
     //ตรวจสอบว่ามีการส่งค่า id มาหรือไม่
     if (!empty($data)) {
-        if (!empty($data['full-back-url']) && !empty($data['mobile-back-url']) && !empty($data['install-back-url']) && !empty($data['qrcash-back-url']) && !empty($data['qrcode-back-url'])) {
+        if (!empty($data['full-back-url']) && !empty($data['mobile-back-url'])  && !empty($data['qrcash-back-url']) && !empty($data['qrcode-back-url'])) {
 
             $dataJson = array(
                 'full-back-url' => $data['full-back-url'],
                 'full-res-url' => $data['full-res-url'],
                 'mobile-back-url' => $data['mobile-back-url'],
                 'mobile-res-url' => $data['mobile-res-url'],
-                'install-back-url' => $data['install-back-url'],
-                'install-res-url' => $data['install-res-url'],
                 'qrcash-back-url' => $data['qrcash-back-url'],
                 'qrcode-back-url' => $data['qrcode-back-url']
             );

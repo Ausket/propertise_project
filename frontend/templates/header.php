@@ -81,6 +81,9 @@ if (isset($_POST['submit'])) {
 // } else {
 //     header('href=#login-register-modal');
 // }
+$linkpri = "frontend/privacypolicy.php";
+$linkcook = "frontend/cookiepolicy.php";
+
 ?>
 <!-- Google fonts -->
 <style>
@@ -90,15 +93,15 @@ if (isset($_POST['submit'])) {
         font-family: 'Prompt', sans-serif;
     }
 </style>
-
+<?php include 'cookies.php'; ?>
 <header class="main-header navbar-light header-sticky header-sticky-smart header-mobile-lg">
     <div class=" sticky-area">
         <div class="container container-xxl">
             <div class="d-flex align-items-center">
                 <nav class="navbar navbar-expand-xl bg-transparent px-0 w-100 w-xl-auto">
                     <a class="navbar-brand mr-7" href="index.php">
-                        <img src="images/logo.png" alt="HomeID" class="d-none d-lg-inline-block">
-                        <img src="images/logo-white.png" alt="HomeID" class="d-inline-block d-lg-none">
+                        <img src="images/logo_new.png" alt="HomeID" class="d-none d-lg-inline-block">
+                        <img src="images/logo_new2.png" alt="HomeID" class="d-inline-block d-lg-none">
                     </a>
                     <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
                         $id = $_SESSION['u_id'];

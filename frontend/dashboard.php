@@ -42,6 +42,17 @@
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <style>
+  #link {
+    display: none;
+  }
+
+  @media screen and (max-width: 1000px) {
+    #link {
+      display: flex;
+    }
+  }
+</style>
 </head>
 
 <body>
@@ -53,9 +64,6 @@
         <main id="content" class="bg-gray-01">
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
-              <div class="mr-0 mr-md-auto">
-                <h2 class="mb-0 text-heading fs-22 lh-15">ยินดีต้อนรับกลับมา <?php echo $rowu['name']; ?></h2>
-              </div>
               <div>
                 <a href="dashboard-add-property.php" class="btn btn-primary btn-lg">
                   <span>เพิ่มประกาศ</span>
@@ -63,6 +71,22 @@
                       <use xlink:href="#icon-add-new"></use>
                     </svg></span>
                 </a>
+              </div>
+            </div>
+            <div class="row" id="link">
+              <div class="col-xxl-12 mb-6">
+                <div class="card px-7 py-6 h-100 chart">
+                  <p class="fs-16 text-dark mb-0"> Menu <i class="fas fa-chevron-square-down text-primary"></i> </p>
+                  <span class="heading-divider"></span>
+                  <div class="card-body p-0 collapse-tabs">
+                    <a href="dashboard.php" type="button" class="btn btn-outline-secondary w-100 fs-15"> แดชบอร์ด </a>
+                    <a href="dashboard-add-property.php" type="button" class="btn btn-outline-secondary w-100 fs-15 mt-2"> ลงประกาศ </a>
+                    <a href="dashboard-properties.php" type="button" class="btn btn-outline-info w-100 fs-15 mt-2"> ประกาศของฉัน </a>
+                    <a href="dashboard-favourites.php" type="button" class="btn btn-outline-info w-100 fs-15 mt-2"> รายการโปรด </a>
+                    <a href="dashboard-my-packages.php" type="button" class="btn btn-outline-primary w-100 fs-15 mt-2"> แพ็คเก็จของฉัน </a>
+                    <a href="dashboard-profiles.php" type="button" class="btn btn-outline-primary w-100 fs-15 mt-2"> ข้อมูลส่วนตัว </a>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">

@@ -41,3 +41,4 @@ $rowu = mysqli_fetch_assoc($resultu);
         </nav>
     </div>
 </header>
+<?php include 'menu-bar.php'; ?>

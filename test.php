@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" >
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <title>Document</title>
     <style>
         #files-area {
@@ -55,7 +55,7 @@
             <a class="btn btn-primary text-light" role="button" aria-disabled="false">+ Add</a>
 
         </label>
-        <input type="file" name="file[]" id="attachment" multiple/>
+        <input type="file" name="file[]" id="attachment" multiple />
 
     </p>
     <p id="files-area">
@@ -63,31 +63,46 @@
             <span id="files-names"></span>
         </span>
     </p>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         const dt = new DataTransfer(); // Permet de manipuler les fichiers de l'input file
 
         $("#attachment").on('change', function(e) {
             for (var i = 0; i < this.files.length; i++) {
-                let fileBloc = $('<span/>', {
-                        class: 'file-block'
-                    }),
-                    fileName = $('<span/>', {
-                        class: 'name',
-                        text: this.files.item(i).name
-                    });
-                fileBloc.append('<span class="file-delete"><span>+</span></span>')
-                    .append(fileName);
-                $("#filesList > #files-names").append(fileBloc);
+                var reader = new FileReader();
+                reader.onload = (function(c) {
+                  let  img = $('<img/>', {
+                            class: 'show',
+                            stc: c.target.result
+                        });
+                });
+                reader.readAsDataURL(this.files[i]);
+
+                    let fileBloc = $('<span/>', {
+                            class: 'file-block'
+                        }),
+                        fileName = $('<span/>', {
+                            class: 'name',
+                            text: this.files.item(i).name
+                        });
+
+                       
+                    fileBloc.append('<span class="file-delete"><span>+</span></span>')
+                        .append(fileName);
+                    $("#filesList > #files-names").append(fileBloc);
+
+               
             };
+
+
             // Ajout des fichiers dans l'objet DataTransfer
             for (let file of this.files) {
                 dt.items.add(file);
             }
             // Mise à jour des fichiers de l'input file après ajout
             this.files = dt.files;
-              
-            console.log(dt.items[i]);
+
+            console.log(dt.items);
             // EventListener pour le bouton de suppression créé
             $('span.file-delete').click(function() {
                 let name = $(this).next('span.name').text();
@@ -99,7 +114,6 @@
                     if (name === dt.items[i].getAsFile().name) {
                         // Suppression du fichier dans l'objet DataTransfer
                         dt.items.remove(i);
-                       
                         continue;
                     }
                 }

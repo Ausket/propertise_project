@@ -870,41 +870,74 @@ $resultd = mysqli_query($con, $sqld);
 
       for (i = 0; i < filesAmount; i++) {
         var reader = new FileReader();
+        var fileName = document.getElementById('fileupload2').files[i].name;
 
+        reader.fileName = input.files[i].name
         reader.onload = (function(e) {
           var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview"></span>'].join('');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" ><span class="name">', e.target.fileName, '</span></span>'].join('');
           document.getElementById('upload-img2').insertBefore(span, null);
+
+          let btns = document.querySelectorAll('span.remove_img_preview');
+
+          for (j of btns) {
+            j.addEventListener('click', function() {
+              console.log(j);
+            });
+          }
+
+
+          // document.getElementById("removeimg").addEventListener("click", removeimg, false);
+
+          // console.log(span.innerHTML);
+
         });
         reader.readAsDataURL(input.files[i]);
-        // console.log(reader);
-      }
 
+
+      }
+      //เพิ่มไฟล์ไปยังวัตถุ DataTransfer
       for (let file of input.files) {
         dt.items.add(file);
       }
-
+      //อัปเดตไฟล์ของไฟล์อินพุตหลังจากเพิ่ม
       input.files = dt.files;
       console.log(dt.items);
 
-      $('#upload-img2').on('click', '.remove_img_preview', function() {
-        let img = $('img.thumb').attr('src');
-        let name = $(this).next('img.thumb').text();
+      function removeimg() {
+        alert('Click');
+        let name = $('span.name').text();
         console.log(name);
-        $(this).parent('span').remove();
-    
-        for (let i = 0; i < dt.items.length; i++) {
-          // Correspondance du fichier et du nom
-          if (name === dt.items[i].getAsFile().name) {
-            // Suppression du fichier dans l'objet DataTransfer
-            dt.items.remove(i);
-           
-            continue;
-          }
-        }
-        // Mise à jour des fichiers de l'input file après suppression
+        // $(this).parent('span').remove();
+
+        // for (let i = 0; i < dt.items.length; i++) {
+        //   // จับคู่ไฟล์และชื่อ
+        //   if (name === dt.items[i].getAsFile().name) {
+        //     // ลบไฟล์ในวัตถุ DataTransfer
+        //     dt.items.remove(i);
+        //     continue;
+        //   }
+        // }
+        // อัปเดตไฟล์อินพุตไฟล์หลังจากการลบ
         document.getElementById('fileupload2').files = dt.files;
-      });
+      }
+
+      // $(document).on('click', '.remove_img_preview', function() {
+      //   let name = $('span.name').text();
+      //   console.log(name);
+      //   $(this).parent('span').remove();
+
+      //   for (let i = 0; i < dt.items.length; i++) {
+      //     // จับคู่ไฟล์และชื่อ
+      //     if (name === dt.items[i].getAsFile().name) {
+      //       // ลบไฟล์ในวัตถุ DataTransfer
+      //       dt.items.remove(i);
+      //       continue;
+      //     }
+      //   }
+      //   // อัปเดตไฟล์อินพุตไฟล์หลังจากการลบ
+      //   document.getElementById('fileupload2').files = dt.files;
+      // });
 
     });
 

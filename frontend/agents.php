@@ -56,7 +56,7 @@
 <body>
   <?php include 'templates/header-two.php'; ?>
   <main id="content">
-    <section class="position-relative">
+  <section class="position-relative">
       <div class="pt-10 page-title bg-overlay bg-cover" style="background-image: url('../images/bg-title-3.jpg');">
         <div class="container">
           <h1 class="fs-32 mb-0 text-white font-weight-500 text-center pt-10 pb-9 lh-17 mxw-478" data-animate="fadeInDown">พบกับตัวแทน
@@ -66,20 +66,33 @@
       <div class="bg-secondary">
         <div class="container">
           <div class="py-2">
-            <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-center" action="" method="GET">
+            <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-end">
               <div class="form-group py-1 col-md-10 px-1 mb-0">
-                <label for="search01" class="sr-only">Search</label>
+                <label for="search01" class="sr-only">ค้นหา</label>
                 <div class="input-group input-group-lg">
                   <div class="input-group-prepend mr-n1">
                     <span class="fs-18 input-group-text bg-white border-0"><i class="fal fa-search"></i></span>
                   </div>
-                  <input type="text" id="search01" class="form-control border-0 bg-white shadow-none" placeholder="ค้นหาจากชื่อตัวแทนหรือบริษัท" name="search_agent">
+                  <input type="text" id="search01" class="form-control border-0 bg-white shadow-none" placeholder="ค้นหาจากชื่อตัวแทน" name="search_agent">
                 </div>
               </div>
               <div class="col-md-2 py-1 px-1">
                 <button type="submit" class="btn btn-primary btn-lg btn-block">
                   ค้นหา
                 </button>
+              </div>
+            </form>
+            <form class="d-block d-md-none">
+              <div class="d-flex align-items-center">
+                <div class="form-group mb-0 w-100">
+                  <label for="search03" class="sr-only">ค้นหา</label>
+                  <div class="input-group input-group-lg">
+                    <input type="text" id="search03" class="form-control border-0 bg-white shadow-none" placeholder="ค้นหาจากชื่อตัวแทน" name="search_agent">
+                    <div class="input-group-append ml-n1">
+                      <button type="submit" class="fs-18 input-group-text bg-white border-0"><i class="fal fa-search"></i></button>
+                    </div>
+                  </div>
+                </div>
               </div>
             </form>
           </div>

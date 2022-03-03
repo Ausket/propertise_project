@@ -152,27 +152,7 @@ if ($type == 'member' || $type == 'agent') {
                                     </div>
                                 </div>
                             </div>
-
-
-                            <hr class="my-4" width="95%">
-
-                            <div class="mb-4">
-                                <h4 class="pl-3"><b>Installment</b> ผ่อนชำระเงิน</h4>
-                            </div>
-                            <div class="pl-4">
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">backgroundUrl</label>
-                                    <div class="col-sm-7">
-                                        <input type="text" class="form-control" id="install-back-url" name="install-back-url" placeholder="กรอก backgroundUrl" required>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-sm-2 col-form-label">responseUrl</label>
-                                    <div class="col-sm-7">
-                                        <input class="form-control" id="install-res-url" name="install-res-url" placeholder="กรอก responseUrl" required>
-                                    </div>
-                                </div>
-                            </div>
+                       
 
                             <hr class="my-4" width="95%">
 

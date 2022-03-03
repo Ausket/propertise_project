@@ -23,7 +23,8 @@ var json_request;
 var url;
 var backUrl = "";
 var resUrl = "";
-var payurl = "http://localhost/deena/propertise/page/";
+// var payurl = "http://localhost/deena/propertise/page/";
+var payurl = "https://okjung.com/au/page/";
 
 
 $.ajax({
@@ -54,6 +55,7 @@ function payQR(url, ref_no, price, id_img) {
         success: function(data) {
             console.log(data);
             backUrl = data["qrcode-back-url"];
+            console.log(backUrl);
             if (backUrl != "") {
                 $.ajax({
                     type: "POST",

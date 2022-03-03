@@ -122,9 +122,7 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
 <body>
   <?php include 'templates/header-two.php'; ?>
   <main id="content">
-  <form class="property-search d-none d-lg-block" action="listing-home.php" method="GET">
     <?php include 'templates/search-box.php'; ?>
-  </form>
     <section class="bg-white shadow-5 pb-1">
       <div class="container">
         <nav aria-label="breadcrumb">

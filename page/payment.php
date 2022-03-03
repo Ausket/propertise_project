@@ -18,7 +18,8 @@ if ($type == 'member' || $type == 'agent') {
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-    CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
+    // CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
+    CURLOPT_URL => 'https://okjung.com/au/page/payment/setupEnvironment.php',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -55,10 +56,12 @@ curl_close($curl);
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/switch_insurance.css">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.min.js"></script>
 
@@ -112,9 +115,13 @@ curl_close($curl);
                                             <label class="input-group" id="inputGroup-sizing">ธนาคาร</label>
                                             <select class="form-control" id="bcode" name="bankCode" onchange="genChecksumMoblie()">
                                                 <option selected>กรุณาเลือกธนาคาร</option>
-                                                <option value="004">kBank</option>
-                                                <option value="014">SCB</option>
-                                                <option value="025">Krungsri</option>
+                                                <option value="004">K-Plus</option>
+                                                <option value="014">SCB Easy (Only Open in Mobile)</option>
+                                                <option value="002">BBL (Only Open in Mobile)</option>
+                                                <option value="025">KMA (Krungsri)</option>
+                                                <option value="006">KTB (Krungthai)</option>
+                                                <!-- <option value="002">BBL (Bangkok Bank)</option>
+                                                    <option value="006">KTB (Krungthai)</option> -->
                                             </select>
                                         </div>
                                         <br>
@@ -158,7 +165,7 @@ curl_close($curl);
                                         </div>
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group" id="inputGroup-sizing">เลขอ้างอิง</label>
-                                            <input class="form-control mb-2" id="referenceNo-credit" type="text" maxlength="15" placeholder="referenceNo" readonly><br />
+                                            <input class="form-control mb-2" id="referenceNo-credit" type="text" id="order-id-credit-card" name="referenceNo" readonly><br />
                                         </div>
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group" id="inputGroup-sizing">ชื่อผู้ถือบัตร</label>
@@ -243,14 +250,14 @@ curl_close($curl);
                                 <input class="mb-2" type="hidden" id="backgroundUrl-installment" name="backgroundUrl">
                                 <!-- <input class="mb-2" type="text" name="detail" placeholder="Detail" value="ข้อมูลรายละเอียด"><br /> -->
 
-                                <!-- debug checksum -->
-                                <!-- <input type="hidden" id="checksum-installment" name="checksum" placeholder="checksum" value=""><br />
+        <!-- debug checksum -->
+        <!-- <input type="hidden" id="checksum-installment" name="checksum" placeholder="checksum" value=""><br />
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-        </div> --> 
+        </div> -->
 
         <!-- Main content -->
         <div class="container mt-3">
@@ -333,6 +340,7 @@ curl_close($curl);
 
     <script src="../js/jquery.min.js"></script>
     <script src="../js/gbPayment.js"></script>
+    <script src="../js/JsBarcode.all.min.js"></script>
     <!-- Bootstrap 4 -->
     <script src="../js/bootstrap.bundle.min.js"></script>
     <!-- AdminLTE App -->
@@ -430,6 +438,44 @@ curl_close($curl);
 
 
         // }
+        function checkPay() {
+            $.ajax({
+                type: "POST",
+                url: "<?= $base_api_pay ?>payment/check_status.php",
+                data: {
+                    referenceNo: $('#referenceNo').val()
+                },
+                success: function(dataCheck) {
+                    console.log(dataCheck)
+                    // alert($('#referenceNo').val())
+                    // console.log('สถานะการชำระเงิน');
+                    // console.log(dataCheck['resultCode']);
+                    if (dataCheck['resultCode'] == '00') {
+
+                        // $('#fieldset').attr('style', 'position: relative; opacity: 0; display: none;');
+                        // $('#fieldset-finish').attr('style', 'opacity: 1; display: block;');
+                        // $('#confirm').attr('class', 'active');
+                        // $('#progress-bar').attr('style', 'width: 100%;');
+                    } else {
+                        // alert('ยังไมไ่ด้รับการชำระเงิน');
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'แจ้งเตือน',
+                            text: 'ธุรกรรมของท่าน ยังไม่ได้รับการชำระเงิน'
+                        })
+                    }
+                    // console.log(dataCheck['txns'][0]['']);
+
+
+                },
+            });
+        }
+        $("#check-pay-qr").click(function() {
+            checkPay()
+        });
+        $("#check-pay-bill").click(function() {
+            checkPay()
+        });
 
         $("#credit-method").click(function() {
             if ($("#order-id").val() == "" || $("#price").val() == "") {

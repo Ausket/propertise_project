@@ -115,7 +115,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
       <div class="container container-xxl">
         <h2 class="text-heading">ค้นหาอสังหาริมทรัพย์ที่คุณต้องการ</h2>
         <span class="heading-divider"></span>
-        <br>
+        <br><br>
         <?php include 'frontend/templates/search-box2.php'; ?>
       </div>
     </section>
@@ -161,7 +161,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                 </div>
                 <div class="card-body pt-3">
                   <h2 class="card-title fs-16 lh-2 mb-0">
-                    <a href="frontend/listing-home.php" class="text-dark hover-primary"><?php echo $row7['title']; ?></a>
+                    <a href="frontend/home-details.php?id=<?php echo $row7['a_id']; ?>" class="text-dark hover-primary"><?php echo $row7['title']; ?></a>
                   </h2>
                   <p class="card-text font-weight-500 text-gray-light mb-2"><?php if ($row7['house_no'] != '') {
                                                                               echo $h_no . " " . $row7['house_no'];

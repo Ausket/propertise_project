@@ -128,7 +128,7 @@ $result = mysqli_query($con, $sqlData);
                                         <b>รายละเอียด</b>
                                     </button>
                                     &nbsp;
-                                    <a href="del.php?id=<?= $row['id'] ?>" onclick="return confirm('ต้องการลบจริงหรือไม่?')" class="btn btn-danger rounded-pill"><i class="far fa-trash-alt"></i>
+                                    <a href="../backend/delpayment_status.php?id=<?php echo $row['id'] ?>" onclick="return confirm('ต้องการลบจริงหรือไม่?')" class="btn btn-danger rounded-pill"><i class="far fa-trash-alt"></i>
                                         <b>ลบ</b>
                                     </a>
 

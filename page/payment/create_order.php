@@ -35,9 +35,12 @@ if ($requestMethod === 'POST') {
         
             $referenceNo = $data['referenceNo'];
             $amount = $data['price'];
+            $name = $data['name'];
+            $pack = $data['pack'];
+            $id = $data['id'];
 
             //คำสั่ง SQL สำหรับเพิ่มข้อมูลใน Database
-            $sql = "INSERT INTO pay_status (referenceNo, price) VALUES ('$referenceNo','$amount')";
+            $sql = "INSERT INTO pay_status (referenceNo, price ,name ,pack_name ,u_id) VALUES ('$referenceNo','$amount','$name','$pack','$id')";
 
             $result = mysqli_query($con, $sql);
 

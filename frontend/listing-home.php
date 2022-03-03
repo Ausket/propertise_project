@@ -60,15 +60,13 @@
 
   <?php include 'templates/header-two.php' ?>
   <main id="content">
-    <form class="property-search d-none d-lg-block" action="" method="GET">
-      <?php include 'templates/search-box.php'; ?>
-    </form>
+    <?php include 'templates/search-box.php'; ?>
     <section class="position-relative">
       <div class="container-fluid px-0">
         <div class="row no-gutters">
           <div class="col-xl-6 col-xxl-7 primary-map map-sticky" id="map-sticky">
             <div class="primary-map-inner">
-              <div class="map-grid-property-01 xl-vh-100 " id="map" >
+              <div class="map-grid-property-01 xl-vh-100" id="map">
               </div>
             </div>
           </div>
@@ -214,8 +212,8 @@
                             <?php echo $rowsb['parking']; ?> คัน
                           </li>
                         </ul>
-                        <span class='badge mr-xl-2 mt-3 mt-sm-0' style="background-color:<?php echo $rowsb['color'] ?> ; color:white;" ><?php echo $rowsb['type'] ?></span>
-                       
+                        <span class='badge mr-xl-2 mt-3 mt-sm-0' style="background-color:<?php echo $rowsb['color'] ?> ; color:white;"><?php echo $rowsb['type'] ?></span>
+
                       </div>
                     </div>
                   </div>
@@ -656,7 +654,7 @@
     });
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
-   
+
 
     $.getJSON("../backend/map.php", function(jsonObj) {
 

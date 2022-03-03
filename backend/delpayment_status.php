@@ -13,6 +13,6 @@ $sql = "DELETE FROM pay_status WHERE id = $id";
 
 $result = mysqli_query($con,$sql) or die(mysqli_error($con));
 
-header("Location: ".$base_url."payment_status.php");
+header("Location: ../page/payment_status.php");
    
 ?>

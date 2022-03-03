@@ -2,23 +2,15 @@
 require_once('../dbconnect.php');
 require('../config.php');
 
-if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
-  $id = $_SESSION['u_id'];
-  $sqlu = "SELECT * FROM users WHERE u_id= $id ";
-  $resultu = mysqli_query($con, $sqlu);
-  $rowu = mysqli_fetch_assoc($resultu);
-}
-
 $sqlp = "SELECT * FROM package_type ORDER BY packtype_id ASC";
 $resultp = mysqli_query($con, $sqlp);
 
 $curl = curl_init();
 
 
-
-
 curl_setopt_array($curl, array(
-  CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
+  // CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
+  CURLOPT_URL => 'https://okjung.com/au/page/payment/setupEnvironment.php',
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -29,12 +21,9 @@ curl_setopt_array($curl, array(
 ));
 
 $response = curl_exec($curl);
-// $response = json_encode($response);
 $response = json_decode($response, true);
 
 curl_close($curl);
-// echo $response['path-api'];
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -60,12 +49,15 @@ curl_close($curl);
   <link rel="stylesheet" href="../css/vendors/timepicker/bootstrap-timepicker.min.css">
   <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
+  <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/hmac-sha256.min.js"></script>
+
+
   <!-- Themes core CSS -->
   <link rel="stylesheet" href="../css/themes.css">
   <!-- Favicons -->
@@ -86,6 +78,128 @@ curl_close($curl);
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+  <style>
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 33%;
+    }
+
+    .unsuccessful {
+      -webkit-filter: grayscale(100%);
+      /* Safari 6.0 - 9.0 */
+      filter: grayscale(100%);
+    }
+
+    .progress-one {
+      width: 33%;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-top: 5px solid #0ec6d5;
+      background-color: transparent;
+    }
+
+    .progress-two {
+      width: 66%;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-top: 5px solid #0ec6d5;
+      background-color: transparent;
+    }
+
+    .progress-three {
+      width: 100%;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      border-top: 5px solid #0ec6d5;
+      background-color: transparent;
+    }
+
+    .w3-black {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .btn-style-one {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: 48%;
+    }
+
+    .btn-style-two {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80%;
+    }
+
+    .img-one {
+      width: 180px;
+      height: 180px;
+    }
+
+    .img-two {
+      width: 100%;
+    }
+
+    .img-three {
+      width: 50%;
+    }
+
+    .boxs {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .box-50 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 48%;
+    }
+
+    .box-100 {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      width: 100%;
+    }
+
+    .fa .fa-check-circle-o {
+      color: green;
+    }
+
+    @media screen and (max-width: 1000px) {
+      .img-one {
+        width: 120px;
+        height: 120px;
+      }
+
+      .text-one {
+        text-align: center;
+        margin: 0;
+        width: 100%;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -102,10 +216,10 @@ curl_close($curl);
         <span class="heading-divider"></span>
         <div class="row">
           <?php while ($rowp = mysqli_fetch_array($resultp)) { ?>
-            <div class="col-xl-3 col-sm-6 mb-6">
+            <div onclick="setData(this)" id="<?php echo $rowp['packtype_id'] ?>" class="col-xl-3 col-sm-6 mb-6">
               <div class="card bg-gray-01 border-0 p-4 overflow-hidden">
                 <div class="card-header bg-transparent p-0">
-                  <p class="fs-15 font-weight-600 text-heading mb-0"><?php echo $rowp['pack_name'] ?></p>
+                  <p class="fs-15 font-weight-600 text-heading mb-0" id="tital-detail"><?php echo $rowp['pack_name'] ?></p>
                   <p class="fs-32 font-weight-500 text-heading lh-15 mb-1"><?php echo $rowp['price'] ?> บาท</p>
                 </div>
                 <div class="card-body p-0">
@@ -131,7 +245,7 @@ curl_close($curl);
                       <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['boots'] ?></p>
                     </li>
                   </ul>
-                  <a class="btn btn-primary btn-block h-52 pl-4 pr-3 d-flex justify-content-between align-items-center" data-toggle="modal" data-id="<?php echo $rowp['packtype_id'] ?>"  <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {?>  href="#packages"  <?php } else { ?> href="#login-register-modal" <?php } ?>> เลือกแพ็คเกจ
+                  <a class="btn btn-primary btn-block h-52 pl-4 pr-3 d-flex justify-content-between align-items-center packtype" onclick="setData(this)" data-toggle="modal" data-id="" <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') { ?> href="#packages" <?php } else { ?> href="#login-register-modal" <?php } ?>> เลือกแพ็คเกจ
                     <i class="far fa-arrow-right ml-1"></i>
                   </a>
                 </div>
@@ -143,8 +257,326 @@ curl_close($curl);
     </section>
   </main>
   <?php include 'templates/footer-two.php'; ?>
+  <div class="modal fade login-register login-register-modal" id="packages" tabindex="-1" role="dialog" aria-labelledby="login-register-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mxw-571" role="document">
+      <div class="modal-content">
+        <div class="wrapper dashboard-wrapper">
+          <div class="d-flex flex-wrap flex-xl-nowrap">
+            <div class="page-content">
+              <main id="content" class="bg-gray-01 pt-2 pb-2 pl-2 pr-2">
+                <div class="collapse-tabs new-property-step">
+                  <div class="tab-content shadow-none p-0">
+                    <div id="collapse-tabs-accordion">
+                      <div class="tab-pane tab-pane-parent fade show active px-0" id="description" role="tabpanel" aria-labelledby="description-tab">
+                        <div class="card bg-transparent border-0">
+                          <div id="description-collapse" class="collapse show collapsible" aria-labelledby="heading-description" data-parent="#collapse-tabs-accordion">
+                            <div class="card-body py-4 py-md-0 px-0">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="card mb-6">
+                                    <div class="card-body p-6">
+                                      <div class="steps">
+                                        <div class="step">
+                                          <img src="../images/step1.png" width="100px" height="100px" />
+                                        </div>
+                                        <div class="step">
+                                          <img class="unsuccessful" src="../images/step2.png" width="100px" height="100px" />
+                                        </div>
+                                        <div class="step">
+                                          <img class="unsuccessful" src="../images/step3.png" width="100px" height="100px" />
+                                        </div>
+                                      </div>
+                                      <div class="progress-one"></div>
+                                      <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;">
+                                        <h3 class="card-title mb-0 text-dark fs-24 lh-15 mb-2 d-flex justify-content-start w-50"> รายละเอียด </h3>
+                                        <h3 class="card-title mb-0 text-gray fs-16 lh-15 mt-1 mb-2 d-flex justify-content-end w-50"> ขั้นตอน 1 - 3 </h3>
+                                      </div>
+                                      <span class="heading-divider"></span>
+                                      <div class="form-row mx-n2">
+                                        <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                          <div class="form-group">
+                                            <label for="price" class="text-heading"> รหัสคำสั่งซื้อ </label>
+                                            <input type="text" class="form-control form-control-lg border-0" id="referenceNo" maxlength="15" readonly>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                          <div class="form-group">
+                                            <label for="price" class="text-heading"> ชื่อลูกค้า </label>
+                                            <input type="text" class="form-control form-control-lg border-0" id="name" value="<?php echo $rowh['name'] ?>" required>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                          <div class="form-group">
+                                            <label for="price" class="text-heading"> เบอร์โทรศัพท์ลูกค้า </label>
+                                            <input type="text" class="form-control form-control-lg border-0" id="tel" maxlength="10" value="<?php echo $rowh['tel'] ?>" required>
+                                          </div>
+                                        </div>
+                                        <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                          <div class="form-group">
+                                            <label for="price" class="text-heading"> รายละเอียดแพ็คเก็จ </label>
+                                            <input type="text" class="form-control form-control-lg border-0" id="detail" readonly>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="price" class="text-heading"> ราคาสินค้า <span class="red">*</span></label>
+                                        <input type="text" class="form-control form-control-lg border-0" id="price" readonly>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="text-right">
+                                <button class="btn btn-lg btn-primary next-button" type="submit" onclick="create_order(); this.onclick=null;"> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane tab-pane-parent fade px-0" id="location" role="tabpanel" aria-labelledby="location-tab">
+                        <div class="card bg-transparent border-0">
+                          <div id="location-collapse" class="collapse collapsible" aria-labelledby="heading-location" data-parent="#collapse-tabs-accordion">
+                            <div class="card-body py-4 py-md-0 px-0">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="card mb-6">
+                                    <div class="card-body p-6">
+                                      <div class="steps">
+                                        <div class="step">
+                                          <img src="../images/step1.png" width="100px" height="100px" />
+                                        </div>
+                                        <div class="step">
+                                          <img src="../images/step2.png" width="100px" height="100px" />
+                                        </div>
+                                        <div class="step">
+                                          <img class="unsuccessful" src="../images/step3.png" width="100px" height="100px" />
+                                        </div>
+                                      </div>
+                                      <div class="progress-two"></div>
+                                      <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;">
+                                        <h3 class="card-title mb-0 text-dark fs-24 lh-15 mb-2 d-flex justify-content-start w-50"> วิธีชำระเงิน </h3>
+                                        <h3 class="card-title mb-0 text-gray fs-16 lh-15 mt-1 mb-2 d-flex justify-content-end w-50"> ขั้นตอน 2 - 3 </h3>
+                                      </div>
+
+                                      <div class="w3-bar w3-black">
+                                        <button class="btn btn-primary mb-3 btn-style-one mr-2" onclick="openCity('qr-code');getQR();"> <i class="fa fa-qrcode fs-20 mr-2" aria-hidden="true"></i> QR Code สแกนชำระเงิน </button>
+                                        <button class="btn btn-primary mb-3 btn-style-one" onclick="openCity('Barcode');getBar();"> <i class="fa fa-barcode fs-20 mr-2" aria-hidden="true"></i> Barcode สแกนชำระเงิน </button>
+                                        <button class="btn btn-primary mb-3 btn-style-one mr-2" id="mobile-method" onclick="openCity('mobile-banking')"> <i class="fa fa-mobile fs-20 mr-2" aria-hidden="true"></i> Mobile banking โอนเงิน </button>
+                                        <button class="btn btn-primary mb-3 btn-style-one" id="credit-method" onclick="openCity('credit-card')"> <i class="fa fa-credit-card fs-20 mr-2" aria-hidden="true"></i> Credit Card รูดบัตร</button>
+                                      </div>
+                                      <span class="heading-divider"></span>
+                                      <div id="qr-code" class="w3-container city">
+                                        <div class="boxs">
+                                          <div class="box-50 mr-2">
+                                            <p class="text-one mr-1">QR Cash </p>
+                                            <p> (ชำระเงินผ่านธนาคาร) </p>
+                                          </div>
+                                          <div class="box-50">
+                                            <p class="text-one mr-1">QR Credit </p>
+                                            <p> (ชำระเงินผ่านแอพพลิเคชั่น) </p>
+                                          </div>
+                                          <div class="box-50 mr-2">
+                                            <img id="img-qr-cash" width="70%" src="https://via.placeholder.com/150" alt="qr-cash">
+                                          </div>
+                                          <div class="box-50">
+                                            <img id="img-qr-credit" width="70%" src="https://via.placeholder.com/150" alt="qr-credit">
+                                          </div>
+                                        </div>
+                                        <span class="action-button background-gradient-v2 check-status" id="check-pay-qr" style="display: none;">ตรวจสอบสถานะ &#10145;</span>
+                                      </div>
+                                      <div id="Barcode" class="w3-container city" style="display:none">
+                                        <div class="boxs">
+                                          <div class="box-100">
+                                            <p class="text-one mr-1">Barcode</p>
+                                            <p> (บาร์โค้ดชำระเงิน ผ่านเคาน์เตอร์ธนาคาร) </p>
+                                          </div>
+                                          <div class="box-100">
+                                            <img id="barcode" height="100px" width="1000px" src="https://via.placeholder.com/1000x100.png?text=พื้นที่แสดงภาพ+Barcode" alt="barcode">
+                                          </div>
+                                        </div>
+                                        <span class="action-button background-gradient-v2 check-status" id="check-pay-bill" style="display: none;">ตรวจสอบสถานะ &#10145;</span>
+                                      </div>
+                                      <div id="mobile-banking" class="w3-container city" style="display:none">
+                                        <form id="mobileBankingform" action="<?= $response['path-api'] ?>v2/mobileBanking" method="POST">
+                                          <input type="hidden" name="customerTelephone" id="cust-phone-mobile" value="<?php echo $_SESSION['tel'] ?>">
+                                          <div class="boxs">
+                                            <div class="box-100">
+                                              <p class="text-one mr-1"> Mobile Banking </p>
+                                              <p> (ชำระเงินผ่านโทรศัพท์มือถือผ่านแอพพลิเคชั่น) </p>
+                                            </div>
+                                            <div class="box-100">
+                                              <div class="form-row mx-n2">
+                                                <div class="form-group col-12">
+                                                  <label for="price" class="text-heading"> เลขอ้างอิง </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" id="ref-mobile" name="referenceNo" readonly>
+                                                </div>
+                                                <div class="form-group col-12">
+                                                  <label for="price" class="text-heading"> ราคาสินค้า </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" id="price-mobile" name="amount" step="0.01" readonly>
+                                                </div>
+                                                <div class="form-group col-12">
+                                                  <label for="price" class="text-heading"> ธนาคาร </label>
+                                                  <select class="form-control form-control-lg border-0" id="bcode" name="bankCode" onchange="genChecksumMoblie()">
+                                                    <option selected>กรุณาเลือกธนาคาร</option>
+                                                    <option value="004">K-Plus</option>
+                                                    <option value="014">SCB Easy (Only Open in Mobile)</option>
+                                                    <option value="002">BBL (Only Open in Mobile)</option>
+                                                    <option value="025">KMA (Krungsri)</option>
+                                                    <option value="006">KTB (Krungthai)</option>
+                                                    <!-- <option value="002">BBL (Bangkok Bank)</option>
+                                                    <option value="006">KTB (Krungthai)</option> -->
+
+                                                  </select>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <button class="btn btn-primary mt-2 btn-style-two fs-16" onclick="submitFormMobile()"> ชำระเงิน </button>
+                                            <input type="hidden" id="public-key-mobile" name="publicKey">
+                                            <input type="hidden" id="res-mobile" name="responseUrl">
+                                            <input type="hidden" id="back-mobile" name="backgroundUrl">
+                                            <!-- debug checksum :  -->
+                                            <input type="hidden" id="checksum-mobile" name="checksum"><br />
+                                          </div>
+                                        </form>
+                                      </div>
+                                      <div id="credit-card" class="w3-container city" style="display:none">
+                                        <div class="boxs">
+                                          <div class="box-100">
+                                            <p class="text-one mr-1"> Credit Card </p>
+                                            <p> (ชำระเงินผ่านบัตรเครดิต) </p>
+                                          </div>
+                                          <div class="box-100">
+                                            <div class="form-row mx-n2">
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> รหัสคำสั่งซื้อ </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" id="order-id-credit-card" name="referenceNo" readonly>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> จำนวนเงิน </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" id="price-credit-card" name="price" readonly>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> ชื่อผู้ถือบัตร </label>
+                                                  <input type="text" class="form-control form-control-lg border-0" placeholder="Name on Card" value="Card Test" name="name" id='name-credit' required>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> หมายเลขบัตร </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" placeholder="XXXX XXXX XXXX XXXX" value="4535017710535741" name="card-number" id='card-number' required>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> เดือนที่หมดอายุ </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" placeholder="XX" value="05" name="monthEnd" id='monthEnd' required>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> ปีที่หมดอายุ </label>
+                                                  <input type="number" class="form-control form-control-lg border-0" placeholder="XX" value="28" name="yearEnd" id='yearEnd' required>
+                                                </div>
+                                              </div>
+                                              <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group">
+                                                  <label for="price" class="text-heading"> รหัส CVV </label>
+                                                  <input type="text" class="form-control form-control-lg border-0" placeholder="XXX" value="184" name="cvv" id='cvv' required>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <button class="btn btn-primary mt-2 btn-style-two fs-16" id="charge-credit"> ชำระเงิน </button>
+                                        </div>
+                                      </div>
+                                      <form name="form-payfull" action="https://api.globalprimepay.com/v2/tokens/3d_secured" method="POST">
+                                        <input type="hidden" id="public-key-credit" name="publicKey"><br>
+                                        <input type="hidden" id="gbpRef" name="gbpReferenceNo">
+                                        <!-- <button type="submit">Pay</button> -->
+                                      </form>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="d-flex flex-wrap">
+                                <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
+                                  <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
+                                </a>
+
+                                <button class="btn btn-lg btn-primary mb-3" id="nextbtn" style="display:none;" onclick="checkPay()"> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </button>
+
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="tab-pane tab-pane-parent fade px-0" id="success" role="tabpanel" aria-labelledby="media-tab">
+                        <div class="card bg-transparent border-0">
+                          <div id="media-collapse" class="collapse collapsible" aria-labelledby="heading-media" data-parent="#collapse-tabs-accordion">
+                            <div class="card-body py-4 py-md-0 px-0">
+                              <div class="row">
+                                <div class="col-lg-12">
+                                  <div class="card mb-6">
+                                    <div class="card-body p-6">
+                                      <div class="steps">
+                                        <div class="step">
+                                          <img src="../images/step1.png" width="100px" height="100px" />
+                                        </div>
+                                        <div class="step">
+                                          <img src="../images/step2.png" width="100px" height="100px" />
+                                        </div>
+                                        <div class="step">
+                                          <img src="../images/step3.png" width="100px" height="100px" />
+                                        </div>
+                                      </div>
+                                      <div class="progress-three"></div>
+                                      <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;">
+                                        <h3 class="card-title mb-0 text-dark fs-24 lh-15 mb-2 d-flex justify-content-start w-50"> ทำรายการสำเร็จ </h3>
+                                        <h3 class="card-title mb-0 text-gray fs-16 lh-15 mt-1 mb-2 d-flex justify-content-end w-50"> ขั้นตอน 3 - 3 </h3>
+                                      </div>
+                                      <span class="heading-divider"></span>
+                                      <div class="box-100 mt-6">
+                                        <img class="img-three" src="../images/check.png">
+                                      </div>
+                                      <div class="box-100">
+                                        <p class="text-one text-primary fs-16"> คุณซื้อแพ็คเก็จ...สำเร็จแล้ว </p>
+                                        <p> </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="text-right">
+                                <button class="btn btn-lg btn-primary" onclick="closemodel()"> สำเร็จ
+                                  <!-- <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span> -->
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </main>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Vendors scripts -->
-  <script src="../css/vendors/jquery.min.js"></script>
+  <script src="../js/jquery.min.js"></script>
+  <script src="../js/gbPayment.js"></script>
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
   <script src="../css/vendors/bootstrap/bootstrap.bundle.js"></script>
   <script src="../css/vendors/bootstrap-select/js/bootstrap-select.min.js"></script>
@@ -162,6 +594,12 @@ curl_close($curl);
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
   <script>
+    function closemodel() {
+      document.getElementById("packages").style.left = "-500px";
+      document.getElementById("packages").style.display = "none";
+      document.querySelector(".modal-backdrop.fade.show").style.display = "none";
+    }
+
     function openCity(cityName) {
       var i;
       var x = document.getElementsByClassName("city");
@@ -169,347 +607,85 @@ curl_close($curl);
         x[i].style.display = "none";
       }
       document.getElementById(cityName).style.display = "block";
+
     }
   </script>
-  <div class="modal fade login-register login-register-modal" id="packages" tabindex="-1" role="dialog" aria-labelledby="login-register-modal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mxw-571" role="document">
-      <div class="modal-content">
-        <div class="wrapper dashboard-wrapper">
-          <div class="d-flex flex-wrap flex-xl-nowrap">
-            <div class="page-content">
-              <main id="content" class="bg-gray-01 pt-2 pb-2 pl-2 pr-2">
-                <div class="collapse-tabs new-property-step">
-                  <div class="tab-content shadow-none p-0">
-                    <form action="" method="POST">
-                      <div id="collapse-tabs-accordion">
-                        <div class="tab-pane tab-pane-parent fade show active px-0" id="description" role="tabpanel" aria-labelledby="description-tab">
-                          <div class="card bg-transparent border-0">
-                            <div id="description-collapse" class="collapse show collapsible" aria-labelledby="heading-description" data-parent="#collapse-tabs-accordion">
-                              <div class="card-body py-4 py-md-0 px-0">
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="card mb-6">
-                                      <div class="card-body p-6">
-                                        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;">
-                                          <h3 class="card-title mb-0 text-dark fs-24 lh-15 mb-2 d-flex justify-content-start w-50"> รายละเอียด </h3>
-                                          <h3 class="card-title mb-0 text-gray fs-16 lh-15 mt-1 mb-2 d-flex justify-content-end w-50"> ขั้นตอน 1 - 3 </h3>
-                                        </div>
-                                        <span class="heading-divider"></span>
-                                        <div class="form-row mx-n2">
-                                          <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                            <div class="form-group">
-                                              <label for="price" class="text-heading"> รหัสคำสั่งซื้อ </label>
-                                              <input type="text" class="form-control form-control-lg border-0" id="order-id" maxlength="15" value="" required>
-                                            </div>
-                                          </div>
-                                          <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                            <div class="form-group">
-                                              <label for="price" class="text-heading"> ชื่อลูกค้า </label>
-                                              <input type="text" class="form-control form-control-lg border-0" id="cust-name" value="<?php echo $rowu['name'] ?>" required>
-                                            </div>
-                                          </div>
-                                          <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                            <div class="form-group">
-                                              <label for="price" class="text-heading"> เบอร์โทรศัพท์ลูกค้า </label>
-                                              <input type="text" class="form-control form-control-lg border-0" id="cust-phone" maxlength="10" value="<?php echo $rowu['tel'] ?>" required>
-                                            </div>
-                                          </div>
-                                          <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                            <div class="form-group">
-                                              <label for="price" class="text-heading"> รายละเอียดแพ็คเก็จ </label>
-                                              <input type="text" class="form-control form-control-lg border-0" id="order-detail" value="<?php echo $rowp['pack_name'] ?>" required>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="form-group">
-                                          <label for="price" class="text-heading"> ราคาสินค้า <span class="red">*</span></label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="price" value="<?php echo $rowp['price'] ?>" required>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="text-right">
-                                  <button class="btn btn-lg btn-primary next-button" type="submit" onclick="create_order()"> ขั้นตอนต่อไป
-                                    <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="tab-pane tab-pane-parent fade px-0" id="location" role="tabpanel" aria-labelledby="location-tab">
-                          <div class="card bg-transparent border-0">
-                            <div id="location-collapse" class="collapse collapsible" aria-labelledby="heading-location" data-parent="#collapse-tabs-accordion">
-                              <div class="card-body py-4 py-md-0 px-0">
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="card mb-6">
-                                      <div class="card-body p-6">
-                                        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;">
-                                          <h3 class="card-title mb-0 text-dark fs-24 lh-15 mb-2 d-flex justify-content-start w-50"> วิธีชำระเงิน </h3>
-                                          <h3 class="card-title mb-0 text-gray fs-16 lh-15 mt-1 mb-2 d-flex justify-content-end w-50"> ขั้นตอน 2 - 3 </h3>
-                                        </div>
-                                        <style>
-                                          .w3-black {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            flex-wrap: wrap;
-                                            width: 100%;
-                                          }
-
-                                          .btn-style-one {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: flex-start;
-                                            width: 48%;
-                                          }
-
-                                          .btn-style-two {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            width: 80%;
-                                          }
-
-                                          .img-one {
-                                            width: 180px;
-                                            height: 180px;
-                                          }
-
-                                          .img-two {
-                                            width: 100%;
-                                          }
-
-                                          .img-three {
-                                            width: 50%;
-                                          }
-
-                                          .boxs {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            flex-wrap: wrap;
-                                            width: 100%;
-                                          }
-
-                                          .box-50 {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            flex-wrap: wrap;
-                                            width: 48%;
-                                          }
-
-                                          .box-100 {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            flex-wrap: wrap;
-                                            width: 100%;
-                                          }
-
-                                          .red {
-                                            color: red;
-                                          }
-
-                                          .fa .fa-check-circle-o {
-                                            color: green;
-                                          }
-
-                                          @media screen and (max-width: 1000px) {
-                                            .img-one {
-                                              width: 120px;
-                                              height: 120px;
-                                            }
-
-                                            .text-one {
-                                              text-align: center;
-                                              margin: 0;
-                                              width: 100%;
-                                            }
-                                          }
-                                        </style>
-                                        <div class="w3-bar w3-black">
-                                          <button class="btn btn-primary mb-3 btn-style-one mr-2" onclick="openCity('qr-code')"> <i class="fa fa-qrcode fs-20 mr-2" aria-hidden="true"></i> QR Code สแกนชำระเงิน </button>
-                                          <button class="btn btn-primary mb-3 btn-style-one" onclick="openCity('barcode')"> <i class="fa fa-barcode fs-20 mr-2" aria-hidden="true"></i> Barcode สแกนชำระเงิน </button>
-                                          <button class="btn btn-primary mb-3 btn-style-one mr-2" onclick="openCity('mobile-banking')"> <i class="fa fa-mobile fs-20 mr-2" aria-hidden="true"></i> Mobile banking โอนเงิน </button>
-                                          <button class="btn btn-primary mb-3 btn-style-one" onclick="openCity('credit-card')"> <i class="fa fa-credit-card fs-20 mr-2" aria-hidden="true"></i> Credit Card รูดบัตร</button>
-                                        </div>
-                                        <span class="heading-divider"></span>
-                                        <div id="qr-code" class="w3-container city">
-                                          <div class="boxs">
-                                            <div class="box-50 mr-2">
-                                              <p class="text-one mr-1">QR Cash </p>
-                                              <p> (ชำระเงินผ่านธนาคาร) </p>
-                                            </div>
-                                            <div class="box-50">
-                                              <p class="text-one mr-1">QR Credit </p>
-                                              <p> (ชำระเงินผ่านแอพพลิเคชั่น) </p>
-                                            </div>
-                                            <div class="box-50 mr-2">
-                                              <img class="img-one" src="../images/QR-Code.gif">
-                                            </div>
-                                            <div class="box-50">
-                                              <img class="img-one" src="../images/QR-Code.gif">
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div id="barcode" class="w3-container city" style="display:none">
-                                          <div class="boxs">
-                                            <div class="box-100">
-                                              <p class="text-one mr-1">Barcode</p>
-                                              <p> (บาร์โค้ดชำระเงิน ผ่านเคาน์เตอร์ธนาคาร) </p>
-                                            </div>
-                                            <div class="box-100">
-                                              <img class="img-two" src="../images/barcode.jpg">
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div id="mobile-banking" class="w3-container city" style="display:none">
-                                          <div class="boxs">
-                                            <div class="box-100">
-                                              <p class="text-one mr-1"> Mobile Banking </p>
-                                              <p> (ชำระเงินผ่านโทรศัพท์มือถือผ่านแอพพลิเคชั่น) </p>
-                                            </div>
-                                            <div class="box-100">
-                                              <div class="form-row mx-n2">
-                                                <div class="form-group col-12">
-                                                  <label for="price" class="text-heading"> เลขอ้างอิง </label>
-                                                  <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
-                                                </div>
-                                                <div class="form-group col-12">
-                                                  <label for="price" class="text-heading"> ราคาสินค้า </label>
-                                                  <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
-                                                </div>
-                                                <div class="form-group col-12">
-                                                  <label for="price" class="text-heading"> ธนาคาร </label>
-                                                  <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <button class="btn btn-primary mt-2 btn-style-two fs-16"> ชำระเงิน </button>
-                                          </div>
-                                        </div>
-                                        <div id="credit-card" class="w3-container city" style="display:none">
-                                          <div class="boxs">
-                                            <div class="box-100">
-                                              <p class="text-one mr-1"> Credit Card </p>
-                                              <p> (ชำระเงินผ่านบัตรเครดิต) </p>
-                                            </div>
-                                            <div class="box-100">
-                                              <div class="form-row mx-n2">
-                                                <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                                  <div class="form-group">
-                                                    <label for="price" class="text-heading"> จำนวนเงิน </label>
-                                                    <input type="number" class="form-control form-control-lg border-0" id="bedroom" name="bedroom" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                                  <div class="form-group">
-                                                    <label for="price" class="text-heading"> ชื่อผู้ถือบัตร </label>
-                                                    <input type="text" class="form-control form-control-lg border-0" id="bathroom" name="bathroom" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                                  <div class="form-group">
-                                                    <label for="price" class="text-heading"> หมายเลขบัตร </label>
-                                                    <input type="number" class="form-control form-control-lg border-0" id="parking" name="parking" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                                  <div class="form-group">
-                                                    <label for="price" class="text-heading"> เดือนที่หมดอายุ </label>
-                                                    <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                                  <div class="form-group">
-                                                    <label for="price" class="text-heading"> ปีที่หมดอายุ </label>
-                                                    <input type="number" class="form-control form-control-lg border-0" id="parking" name="parking" required>
-                                                  </div>
-                                                </div>
-                                                <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
-                                                  <div class="form-group">
-                                                    <label for="price" class="text-heading"> รหัส CVV </label>
-                                                    <input type="text" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <button class="btn btn-primary mt-2 btn-style-two fs-16"> ชำระเงิน </button>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="d-flex flex-wrap">
-                                  <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
-                                    <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
-                                  </a>
-                                  <button class="btn btn-lg btn-primary next-button mb-3"> ขั้นตอนต่อไป
-                                    <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="tab-pane tab-pane-parent fade px-0" id="media" role="tabpanel" aria-labelledby="media-tab">
-                          <div class="card bg-transparent border-0">
-                            <div id="media-collapse" class="collapse collapsible" aria-labelledby="heading-media" data-parent="#collapse-tabs-accordion">
-                              <div class="card-body py-4 py-md-0 px-0">
-                                <div class="row">
-                                  <div class="col-lg-12">
-                                    <div class="card mb-6">
-                                      <div class="card-body p-6">
-                                        <div style="display: flex; align-items: center; justify-content: center; flex-wrap: wrap; width: 100%;">
-                                          <h3 class="card-title mb-0 text-dark fs-24 lh-15 mb-2 d-flex justify-content-start w-50"> ทำรายการสำเร็จ </h3>
-                                          <h3 class="card-title mb-0 text-gray fs-16 lh-15 mt-1 mb-2 d-flex justify-content-end w-50"> ขั้นตอน 3 - 3 </h3>
-                                        </div>
-                                        <span class="heading-divider"></span>
-                                        <div class="box-100 mt-6">
-                                          <img class="img-three" src="../images/check.png">
-                                        </div>
-                                        <div class="box-100">
-                                          <p class="text-one text-primary fs-16"> คุณซื้อแพ็คเก็จ...สำเร็จแล้ว </p>
-                                          <p> </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                                <div class="text-right">
-                                  <button class="btn btn-lg btn-primary next-button" type="submit"> ขั้นตอนต่อไป
-                                    <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </main>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <script>
+    var backUrl = "";
+    var resUrl = "";
+    var payMethod = "";
+    var paymentAmount = 0;
+
+    function formatPhoneNumber(phoneNumberString) {
+      var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+      var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
+      if (match) {
+        var intlCode = (match[1] ? '+1 ' : '');
+        return [intlCode, '', match[2], '-', match[3], '-', match[4]].join('');
+      }
+      return null;
+    }
+
+    function numberWithCommas(x) {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    function setData(e) {
+      // let id = e.id;
+      console.log(`${e.id}`); //error php
+
+      $.ajax({
+        url: "<?= $base_api_pay ?>payment/getData.php",
+        method: "POST",
+        data: JSON.stringify({
+          p_id: e.id
+        }),
+        success: function(data) {
+          // data = JSON.parse(data);
+          // console.log(data);
+          // console.log(data.pack_name);
+          // console.log(data.price);
+          paymentAmount = parseInt(data.price);
+
+          let orderID = $('#referenceNo');
+          let random = 1000 + Math.random() * 10000;
+          random = Math.ceil(random)
+          const d = new Date();
+          var referenceNO = `${d.getFullYear()}${("0" + (d.getMonth() + 1)).slice(-2)}${d.getDate()}000${random}`;
+          orderID.val(referenceNO);
+
+          let price = $('#price');
+          let detail = $('#detail');
+          let name = $('#name');
+          let tel = $('#tel');
+          let getDetail = data.pack_name;
+          tel.val(formatPhoneNumber(tel.val()));
+          price.val(numberWithCommas(paymentAmount.toFixed(2)));
+          detail.val(getDetail);
+          name.val("<?= $_SESSION['name'] ?>");
+
+
+          //mobile
+          $('#ref-mobile').val(referenceNO);
+          $('#price-mobile').val(paymentAmount.toFixed(2));
+          //creditCard
+          $('#order-id-credit-card').val(referenceNO);
+          $('#price-credit-card').val(paymentAmount.toFixed(2));
+
+        }
+      });
+
+
+    }
+
     $("#credit-method").click(function() {
-      if ($("#order-id").val() == "" || $("#price").val() == "") {
+      if ($("#referenceNo").val() == "" || $("#price").val() == "") {
         // $('#close-mobile-modal').click();
         alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
 
       } else {
-        $("#referenceNo-credit").val($("#order-id").val());
-        $("#amount-credit").val($("#price").val());
+        $("#order-id-credit-card").val($("#referenceNo").val());
+        $("#price-credit-card").val($("#price").val());
       }
 
     });
@@ -540,20 +716,20 @@ curl_close($curl);
                     //กำหนค่า public key ให้กับ form-payfull
                     $("#public-key-credit").val(dataEnvi["public-key"]);
                     payCredit(
-                      $("#number-credit").val(),
-                      $("#expirationMonth-credit").val(),
-                      $("#expirationYear-credit").val(),
-                      $("#securityCode-credit").val(),
+                      $("#card-number").val(),
+                      $("#monthEnd").val(),
+                      $("#yearEnd").val(),
+                      $("#cvv").val(),
                       $("#name-credit").val(),
-                      $("#amount-credit").val(),
-                      $("#referenceNo-credit").val(),
+                      $("#price-credit-card").val(),
+                      $("#order-id-credit-card").val(),
                       data['full-back-url'],
                       data['full-res-url'],
-                      $("#order-detail").val(),
-                      $("#cust-name").val(),
+                      $("#detail").val(),
+                      $("#name").val(),
                       "cutEmail",
                       "cutAddress",
-                      $("#cust-phone").val(),
+                      $("#tel").val(),
                       "defined1"
                     )
                   }
@@ -575,6 +751,8 @@ curl_close($curl);
         method: "GET",
         success: function(dataRes) {
           // console.log(data);
+          dataRes = JSON.stringify(dataRes);
+          dataRes = JSON.parse(dataRes);
           backUrl = dataRes["mobile-back-url"];
           resUrl = dataRes["mobile-res-url"];
           // กำหนดข้อมูล Back and Response Url ให้ form
@@ -596,6 +774,12 @@ curl_close($curl);
                   backUrl +
                   $("#bcode").val(), dataEnvi["secret-key"]
                 );
+                console.log($("#price-mobile").val());
+                console.log($("#ref-mobile").val());
+                console.log(resUrl);
+                console.log(backUrl);
+                console.log($("#bcode").val());
+                console.log(dataEnvi["secret-key"]);
                 $("#checksum-mobile").val(mobile_hash);
               }
             },
@@ -607,34 +791,33 @@ curl_close($curl);
 
     }
 
-
-
     $("#mobile-method").click(function() {
-      if ($("#order-id").val() == "" || $("#price").val() == "") {
+      if ($("#referenceNo").val() == "" || $("#price").val() == "") {
         // $('#close-mobile-modal').click();
         alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
 
       } else {
-        $("#ref-mobile").val($("#order-id").val());
+        $("#ref-mobile").val($("#referenceNo").val());
         $("#price-mobile").val($("#price").val());
-        $("#cust-phone-mobile").val($("#cust-phone").val());
+        $("#cust-phone-mobile").val($("#tel").val());
+
       }
 
     });
 
     function getQR() {
-      if ($("#order-id").val() == "" || $("#price").val() == "") {
+      if ($("#referenceNo").val() == "" || $("#price").val() == "") {
         alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
       } else {
         payQR(
           '/gbp/gateway/qrcode/text',
-          $("#order-id").val(),
+          $("#referenceNo").val(),
           $("#price").val(),
           '#img-qr-cash'
         )
         payQR(
           '/gbp/gateway/qrcredit/text',
-          $("#order-id").val(),
+          $("#referenceNo").val(),
           $("#price").val(),
           '#img-qr-credit'
         )
@@ -646,7 +829,7 @@ curl_close($curl);
           timer: 1000
         })
       }
-
+      document.getElementById('nextbtn').style.display = "block";
     }
 
     function submitFormMobile() {
@@ -654,15 +837,16 @@ curl_close($curl);
     }
 
     function getBar() {
-      if ($("#cust-name").val() == "" || $("#order-detail").val() == "") {
+      if ($("#name").val() == "" || $("#detail").val() == "") {
+        alert($("#detail").val());
         alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
       } else {
         payBill(
           "/gbp/gateway/barcode/text",
-          $("#order-id").val(),
+          $("#referenceNo").val(),
           $("#price").val(),
-          $("#cust-name").val(),
-          $("#order-detail").val(),
+          $("#name").val(),
+          $("#detail").val(),
           "#barcode"
         )
         Swal.fire({
@@ -673,6 +857,8 @@ curl_close($curl);
           timer: 1000
         })
       }
+      document.getElementById('nextbtn').style.display = "block";
+
     }
 
     function create_order() {
@@ -681,8 +867,11 @@ curl_close($curl);
         // url: "http://localhost/deena/project-api/v1/create_order.php",
         method: "POST",
         data: JSON.stringify({
-          referenceNo: $("#order-id").val(),
+          referenceNo: $("#referenceNo").val(),
           price: $("#price").val(),
+          name: "<?= $_SESSION['name'] ?>",
+          pack: $("#detail").val(),
+          id: "<?= $_SESSION['u_id'] ?>"
         }),
         success: function(data) {
           console.log(data);
@@ -693,9 +882,71 @@ curl_close($curl);
             showConfirmButton: false,
             timer: 1000
           })
+
         }
       });
     }
+
+
+    $('#mobile-method').on('click', function() {
+      document.getElementById('nextbtn').style.display = "none";
+    })
+    $('#credit-method').on('click', function() {
+      document.getElementById('nextbtn').style.display = "none";
+    })
+
+    
+
+    function checkPay() {
+      $.ajax({
+        type: "POST",
+        url: "<?= $base_api_pay ?>payment/check_status.php",
+        data: {
+          referenceNo: $('#referenceNo').val()
+        },
+        success: function(dataCheck) {
+          // console.log(dataCheck)
+          // // alert($('#referenceNo').val())
+          console.log('สถานะการชำระเงิน');
+          console.log(dataCheck['resultCode']);
+          if (dataCheck['resultCode'] == '00') {
+
+            $('#success').attr('style', 'opacity: 1; display: block;');
+            // $('#fieldset').attr('style', 'position: relative; opacity: 0; display: none;');
+            // $('#confirm').attr('class', 'active');
+            // $('#progress-bar').attr('style', 'width: 100%;');
+          } else {
+            // alert('ยังไมไ่ด้รับการชำระเงิน');
+            Swal.fire({
+              icon: 'warning',
+              title: 'แจ้งเตือน',
+              text: 'ธุรกรรมของท่าน ยังไม่ได้รับการชำระเงิน'
+            })
+          }
+          // console.log(dataCheck['txns'][0]['']);
+
+        },
+      });
+    }
+
+    $("#nextbtn").click(function() {
+      if (payMethod == 'qr') {
+        $('#check-pay-qr').click();
+
+      } else if (payMethod == 'barcode') {
+        $('#check-pay-bill').click();
+
+      }
+    });
+
+    $("#check-pay-qr").click(function() {
+      checkPay()
+    });
+    $("#check-pay-bill").click(function() {
+      checkPay()
+    });
+
+
   </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
