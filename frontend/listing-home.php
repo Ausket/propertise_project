@@ -104,15 +104,15 @@
                   <div class="form-group">
                     <!-- Show Numbers Of Rows -->
                     <select class="form-control" name="state" id="maxRows">
-                      <option value="6000">แสดงทั้งหมด</option>
-                      <option value="6">6</option>
-                      <option value="12">12</option>
-                      <option value="18">18</option>
-                      <option value="30">30</option>
-                      <option value="60">60</option>
-                      <option value="90">90</option>
-                      <option value="150">150</option>
-                    </select>
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
                   </div>
                 </div>
               </div>
@@ -211,9 +211,18 @@
                             </svg>
                             <?php echo $rowsb['parking']; ?> คัน
                           </li>
+                          <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center mr-5">
+                            <?php
+                            $sqlb = "SELECT * FROM advertise ORDER BY advertise.view DESC limit 5";
+                            $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
+                            foreach ($resultb as $key2) {
+                              if ($key2['a_id'] == $rowsb['a_id']) { ?>
+                                <span class="badge badge-orange mr-3 ">ยอดนิยม</span>
+                            <?php }
+                            } ?>
+                            <span class='badge' style="background-color:<?php echo $rowsb['color'] ?> ; color:white;"><?php echo $rowsb['type'] ?></span>
+                          </li>
                         </ul>
-                        <span class='badge mr-xl-2 mt-3 mt-sm-0' style="background-color:<?php echo $rowsb['color'] ?> ; color:white;"><?php echo $rowsb['type'] ?></span>
-
                       </div>
                     </div>
                   </div>
@@ -267,218 +276,7 @@
         </div>
       </div>
     </div>
-    <div class="d-none" id="template-properties">
-      <div class="marker-item" data-icon-marker="../images/googlle-market-02.png" data-position="[-73.9893691, 40.6751204]" data-marker-style='{"className":"marker","style":{"width":"45px","height":"48px"},"popup":{"className":"popup-map-property-02","maxWidth":"319px"}}'>
-        <div class="position-relative">
-          <div class="media flex-row no-gutters align-items-center pb-2 border-bottom p-2">
-            <div class="col-3 mr-2 card border-0"><img src="../images/properties-list-03.jpg" class="card-img" alt="Home in Metric Way"></div>
-            <div class="media-body">
-              <h2 class="my-0"><a href="single-property-1.html" class="fs-13 lh-2 text-dark hover-primary d-block">Home in
-                  Metric
-                  Way</a></h2>
-              <p class="mb-0 font-weight-500 text-gray-light">1421 San Pedro St, Los Angeles</p>
-              <p class="fs-17 font-weight-bold text-heading mb-0">$1.250.000</p>
-            </div>
-          </div>
-          <ul class="list-inline d-flex mb-0 flex-wrap justify-content-between p-2">
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                <use xlink:href="#icon-bedroom"></use>
-              </svg>
-              3 Br
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-shower fs-18 text-primary mr-1">
-                <use xlink:href="#icon-shower"></use>
-              </svg>
-              3 Ba
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-square fs-18 text-primary mr-1">
-                <use xlink:href="#icon-square"></use>
-              </svg>
-              2300 Sq.Ft
-            </li>
-          </ul>
-          <div class="badge badge-primary">For Sale</div>
-        </div>
-      </div>
-      <div class="marker-item" data-icon-marker="../images/googlle-market-02.png" data-position="[-73.9934889, 40.6743149]" data-marker-style='{"className":"marker","style":{"width":"45px","height":"48px"},"popup":{"className":"popup-map-property-02","maxWidth":"319px"}}'>
-        <div class="position-relative">
-          <div class="media flex-row no-gutters align-items-center pb-2 border-bottom p-2">
-            <div class="col-3 mr-2 card border-0"><img src="../images/properties-list-04.jpg" class="card-img" alt="Home in Metric Way"></div>
-            <div class="media-body">
-              <h2 class="my-0"><a href="single-property-1.html" class="fs-13 lh-2 text-dark hover-primary d-block">Home in
-                  Metric
-                  Way</a></h2>
-              <p class="mb-0 font-weight-500 text-gray-light">1421 San Pedro St, Los Angeles</p>
-              <p class="fs-17 font-weight-bold text-heading mb-0">$1.250.000</p>
-            </div>
-          </div>
-          <ul class="list-inline d-flex mb-0 flex-wrap justify-content-between p-2">
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                <use xlink:href="#icon-bedroom"></use>
-              </svg>
-              3 Br
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-shower fs-18 text-primary mr-1">
-                <use xlink:href="#icon-shower"></use>
-              </svg>
-              3 Ba
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-square fs-18 text-primary mr-1">
-                <use xlink:href="#icon-square"></use>
-              </svg>
-              2300 Sq.Ft
-            </li>
-          </ul>
-          <div class="badge badge-primary">For Sale</div>
-        </div>
-      </div>
-      <div class="marker-item" data-icon-marker="../images/googlle-market-03.png" data-position="[100.604272, 13.84784]" data-marker-style='{"className":"marker","style":{"width":"45px","height":"48px"},"popup":{"className":"popup-map-property-02","maxWidth":"319px"}}'>
-        <div class="position-relative">
-          <div class="media flex-row no-gutters align-items-center pb-2 border-bottom p-2">
-            <div class="col-3 mr-2 card border-0"><img src="../images/properties-list-11.jpg" class="card-img" alt="Home in Metric Way"></div>
-            <div class="media-body">
-              <h2 class="my-0"><a href="single-property-1.html" class="fs-13 lh-2 text-dark hover-primary d-block">Home in
-                  Metric
-                  Way</a></h2>
-              <p class="mb-0 font-weight-500 text-gray-light">1421 San Pedro St, Los Angeles</p>
-              <p class="fs-17 font-weight-bold text-heading mb-0">$2500<span class="fs-14 font-weight-500 text-gray-light"> /month</span></p>
-            </div>
-          </div>
-          <ul class="list-inline d-flex mb-0 flex-wrap justify-content-between p-2">
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                <use xlink:href="#icon-bedroom"></use>
-              </svg>
-              3 Br
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-shower fs-18 text-primary mr-1">
-                <use xlink:href="#icon-shower"></use>
-              </svg>
-              3 Ba
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-square fs-18 text-primary mr-1">
-                <use xlink:href="#icon-square"></use>
-              </svg>
-              2300 Sq.Ft
-            </li>
-          </ul>
-          <div class="badge badge-indigo">For Rent</div>
-        </div>
-      </div>
-      <div class="marker-item" data-icon-marker="../images/googlle-market-02.png" data-position="[100.604970, 13.84234]" data-marker-style='{"className":"marker","style":{"width":"45px","height":"48px"},"popup":{"className":"popup-map-property-02","maxWidth":"319px"}}'>
-        <div class="position-relative">
-          <div class="media flex-row no-gutters align-items-center pb-2 border-bottom p-2">
-            <div class="col-3 mr-2 card border-0"><img src="../images/properties-list-12.jpg" class="card-img" alt="Home in Metric Way"></div>
-            <div class="media-body">
-              <h2 class="my-0"><a href="single-property-1.html" class="fs-13 lh-2 text-dark hover-primary d-block">Home in
-                  Metric
-                  Way</a></h2>
-              <p class="mb-0 font-weight-500 text-gray-light">1421 San Pedro St, Los Angeles</p>
-              <p class="fs-17 font-weight-bold text-heading mb-0">$1.250.000</p>
-            </div>
-          </div>
-          <ul class="list-inline d-flex mb-0 flex-wrap justify-content-between p-2">
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                <use xlink:href="#icon-bedroom"></use>
-              </svg>
-              3 Br
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-shower fs-18 text-primary mr-1">
-                <use xlink:href="#icon-shower"></use>
-              </svg>
-              3 Ba
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-square fs-18 text-primary mr-1">
-                <use xlink:href="#icon-square"></use>
-              </svg>
-              2300 Sq.Ft
-            </li>
-          </ul>
-          <div class="badge badge-primary">For Sale</div>
-        </div>
-      </div>
-      <div class="marker-item" data-icon-marker="../images/googlle-market-02.png" data-position="[100.605672, 13.89484]" data-marker-style='{"className":"marker","style":{"width":"45px","height":"48px"},"popup":{"className":"popup-map-property-02","maxWidth":"319px"}}'>
-        <div class="position-relative">
-          <div class="media flex-row no-gutters align-items-center pb-2 border-bottom p-2">
-            <div class="col-3 mr-2 card border-0"><img src="../images/properties-list-13.jpg" class="card-img" alt="Home in Metric Way"></div>
-            <div class="media-body">
-              <h2 class="my-0"><a href="single-property-1.html" class="fs-13 lh-2 text-dark hover-primary d-block">Home in
-                  Metric
-                  Way</a></h2>
-              <p class="mb-0 font-weight-500 text-gray-light">1421 San Pedro St, Los Angeles</p>
-              <p class="fs-17 font-weight-bold text-heading mb-0">$1.250.000</p>
-            </div>
-          </div>
-          <ul class="list-inline d-flex mb-0 flex-wrap justify-content-between p-2">
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                <use xlink:href="#icon-bedroom"></use>
-              </svg>
-              3 Br
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-shower fs-18 text-primary mr-1">
-                <use xlink:href="#icon-shower"></use>
-              </svg>
-              3 Ba
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-square fs-18 text-primary mr-1">
-                <use xlink:href="#icon-square"></use>
-              </svg>
-              2300 Sq.Ft
-            </li>
-          </ul>
-          <div class="badge badge-primary">For Sale</div>
-        </div>
-      </div>
-      <div class="marker-item" data-icon-marker="../images/googlle-market-03.png" data-position="[100.604642, 13.89092]" data-marker-style='{"className":"marker","style":{"width":"45px","height":"48px"},"popup":{"className":"popup-map-property-02","maxWidth":"319px"}}'>
-        <div class="position-relative">
-          <div class="media flex-row no-gutters align-items-center pb-2 border-bottom p-2">
-            <div class="col-3 mr-2 card border-0"><img src="../images/properties-list-03.jpg" class="card-img" alt="Home in Metric Way"></div>
-            <div class="media-body">
-              <h2 class="my-0"><a href="single-property-1.html" class="fs-13 lh-2 text-dark hover-primary d-block">Home in
-                  Metric
-                  Way</a></h2>
-              <p class="mb-0 font-weight-500 text-gray-light">1421 San Pedro St, Los Angeles</p>
-              <p class="fs-17 font-weight-bold text-heading mb-0">$2500<span class="fs-14 font-weight-500 text-gray-light"> /month</span></p>
-            </div>
-          </div>
-          <ul class="list-inline d-flex mb-0 flex-wrap justify-content-between p-2">
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-bedroom fs-18 text-primary mr-1">
-                <use xlink:href="#icon-bedroom"></use>
-              </svg>
-              3 Br
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-shower fs-18 text-primary mr-1">
-                <use xlink:href="#icon-shower"></use>
-              </svg>
-              3 Ba
-            </li>
-            <li class="list-inline-item text-gray font-weight-500 fs-13 d-flex align-items-center">
-              <svg class="icon icon-square fs-18 text-primary mr-1">
-                <use xlink:href="#icon-square"></use>
-              </svg>
-              2300 Sq.Ft
-            </li>
-          </ul>
-          <div class="badge badge-indigo">For Rent</div>
-        </div>
-      </div>
-    </div>
+    >
   </main>
   <?php include 'templates/footer-two.php' ?>
   <!-- Vendors scripts -->
@@ -635,9 +433,8 @@
       container: 'map',
       center: [100.604274, 13.84786],
       style: 'mapbox://styles/mapbox/outdoors-v11',
-      zoom: 15
+      zoom: 13
     });
-
 
 
     map.addControl(
@@ -646,7 +443,6 @@
         mapboxgl: mapboxgl
 
       })
-
     );
 
     map.on('load', function() {
@@ -659,18 +455,20 @@
     $.getJSON("../backend/map.php", function(jsonObj) {
 
       $.each(jsonObj, function(i, item) {
-
+        console.log(jsonObj[i]);
         const popup = new mapboxgl.Popup({
           offset: 25
         }).setText(
-          item.name
+          item.title + '\n บ้านเลขที่ ' + item.house_no + ' หมู่ ' + item.village_no + ' ต.' + item.dname_th +
+          ' อ. ' + item.aname_th + ' จ. ' + item.name_th + ' ' + item.postal_code
         );
 
-        var marker2 = new mapboxgl.Marker().setLngLat([item.lng, item.lat]).setPopup(popup).addTo(map);
-
-
+        var marker2 = new mapboxgl.Marker({color: 'red'}).setLngLat([item.lng, item.lat]).setPopup(popup).addTo(map);
       });
     });
+
+
+
   </script>
   <script>
     getPagination('#precard');
@@ -777,7 +575,7 @@
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change

@@ -50,8 +50,11 @@ LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
 LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
 LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
 LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-WHERE advertise.ad_status = '1' ORDER BY advertise.view DESC limit 6 ";
+WHERE advertise.ad_status = '1' ORDER BY advertise.view DESC limit 5 ";
 $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
+
+$sql8 = "SELECT COUNT(pd_id),pd_id FROM file GROUP BY pd_id";
+$result8 = mysqli_query($con, $sql8) or die(mysqli_error($con));
 
 ?>
 <!doctype html>
@@ -146,16 +149,25 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                       <span class="badge mr-2 badge-primary" style="background-color:<?php echo $row7['color'] ?> ; color:white;"><?php echo $row7['type']; ?></span>
                     </div>
                     <ul class="list-inline mb-0 mt-auto hover-image">
-                      <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                        <a href="#" class="text-white hover-primary">
-                          <i class="far fa-images"></i><span class="pl-1">9</span>
+                      <li class="list-inline-item mr-2" data-toggle="tooltip" title=" <?php foreach ($result8 as $key) {
+                              if ($key['pd_id'] == $row7['pd_id']) {
+                                echo $key['COUNT(pd_id)'];
+                              }
+                            } ?> Images">
+                        <a href="frontend/home-details.php?id=<?php echo $row7['a_id'] ?>" class="text-white hover-primary">
+                          <i class="far fa-images"></i><span class="pl-1">
+                            <?php foreach ($result8 as $key) {
+                              if ($key['pd_id'] == $row7['pd_id']) {
+                                echo $key['COUNT(pd_id)'];
+                              }
+                            } ?></span>
                         </a>
                       </li>
-                      <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                      <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                         <a href="#" class="text-white hover-primary">
                           <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                         </a>
-                      </li>
+                      </li> -->
                     </ul>
                   </div>
                 </div>
@@ -208,7 +220,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                   </ul>
                 </div>
                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                  <p class="fs-17 font-weight-bold text-heading mb-0">฿<?php echo $row7['price']; ?> </p>
+                  <p class="fs-17 font-weight-bold text-heading mb-0"><?php echo $row7['price']; ?> บาท</p>
                   <ul class="list-inline mb-0">
                     <li class="list-inline-item">
                       <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
@@ -291,16 +303,25 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                       <span class='badge mr-2' style="background-color:<?php echo $row2['color'] ?> ; color:white;"><?php echo $row2['type'] ?></span>
                     </div>
                     <ul class="list-inline mb-0 mt-auto hover-image">
-                      <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                        <a href="#" class="text-white hover-primary">
-                          <i class="far fa-images"></i><span class="pl-1">9</span>
+                    <li class="list-inline-item mr-2" data-toggle="tooltip" title=" <?php foreach ($result8 as $key) {
+                              if ($key['pd_id'] == $row7['pd_id']) {
+                                echo $key['COUNT(pd_id)'];
+                              }
+                            } ?> Images">
+                        <a href="frontend/home-details.php?id=<?php echo $row2['a_id'] ?>" class="text-white hover-primary">
+                          <i class="far fa-images"></i><span class="pl-1">
+                            <?php foreach ($result8 as $key) {
+                              if ($key['pd_id'] == $row2['pd_id']) {
+                                echo $key['COUNT(pd_id)'];
+                              }
+                            } ?></span>
                         </a>
                       </li>
-                      <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                      <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                         <a href="#" class="text-white hover-primary">
                           <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                         </a>
-                      </li>
+                      </li> -->
                     </ul>
                   </div>
                 </div>
@@ -353,7 +374,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                   </ul>
                 </div>
                 <div class="card-footer bg-transparent d-flex justify-content-between align-items-center py-3">
-                  <p class="fs-17 font-weight-bold text-heading mb-0">฿<?php echo $row2['price'] ?></p>
+                  <p class="fs-17 font-weight-bold text-heading mb-0"><?php echo $row2['price'] ?> บาท</p>
                   <ul class="list-inline mb-0">
 
                     <li class="list-inline-item">
@@ -381,7 +402,6 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
               </div>
             </div>
           <?php } ?>
-
         </div>
       </div>
     </section>
@@ -457,7 +477,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                 </div>
                 <div class="col-sm-9">
                   <div class="card-body p-0 pl-0 pl-sm-5 pt-5 pt-sm-0">
-                    <a href="single-property-1.html" class="d-flex align-items-center text-dark hover-secondary">
+                    <a href="frontend/listing-grid.php" class="d-flex align-items-center text-dark hover-secondary">
                       <h4 class="fs-20 lh-1625 mb-1"> ซื้อบ้านใหม่ </h4>
                       <span class="ml-2 text-primary fs-42 lh-1 hover-image d-inline-flex align-items-center">
                         <svg class="icon icon-long-arrow">
@@ -478,14 +498,18 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                 </div>
                 <div class="col-sm-9">
                   <div class="card-body p-0 pl-0 pl-sm-5 pt-5 pt-sm-0">
-                    <a href="single-property-1.html" class="d-flex align-items-center text-dark hover-secondary">
-                      <h4 class="fs-20 lh-1625 mb-1"> ขายบ้าน </h4>
-                      <span class="ml-2 text-primary fs-42 lh-1 hover-image d-inline-flex align-items-center">
-                        <svg class="icon icon-long-arrow">
-                          <use xlink:href="#icon-long-arrow"></use>
-                        </svg>
-                      </span>
-                    </a>
+                    <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') { ?>
+                      <a href="frontend/dashboard-add-property.php" class="d-flex align-items-center text-dark hover-secondary">
+                      <?php } else { ?>
+                        <a href="#login-register-modal" data-toggle="modal" class="d-flex align-items-center text-dark hover-secondary">
+                        <?php } ?>
+                        <h4 class="fs-20 lh-1625 mb-1"> ขายบ้าน </h4>
+                        <span class="ml-2 text-primary fs-42 lh-1 hover-image d-inline-flex align-items-center">
+                          <svg class="icon icon-long-arrow">
+                            <use xlink:href="#icon-long-arrow"></use>
+                          </svg>
+                        </span>
+                        </a>
                   </div>
                 </div>
               </div>
@@ -499,7 +523,7 @@ $result7 = mysqli_query($con, $sql7) or die(mysqli_error($con));
                 </div>
                 <div class="col-sm-9">
                   <div class="card-body p-0 pl-0 pl-sm-5 pt-5 pt-sm-0">
-                    <a href="single-property-1.html" class="d-flex align-items-center text-dark hover-secondary">
+                    <a href="frontend/listing-home.php" class="d-flex align-items-center text-dark hover-secondary">
                       <h4 class="fs-20 lh-1625 mb-1"> เช่าบ้าน </h4>
                       <span class="ml-2 text-primary fs-42 lh-1 hover-image d-inline-flex align-items-center">
                         <svg class="icon icon-long-arrow">

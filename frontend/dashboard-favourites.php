@@ -11,7 +11,7 @@ $resultfa = mysqli_query($con, $sqlfa);
 $numf = mysqli_num_rows($resultfa);
 
 
-$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
+$sqlad = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
 location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.u_id,favourite.u_id,favourite.a_id
@@ -170,15 +170,15 @@ if (isset($_POST['ch'])) {
                   <div class="form-group">
                     <!-- Show Numbers Of Rows -->
                     <select class="form-control" name="state" id="maxRows">
-                      <option value="4000">ทั้งหมด</option>
-                      <option value="4">4</option>
-                      <option value="8">8</option>
-                      <option value="12">12</option>
-                      <option value="20">20</option>
-                      <option value="60">60</option>
-                      <option value="80">80</option>
-                      <option value="100">100</option>
-                    </select>
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
                   </div>
                 </div>
               </div>
@@ -198,26 +198,7 @@ if (isset($_POST['ch'])) {
                             <img src="../image/p_img/<?php echo $rowad['img_video'] ?>" alt="<?php echo $rowad['img_video'] ?>">
                             <div class="card-img-overlay p-2 d-flex flex-column">
                               <div>
-                                <?php if ($rowad['type'] == 'ขาย') {
-                                  $type = 'ขาย';
-                                  echo "<span class='badge  badge-indigo '>$type</span>";
-                                } ?>
-                                <?php if ($rowad['type'] == 'เช่า') {
-                                  $type = 'เช่า';
-                                  echo "<span class='badge  badge-info'>$type</span>";
-                                } ?>
-                                <?php if ($rowad['type'] == 'ขาย-เช่า') {
-                                  $type = 'ขาย-เช่า';
-                                  echo "<span class='badge  badge-success '>$type</span>";
-                                } ?>
-                                <?php if ($rowad['type'] == 'ขายดาวน์') {
-                                  $type = 'ขายดาวน์';
-                                  echo "<span class='badge  badge-warning '>$type</span>";
-                                } ?>
-                                <?php if ($rowad['type'] == 'ใบจอง') {
-                                  $type = 'ใบจอง';
-                                  echo "<span class='badge  badge-danger '>$type</span>";
-                                } ?>
+                              <span class='badge' style="background-color:<?php echo $rowad['color'] ?> ; color:white;"><?php echo $rowad['type'] ?></span>
                               </div>
                               <div class="mt-auto hover-image">
                                 <ul class="list-inline mb-0 d-flex align-items-end">
@@ -465,7 +446,7 @@ if (isset($_POST['ch'])) {
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(4)
+        .val(10)
         .change();
 
       // end of on select change

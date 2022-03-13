@@ -79,7 +79,8 @@ $resultpr = mysqli_query($con, $sqlpr);
   <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
   <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
   <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
-
+  <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
   <style>
     .profile-images-card {
@@ -185,20 +186,20 @@ $resultpr = mysqli_query($con, $sqlpr);
             <div class="collapse-tabs new-property-step">
               <ul class="nav nav-pills border py-2 px-3 mb-6 d-none d-md-flex mb-6" role="tablist">
                 <li class="nav-item col">
-                  <a class="nav-link active bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="description-tab" data-toggle="pill" data-number="1." href="#description" role="tab" aria-controls="description" aria-selected="true"><span class="number">1.</span> รายละเอียดอสังหาริมทรัพย์</a>
+                  <a class="nav-link active bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="description-tab" data-toggle="pill" data-number="1." href="#description" role="tab" aria-controls="description" aria-selected="true" ><span class="number">1.</span> รายละเอียดอสังหาริมทรัพย์</a>
                 </li>
                 <li class="nav-item col">
-                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="location-tab" data-toggle="pill" data-number="2." href="#location" role="tab" aria-controls="location" aria-selected="false"><span class="number">2.</span> ที่ตั้งอสังหาริมทรัพย์ </a>
+                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="location-tab" data-toggle="pill" data-number="2." href="#location" role="tab" aria-controls="location" aria-selected="false"><span class="number"  >2.</span> ที่ตั้งอสังหาริมทรัพย์ </a>
                 </li>
                 <li class="nav-item col">
-                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="media-tab" data-toggle="pill" data-number="3." href="#media" role="tab" aria-controls="media" aria-selected="false"><span class="number">3.</span> รูปภาพ </a>
+                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="media-tab" data-toggle="pill" data-number="3." href="#media" role="tab" aria-controls="media" aria-selected="false"><span class="number" >3.</span> รูปภาพ </a>
                 </li>
                 <li class="nav-item col">
-                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="detail-tab" data-toggle="pill" data-number="4." href="#detail" role="tab" aria-controls="detail" aria-selected="false"><span class="number">4.</span> รายละเอียดประกาศ </a>
+                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="detail-tab" data-toggle="pill" data-number="4." href="#detail" role="tab" aria-controls="detail" aria-selected="false"><span class="number" >4.</span> รายละเอียดประกาศ </a>
                 </li>
               </ul>
               <div class="tab-content shadow-none p-0">
-                <form action="../backend/add_advertise_front.php" enctype="multipart/form-data" method="POST">
+                <form action="../backend/add_advertise_front.php" class="adForm" enctype="multipart/form-data" method="POST">
                   <div id="collapse-tabs-accordion">
                     <div class="tab-pane tab-pane-parent fade show active px-0" id="description" role="tabpanel" aria-labelledby="description-tab">
                       <div class="card bg-transparent border-0">
@@ -212,7 +213,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                     <hr>
                                     <div class="form-group mb-3">
                                       <label for="status" class="text-heading">ประเภทอสังหาริมทรัพย์ <span class="red">*</span> </label>
-                                      <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" data-style="btn-lg py-2 h-52" name="ptype" id="ptype">
+                                      <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" data-style="btn-lg py-2 h-52" name="ptype" id="ptype" required>
                                         <?php while ($rowt = mysqli_fetch_array($resultt)) { ?>
                                           <?php
                                           if ($rowt['pt_status'] == '1') {
@@ -329,7 +330,12 @@ $resultpr = mysqli_query($con, $sqlpr);
                               </div>
                             </div>
                             <div class="text-right">
-                              <button class="btn btn-lg btn-primary next-button" type="submit"> ขั้นตอนต่อไป
+                              <button class="btn btn-lg btn-primary " onclick="checkVal()" type="submit"> ขั้นตอนต่อไป
+                                <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                              </button>
+                            </div>
+                            <div class="text-right">
+                              <button class="btn btn-lg btn-primary next-button" type="submit" id="nextbtn" hidden> ขั้นตอนต่อไป
                                 <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                               </button>
                             </div>
@@ -379,7 +385,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                       <div class="col-md-4 col-lg-12 col-xxl-4 px-2 mb-4 mb-md-0">
                                         <div class="form-group mb-0">
                                           <label for="category" class="text-heading"> จังหวัด <span class="red">*</span></label>
-                                          <select class="form-control border-0 shadow-none form-control-lg " name="province_id" id="province" class="form-control">
+                                          <select class="form-control border-0 shadow-none form-control-lg " name="province_id" id="province" class="form-control" required>
                                             <option value="" selected disabled>เลือกจังหวัด</option>
                                             <?php while ($rowpr = mysqli_fetch_assoc($resultpr)) : ?>
                                               <option value="<?= $rowpr['id'] ?>"><?= $rowpr['name_th'] ?></option>
@@ -392,7 +398,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                       <div class="col-md-4 col-lg-12 col-xxl-4 px-2 mb-4 mb-md-0">
                                         <div class="form-group mb-0">
                                           <label for="amphure" class="text-heading">อำเภอ <span class="red">*</span></label>
-                                          <select class="form-control border-0 shadow-none form-control-lg " name="amphure_id" id="amphure" class="form-control">
+                                          <select class="form-control border-0 shadow-none form-control-lg " name="amphure_id" id="amphure" class="form-control" required>
 
                                           </select>
                                         </div>
@@ -401,7 +407,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                       <div class="col-md-4 col-lg-12 col-xxl-4 px-2 mb-4 mb-md-0">
                                         <div class="form-group mb-0">
                                           <label for="district" class="text-heading"> ตำบล <span class="red">*</span></label>
-                                          <select class="form-control border-0 shadow-none form-control-lg " title="เลือก" data-style="btn-lg py-2 h-52" name="district_id" id="district">
+                                          <select class="form-control border-0 shadow-none form-control-lg " title="เลือก" data-style="btn-lg py-2 h-52" name="district_id" id="district" required>
 
                                           </select>
                                         </div>
@@ -467,9 +473,16 @@ $resultpr = mysqli_query($con, $sqlpr);
                               <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
-                              <button class="btn btn-lg btn-primary next-button mb-3"> ขั้นตอนต่อไป
-                                <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
-                              </button>
+                              <div class="text-right">
+                                <button class="btn btn-lg btn-primary " onclick="checkVal2()" type="submit"> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </button>
+                              </div>
+                              <div class="text-right">
+                                <button class="btn btn-lg btn-primary next-button" type="submit" id="nextbtn2" hidden> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -535,7 +548,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                   <div class="col-lg-12">
                                     <div class="form-group">
                                       <label for="structure-type" class="text-heading"> ประเภทประกาศ <span class="red">*</span></label>
-                                      <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" name="atype" id="atype">
+                                      <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" name="atype" id="atype" required>
                                         <option class="text-center">เลือกประเภทประกาศ</option>
                                         <?php while ($rowat = mysqli_fetch_array($resultat)) { ?>
                                           <?php
@@ -550,7 +563,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                   <div class="col-lg-12">
                                     <div class="form-group">
                                       <label for="size-in-ft" class="text-heading"> หัวข้อ <span class="red">*</span></label>
-                                      <input type="text" class="form-control form-control-lg border-0" id="size-in-ft" name="title" required>
+                                      <input type="text" class="form-control form-control-lg border-0" id="title" name="title" required>
                                     </div>
                                   </div>
                                 </div>
@@ -558,7 +571,7 @@ $resultpr = mysqli_query($con, $sqlpr);
                                   <div class="col-lg-12">
                                     <div class="form-group mb-0">
                                       <label for="owner" class="text-heading"> บรรยาย <span class="red">*</span> (เกี่ยวกับอสังหาริมทรัพย์ของคุณ) </label>
-                                      <textarea class="form-control border-0" id="describe" name="describe" rows="8" required></textarea>
+                                      <textarea class="form-control border-0" id="note" name="describe" rows="8"></textarea>
                                       <script>
                                         CKEDITOR.replace('describe');
 
@@ -576,8 +589,8 @@ $resultpr = mysqli_query($con, $sqlpr);
                               <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
-                              <button class="btn btn-lg bg-white rounded-lg mb-3 mr-3 " type="submit" name="submit1"> บันทึก </button>
-                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2"> ลงประกาศ </button>
+                              <button class="btn btn-lg bg-white rounded-lg mb-3 mr-3 " type="submit" name="submit1" id="submit"> บันทึก </button>
+                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2" id="submit2"> ลงประกาศ </button>
                             </div>
                           </div>
                         </div>
@@ -830,7 +843,7 @@ $resultpr = mysqli_query($con, $sqlpr);
 
 
 
-        var marker1 = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+        var marker1 = new mapboxgl.Marker({color: 'red'}).setLngLat(coordinates).addTo(map);
 
         marker.push(marker1);
 
@@ -852,6 +865,34 @@ $resultpr = mysqli_query($con, $sqlpr);
 
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
+
+    function checkVal() {
+      if ($('#ptype').val() && $('#bedroom').val() && $('#bathroom').val() && $('#parking').val() && $('#price').val() != '') {
+        $('#nextbtn').click()
+      } else {
+
+        Swal.fire({
+          icon: 'warning',
+          title: 'แจ้งเตือน',
+          text: 'กรุณากรอกข้อมูลให้ครบถ้วน'
+        })
+      }
+    }
+
+    function checkVal2() {
+      if ($('#village_no').val() && $('#house_no').val() && $('#province').val() && $('#amphure').val() && $('#district').val() && $('#postal_code').val() && $('#lat').val() && $('#lng').val() != '') {
+        $('#nextbtn2').click()
+      } else {
+
+        Swal.fire({
+          icon: 'warning',
+          title: 'แจ้งเตือน',
+          text: 'กรุณากรอกข้อมูลให้ครบถ้วน'
+        })
+      }
+    }
+
+    
   </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

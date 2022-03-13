@@ -83,8 +83,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                             <th>ลำดับ</th>
                                             <th>ชื่อแพ็คเกจ</th>
                                             <th>จำนวนรูปภาพ</th>
-                                            <th>จำนวนวิดีโอ</th>
-                                            <th>ระยะเวลา(เดือน)</th>
+                                            <!-- <th>จำนวนวิดีโอ</th> -->
+                                            <th>ระยะเวลา(วัน)</th>
                                             <th>จำนวนหน้าเพจ</th>
                                             <th>จำนวนดันประกาศ</th>
                                             <th>ราคา</th>
@@ -100,7 +100,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                 <td><?php echo $order++ ?></td>
                                                 <td><?php echo $row2['pack_name']; ?></td>
                                                 <td><?php echo $row2['images']; ?></td>
-                                                <td><?php echo $row2['video']; ?></td>
+                                               
                                                 <td><?php echo $row2['period']; ?></td>
                                                 <td><?php echo $row2['page']; ?></td>
                                                 <td><?php echo $row2['boots']; ?></td>
@@ -168,8 +168,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         $("#example1").DataTable({
                             "responsive": true,
                             "lengthChange": false,
-                            "autoWidth": false,
-                            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                            "autoWidth": false
+                            // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
                         $('#example2').DataTable({
                             "paging": true,

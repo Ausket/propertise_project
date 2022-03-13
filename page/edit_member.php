@@ -149,24 +149,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <textarea type="text" class="form-control" name="address" id="address" value=""><?php echo $rowm['address']; ?></textarea>
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                           <label for="inputName2" class="col-sm-2 col-form-label">วันเกิด</label>
                           <div class="col-sm-10">
                             <input type="date" class="form-control" name="birth_date" id="birth_date" value="<?php echo $rowm['birth_date']; ?>">
                           </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                           <label for="inputName2" class="col-sm-2 col-form-label">บริษัท</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" name="company" id="company" value="<?php echo $rowm['company']; ?>">
                           </div>
                         </div>
-                        <div class="form-group row">
+                        <!-- <div class="form-group row">
                           <label for="inputName2" class="col-sm-2 col-form-label">บัตรประชาชน</label>
                           <div class="col-sm-10">
                             <input type="text" class="form-control" name="id_card" id="id_card" value="<?php echo $rowm['id_card']; ?>">
                           </div>
-                        </div>
+                        </div> -->
                         <div class="form-group row">
                           <div class="offset-5 col-6">
                             <button type="submit" name="submit" class="btn btn-danger">บันทึก</button>

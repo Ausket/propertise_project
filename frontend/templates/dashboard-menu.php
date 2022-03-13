@@ -9,9 +9,17 @@ $sqlu = "SELECT * FROM users WHERE u_id= $id ";
 $resultu = mysqli_query($con, $sqlu);
 $rowu = mysqli_fetch_assoc($resultu);
 
-$sqla = "SELECT * FROM advertise WHERE u_id = $id ";
+$sqla = "SELECT * FROM advertise WHERE u_id = $id AND ad_status = '1' ";
 $resulta = mysqli_query($con, $sqla);
 $total_record = mysqli_num_rows($resulta);
+
+$sqla2 = "SELECT * FROM advertise WHERE u_id = $id AND ad_status = '2' ";
+$resulta2 = mysqli_query($con, $sqla2);
+$total_record2 = mysqli_num_rows($resulta2);
+
+$sqla3 = "SELECT * FROM advertise WHERE u_id = $id  ";
+$resulta3 = mysqli_query($con, $sqla3);
+$total_record3 = mysqli_num_rows($resulta3);
 
 $sqlf = "SELECT * FROM favourite WHERE u_id= $id";
 $resultf = mysqli_query($con, $sqlf);
@@ -21,16 +29,13 @@ $sqlv = "SELECT SUM(view) FROM advertise WHERE u_id = $id ";
 $resultv = mysqli_query($con, $sqlv) or die(mysqli_error($con));
 $rowv = mysqli_fetch_assoc($resultv);
 
-// if (isset($_SESSION["name"])) {
-//     if ((time() - $_SESSION['last_login_timestamp']) > 60) //
-//     {
-//         header("location:../page/logout.php");
-//     } else {
-//         $_SESSION['last_login_timestamp'] = time();
-//     }
-// } else {
-//     header('href=#login-register-modal');
-// }
+
+$sqlp = "SELECT * FROM (pay_status 
+LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
+WHERE u_id= $id";
+$resultp = mysqli_query($con, $sqlp);
+$nump = mysqli_num_rows($resultp);
+
 
 ?>
 
@@ -41,7 +46,7 @@ $rowv = mysqli_fetch_assoc($resultv);
         <div class="sticky-area shadow-xs-1 py-3">
             <div class="d-flex px-3 px-xl-6 w-100">
                 <a class="navbar-brand" href="../index.php">
-                    <img src="../images/logo.png" alt="HomeID">
+                    <img src="../images/logo_new.png" alt="HomeID">
                 </a>
                 <div class="ml-auto d-flex align-items-center ">
                     <div class="d-flex align-items-center d-xl-none pr-2">
@@ -92,7 +97,7 @@ $rowv = mysqli_fetch_assoc($resultv);
                                         </svg>
                                     </span>
                                     <span class="sidebar-item-text">ประกาศของฉัน</span>
-                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold"><?php echo $total_record ?></span>
+                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold"><?php echo $total_record3 ?></span>
                                 </a>
                             </li>
                             <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
@@ -119,7 +124,7 @@ $rowv = mysqli_fetch_assoc($resultv);
                                         </svg>
                                     </span>
                                     <span class="sidebar-item-text">แพ็คเก็จของฉัน</span>
-                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold">5</span>
+                                    <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold"><?php echo $nump ?></span>
                                 </a>
                             </li>
                             <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">

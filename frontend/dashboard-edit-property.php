@@ -85,6 +85,8 @@ $resultd = mysqli_query($con, $sqld);
   <link rel="stylesheet" href="../css/vendors/timepicker/bootstrap-timepicker.min.css">
   <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
+  <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
   <!-- Themes core CSS -->
@@ -242,16 +244,16 @@ $resultd = mysqli_query($con, $sqld);
             <div class="collapse-tabs new-property-step">
               <ul class="nav nav-pills border py-2 px-3 mb-6 d-none d-md-flex mb-6" role="tablist">
                 <li class="nav-item col">
-                  <a class="nav-link active bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="description-tab" data-toggle="pill" data-number="1." href="#description" role="tab" aria-controls="description" aria-selected="true"><span class="number">1.</span> รายละเอียดอสังหาริมทรัพย์</a>
+                  <a class="nav-link active bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="description-tab" data-toggle="pill" data-number="1." href="#description" role="tab" aria-controls="description" aria-selected="true"><span class="number">1.</span> รายละเอียดอสังหาริมทรัพย์</a>
                 </li>
                 <li class="nav-item col">
-                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="location-tab" data-toggle="pill" data-number="2." href="#location" role="tab" aria-controls="location" aria-selected="false"><span class="number">2.</span> ที่ตั้งอสังหาริมทรัพย์ </a>
+                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="location-tab" data-toggle="pill" data-number="2." href="#location" role="tab" aria-controls="location" aria-selected="false"><span class="number">2.</span> ที่ตั้งอสังหาริมทรัพย์ </a>
                 </li>
                 <li class="nav-item col">
-                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="media-tab" data-toggle="pill" data-number="3." href="#media" role="tab" aria-controls="media" aria-selected="false"><span class="number">3.</span> รูปภาพ </a>
+                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="media-tab" data-toggle="pill" data-number="3." href="#media" role="tab" aria-controls="media" aria-selected="false"><span class="number">3.</span> รูปภาพ </a>
                 </li>
                 <li class="nav-item col">
-                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block" id="detail-tab" data-toggle="pill" data-number="4." href="#detail" role="tab" aria-controls="detail" aria-selected="false"><span class="number">4.</span> รายละเอียดประกาศ </a>
+                  <a class="nav-link bg-transparent shadow-none py-2 font-weight-500 text-center lh-214 d-block disabled" id="detail-tab" data-toggle="pill" data-number="4." href="#detail" role="tab" aria-controls="detail" aria-selected="false"><span class="number">4.</span> รายละเอียดประกาศ </a>
                 </li>
               </ul>
               <div class="tab-content shadow-none p-0">
@@ -498,9 +500,12 @@ $resultd = mysqli_query($con, $sqld);
                               </div>
                             </div>
                             <div class="text-right">
-                              <button class="btn btn-lg btn-primary next-button"> ขั้นตอนต่อไป
+                              <button class="btn btn-lg btn-primary next-button" id="nextbtn" hidden> ขั้นตอนต่อไป
                                 <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                               </button>
+                              <span class="btn btn-lg btn-primary" onclick="checkVal()"> ขั้นตอนต่อไป
+                                <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                              </span>
                             </div>
                           </div>
                         </div>
@@ -626,9 +631,14 @@ $resultd = mysqli_query($con, $sqld);
                               <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
-                              <button class="btn btn-lg btn-primary next-button mb-3"> ขั้นตอนต่อไป
+                              <div class="text-right">
+                              <button class="btn btn-lg btn-primary next-button" id="nextbtn2" hidden> ขั้นตอนต่อไป
                                 <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                               </button>
+                              <span class="btn btn-lg btn-primary" onclick="checkVal2()"> ขั้นตอนต่อไป
+                                <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                              </span>
+                            </div>
                             </div>
                           </div>
                         </div>
@@ -871,31 +881,22 @@ $resultd = mysqli_query($con, $sqld);
       for (i = 0; i < filesAmount; i++) {
         var reader = new FileReader();
         var fileName = document.getElementById('fileupload2').files[i].name;
+        var j = 0;
 
         reader.fileName = input.files[i].name
         reader.onload = (function(e) {
           var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" ><span class="name">', e.target.fileName, '</span></span>'].join('');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" id="',j++,'" ><span class="name"></span></span>'].join('');
+          // span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" id="',j++,'" ><span class="name">', e.target.fileName, '</span></span>'].join('');
           document.getElementById('upload-img2').insertBefore(span, null);
-
-          let btns = document.querySelectorAll('span.remove_img_preview');
-
-          for (j of btns) {
-            j.addEventListener('click', function() {
-              console.log(j);
-            });
-          }
-
-
-          // document.getElementById("removeimg").addEventListener("click", removeimg, false);
-
-          // console.log(span.innerHTML);
-
         });
+        
         reader.readAsDataURL(input.files[i]);
-
+        
 
       }
+      
+
       //เพิ่มไฟล์ไปยังวัตถุ DataTransfer
       for (let file of input.files) {
         dt.items.add(file);
@@ -904,40 +905,24 @@ $resultd = mysqli_query($con, $sqld);
       input.files = dt.files;
       console.log(dt.items);
 
-      function removeimg() {
-        alert('Click');
-        let name = $('span.name').text();
-        console.log(name);
-        // $(this).parent('span').remove();
+      $(document).on('click', '.remove_img_preview', function() {
+        id = $(this).attr('id');
+        // let name = $('span.name').text();
+        // console.log(name);
+        console.log(id);
+        $(this).parent('span').remove();
 
-        // for (let i = 0; i < dt.items.length; i++) {
-        //   // จับคู่ไฟล์และชื่อ
-        //   if (name === dt.items[i].getAsFile().name) {
-        //     // ลบไฟล์ในวัตถุ DataTransfer
-        //     dt.items.remove(i);
-        //     continue;
-        //   }
-        // }
+        for (let i = 0; i < dt.items.length; i++) {
+          // จับคู่ไฟล์และชื่อ
+          if (id === dt.items[i].getAsFile().name) {
+            // ลบไฟล์ในวัตถุ DataTransfer
+            dt.items.remove(i);
+            continue;
+          }
+        }
         // อัปเดตไฟล์อินพุตไฟล์หลังจากการลบ
         document.getElementById('fileupload2').files = dt.files;
-      }
-
-      // $(document).on('click', '.remove_img_preview', function() {
-      //   let name = $('span.name').text();
-      //   console.log(name);
-      //   $(this).parent('span').remove();
-
-      //   for (let i = 0; i < dt.items.length; i++) {
-      //     // จับคู่ไฟล์และชื่อ
-      //     if (name === dt.items[i].getAsFile().name) {
-      //       // ลบไฟล์ในวัตถุ DataTransfer
-      //       dt.items.remove(i);
-      //       continue;
-      //     }
-      //   }
-      //   // อัปเดตไฟล์อินพุตไฟล์หลังจากการลบ
-      //   document.getElementById('fileupload2').files = dt.files;
-      // });
+      });
 
     });
 
@@ -1046,7 +1031,7 @@ $resultd = mysqli_query($con, $sqld);
 
     });
 
-    const marker2 = new mapboxgl.Marker()
+    const marker2 = new mapboxgl.Marker({color: 'red'})
       .setLngLat([<?= $rowb['lng']; ?>, <?= $rowb['lat']; ?>])
       .addTo(map)
 
@@ -1075,7 +1060,7 @@ $resultd = mysqli_query($con, $sqld);
         document.getElementById("lat").value = coordinates.lat
 
 
-        var marker1 = new mapboxgl.Marker().setLngLat(coordinates).addTo(map);
+        var marker1 = new mapboxgl.Marker({color: 'red'}).setLngLat(coordinates).addTo(map);
 
         marker.push(marker1);
 
@@ -1097,6 +1082,32 @@ $resultd = mysqli_query($con, $sqld);
     })
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
+
+    function checkVal() {
+      if ($('#ptype').val() && $('#bedroom').val() && $('#bathroom').val() && $('#parking').val() && $('#price').val() != '') {
+        $('#nextbtn').click()
+      } else {
+
+        Swal.fire({
+          icon: 'warning',
+          title: 'แจ้งเตือน',
+          text: 'กรุณากรอกข้อมูลให้ครบถ้วน'
+        })
+      }
+    }
+
+    function checkVal2() {
+      if ($('#village_no').val() && $('#house_no').val() && $('#province').val() && $('#amphure').val() && $('#district').val() && $('#postal_code').val() && $('#lat').val() && $('#lng').val() != '') {
+        $('#nextbtn2').click()
+      } else {
+
+        Swal.fire({
+          icon: 'warning',
+          title: 'แจ้งเตือน',
+          text: 'กรุณากรอกข้อมูลให้ครบถ้วน'
+        })
+      }
+    }
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>

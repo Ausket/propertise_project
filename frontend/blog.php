@@ -2,15 +2,16 @@
 require_once('../dbconnect.php');
 
 $sqla = "SELECT article.a_title , article.a_note , article.a_img , article.a_img , article.a_status , article.a_id,
-article_type.a_type, article.a_date
+article_type.a_type, article.a_date, article.a_view
 FROM (article
 INNER  JOIN  article_type ON article.at_id = article_type.at_id)
-ORDER BY a_id DESC ";
+WHERE article_type.at_id = '3'  ORDER BY a_id DESC ";
 $resulta = mysqli_query($con, $sqla);
 
 ?>
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -70,15 +71,15 @@ $resulta = mysqli_query($con, $sqla);
           <div class="form-group">
             <!-- Show Numbers Of Rows -->
             <select class="form-control" name="state" id="maxRows">
-              <option value="4000">ทั้งหมด</option>
-              <option value="4">4</option>
-              <option value="8">8</option>
-              <option value="12">12</option>
-              <option value="20">20</option>
-              <option value="60">60</option>
-              <option value="80">80</option>
-              <option value="100">100</option>
-            </select>
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
           </div>
         </div>
         <div class="row ml-xl-0 mr-xl-n6" id="precard">
@@ -98,9 +99,30 @@ $resulta = mysqli_query($con, $sqla);
                     <div class="col-md-6">
                       <div class="card-body pl-md-6 px-0 pt-5 pt-md-0 pb-0">
                         <ul class="list-inline mb-1">
-                          <li class="list-inline-item mr-4"><i class="far fa-calendar mr-1"></i><?php echo $rowa['a_date']; ?>
+                          <?php
+                          $date_create = $rowa['a_date'];
+                          $date_thai = explode("-", $date_create);
+                          $day = $date_thai[2];
+                          $mont = $date_thai[1];
+                          $year = $date_thai[0];
+                          $year = (int)($year + 543);
+
+                          $sqly = "SELECT * FROM years";
+                          $resulty = mysqli_query($con, $sqly);
+
+                          foreach ($resulty as $value) {
+
+                            if ($value['year_id'] == $mont) {
+
+                              $mont = $value['year_name'];
+                            }
+                          }
+                          $date_create = $day . ' ' . $mont . ' ' . $year;
+
+                          ?>
+                          <li class="list-inline-item mr-4"><i class="far fa-calendar mr-1"></i><?php echo $date_create ?>
                           </li>
-                          <li class="list-inline-item mr-4"><i class="far fa-eye mr-1"></i> 149
+                          <li class="list-inline-item mr-4"><i class="far fa-eye mr-1"></i><?php echo $rowa['a_view']; ?>
                             ครั้ง
                           </li>
                         </ul>
@@ -258,7 +280,7 @@ $resulta = mysqli_query($con, $sqla);
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(4)
+        .val(10)
         .change();
 
       // end of on select change

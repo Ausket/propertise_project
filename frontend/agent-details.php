@@ -52,7 +52,7 @@ FROM (((((advertise
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
     LEFT  JOIN users ON advertise.u_id = users.u_id)
-    WHERE users.u_id = $ida AND advertise_type.atype_id = '2' AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
+    WHERE users.u_id = $ida AND advertise_type.atype_id in ('2','3') AND advertise.ad_status ='1' ORDER BY advertise.a_id DESC ";
 $resultad3 = mysqli_query($con, $sqlad3) or die(mysqli_error($con));
 $total_record3 = mysqli_num_rows($resultad3);
 
@@ -70,6 +70,11 @@ FROM (((((advertise
 $resultad4 = mysqli_query($con, $sqlad4) or die(mysqli_error($con));
 $total_record4 = mysqli_num_rows($resultad4);
 
+$sql6 = "SELECT COUNT(pd_id),pd_id FROM file GROUP BY pd_id";
+$result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
+
+$sqlb = "SELECT * FROM advertise ORDER BY advertise.view DESC limit 5";
+$resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
 
 ?>
 
@@ -131,7 +136,7 @@ $total_record4 = mysqli_num_rows($resultad4);
                 <div class="card-body text-center p-0">
                   <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" class="mb-2" width="130">
                   <p class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500"><?php echo $rowa['name'] ?></p>
-                  <ul class="list-inline mb-2">
+                  <!-- <ul class="list-inline mb-2">
                     <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5</li>
                     <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
                       <ul class="list-inline mb-0">
@@ -152,42 +157,42 @@ $total_record4 = mysqli_num_rows($resultad4);
                         </li>
                       </ul>
                     </li>
-                  </ul>
+                  </ul> -->
                 </div>
-                <div class="card-footer bg-white px-0 pt-1">
+                <div class="card-footer bg-white px-0 pt-2">
                   <ul class="list-group list-group-no-border mb-7">
-                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-4 pb-0">
                       <span class="col-4 p-0 fs-13">สำนักงาน</span>
                       <span class="col-8 p-0 text-heading font-weight-500"><?php echo $rowa['company'] ?></span>
                     </li>
-                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
+                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-4 pb-0">
                       <span class="col-4 p-0 fs-13">โทรศัพท์มือถือ</span>
                       <span class="col-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel'] ?></span>
                     </li>
-                    <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                    <!-- <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
                       <span class="col-4 p-0 fs-13">อีเมล</span>
                       <span class="col-8 p-0"><?php echo $rowa['email'] ?></span>
-                    </li>
-                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                      <span class="col-3 p-0 fs-13">Social</span>
+                    </li> -->
+                    <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-6 pb-0">
+                      <span class="col-3 p-0 fs-13">การติดต่อ</span>
                       <ul class="col-9 list-inline text-gray-lighter m-0 p-0 z-index-2">
                         <li class="list-inline-item m-0">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-phone"></i></a>
                         </li>
                         <li class="list-inline-item mr-0 ml-2">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-line"></i></a>
                         </li>
                         <li class="list-inline-item mr-0 ml-2">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-envelope"></i></a>
                         </li>
                         <li class="list-inline-item mr-0 ml-2">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-browser"></i></a>
                         </li>
                       </ul>
                     </li>
                   </ul>
-                  <button type="submit" class="btn btn-primary btn-lg btn-block shadow-none"> ส่งข้อความ
-                  </button>
+                  <!-- <button type="submit" class="btn btn-primary btn-lg btn-block shadow-none"> ส่งข้อความ
+                  </button> -->
                 </div>
               </div>
               <div class="card">
@@ -196,7 +201,7 @@ $total_record4 = mysqli_num_rows($resultad4);
                   <div class="text-dark mb-6 mt-n2 font-weight-500">ถ้าคุณอยากเป็น
                     <p class="mb-0 fs-18">ตัวแทนอสังหาริมทรัพย์</p>
                   </div>
-                  <a href="#" class="btn btn-primary">สมัครเลย</a>
+                  <a data-toggle="modal" href="#register-modal" class="btn btn-primary">สมัครเลย</a>
                 </div>
               </div>
             </div>
@@ -243,12 +248,12 @@ $total_record4 = mysqli_num_rows($resultad4);
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows">
                                 <option value="6000">แสดงทั้งหมด</option>
-                                <option value="6">6</option>
-                                <option value="12">12</option>
-                                <option value="18">18</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
                                 <option value="30">30</option>
                                 <option value="60">60</option>
-                                <option value="90">90</option>
+                                <option value="100">100</option>
                                 <option value="150">150</option>
                               </select>
                             </div>
@@ -267,20 +272,35 @@ $total_record4 = mysqli_num_rows($resultad4);
                                       <img src="../image/p_img/<?php echo $rowad['img_video']; ?>" alt="Home in Metric Way">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
+                                          <?php foreach ($resultb as $key2) {
+                                            if ($key2['a_id'] == $rowad['a_id']) { ?>
+                                              <span class="badge badge-orange mr-2">ยอดนิยม</span>
+                                          <?php }
+                                          } ?>
                                           <span class='badge ' style="background-color:<?php echo $rowad['color']; ?>; color:white; "><?php echo $rowad['type']; ?></span>
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                              <a href="#" class="text-white hover-primary">
-                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="<?php foreach ($result6 as $key) {
+                                                                                                              if ($key['pd_id'] == $rowad['pd_id']) {
+                                                                                                                echo $key['COUNT(pd_id)'];
+                                                                                                              }
+                                                                                                            } ?>  Images">
+                                              <a href="home-details.php?id=<?php echo $rowad['a_id'] ?>" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">
+                                                  <?php foreach ($result6 as $key) {
+                                                    if ($key['pd_id'] == $rowad['pd_id']) {
+                                                      echo $key['COUNT(pd_id)'];
+                                                    }
+                                                  } ?>
+                                                </span>
                                               </a>
                                             </li>
-                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                            <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                                               <a href="#" class="text-white hover-primary">
                                                 <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                                               </a>
-                                            </li>
+                                            </li> -->
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
                                             <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
@@ -407,12 +427,12 @@ $total_record4 = mysqli_num_rows($resultad4);
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows2">
                                 <option value="6000">แสดงทั้งหมด</option>
-                                <option value="6">6</option>
-                                <option value="12">12</option>
-                                <option value="18">18</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
                                 <option value="30">30</option>
                                 <option value="60">60</option>
-                                <option value="90">90</option>
+                                <option value="100">100</option>
                                 <option value="150">150</option>
                               </select>
                             </div>
@@ -431,20 +451,35 @@ $total_record4 = mysqli_num_rows($resultad4);
                                       <img src="../image/p_img/<?php echo $rowad2['img_video']; ?>" alt="Home in Metric Way">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
+                                          <?php foreach ($resultb as $key2) {
+                                            if ($key2['a_id'] == $rowad2['a_id']) { ?>
+                                              <span class="badge badge-orange mr-2">ยอดนิยม</span>
+                                          <?php }
+                                          } ?>
                                           <span class='badge ' style="background-color:<?php echo $rowad2['color']; ?>; color:white; "><?php echo $rowad2['type']; ?></span>
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                              <a href="#" class="text-white hover-primary">
-                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="<?php foreach ($result6 as $key) {
+                                                                                                              if ($key['pd_id'] == $rowad2['pd_id']) {
+                                                                                                                echo $key['COUNT(pd_id)'];
+                                                                                                              }
+                                                                                                            } ?>  Images">
+                                              <a href="home-details.php?id=<?php echo $rowad2['a_id'] ?>" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">
+                                                  <?php foreach ($result6 as $key) {
+                                                    if ($key['pd_id'] == $rowad2['pd_id']) {
+                                                      echo $key['COUNT(pd_id)'];
+                                                    }
+                                                  } ?>
+                                                </span>
                                               </a>
                                             </li>
-                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                            <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                                               <a href="#" class="text-white hover-primary">
                                                 <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                                               </a>
-                                            </li>
+                                            </li> -->
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
                                             <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
@@ -570,12 +605,12 @@ $total_record4 = mysqli_num_rows($resultad4);
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows3">
                                 <option value="6000">แสดงทั้งหมด</option>
-                                <option value="6">6</option>
-                                <option value="12">12</option>
-                                <option value="18">18</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
                                 <option value="30">30</option>
                                 <option value="60">60</option>
-                                <option value="90">90</option>
+                                <option value="100">100</option>
                                 <option value="150">150</option>
                               </select>
                             </div>
@@ -594,21 +629,36 @@ $total_record4 = mysqli_num_rows($resultad4);
                                       <img src="../image/p_img/<?php echo $rowad3['img_video']; ?>" alt="Villa on Hollywood Boulevard">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
+                                          <?php foreach ($resultb as $key2) {
+                                            if ($key2['a_id'] == $rowad3['a_id']) { ?>
+                                              <span class="badge badge-orange mr-2">ยอดนิยม</span>
+                                          <?php }
+                                          } ?>
                                           <span class='badge ' style="background-color:<?php echo $rowad3['color']; ?>; color:white; "><?php echo $rowad3['type']; ?></span>
 
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                              <a href="#" class="text-white hover-primary">
-                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="<?php foreach ($result6 as $key) {
+                                                                                                              if ($key['pd_id'] == $rowad3['pd_id']) {
+                                                                                                                echo $key['COUNT(pd_id)'];
+                                                                                                              }
+                                                                                                            } ?>  Images">
+                                              <a href="home-details.php?id=<?php echo $rowad3['a_id'] ?>" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">
+                                                  <?php foreach ($result6 as $key) {
+                                                    if ($key['pd_id'] == $rowad3['pd_id']) {
+                                                      echo $key['COUNT(pd_id)'];
+                                                    }
+                                                  } ?>
+                                                </span>
                                               </a>
                                             </li>
-                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                            <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                                               <a href="#" class="text-white hover-primary">
                                                 <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                                               </a>
-                                            </li>
+                                            </li> -->
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
                                             <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
@@ -735,12 +785,12 @@ $total_record4 = mysqli_num_rows($resultad4);
                             <div class="form-group">
                               <select class="form-control" name="state" id="maxRows4">
                                 <option value="6000">แสดงทั้งหมด</option>
-                                <option value="6">6</option>
-                                <option value="12">12</option>
-                                <option value="18">18</option>
+                                <option value="10">10</option>
+                                <option value="15">15</option>
+                                <option value="25">25</option>
                                 <option value="30">30</option>
                                 <option value="60">60</option>
-                                <option value="90">90</option>
+                                <option value="100">100</option>
                                 <option value="150">150</option>
                               </select>
                             </div>
@@ -759,20 +809,35 @@ $total_record4 = mysqli_num_rows($resultad4);
                                       <img src="../image/p_img/<?php echo $rowad4['img_video']; ?>" alt="Home in Metric Way">
                                       <div class="card-img-overlay d-flex flex-column">
                                         <div class="mb-auto">
+                                          <?php foreach ($resultb as $key2) {
+                                            if ($key2['a_id'] == $rowad4['a_id']) { ?>
+                                              <span class="badge badge-orange mr-2">ยอดนิยม</span>
+                                          <?php }
+                                          } ?>
                                           <span class='badge ' style="background-color:<?php echo $rowad4['color']; ?>; color:white; "><?php echo $rowad4['type']; ?></span>
                                         </div>
                                         <div class="d-flex hover-image">
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                                              <a href="#" class="text-white hover-primary">
-                                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="<?php foreach ($result6 as $key) {
+                                                                                                              if ($key['pd_id'] == $rowad4['pd_id']) {
+                                                                                                                echo $key['COUNT(pd_id)'];
+                                                                                                              }
+                                                                                                            } ?>  Images">
+                                              <a href="home-details.php?id=<?php echo $rowad4['a_id'] ?>" class="text-white hover-primary">
+                                                <i class="far fa-images"></i><span class="pl-1">
+                                                  <?php foreach ($result6 as $key) {
+                                                    if ($key['pd_id'] == $rowad4['pd_id']) {
+                                                      echo $key['COUNT(pd_id)'];
+                                                    }
+                                                  } ?>
+                                                </span>
                                               </a>
                                             </li>
-                                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                                            <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                                               <a href="#" class="text-white hover-primary">
                                                 <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                                               </a>
-                                            </li>
+                                            </li> -->
                                           </ul>
                                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
                                             <?php if (isset($_SESSION['u_id']) ? $_SESSION['u_id'] : '') {
@@ -891,6 +956,84 @@ $total_record4 = mysqli_num_rows($resultad4);
     </section>
   </main>
   <?php include 'templates/footer-two.php'; ?>
+  <div class="modal fade login-register login-register-modal" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="register-modal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mxw-571" role="document">
+      <div class="modal-content">
+        <div class="modal-header border-0 p-0">
+          <a class="col-8 ml-0 py-6 px-6 fs-24">สมัครเป็นตัวแทนหรือนายหน้า</a>
+          <div class="col-sm-4 ml-0 d-flex align-items-center justify-content-end">
+            <button type="button" class="close m-0 fs-30" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true" style="margin-right: 10px;">&times;</span>
+            </button>
+          </div>
+        </div>
+        <div class="modal-body p-4 py-sm-7 px-sm-8">
+          <form action="../backend/regis_agent.php?id=<?php echo $ida ?>" id="regisform" method="post">
+            <div class="form-group mb-4">
+              <label for="username01" class="sr-only">Email</label>
+              <div class="input-group input-group-lg">
+                <div class="input-group-prepend ">
+                  <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                    <i class="far fa-user"></i></span>
+                </div>
+                <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" required placeholder="อีเมล">
+              </div>
+            </div>
+            <div class="form-group mb-4">
+              <label for="password01" class="sr-only">Password</label>
+              <div class="input-group input-group-lg">
+                <div class="input-group-prepend ">
+                  <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                    <i class="far fa-lock"></i>
+                  </span>
+                </div>
+                <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" required placeholder="รหัสผ่าน">
+                <div class="input-group-append">
+                  <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
+                    <i class="far fa-eye-slash"></i>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group mb-4">
+              <label for="full-name" class="sr-only">Full name</label>
+              <div class="input-group input-group-lg">
+                <div class="input-group-prepend ">
+                  <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                    <i class="far fa-address-card"></i></span>
+                </div>
+                <input type="text" class="form-control border-0 shadow-none fs-13" id="name" name="name" required placeholder="ชื่อและนามสกุล">
+              </div>
+            </div>
+            <div class="form-group mb-4">
+              <label for="phone01" class="sr-only">Phone</label>
+              <div class="input-group input-group-lg">
+                <div class="input-group-prepend ">
+                  <span class="input-group-text bg-gray-01 border-0 text-muted fs-18">
+                    <i class="far fa-phone-alt"></i></span>
+                </div>
+                <input type="number" class="form-control border-0 shadow-none fs-13" id="tel" name="tel" required placeholder="เบอร์โทรศัพท์">
+              </div>
+            </div>
+
+            <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">สมัครสมาชิก</button>
+          </form>
+          <div class="divider text-center my-2">
+            <span class="px-4 bg-white lh-17 text">
+              หรือเชื่อมต่อผ่าน
+            </span>
+          </div>
+          <div class="row no-gutters mx-n2">
+            <div class="col-12 px-2 mb-4">
+              <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                <i class="fab fa-line fa-fw fa-2x"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Vendors scripts -->
   <script src="../css/vendors/jquery.min.js"></script>
   <script src="../css/vendors/jquery-ui/jquery-ui.min.js"></script>
@@ -1142,7 +1285,7 @@ $total_record4 = mysqli_num_rows($resultad4);
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change
@@ -1276,7 +1419,7 @@ $total_record4 = mysqli_num_rows($resultad4);
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change
@@ -1410,7 +1553,7 @@ $total_record4 = mysqli_num_rows($resultad4);
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change
@@ -1544,7 +1687,7 @@ $total_record4 = mysqli_num_rows($resultad4);
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change

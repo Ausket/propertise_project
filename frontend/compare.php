@@ -194,6 +194,21 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
             padding: 10px;
         }
 
+        .rows-five {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 25%;
+            height: 100px;
+            border: 1px solid #dddddd;
+            font-size: 14px;
+            font-weight: 500;
+            line-height: 1.2rem;
+            text-align: center;
+            padding: 10px;
+        }
+
         .tables:hover .rows,
         .tables:hover .rows-two {
             background-color: #dddddd;
@@ -203,7 +218,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 
         .icon-facebook {
             font-size: 26px;
-            margin-right: 30px;
+            margin-left: 30px;
             color: #166fe5;
             cursor: pointer;
         }
@@ -221,22 +236,30 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
             cursor: pointer;
         }
 
+        .img {
+            width: 300px;
+            height: 200px;
+        }
+
 
         @media screen and (max-width: 1000px) {
             .rows {
-                height: 90px;
+                height: 150px;
             }
 
             .img-slider {
                 display: block;
             }
 
-
+            .img {
+                width: 200px;
+                height: 100px;
+            }
 
             .icon-facebook {
                 font-size: 19px;
-                margin-right: 8px;
                 color: #166fe5;
+                margin-left: 8px;
                 cursor: pointer;
             }
 
@@ -253,7 +276,55 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
             }
 
             .rows-four {
+                height: 130px;
+            }
+
+            .rows-five {
+                height: 150px;
+            }
+
+        }
+
+        @media screen and (max-width: 600px) {
+           
+            .rows {
+                height: 150px;
+            }
+
+            .img-slider {
+                display: block;
+            }
+
+            .img {
+                width: 100px;
                 height: 70px;
+            }
+
+
+            .icon-facebook {
+                font-size: 19px;
+                color: #166fe5;
+                margin-left: 8px;
+                cursor: pointer;
+            }
+
+            .icon-line {
+                font-size: 20px;
+                color: #07b53b;
+                cursor: pointer;
+            }
+
+            .icon-mobile {
+                font-size: 17px;
+                margin-left: 8px;
+                cursor: pointer;
+            }
+
+            .rows-four {
+                height: 100px;
+            }
+            .rows-five {
+                height: 150px;
             }
         }
     </style>
@@ -273,15 +344,15 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                     รูปภาพ
                 </div>
                 <div class="rows-four">
-                    <img src="../image/p_img/<?php echo $row1['img_video'] ?>">
+                    <img class="img" src="../image/p_img/<?php echo $row1['img_video'] ?>">
                 </div>
                 <div class="rows-four">
-                    <img src="../image/p_img/<?php echo $row22['img_video'] ?>">
+                    <img class="img" src="../image/p_img/<?php echo $row22['img_video'] ?>">
                 </div>
 
                 <div class="rows-four">
                     <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-                        <img src="../image/p_img/<?php echo $row3['img_video'] ?>"> <?php } ?>
+                        <img class="img" src="../image/p_img/<?php echo $row3['img_video'] ?>"> <?php } ?>
                 </div>
 
             </div>
@@ -306,7 +377,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
             </div>
             <div class="tables">
                 <div class="rows text-dark">
-                    รายละเอียด
+                    รายละเอียดที่อยู่
                 </div>
                 <div class="rows">
                     <p><?php if ($row1['house_no'] != '') {
@@ -469,18 +540,34 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                 </div>
             </div>
             <div class="tables">
+                <div class="rows-five text-dark">
+                    สิ่งอำนวยความสะดวก
+                </div>
+                <div class="rows-five">
+                    <?php echo $row1['facility'] ?>
+                </div>
+                <div class="rows-five">
+                    <?php echo $row22['facility'] ?>
+                </div>
+                <div class="rows-five">
+                    <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
+                        <?php echo $row3['facility'] ?>
+                    <?php } ?>
+                </div>
+            </div>
+            <div class="tables">
                 <div class="rows-two text-dark">
                     ติดต่อ
                 </div>
                 <div class="rows-two">
-                    <td> <i class="fab fa-facebook icon-facebook"></i> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> </td>
+                    <td> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile "></i> <i class="fab fa-facebook icon-facebook"></i> </td>
                 </div>
                 <div class="rows-two">
-                    <td> <i class="fab fa-facebook icon-facebook"></i> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> </td>
+                    <td> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> <i class="fab fa-facebook icon-facebook"></i> </td>
                 </div>
                 <div class="rows-two">
                     <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-                        <td> <i class="fab fa-facebook icon-facebook"></i> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> </td> <?php } ?>
+                        <td> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> <i class="fab fa-facebook icon-facebook"></i></td> <?php } ?>
                 </div>
             </div>
         </div>

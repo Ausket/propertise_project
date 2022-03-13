@@ -188,16 +188,16 @@
                 </div>
                 <div class="d-flex align-items-center ml-3">
                   <div class="form-group">
-                    <select class="form-control" name="state" id="maxRows">
-                      <option value="6000">แสดงทั้งหมด</option>
-                      <option value="6">6</option>
-                      <option value="12">12</option>
-                      <option value="18">18</option>
-                      <option value="30">30</option>
-                      <option value="60">60</option>
-                      <option value="90">90</option>
-                      <option value="150">150</option>
-                    </select>
+                  <select class="form-control" name="state" id="maxRows">
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
 
                   </div>
                 </div>
@@ -211,7 +211,7 @@
                           <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
                         </a>
                         <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
-                        <ul class="list-inline mb-0">
+                        <!-- <ul class="list-inline mb-0">
                           <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
                           </li>
                           <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
@@ -233,7 +233,7 @@
                               </li>
                             </ul>
                           </li>
-                        </ul>
+                        </ul> -->
                       </div>
                       <div class="card-footer bg-white px-0 pt-1 pb-6">
                         <ul class="list-group list-group-no-border pb-1">
@@ -245,24 +245,24 @@
                             <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
                             <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
                           </li>
-                          <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                          <!-- <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
                             <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
                             <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
-                          </li>
-                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
+                          </li> -->
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-6 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">การติดต่อ</span>
                             <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
                               <li class="list-inline-item m-0">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-phone"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-line"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-envelope"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-browser"></i></a>
                               </li>
                             </ul>
                           </li>
@@ -390,16 +390,16 @@
                 </div>
                 <div class="d-flex align-items-center ml-3 ">
                   <div class="form-group ">
-                    <select class="form-control" name="state" id="maxRows">
-                      <option value="6000">แสดงทั้งหมด</option>
-                      <option value="6">6</option>
-                      <option value="12">12</option>
-                      <option value="18">18</option>
-                      <option value="30">30</option>
-                      <option value="60">60</option>
-                      <option value="90">90</option>
-                      <option value="150">150</option>
-                    </select>
+                  <select class="form-control" name="state" id="maxRows">
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
 
                   </div>
                 </div>
@@ -414,7 +414,7 @@
                           <img src="../image/m_img/<?php echo $rowa['img'] ?>" alt="" width="130">
                         </a>
                         <a href="agent-details.php?id=<?php echo $rowa['u_id']; ?>" class="d-block fs-16 lh-214 text-dark mb-0 font-weight-500 hover-primary"><?php echo $rowa['name']; ?></a>
-                        <ul class="list-inline mb-0">
+                        <!-- <ul class="list-inline mb-0">
                           <li class="list-inline-item fs-13 text-heading font-weight-500">4.8/5
                           </li>
                           <li class="list-inline-item fs-13 text-heading font-weight-500 mr-1">
@@ -436,7 +436,7 @@
                               </li>
                             </ul>
                           </li>
-                        </ul>
+                        </ul> -->
                       </div>
                       <div class="card-footer bg-white px-0 pt-1 pb-6">
                         <ul class="list-group list-group-no-border pb-1">
@@ -448,24 +448,24 @@
                             <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">โทรศัพท์มือถือ</span>
                             <span class="col-sm-8 p-0 text-heading font-weight-500"><?php echo $rowa['tel']; ?></span>
                           </li>
-                          <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
+                          <!-- <li class="list-group-item d-flex align-items-sm-center row m-0 px-0 pt-2 pb-0">
                             <span class="col-sm-4 p-0 fs-13 lh-114">อีเมล</span>
                             <span class="col-sm-8 p-0"><?php echo $rowa['email']; ?></span>
-                          </li>
-                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">Social</span>
+                          </li> -->
+                          <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-6 pb-0">
+                            <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">การติดต่อ</span>
                             <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
                               <li class="list-inline-item m-0">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-phone"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-line"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-envelope"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-browser"></i></a>
                               </li>
                             </ul>
                           </li>
@@ -632,7 +632,7 @@
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change

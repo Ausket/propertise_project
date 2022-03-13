@@ -4,13 +4,17 @@ require_once('../dbconnect.php');
 $ida = $_GET['id'];
 
 $sqla = "SELECT article.a_title , article.a_note , article.a_img , article.a_img , article.a_status , article.a_id,
-article_type.a_type, article.a_date
+article_type.a_type, article.a_date , article.a_view
 FROM (article
 INNER  JOIN  article_type ON article.at_id = article_type.at_id)
 WHERE a_id = $ida ";
 
 $resulta = mysqli_query($con, $sqla);
 $rowa = mysqli_fetch_assoc($resulta);
+
+$sqlv = "UPDATE article SET a_view=a_view+1 WHERE a_id = $ida ";
+$resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
+
 
 ?>
 <!doctype html>
@@ -57,6 +61,12 @@ $rowa = mysqli_fetch_assoc($resulta);
   <meta property="og:image:type" content="image/png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
+
+  <meta property="og:title" content="social media sharing" />
+  <meta property="og:image" content="URL OF IMAGE ONLY" />
+  <meta property="og:url" content="onlinecode.org" />
+  <meta property="og:description" content="social media sharing" />
+
 </head>
 
 <body>
@@ -73,57 +83,70 @@ $rowa = mysqli_fetch_assoc($resulta);
           </li>
         </ul>
         <h2 class="fs-md-32 text-heading lh-141 mb-6 mxw-670 text-center">
-        <?php echo $rowa['a_title']; ?>
+          <?php echo $rowa['a_title']; ?>
         </h2>
         <ul class="list-inline text-center mb-8">
-        <?php
-              $sql4 = "SELECT * FROM users WHERE utype = 'admin'";
-              $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));
-              $row4 = mysqli_fetch_assoc($result4);
-             
-              ?>
+          <?php
+          $sql4 = "SELECT * FROM users WHERE utype = 'admin'";
+          $result4 = mysqli_query($con, $sql4) or die(mysqli_error($con));
+          $row4 = mysqli_fetch_assoc($result4);
+
+          ?>
           <li class="list-inline-item mr-4"><img class="mr-1" src="../image/m_img/<?php echo $row4['img'] ?>" alt="" width="50"> <?php echo $row4['name']; ?>
           </li>
-          <li class="list-inline-item mr-4"><i class="far fa-calendar mr-1"></i><?php echo $rowa['a_date']; ?> </li>
-          <li class="list-inline-item mr-4"><i class="far fa-eye mr-1"></i> 149 ครั้ง </li>
+          <?php
+          $date_create = $rowa['a_date'];
+          $date_thai = explode("-", $date_create);
+          $day = $date_thai[2];
+          $mont = $date_thai[1];
+          $year = $date_thai[0];
+          $year = (int)($year + 543);
+
+          $sqly = "SELECT * FROM years";
+          $resulty = mysqli_query($con, $sqly);
+
+          foreach ($resulty as $value) {
+
+            if ($value['year_id'] == $mont) {
+
+              $mont = $value['year_name'];
+            }
+          }
+          $date_create = $day . ' ' . $mont . ' ' . $year;
+
+          ?>
+          <li class="list-inline-item mr-4"><i class="far fa-calendar mr-1"></i><?php echo  $date_create; ?> </li>
+          <li class="list-inline-item mr-4"><i class="far fa-eye mr-1"></i><?php echo $rowa['a_view']; ?> ครั้ง </li>
         </ul>
         <img class="m-auto d-block" src="../image/a_img/<?php echo $rowa['a_img'] ?>" alt="Ten Benefits Of Rentals That May Change Your Perspective">
+        <br><br>
         <div class="mxw-751">
           <div class="lh-214 mb-9">
             <p>
-            <?php echo $rowa['a_note']; ?>
+              <?php echo $rowa['a_note']; ?>
             </p>
           </div>
+          <?php
+          // pass web-site url
+          $site_url  = "https://lifejung.com/frontend/blog-details.php?id=$ida";
+          // post title
+          $site_title  = "Blog lifejung";
+          ?>
           <div class="row pb-7 mb-6 border-bottom">
-            <div class="col-sm-6 d-flex">
-              <span class="d-inline-block mr-2"><i class="fal fa-tags"></i></span>
-              <ul class="list-inline">
-                <li class="list-inline-item mr-0"><a href="#" class="text-muted hover-dark">อสังหาริมทรัพย์,</a>
-                </li>
-                <li class="list-inline-item mr-0"><a href="#" class="text-muted hover-dark">ธีมมูฟ,</a>
-                </li>
-                <li class="list-inline-item mr-0"><a href="#" class="text-muted hover-dark">อาคาร</a>
-                </li>
-              </ul>
-            </div>
             <div class="col-sm-6 text-left text-sm-right">
               <span class="d-inline-block text-heading font-weight-500 lh-17 mr-1">แชร์โพสต์นี้</span>
               <button type="button" class="btn btn-primary rounded-circle w-52px h-52 fs-20 d-inline-flex align-items-center justify-content-center" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content=' <ul class="list-inline mb-0">
-                  <li class="list-inline-item">
-                    <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                        class="fab fa-twitter"></i></a>
-                  </li>
                   <li class="list-inline-item ">
-                    <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
+                    <a href="http://www.facebook.com/sharer.php?u=<?=$site_url?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
                                                         class="fab fa-facebook-f"></i></a>
                   </li>
                   <li class="list-inline-item">
                     <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                        class="fab fa-instagram"></i></a>
+                                                        class="fab fa-youtube"></i></a>
                   </li>
                   <li class="list-inline-item">
                     <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                        class="fab fa-youtube"></i></a>
+                                                        class="fab fa-line"></i></a>
                   </li>
                 </ul>
                 '>

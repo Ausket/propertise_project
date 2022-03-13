@@ -27,7 +27,7 @@ if (isset($_POST['ch'])) {
   $text = 'ORDER BY advertise.a_id DESC ';
 }
 
-
+$order = 1;
 ?>
 <!doctype html>
 <html lang="en">
@@ -95,7 +95,7 @@ if (isset($_POST['ch'])) {
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div class="mr-0 mr-md-auto">
                 <a href="dashboard-properties.php">
-                  <h2 class="mb-0 text-heading fs-22 lh-15">ประกาศทั้งหมดของฉัน<span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $total_record ?></span>
+                  <h2 class="mb-0 text-heading fs-22 lh-15">ประกาศทั้งหมดของฉัน<span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $total_record3 ?></span>
                   </h2>
                 </a>
 
@@ -105,7 +105,7 @@ if (isset($_POST['ch'])) {
                   <form class="d-none d-md-flex row no-gutters px-n1 flex-wrap align-items-center" action="" method="GET">
                     <div class="input-group input-group-lg bg-white border">
                       <div class="input-group-prepend">
-                        <button class="btn pr-0 shadow-none" type="button"><i class="far fa-search"></i></button>
+                        <button type="submit" class="btn pr-0 shadow-none" type="button"><i class="far fa-search"></i></button>
                       </div>
                       <input type="text" class="form-control bg-transparent border-0 shadow-none text-body" placeholder="ค้นหา" name="search_ad">
                     </div>
@@ -140,15 +140,15 @@ if (isset($_POST['ch'])) {
                   <div class="form-group">
                     <!-- Show Numbers Of Rows -->
                     <select class="form-control" name="state" id="maxRows">
-                      <option value="5000">ทั้งหมด</option>
-                      <option value="5">5</option>
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="20">20</option>
-                      <option value="50">50</option>
-                      <option value="70">70</option>
-                      <option value="100">100</option>
-                    </select>
+                    <option value="6000">แสดงทั้งหมด</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
+                    <option value="30">30</option>
+                    <option value="60">60</option>
+                    <option value="100">100</option>
+                    <option value="150">150</option>
+                  </select>
                   </div>
                 </div>
               </div>
@@ -221,9 +221,10 @@ if (isset($_POST['ch'])) {
                 <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
+                    <th scope="col" class="border-top-0 pt-5 pb-4">ลำดับที่</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ไอดีประกาศ</th>
-                      <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
+                      <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">จัดการ</th>
@@ -237,7 +238,9 @@ if (isset($_POST['ch'])) {
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
+                      <td class="align-middle"><?php echo $order++ ?></td>
                       <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
+                      <td class="align-middle"><?php echo $row2['date']; ?></td>
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
@@ -279,7 +282,7 @@ if (isset($_POST['ch'])) {
                             </div>
                           </div>
                         </td>
-                        <td class="align-middle"><?php echo $row2['date']; ?></td>
+                        
                         <td class="align-middle">
                           <?php if ($row2['ad_status'] == '1') {
                             $status = 'กำลังลงประกาศ';
@@ -294,9 +297,10 @@ if (isset($_POST['ch'])) {
                             echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-green"> ' . $status . ' </span>';
                           }
                           if ($row2['ad_status'] == '3') {
-                            $status = 'ประกาศหมดอายุ';
+                            $status = 'ขายแล้ว';
                             echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
-                          } ?>
+                          }
+                           ?>
 
 
 
@@ -304,8 +308,9 @@ if (isset($_POST['ch'])) {
                         <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
                           <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-3"><i class="fal fa-pencil-alt"></i></a>
+                          <?php if($row2['ad_status'] !== '1'){ ?>
                           <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
-                        </td>
+                          <?php  } ?></td>
                       <?php  } ?>
                       </tr>
 
@@ -385,9 +390,10 @@ if (isset($_POST['ch'])) {
                 <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
+                    <th scope="col" class="border-top-0 pt-5 pb-4">ลำดับที่</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ไอดีประกาศ</th>
-                      <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
+                      <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">จัดการ</th>
@@ -402,7 +408,9 @@ if (isset($_POST['ch'])) {
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
+                      <td class="align-middle"><?php echo $order++; ?></td>
                       <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
+                      <td class="align-middle"><?php echo $row2['date']; ?></td>
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
@@ -444,7 +452,6 @@ if (isset($_POST['ch'])) {
                             </div>
                           </div>
                         </td>
-                        <td class="align-middle"><?php echo $row2['date']; ?></td>
                         <td class="align-middle">
                           <?php if ($row2['ad_status'] == '1') {
                             $status = 'กำลังลงประกาศ';
@@ -459,7 +466,7 @@ if (isset($_POST['ch'])) {
                             echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-green"> ' . $status . ' </span>';
                           }
                           if ($row2['ad_status'] == '3') {
-                            $status = 'ประกาศหมดอายุ';
+                            $status = 'ขายแล้ว';
                             echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
                           } ?>
 
@@ -468,8 +475,9 @@ if (isset($_POST['ch'])) {
                         <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
                           <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-3"><i class="fal fa-pencil-alt"></i></a>
+                          <?php if($row2['ad_status'] !== '1'){ ?>
                           <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
-                        </td>
+                          <?php  } ?> </td>
                       <?php  } ?>
                       </tr>
 
@@ -632,7 +640,7 @@ if (isset($_POST['ch'])) {
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(5)
+        .val(10)
         .change();
 
       // end of on select change

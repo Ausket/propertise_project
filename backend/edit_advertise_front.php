@@ -73,8 +73,11 @@ if ($file != '') {
         $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
-
+        if (isset($_POST["facility"])) {
         $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+        }else{
+            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area' WHERE l_id = $l_id ";
+        }
         $result = mysqli_query($con, $sql);
 
         if ($status == '1') {
@@ -121,7 +124,11 @@ if ($file != '') {
         $result2 = mysqli_query($con, $sql2);
 
 
-        $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+        if (isset($_POST["facility"])) {
+            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+            }else{
+                $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area' WHERE l_id = $l_id ";
+            }
         $result = mysqli_query($con, $sql);
 
 
@@ -170,7 +177,11 @@ if ($file == '') {
         $result2 = mysqli_query($con, $sql2);
 
 
-        $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+        if (isset($_POST["facility"])) {
+            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+            }else{
+                $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area' WHERE l_id = $l_id ";
+            }
         $result = mysqli_query($con, $sql);
 
 
@@ -218,7 +229,11 @@ if ($file == '') {
         $result2 = mysqli_query($con, $sql2);
 
 
-        $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+        if (isset($_POST["facility"])) {
+            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+            }else{
+                $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',space_area='$space_area' WHERE l_id = $l_id ";
+            }
         $result = mysqli_query($con, $sql);
 
 

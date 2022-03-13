@@ -9,7 +9,8 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require('../config.php');
 // require('../connect.php');
 // $con=mysqli_connect("localhost","root","123456","propertise") or die("เชื่อมต่อผิดพลาด");
-$con=mysqli_connect("localhost","fininsure_auhome","SkHEFLW56W","fininsure_auhome") or die("เชื่อมต่อผิดพลาด");
+// $con=mysqli_connect("localhost","fininsure_auhome","SkHEFLW56W","fininsure_auhome") or die("เชื่อมต่อผิดพลาด");
+$con=mysqli_connect("localhost","fininsure_lifejung","mCVI1HT3","fininsure_lifejung") or die("เชื่อมต่อผิดพลาด");
 //ข้อความ : ขาดการตรวจสอบเงื่อนไขป้องกันการเข้าถึงจากผู้ไม่ประสงค์ดี 
 
 if (!empty($_POST['resultCode'])) {

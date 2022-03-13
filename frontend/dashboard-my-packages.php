@@ -1,3 +1,20 @@
+<?php
+
+require_once('../dbconnect.php');
+
+ $id = $_SESSION['u_id'];
+if (empty($id)) {
+  header('Location:../index.php');
+}
+
+$sqlpa = "SELECT * FROM (pay_status 
+LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
+WHERE u_id= $id ORDER BY pay_status.id DESC";
+$resultpa = mysqli_query($con, $sqlpa);
+$nump = mysqli_num_rows($resultpa);
+
+$order = 1;
+?>
 <!doctype html>
 <html lang="en">
 
@@ -54,77 +71,70 @@
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div class="mr-0 mr-md-auto">
-                <h2 class="mb-0 text-heading fs-22 lh-15"> บันทึกการค้นหาของฉัน <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2">5</span>
+                <h2 class="mb-0 text-heading fs-22 lh-15"> แพ็คเกจของฉัน <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $nump ?></span>
                 </h2>
               </div>
-              <form class="form">
-                <div class="input-group input-group-lg bg-white border">
-                  <div class="input-group-prepend">
-                    <button class="btn pr-0 shadow-none" type="button"><i class="far fa-search"></i></button>
-                  </div>
-                  <input type="text" class="form-control bg-transparent border-0 shadow-none text-body" placeholder="ค้นหา" name="search">
-                </div>
-              </form>
             </div>
             <div class="table-responsive">
               <table class="table table-hover border rounded-lg mb-6 bg-white">
                 <thead class="thead-sm thead-black">
                   <tr>
-                    <th scope="col" class="border-top-0 px-6 pt-5 pb-4 fs-14">ประเภทแพ็คเก็จ</th>
+                    <th scope="col" class="border-top-0 px-5 pb-4 fs-14">ลำดับที่</th>
+                    <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">วันที่ซื้อ</th>
+                    <th scope="col" class="border-top-0 px-5 pb-4 fs-14">รหัสสั่งซื้อ</th>
+                    <th scope="col" class="border-top-0 px-5 pb-4 fs-14">ประเภทแพ็คเก็จ</th>
                     <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">ราคา</th>
+                    <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">วิธีชำระเงิน</th>
                     <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">วันหมดอายุ</th>
                   </tr>
                 </thead>
+                <?php while ($rowp = mysqli_fetch_array($resultpa)) { ?>
                 <tbody>
                   <tr class="shadow-hover-xs-2 bg-hover-white">
+                  <td class="align-middle p-6">
+                     <?php echo $order++ ?>
+                    </td>
+                    <td class="align-middle">
+                    <?php echo $rowp['datetime_order'] ; ?>
+                    </td>
                     <td class="align-middle p-6">
-                      <a href="#" class="text-dark font-weight-500 hover-primary pt-1">Free</a>
+                     <?php echo $rowp['referenceNo'] ?>
                     </td>
                     <td class="align-middle">
-                      ฿0
+                    <?php echo $rowp['pack_name'] ?>
                     </td>
                     <td class="align-middle">
-                      19 มกราคม 2019
-                    </td>
-                  </tr>
-                  <tr class="shadow-hover-xs-2 bg-hover-white">
-                    <td class="align-middle p-6">
-                      <a href="#" class="text-dark font-weight-500 hover-primary pt-1">Standard</a>
+                    <?php echo $rowp['price'] ?>
                     </td>
                     <td class="align-middle">
-                      ฿499
+                    <?php if($rowp['resultCode'] == '00') { echo $rowp['paymentType']; }else{ echo 'ยังไม่ได้ชำระเงิน'; } ?>
                     </td>
+                    <?php 
+                    $period = $rowp['period'];
+                    $time = strtotime($rowp['datetime_order']) ;
+                    $month = '+'.$period.'day';
+                    $stop_date = date('Y-m-d', strtotime($month,$time));
+                    
+                    $sqlam = "SELECT SUM(price) FROM pay_status WHERE u_id = $id AND resultCode = '00' ";
+                    $qr = mysqli_query($con,$sqlam);
+                    $amount = mysqli_fetch_array($qr);
+                    ?>
                     <td class="align-middle">
-                      30 ธันวาคม 2019
-                    </td>
-                  </tr>
-                  <tr class="shadow-hover-xs-2 bg-hover-white">
-                    <td class="align-middle p-6">
-                      <a href="#" class="text-dark font-weight-500 hover-primary pt-1">Special</a>
-                    </td>
-                    <td class="align-middle">
-                      ฿799
-                    </td>
-                    <td class="align-middle">
-                      05 ตุลาตม 2019
-                    </td>
-                  </tr>
-                  <tr class="shadow-hover-xs-2 bg-hover-white">
-                    <td class="align-middle p-6">
-                      <a href="#" class="text-dark font-weight-500 hover-primary pt-1">Bussiness</a>
-                    </td>
-                    <td class="align-middle">
-                      ฿1,200
-                    </td>
-                    <td class="align-middle">
-                      28 มิถุนายน 2019
+                    <?php echo $stop_date ?>
                     </td>
                   </tr>
                 </tbody>
+                <?php } ?>
               </table>
             </div>
+            <div class="d-flex flex-wrap flex-md-nowrap mb-6">
+              <div class="mr-0 mr-md-auto">
+                <h2 class="mb-0 text-heading fs-22 lh-15"> ยอดรวม <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $amount['SUM(price)'] ?></span> บาท
+                </h2>
+              </div>
+            </div>
             <div class="text-right">
-              <a href="#" class="btn btn-lg btn-primary">เปลี่ยนแพ็คเก็จ</a>
+              <a href="packages.php" class="btn btn-lg btn-primary">เปลี่ยนแพ็คเก็จ</a>
             </div>
           </div>
         </main>

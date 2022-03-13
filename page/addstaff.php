@@ -153,7 +153,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <textarea type="text" class="form-control" id="exampleInputEmail1" name="address" value="" placeholder="ที่อยู่" required></textarea>
 
                                 </div>
-                                <div class="form-group">
+                                <!-- <div class="form-group">
 
                                     <label for="exampleInputEmail1">วันเกิด</label>
                                     <input type="date" class="form-control" id="exampleInputEmail1" name="birth_date" value="" placeholder="วันเกิด" required>
@@ -162,7 +162,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">เลขบัตรประชาชน</label>
                                     <input type="text" class="form-control" id="exampleInputEmail1" name="id_card" value="" placeholder="เลขบัตรประชาชน" required>
-                                </div>
+                                </div> -->
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">

@@ -101,7 +101,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($row2 = mysqli_fetch_array($result2)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../image/a_img/<?php echo $row2['a_img'] ?>"style="border-radius:50%" width="100"></td>
+                                                <td><img src="../image/a_img/<?php echo $row2['a_img'] ?>" width="100"></td>
                                                 <td><?php echo $row2['a_type']; ?></td>
                                                 <td><?php echo $row2['a_title']; ?></td>
                                                 <td><?php echo $row2['a_note']; ?></td>
@@ -183,8 +183,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         $("#example1").DataTable({
                             "responsive": true,
                             "lengthChange": false,
-                            "autoWidth": false,
-                            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+                            "autoWidth": false
+                            // "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
                         }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
                         $('#example2').DataTable({
                             "paging": true,

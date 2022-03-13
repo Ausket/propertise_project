@@ -90,7 +90,7 @@
               </div>
             </div>
             <div class="row">
-              <div class="col-sm-6 col-xxl-4 mb-6">
+              <div class="col-sm-6 col-xxl-3 mb-6">
                 <div class="card">
                   <div class="card-body row align-items-center px-6 py-7">
                     <div class="col-5">
@@ -102,12 +102,29 @@
                     </div>
                     <div class="col-7 text-center">
                       <p class="fs-42 lh-12 mb-0 counterup" data-start="0" data-end="<?php echo $total_record ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $total_record ?></p>
-                      <p>ประกาศ</p>
+                      <p>ลงประกาศแล้ว</p>
                     </div>
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-xxl-4 mb-6">
+              <div class="col-sm-6 col-xxl-3 mb-6">
+                <div class="card">
+                  <div class="card-body row align-items-center px-6 py-7">
+                    <div class="col-5">
+                      <span class="w-83px h-83 d-flex align-items-center justify-content-center fs-36 badge badge-pink badge-circle">
+                        <svg class="icon icon-heart">
+                          <use xlink:href="#icon-1"></use>
+                        </svg>
+                      </span>
+                    </div>
+                    <div class="col-7 text-center">
+                      <p class="fs-42 lh-12 mb-0 counterup" data-start="0" data-end="<?php echo $total_record2  ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $total_record2 ?></p>
+                      <p>แบบร่างประกาศ</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-xxl-3 mb-6">
                 <div class="card">
                   <div class="card-body row align-items-center px-6 py-7">
                     <div class="col-5">
@@ -117,7 +134,6 @@
                         </svg>
                       </span>
                     </div>
-                    
                     <div class="col-7 text-center">
                       <p class="fs-42 lh-12 mb-0 counterup" data-start="0" data-end="<?php echo $rowv['SUM(view)'] ?>" data-decimals="0" data-duration="0" data-separator=""><?php echo $rowv['SUM(view)'] ?></p>
                       <p>ยอดดูทั้งหมด</p>
@@ -125,7 +141,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-sm-6 col-xxl-4 mb-6">
+              <div class="col-sm-6 col-xxl-3 mb-6">
                 <div class="card">
                   <div class="card-body row align-items-center px-6 py-7">
                     <div class="col-5">

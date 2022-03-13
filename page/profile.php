@@ -133,13 +133,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <?php echo $row['address']; ?>
                 </p>
                 <hr>
-                <strong><i class="fas fa-birthday-cake"></i> วันเกิด</strong>
+                <!-- <strong><i class="fas fa-birthday-cake"></i> วันเกิด</strong>
 
                 <p class="text-muted">
                   <?php echo $row['birth_date']; ?>
-                </p>
+                </p> -->
 
-                <hr>
+                <!-- <hr> -->
                 <strong><i class="fas fa-building"></i> บริษัท</strong>
 
                 <p class="text-muted">
@@ -147,13 +147,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </p>
 
                 <hr>
-                <strong><i class="fas fa-id-card"></i> เลขบัตรประชาชน</strong>
+                <!-- <strong><i class="fas fa-id-card"></i> เลขบัตรประชาชน</strong>
 
                 <p class="text-muted">
                   <?php echo $row['id_card']; ?>
                 </p>
 
-                <hr>
+                <hr> -->
                 <div class="col-12">
                   <a href="edit_profile.php"><button class="btn btn-warning d-block m-auto" type="submit"><i class="fas fa-user-edit"></i> แก้ไข</button></a>
                 </div>

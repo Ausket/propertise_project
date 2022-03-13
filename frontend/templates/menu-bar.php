@@ -206,7 +206,7 @@
             <i class="fal fa-bullhorn"></i>
         </div>
         <div class="txt flex-center-center mt-1">
-            ประกาศของฉัน
+            ประกาศ
         </div>
     </a>
     <a href="dashboard-favourites.php" class="item flex-center-center-wrap">
@@ -222,17 +222,10 @@
             <i class="far fa-box"></i>
         </div>
         <div class="txt flex-center-center mt-1">
-            แพ็คเก็จของฉัน
+            แพ็คเก็จ
         </div>
     </a>
-    <a href="dashboard-profiles.php" class="item flex-center-center-wrap">
-        <div class="icon flex-center-center border-background">
-            <i class="far fa-user"></i>
-        </div>
-        <div class="txt flex-center-center mt-1">
-            ข้อมูลส่วนตัว
-        </div>
-    </a>
+    
 </div>
 
 <script>

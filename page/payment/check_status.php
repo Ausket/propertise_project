@@ -149,7 +149,6 @@ if (isset($_POST['referenceNo']) && !empty($_POST['referenceNo'])) {
             price = '$amount' ,
             resultCode = '$resultCode', 
             merchantDefined	 = '$merchantDefined',
-            pack_name = '$detail',
             date = '$date',
             time = '$time' 
             WHERE referenceNo = '$referentNo'";

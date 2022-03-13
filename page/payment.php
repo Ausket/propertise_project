@@ -19,7 +19,8 @@ $curl = curl_init();
 
 curl_setopt_array($curl, array(
     // CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
-    CURLOPT_URL => 'https://okjung.com/au/page/payment/setupEnvironment.php',
+    // CURLOPT_URL => 'https://okjung.com/au/page/payment/setupEnvironment.php',
+    CURLOPT_URL => 'https://lifejung.com/page/payment/setupEnvironment.php',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -35,6 +36,10 @@ $response = json_decode($response, true);
 
 curl_close($curl);
 // echo $response['path-api'];
+
+$pack = "SELECT * FROM package_type";
+$resultpack = mysqli_query($con, $pack);
+
 
 ?>
 <!DOCTYPE html>
@@ -264,31 +269,37 @@ curl_close($curl);
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">รหัสคำสั่งซื้อ</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="order-id" maxlength="15" placeholder="กรุณากำหนดรหัสคำสั่งซื้อ 15 หลัก">
+                    <input type="text" class="form-control" id="referenceNo" maxlength="15" placeholder="กรุณากำหนดรหัสคำสั่งซื้อ 15 หลัก">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">ชื่อลูกค้า</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="cust-name" placeholder="กรุณากรอกชื่อลูกค้า" value="ศิริพร">
+                    <input type="text" class="form-control" id="cust-name" placeholder="กรุณากรอกชื่อลูกค้า">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">เบอร์โทรศัพท์ลูกค้า</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="cust-phone" maxlength="10" placeholder="กรุณากรอกเบอร์โทรศัพท์" value="0922766755">
+                    <input type="text" class="form-control" id="cust-phone" maxlength="10" placeholder="กรุณากรอกเบอร์โทรศัพท์">
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">รายละเอียดสินค้า</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" id="order-detail" placeholder="กรอกรายละเอียดสินค้า" value="กระเป๋า">
+                    <select class="form-control " id="order-detail" name="order-detail">
+                        <option selected>กรุณาเลือกแพ็คเกจ</option>
+                        <?php while ($rowpack = mysqli_fetch_assoc($resultpack)) : ?>
+                            <option value="<?= $rowpack['packtype_id'] ?>"><?= $rowpack['pack_name'] ?>/ระยะเวลา <?= $rowpack['period'] ?> วัน</option>
+                        <?php endwhile; ?>
+                    </select>
+                   
                 </div>
             </div>
             <div class="form-group row">
                 <label for="inputPassword" class="col-sm-2 col-form-label">ราคาสินค้า</label>
                 <div class="col-sm-10">
-                    <input type="number" class="form-control" id="price" placeholder="กรุณากำหนดราคาสินค้า เป็นทศนิยม 2 ตำแหน่ง เช่น 95.00 หรือ 85.50" value="1200.00">
+                    <input type="number" class="form-control" id="price">
                     <label for="" class="mt-1" style="color:red"> *กรุณากรอกข้อมูลเป็นทศนิยม 2 ตำแหน่ง เช่น 95.00 หรือ 85.50</label>
                 </div>
             </div>
@@ -363,6 +374,13 @@ curl_close($curl);
     <script>
         var resUrl = "";
 
+        let orderID = $('#referenceNo');
+        let random = 1000 + Math.random() * 10000;
+        random = Math.ceil(random)
+        const d = new Date();
+        var referenceNO = `${'ad'+ d.getFullYear()}${("0" + (d.getMonth() + 1)).slice(-2)}${d.getDate()}0${random}`;
+        orderID.val(referenceNO);
+        
         $(document).ready(function() {
             // API เรียกข้อมูล ReponseUrl มาแสดงในหน้าเพจ
             // $.ajax({
@@ -382,62 +400,28 @@ curl_close($curl);
             // });            
         });
 
-        // $("#installment-method").click(function() {
-        //     if ($("#order-id").val() == "" || $("#price").val() == "") {
-        //         // $('#close-mobile-modal').click();
-        //         alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
+        $('#order-detail').change(function() {
+            var id = $(this).val();
+            $.ajax({
+                type: "post",
+                url: "payment/get_price.php",
+                data: {
+                    pack : id
+                },
 
-        //     } else {
-        //         $("#referenceNo-installment").val($("#order-id").val());
-        //         $("#amount-installment").val($("#price").val());
-        //         $.ajax({
-        //             url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
-        //             method: "GET",
-        //             success: function(dataEnvi) {
-        //                 $("#publicKey-installment").val(dataEnvi["public-key"]);
-        //                 $.ajax({
-        //                     url: "<?= $base_api_pay ?>payment/setupResponse.php",
-        //                     method: "GET",
-        //                     success: function(dataRes) {
-        //                         // console.log(data);
-        //                         // กำหนดข้อมูล Back and Response Url ให้ form
-        //                         $("#responseUrl-installment").val(dataRes["install-res-url"]);
-        //                         $("#backgroundUrl-installment").val(dataRes["install-back-url"]);
+                success: function(data) {
+                    // console.log(data.price);
+                    // console.log(data.name);
+                    paymentAmount = parseInt(data);
+                    let price = $('#price');
+                    price.val(paymentAmount.toFixed(2));
+                    // console.log(price);
 
-        //                     },
-        //                 });
-        //             },
-        //         });
+                }
+            });
 
+        });
 
-        //     }
-
-        // });
-
-        // function genChecksumInst() {
-        //     //เรียกใช้ข้อมูล Environment
-        //     $.ajax({
-        //         url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
-        //         method: "GET",
-        //         success: function(dataEnvi) {
-
-        //             //กำหนค่า public key ให้กับ form-payfull
-        //             let hashInstallment = CryptoJS.HmacSHA256(
-        //                 $("#amount-installment").val() +
-        //                 $("#referenceNo-installment").val() +
-        //                 $("#responseUrl-installment").val() +
-        //                 $("#backgroundUrl-installment").val() +
-        //                 $("#bankCode-installment").val() +
-        //                 $("#term-installment").val(), dataEnvi["secret-key"]);
-        //             $("#checksum-installment").val(hashInstallment);
-
-
-        //         },
-        //     });
-
-
-
-        // }
         function checkPay() {
             $.ajax({
                 type: "POST",
@@ -478,12 +462,12 @@ curl_close($curl);
         });
 
         $("#credit-method").click(function() {
-            if ($("#order-id").val() == "" || $("#price").val() == "") {
+            if ($("#referenceNo").val() == "" || $("#price").val() == "") {
                 // $('#close-mobile-modal').click();
                 alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
 
             } else {
-                $("#referenceNo-credit").val($("#order-id").val());
+                $("#referenceNo-credit").val($("#referenceNo").val());
                 $("#amount-credit").val($("#price").val());
             }
 
@@ -585,12 +569,12 @@ curl_close($curl);
 
 
         $("#mobile-method").click(function() {
-            if ($("#order-id").val() == "" || $("#price").val() == "") {
+            if ($("#referenceNo").val() == "" || $("#price").val() == "") {
                 // $('#close-mobile-modal').click();
                 alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
 
             } else {
-                $("#ref-mobile").val($("#order-id").val());
+                $("#ref-mobile").val($("#referenceNo").val());
                 $("#price-mobile").val($("#price").val());
                 $("#cust-phone-mobile").val($("#cust-phone").val());
             }
@@ -598,18 +582,18 @@ curl_close($curl);
         });
 
         function getQR() {
-            if ($("#order-id").val() == "" || $("#price").val() == "") {
+            if ($("#referenceNo").val() == "" || $("#price").val() == "") {
                 alert('กรุณากำหนดข้อมูลให้ถูกต้อง');
             } else {
                 payQR(
                     '/gbp/gateway/qrcode/text',
-                    $("#order-id").val(),
+                    $("#referenceNo").val(),
                     $("#price").val(),
                     '#img-qr-cash'
                 )
                 payQR(
                     '/gbp/gateway/qrcredit/text',
-                    $("#order-id").val(),
+                    $("#referenceNo").val(),
                     $("#price").val(),
                     '#img-qr-credit'
                 )
@@ -634,7 +618,7 @@ curl_close($curl);
             } else {
                 payBill(
                     "/gbp/gateway/barcode/text",
-                    $("#order-id").val(),
+                    $("#referenceNo").val(),
                     $("#price").val(),
                     $("#cust-name").val(),
                     $("#order-detail").val(),
@@ -651,13 +635,17 @@ curl_close($curl);
         }
 
         function create_order() {
+            let name = $("#order-detail option:selected").text();
             $.ajax({
                 url: "<?= $base_api_pay ?>payment/create_order.php",
                 // url: "http://localhost/deena/project-api/v1/create_order.php",
                 method: "POST",
                 data: JSON.stringify({
-                    referenceNo: $("#order-id").val(),
+                    referenceNo: $("#referenceNo").val(),
                     price: $("#price").val(),
+                    name: $("#cust-name").val(),
+                    pack: name,
+                    id: "<?= $_SESSION['u_id'] ?>"
                 }),
                 success: function(data) {
                     console.log(data);

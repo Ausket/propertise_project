@@ -176,6 +176,12 @@ $resultt = mysqli_query($con, $sqlt);
 $sqlat = "SELECT * FROM advertise_type  ";
 $resultat = mysqli_query($con, $sqlat);
 
+$sql6 = "SELECT COUNT(pd_id),pd_id FROM file GROUP BY pd_id";
+$result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
+
+$sqlb = "SELECT * FROM advertise ORDER BY advertise.view DESC limit 5";
+$resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -430,12 +436,12 @@ $resultat = mysqli_query($con, $sqlat);
                   <!-- Show Numbers Of Rows -->
                   <select class="form-control" name="state" id="maxRows">
                     <option value="6000">แสดงทั้งหมด</option>
-                    <option value="6">6</option>
-                    <option value="12">12</option>
-                    <option value="18">18</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="25">25</option>
                     <option value="30">30</option>
                     <option value="60">60</option>
-                    <option value="90">90</option>
+                    <option value="100">100</option>
                     <option value="150">150</option>
                   </select>
                 </div>
@@ -451,20 +457,34 @@ $resultat = mysqli_query($con, $sqlat);
                       <img src="../image/p_img/<?php echo $row2['img_video']; ?>" id="proimg<?php echo $row2['a_id'] ?>" alt="<?php echo $row2['img_video']; ?>">
                       <div class="card-img-overlay d-flex flex-column">
                         <div>
+                        <?php foreach ($resultb as $key2) {
+                          if ($key2['a_id'] == $row2['a_id']) { ?>
+                            <span class="badge badge-orange mr-2">ยอดนิยม</span>
+                        <?php }
+                        } ?>
                           <span class='badge mr-2' style="background-color:<?php echo $row2['color'] ?> ; color:white;"><?php echo $row2['type'] ?></span>
                         </div>
                         <div class="mt-auto d-flex hover-image">
                           <ul class="list-inline mb-0 d-flex align-items-end mr-auto">
-                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="9 Images">
-                              <a href="#" class="text-white hover-primary">
-                                <i class="far fa-images"></i><span class="pl-1">9</span>
+                            <li class="list-inline-item mr-2" data-toggle="tooltip" title="<?php foreach ($result6 as $key) {
+                                                                                              if ($key['pd_id'] == $row2['pd_id']) {
+                                                                                                echo $key['COUNT(pd_id)'];
+                                                                                              }
+                                                                                            } ?> Images">
+                              <a href="home-details.php?id=<?php echo $row2['a_id'] ?>" class="text-white hover-primary">
+                                <i class="far fa-images"></i><span class="pl-1">
+                                  <?php foreach ($result6 as $key) {
+                                    if ($key['pd_id'] == $row2['pd_id']) {
+                                      echo $key['COUNT(pd_id)'];
+                                    }
+                                  } ?></span>
                               </a>
                             </li>
-                            <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
+                            <!-- <li class="list-inline-item" data-toggle="tooltip" title="2 Video">
                               <a href="#" class="text-white hover-primary">
                                 <i class="far fa-play-circle"></i><span class="pl-1">2</span>
                               </a>
-                            </li>
+                            </li> -->
                           </ul>
 
                           <ul class="list-inline mb-0 d-flex align-items-end mr-n3">
@@ -522,7 +542,7 @@ $resultat = mysqli_query($con, $sqlat);
                           }
                         } ?>
                         <?php echo $row2['postal_code']; ?></p>
-                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16">฿<?php echo $row2['price']; ?></p>
+                      <p class="fs-17 font-weight-bold text-heading mb-0 lh-16"><?php echo $row2['price']; ?> บาท</p>
                     </div>
                     <div class="card-footer bg-transparent px-0 pb-0 pt-2">
                       <ul class="list-inline mb-0">
@@ -855,7 +875,7 @@ $resultat = mysqli_query($con, $sqlat);
           }); // end of on click pagination list
           limitPagging();
         })
-        .val(6)
+        .val(10)
         .change();
 
       // end of on select change

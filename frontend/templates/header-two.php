@@ -37,8 +37,8 @@ if (isset($_POST['submit'])) {
             $_SESSION['last_login_timestamp'] = time();
 
             if (!empty($_POST['remember'])) {
-                setcookie('user_login',$_POST['email'],time()+(1 * 24 * 60 * 60),'/');
-                setcookie('user_password',$_POST['password'],time()+(1 * 24 * 60 * 60),'/');
+                setcookie('user_login', $_POST['email'], time() + (1 * 24 * 60 * 60), '/');
+                setcookie('user_password', $_POST['password'], time() + (1 * 24 * 60 * 60), '/');
             } else {
 
                 if (isset($_COOKIE['user_login'])) {
@@ -54,20 +54,20 @@ if (isset($_POST['submit'])) {
             if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
                 header("location: ../page/profile.php");
             }
-            // if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
-            //     header("location: ../index.php");
-            // }
+            if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
+                header("location: dashboard-profiles.php");
+            }
         } else {
             echo "<script>";
             echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
             echo "</script>";
-            header('Refresh:0; url=../index.php');
+            // header('Refresh:0; url=../index.php');
         }
     }
 }
 
 $linkpri = "privacypolicy.php";
-$linkcook ="cookiepolicy.php";
+$linkcook = "cookiepolicy.php";
 
 ?>
 <!-- Google fonts -->
@@ -76,6 +76,10 @@ $linkcook ="cookiepolicy.php";
 
     * {
         font-family: 'Prompt', sans-serif;
+    }
+
+    .line {
+        background-color: #00B900;
     }
 </style>
 <!-- <?php include 'cookies.php'; ?> -->
@@ -230,9 +234,10 @@ $linkcook ="cookiepolicy.php";
                                         <span class="input-group-text bg-gray-01 border-0 text-muted fs-18" id="inputGroup-sizing-lg">
                                             <i class="far fa-user"></i></span>
                                     </div>
-                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" value="<?php if(isset($_COOKIE['user_login'])){
-                                    
-                                    echo $_COOKIE['user_login']; } ?>" required placeholder="อีเมล">
+                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" value="<?php if (isset($_COOKIE['user_login'])) {
+
+                                                                                                                                            echo $_COOKIE['user_login'];
+                                                                                                                                        } ?>" required placeholder="อีเมล">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -243,7 +248,9 @@ $linkcook ="cookiepolicy.php";
                                             <i class="far fa-lock"></i>
                                         </span>
                                     </div>
-                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" value="<?php if(isset($_COOKIE['user_login'])){ echo $_COOKIE['user_password'];} ?>" required placeholder="รหัสผ่าน">
+                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" value="<?php if (isset($_COOKIE['user_login'])) {
+                                                                                                                                                    echo $_COOKIE['user_password'];
+                                                                                                                                                } ?>" required placeholder="รหัสผ่าน">
                                     <div class="input-group-append">
                                         <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
                                             <i class="far fa-eye-slash"></i>
@@ -253,7 +260,7 @@ $linkcook ="cookiepolicy.php";
                             </div>
                             <div class="d-flex mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" <?php if(isset($_COOKIE['user_login'])){?> checked <?php }  ?> id="remember-me" name="remember">
+                                    <input class="form-check-input" type="checkbox" <?php if (isset($_COOKIE['user_login'])) { ?> checked <?php }  ?> id="remember-me" name="remember">
                                     <label class="form-check-label" for="remember-me">
                                         บันทึกการเข้าสู่ระบบ
                                     </label>
@@ -270,19 +277,9 @@ $linkcook ="cookiepolicy.php";
                             </span>
                         </div>
                         <div class="row no-gutters mx-n2">
-                            <div class="col-4 px-2 mb-4">
-                                <a href="dashboard-profiles.php" class="btn btn-lg btn-block facebook text-white px-0">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                            </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block google px-0">
-                                    <img src="../images/google.png" alt="Google">
-                                </a>
-                            </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
-                                    <i class="fab fa-twitter"></i>
+                            <div class="col-12 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                                    <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
                         </div>
@@ -344,25 +341,12 @@ $linkcook ="cookiepolicy.php";
                             </span>
                         </div>
                         <div class="row no-gutters mx-n2">
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block facebook text-white px-0">
-                                    <i class="fab fa-facebook-f"></i>
+                            <div class="col-12 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                                    <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block google px-0">
-                                    <img src="../images/google.png" alt="Google">
-                                </a>
-                            </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="mt-2">การสร้างบัญชีแสดงว่าคุณยอมรับ
-                            <a class="text-heading" href="#"><u>ข้อกำหนดการใช้งาน</u> </a> และ
-                            <a class="text-heading" href="#"><u>นโยบายความเป็นส่วนตัว</u></a>.
+
                         </div>
                     </div>
                 </div>

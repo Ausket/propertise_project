@@ -10,7 +10,8 @@ $curl = curl_init();
 
 curl_setopt_array($curl, array(
   // CURLOPT_URL => 'http://localhost/deena/propertise/page/payment/setupEnvironment.php',
-  CURLOPT_URL => 'https://okjung.com/au/page/payment/setupEnvironment.php',
+  // CURLOPT_URL => 'https://okjung.com/au/page/payment/setupEnvironment.php',
+  CURLOPT_URL => 'https://lifejung.com/page/payment/setupEnvironment.php',
   CURLOPT_RETURNTRANSFER => true,
   CURLOPT_ENCODING => '',
   CURLOPT_MAXREDIRS => 10,
@@ -219,29 +220,25 @@ curl_close($curl);
             <div onclick="setData(this)" id="<?php echo $rowp['packtype_id'] ?>" class="col-xl-3 col-sm-6 mb-6">
               <div class="card bg-gray-01 border-0 p-4 overflow-hidden">
                 <div class="card-header bg-transparent p-0">
-                  <p class="fs-15 font-weight-600 text-heading mb-0" id="tital-detail"><?php echo $rowp['pack_name'] ?></p>
-                  <p class="fs-32 font-weight-500 text-heading lh-15 mb-1"><?php echo $rowp['price'] ?> บาท</p>
+                  <p class="fs-32 font-weight-600 text-heading mb-0 " id="tital-detail"><i class="fas fa-box-check" style="color:#0ec6d5;"></i> <?php echo $rowp['pack_name'] ?></p>
+                  <p class="fs-24 font-weight-500 text-heading lh-15 mb-1"><?php echo $rowp['price'] ?> บาท</p>
                 </div>
                 <div class="card-body p-0">
                   <ul class="list-unstyled pt-2 mb-2">
                     <li class="d-flex justify-content-between">
                       <p class="text-gray-light mb-0">ระยะเวลา</p>
-                      <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['period'] ?> เดือน</p>
+                      <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['period'] ?> วัน</p>
                     </li>
                     <li class="d-flex justify-content-between">
                       <p class="text-gray-light mb-0">รูปภาพ</p>
                       <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['images'] ?></p>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <p class="text-gray-light mb-0">วีดีโอ</p>
-                      <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['video'] ?></p>
-                    </li>
-                    <li class="d-flex justify-content-between">
                       <p class="text-gray-light mb-0">หน้าเพจ</p>
                       <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['page'] ?></p>
                     </li>
                     <li class="d-flex justify-content-between">
-                      <p class="text-gray-light mb-0">ประกาศ</p>
+                      <p class="text-gray-light mb-0">ดันประกาศ</p>
                       <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['boots'] ?></p>
                     </li>
                   </ul>
@@ -516,9 +513,6 @@ curl_close($curl);
                                 <button class="btn btn-lg btn-primary mb-3 next-button" id="nextbtn" style="display:none;"> ขั้นตอนต่อไป
                                   <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                                 </button>
-                                
-                             
-
                               </div>
                             </div>
                           </div>
@@ -665,7 +659,7 @@ curl_close($curl);
           let tel = $('#tel');
           let getDetail = data.pack_name;
           tel.val(formatPhoneNumber(tel.val()));
-          price.val(numberWithCommas(paymentAmount.toFixed(2)));
+          price.val(paymentAmount.toFixed(2));
           detail.val(getDetail);
           name.val("<?= $_SESSION['name'] ?>");
 
@@ -690,7 +684,8 @@ curl_close($curl);
 
       } else {
         $("#order-id-credit-card").val($("#referenceNo").val());
-        $("#price-credit-card").val($("#price").val());
+        var price_credit = $("#price").val();
+        $("#price-credit-card").val();
       }
 
     });
@@ -717,7 +712,9 @@ curl_close($curl);
                 url: "<?= $base_api_pay ?>payment/setupEnvironment.php",
                 method: "GET",
                 success: function(dataEnvi) {
+
                   if (backUrl != "") {
+
                     //กำหนค่า public key ให้กับ form-payfull
                     $("#public-key-credit").val(dataEnvi["public-key"]);
                     payCredit(
@@ -834,7 +831,7 @@ curl_close($curl);
           timer: 1000
         })
       }
-      // document.getElementById('nextbtn').style.display = "block";
+      document.getElementById('next').style.display = "block";
     }
 
     function submitFormMobile() {
@@ -862,7 +859,7 @@ curl_close($curl);
           timer: 1000
         })
       }
-      // document.getElementById('nextbtn').style.display = "block";
+      document.getElementById('next').style.display = "block";
 
     }
 
@@ -879,7 +876,16 @@ curl_close($curl);
           id: "<?= $_SESSION['u_id'] ?>"
         }),
         success: function(data) {
-          console.log(data);
+          // console.log(data);
+          // if(data.price == '0.00') {
+          //   Swal.fire({
+          //     position: 'top-center',
+          //     icon: 'success',
+          //     title: 'คุณได้รับแพ็คเกจฟรีแล้ว',
+          //     showConfirmButton: false,
+          //     timer: 1000
+          //   })
+       
           Swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -887,6 +893,7 @@ curl_close($curl);
             showConfirmButton: false,
             timer: 1000
           })
+        
 
         }
       });
@@ -900,7 +907,7 @@ curl_close($curl);
       document.getElementById('next').style.display = "none";
     })
 
-    
+
 
     function checkPay() {
       $.ajax({
@@ -912,13 +919,13 @@ curl_close($curl);
         success: function(dataCheck) {
           // console.log(dataCheck)
           // // alert($('#referenceNo').val())
-         
+
           console.log('สถานะการชำระเงิน');
           console.log(dataCheck['resultCode']);
           if (dataCheck['resultCode'] == '00') {
-            
+
             $('#nextbtn').click()
-            $('#success').attr('style', 'opacity: 1; display: block;');
+            // $('#success').attr('style', 'opacity: 1; display: block;');
             // $('#fieldset').attr('style', 'position: relative; opacity: 0; display: none;');
             // $('#confirm').attr('class', 'active');
             // $('#progress-bar').attr('style', 'width: 100%;');
@@ -952,8 +959,6 @@ curl_close($curl);
     $("#check-pay-bill").click(function() {
       checkPay()
     });
-
-
   </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

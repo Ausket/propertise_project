@@ -3,7 +3,7 @@ require_once('../dbconnect.php');
 
 $id = $_SESSION['u_id'];
 if (empty($id)) {
-  header('Location:login.php');
+  header('Location:../index.php');
 }
 $sql = "SELECT * FROM users WHERE u_id= $id ";
 $result = mysqli_query($con, $sql);
@@ -97,19 +97,24 @@ $resultp = mysqli_query($con, $sqlp);
                           <div class="form-row mx-n4">
                             <div class="form-group col-md-6 px-4">
                               <label for="name" class="text-heading"> ชื่อ-นามสกุล </label>
-                              <input type="text" class="form-control form-control-lg border-0" id="name" name="name" value="<?php echo $row['name']; ?>" >
+                              <input type="text" class="form-control form-control-lg border-0" id="name" name="name" value="<?php echo $row['name']; ?>">
                             </div>
                             <div class="form-group col-md-6 px-4">
-                              <label for="email" class="text-heading"> อีเมล </label>
-                              <input type="email" class="form-control form-control-lg border-0" id="email" name="email" value="<?php echo $row['email']; ?>" >
+                              <label for="phone" class="text-heading"> เบอร์โทร </label>
+                              <input type="number" class="form-control form-control-lg border-0" id="phone" name="tel" value="<?php echo $row['tel']; ?>">
                             </div>
                           </div>
                           <div class="form-row mx-n4">
                             <div class="form-group col-md-6 px-4">
-                              <label for="phone" class="text-heading"> เบอร์โทร </label>
-                              <input type="number" class="form-control form-control-lg border-0" id="phone" name="tel" value="<?php echo $row['tel']; ?>" >
+                              <label for="line_id" class="text-heading"> LINE ID </label>
+                              <input type="text" class="form-control form-control-lg border-0" id="line_id" name="line_id" value="<?php echo $row['line_id']; ?>">
                             </div>
                             <div class="form-group col-md-6 px-4">
+                              <label for="email" class="text-heading"> อีเมล </label>
+                              <input type="email" class="form-control form-control-lg border-0" id="email" name="email" value="<?php echo $row['email']; ?>">
+                            </div>
+                          </div>
+                          <!-- <div class="form-group col-md-6 px-4">
                               <label for="date" class="text-heading"> วันเกิด </label>
                               <input type="date" class="form-control form-control-lg border-0" id="date" name="birth_date" value="<?php echo $row['birth_date']; ?>">
                             </div>
@@ -118,10 +123,15 @@ $resultp = mysqli_query($con, $sqlp);
                             <div class="form-group col-md-6 px-4 mb-md-0">
                               <label for="citizen_id" class="text-heading"> รหัสประจำตัวประชาชน </label>
                               <input type="number" class="form-control form-control-lg border-0" id="citizen_id" name="id_card" value="<?php echo $row['id_card']; ?>" >
+                            </div> -->
+                          <div class="form-row mx-n4">
+                          <div class="form-group col-md-6 px-4 mb-md-0">
+                              <label for="website" class="text-heading"> เว็บไซต์ </label>
+                              <input type="text" class="form-control form-control-lg border-0" id="website" name="website" value="<?php echo $row['website']; ?>">
                             </div>
                             <div class="form-group col-md-6 px-4 mb-md-0">
                               <label for="company" class="text-heading"> บริษัท </label>
-                              <input type="text" class="form-control form-control-lg border-0" id="company" name="company" value="<?php echo $row['company']; ?>" >
+                              <input type="text" class="form-control form-control-lg border-0" id="company" name="company" value="<?php echo $row['company']; ?>">
                             </div>
                           </div>
                           <div class="form-row mx-n4">
@@ -133,8 +143,8 @@ $resultp = mysqli_query($con, $sqlp);
                         </div>
                     </div>
                     <div class="d-flex justify-content-center flex-wrap">
-                      <button class="btn btn-lg btn-danger border rounded-lg mb-3">ลบบัญชีผู้ใช้</button>
-                      <button type="submit"  class="btn btn-lg btn-primary ml-4 mb-3">อัพเดตโปรไฟล์</button></form>
+                      <a href="../backend/del_account.php?id=<?php echo $row['u_id'] ?>" class="btn btn-lg btn-danger border rounded-lg mb-3" onclick="return confirm('ต้องการลบข้อมูลผู้ใช้นี้จริงหรือ ?')">ลบบัญชีผู้ใช้</a>
+                      <button type="submit" class="btn btn-lg btn-primary ml-4 mb-3">อัพเดตโปรไฟล์</button></form>
                     </div>
                   </div>
                 </div>
@@ -188,7 +198,7 @@ $resultp = mysqli_query($con, $sqlp);
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
-  
+
   <!-- Modal -->
   <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

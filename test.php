@@ -69,29 +69,21 @@
 
         $("#attachment").on('change', function(e) {
             for (var i = 0; i < this.files.length; i++) {
-                var reader = new FileReader();
-                reader.onload = (function(c) {
-                  let  img = $('<img/>', {
-                            class: 'show',
-                            stc: c.target.result
-                        });
-                });
-                reader.readAsDataURL(this.files[i]);
+                
+                let fileBloc = $('<span/>', {
+                        class: 'file-block'
+                    }),
+                    fileName = $('<span/>', {
+                        class: 'name',
+                        text: this.files.item(i).name
+                    });
 
-                    let fileBloc = $('<span/>', {
-                            class: 'file-block'
-                        }),
-                        fileName = $('<span/>', {
-                            class: 'name',
-                            text: this.files.item(i).name
-                        });
 
-                       
-                    fileBloc.append('<span class="file-delete"><span>+</span></span>')
-                        .append(fileName);
-                    $("#filesList > #files-names").append(fileBloc);
+                fileBloc.append('<span class="file-delete"><span>+</span></span>')
+                   .append(fileName);
+                $("#filesList > #files-names").append(fileBloc);
 
-               
+
             };
 
 

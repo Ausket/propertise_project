@@ -9,8 +9,9 @@ $bathroom = $_POST['bathroom'];
 $parking = $_POST['parking'];
 $price = $_POST['price'];
 $space_area = $_POST['space_area'];
-$facility = implode(",", $_POST["facility"]);
-
+if (isset($_POST["facility"])) {
+    $facility = implode(",", $_POST["facility"]);
+}
 $house_no = $_POST['house_no'];
 $village_no = $_POST['village_no'];
 $lane = $_POST['lane'];
@@ -63,7 +64,11 @@ if ($file != '') {
         $row3 = mysqli_fetch_assoc($result3);
         $l_id = $row3['l_id'];
 
-        $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id','$facility') ";
+        if (isset($_POST["facility"])) {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id','$facility') ";
+        } else {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id') ";
+        }
         $result = mysqli_query($con, $sql);
 
         $sql4 = "SELECT * FROM property_detail ORDER BY pd_id DESC LIMIT 1";
@@ -74,7 +79,7 @@ if ($file != '') {
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
-        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+        $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
 
         $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
         $qry = mysqli_query($con, $check) or die(mysqli_error($con));
@@ -130,7 +135,11 @@ if ($file != '') {
         $row3 = mysqli_fetch_assoc($result3);
         $l_id = $row3['l_id'];
 
-        $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id','$facility') ";
+        if (isset($_POST["facility"])) {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id','$facility') ";
+        } else {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','$newname','$space_area','$id') ";
+        }
         $result = mysqli_query($con, $sql);
 
         $sql4 = "SELECT * FROM property_detail ORDER BY pd_id DESC LIMIT 1";
@@ -141,7 +150,7 @@ if ($file != '') {
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
-        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+        $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
 
         $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
         $qry = mysqli_query($con, $check) or die(mysqli_error($con));
@@ -199,7 +208,11 @@ if ($file != '') {
         $row3 = mysqli_fetch_assoc($result3);
         $l_id = $row3['l_id'];
 
-        $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id','$facility') ";
+        if (isset($_POST["facility"])) {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id','$facility') ";
+        } else {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id') ";
+        }
         $result = mysqli_query($con, $sql);
 
         $sql4 = "SELECT * FROM property_detail ORDER BY pd_id DESC LIMIT 1";
@@ -210,7 +223,7 @@ if ($file != '') {
         $sql6 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2') ";
         $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
 
-        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+        $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
 
         $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
         $qry = mysqli_query($con, $check) or die(mysqli_error($con));
@@ -221,10 +234,10 @@ if ($file != '') {
         $qry2 = mysqli_query($con, $namep) or die(mysqli_error($con));
         foreach ($qry2 as $value) {
 
-        if ($rs['ptype_id'] == $value['ptype_id']) {
-            $code = $value['name_short'];
+            if ($rs['ptype_id'] == $value['ptype_id']) {
+                $code = $value['name_short'];
+            }
         }
-    }
 
         $maxId = substr($rs['a_id'], -5);
         $maxId = substr("00000" . $maxId, -5);
@@ -268,7 +281,11 @@ if ($file != '') {
         $row3 = mysqli_fetch_assoc($result3);
         $l_id = $row3['l_id'];
 
-        $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id','$facility') ";
+        if (isset($_POST["facility"])) {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id,facility) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id','$facility') ";
+        } else {
+            $sql = "INSERT INTO property_detail(ptype_id,l_id,project_name,bedroom,bathroom,parking,price,img_video,space_area,u_id) VALUES('$ptype','$l_id','$project_name','$bedroom','$bathroom','$parking','$price','home.png','$space_area','$id') ";
+        }
         $result = mysqli_query($con, $sql);
 
         $sql4 = "SELECT * FROM property_detail ORDER BY pd_id DESC LIMIT 1";
@@ -279,7 +296,7 @@ if ($file != '') {
         $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
-        $yearMonth = substr(date("Y") + 543, -2) . date("m");
+        $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
 
         $check = "SELECT * FROM advertise ORDER BY a_id DESC LIMIT 1";
         $qry = mysqli_query($con, $check) or die(mysqli_error($con));

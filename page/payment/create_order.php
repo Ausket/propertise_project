@@ -43,7 +43,7 @@ if ($requestMethod === 'POST') {
             $sql = "INSERT INTO pay_status (referenceNo, price ,name ,pack_name ,u_id) VALUES ('$referenceNo','$amount','$name','$pack','$id')";
 
             $result = mysqli_query($con, $sql);
-
+          
             if ($result) {
                 $detail = 'Insert Data Success';
                 $msg = 'Success';
@@ -85,6 +85,7 @@ if ($resultArr == null) {
 }
 
 echo json_encode($response);
+
 
    
 ?>

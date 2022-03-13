@@ -60,7 +60,7 @@ if (isset($_POST['submit'])) {
                 header("location: page/profile.php");
             }
             if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
-                header("location: index.php");
+                header("location: frontend/dashboard-profiles.php");
             }
         } else {
             echo "<script>";
@@ -91,6 +91,9 @@ $linkcook = "frontend/cookiepolicy.php";
 
     * {
         font-family: 'Prompt', sans-serif;
+    }
+    .line{
+        background-color: #00B900;
     }
 </style>
 <?php include 'cookies.php'; ?>
@@ -293,19 +296,9 @@ $linkcook = "frontend/cookiepolicy.php";
                             </span>
                         </div>
                         <div class="row no-gutters mx-n2">
-                            <div class="col-4 px-2 mb-4">
-                                <a href="frontend/dashboard-profiles.php" class="btn btn-lg btn-block facebook text-white px-0">
-                                    <i class="fab fa-facebook-f"></i>
-                                </a>
-                            </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block google px-0">
-                                    <img src="images/google.png" alt="Google">
-                                </a>
-                            </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
-                                    <i class="fab fa-twitter"></i>
+                            <div class="col-12 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                                <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
                         </div>
@@ -367,25 +360,11 @@ $linkcook = "frontend/cookiepolicy.php";
                             </span>
                         </div>
                         <div class="row no-gutters mx-n2">
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block facebook text-white px-0">
-                                    <i class="fab fa-facebook-f"></i>
+                            <div class="col-12 px-2 mb-4">
+                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                                <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block google px-0">
-                                    <i class="fab fa-google-g"></i>
-                                </a>
-                            </div>
-                            <div class="col-4 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block twitter text-white px-0">
-                                    <i class="fab fa-twitter"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <div class="mt-2">การสร้างบัญชีแสดงว่าคุณยอมรับ
-                            <a class="text-heading" href="#"><u>ข้อกำหนดการใช้งาน</u> </a> และ
-                            <a class="text-heading" href="#"><u>นโยบายความเป็นส่วนตัว</u></a>.
                         </div>
                     </div>
                 </div>
