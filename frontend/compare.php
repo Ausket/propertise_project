@@ -14,12 +14,13 @@ if (isset($_GET["id3"]) ? $_GET["id3"] : '') {
     $sql32 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
-FROM ((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.line_id,users.website
+FROM (((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
     WHERE a_id =  $id3 ";
     $result32 = mysqli_query($con, $sql32) or die(mysqli_error($con));
     $row3 = mysqli_fetch_assoc($result32);
@@ -35,12 +36,13 @@ $facility_arr = array("สระว่ายน้ำ", "ห้องสมุ�
 $sql1 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
-FROM ((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.line_id,users.website
+FROM (((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
     WHERE a_id =  $id1 ";
 $result1 = mysqli_query($con, $sql1) or die(mysqli_error($con));
 $row1 = mysqli_fetch_assoc($result1);
@@ -51,12 +53,13 @@ $pd_id = $row1['l_id'];
 $sql22 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
-FROM ((((advertise
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.line_id,users.website
+FROM (((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
     LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
     LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
+    LEFT  JOIN users ON advertise.u_id = users.u_id)
     WHERE a_id =  $id2 ";
 $result22 = mysqli_query($con, $sql22) or die(mysqli_error($con));
 $row22 = mysqli_fetch_assoc($result22);
@@ -240,7 +243,11 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
             width: 300px;
             height: 200px;
         }
-
+        
+        /* .tel{
+            width:10px;
+            height: 10px;
+        } */
 
         @media screen and (max-width: 1000px) {
             .rows {
@@ -560,14 +567,14 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                     ติดต่อ
                 </div>
                 <div class="rows-two">
-                    <td> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile "></i> <i class="fab fa-facebook icon-facebook"></i> </td>
+                    <td> <a href="https://line.me/ti/p/~<?php echo $row1['line_id'] ?>" target="_blank"><i class="fab fa-line icon-line"></i></a><a href="tel:<?php echo $row1['tel'] ?>"  ><i class="fas fa-phone-square-alt icon-mobile "></i></a> <a href="<?php echo $row1['website'] ?>" target="_blank"> <i class="fas fa-globe icon-facebook"></i></a> </td>
                 </div>
                 <div class="rows-two">
-                    <td> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> <i class="fab fa-facebook icon-facebook"></i> </td>
+                    <td><a href="https://line.me/ti/p/~<?php echo $row22['line_id'] ?>" target="_blank"><i class="fab fa-line icon-line"></i></a><a href="tel:<?php echo $row22['tel'] ?>" ><i class="fas fa-phone-square-alt icon-mobile"></i></a><a href="<?php echo $row22['website'] ?>" target="_blank"><i class="fas fa-globe icon-facebook"></i></a> </td>
                 </div>
                 <div class="rows-two">
                     <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-                        <td> <i class="fab fa-line icon-line"></i> <i class="fas fa-phone-square-alt icon-mobile"></i> <i class="fab fa-facebook icon-facebook"></i></td> <?php } ?>
+                        <td><a href="https://line.me/ti/p/~<?php echo $row3['line_id'] ?>" target="_blank"> <i class="fab fa-line icon-line"></i></a><a href="tel:<?php echo $row3['tel'] ?>" ><i class="fas fa-phone-square-alt icon-mobile"></i></a><a href="<?php echo $row3['website'] ?>" target="_blank"><i class="fas fa-globe icon-facebook"></i></a></td> <?php } ?>
                 </div>
             </div>
         </div>

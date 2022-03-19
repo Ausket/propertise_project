@@ -11,11 +11,13 @@ $address = $_POST["address"];
 $id_card = $_POST["id_card"];
 $company = $_POST["company"];
 $birth_date = $_POST["birth_date"];
+$line_id = $_POST["line_id"];
+$website = $_POST["website"];
 
 
 //แก้ไขข้อมูล
 
-$sql = "UPDATE users SET name='$name',email= '$email',tel='$tel',address='$address',id_card='$id_card',company='$company',birth_date='$birth_date' WHERE u_id = $id";
+$sql = "UPDATE users SET name='$name',email= '$email',tel='$tel',address='$address',company='$company',line_id='$line_id',website='$website' WHERE u_id = $id";
 $result = mysqli_query($con, $sql) or die(mysqli_error($con));
 
 $sql2 = "SELECT * FROM users WHERE u_id = $id";

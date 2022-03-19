@@ -82,7 +82,7 @@ $linkcook = "cookiepolicy.php";
         background-color: #00B900;
     }
 </style>
-<!-- <?php include 'cookies.php'; ?> -->
+<?php include 'cookies.php'; ?>
 <header class="main-header navbar-light header-sticky header-sticky-smart header-mobile-lg">
     <div class=" sticky-area">
         <div class="container container-xxl">
@@ -125,12 +125,12 @@ $linkcook = "cookiepolicy.php";
                                     <span class="caret"></span>
                                 </a>
                             </li>
-                            <li id="navbar-item-dashboard" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
+                            <!-- <li id="navbar-item-dashboard" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
                                 <a class="nav-link p-0" href="calculator.php">
                                     คำนวณสินเชื่อที่อยู่อาศัย
                                     <span class="caret"></span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li id="navbar-item-dashboard" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
                                 <a class="nav-link p-0" href="packages.php">
                                     แพ็คเกจโฆษณา
@@ -180,7 +180,7 @@ $linkcook = "cookiepolicy.php";
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
                                         <a class="dropdown-item" href="../frontend/dashboard-profiles.php">ข้อมูลส่วนตัว</a>
-                                        <a class="dropdown-item" href="../page/logout.php">ออกจากระบบ</a>
+                                        <a class="dropdown-item" href="../page/logout.php" onclick="logOut();">ออกจากระบบ</a>
                                     </div>
                                 </div>
                             </li>
@@ -278,7 +278,7 @@ $linkcook = "cookiepolicy.php";
                         </div>
                         <div class="row no-gutters mx-n2">
                             <div class="col-12 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                                <a href="../frontend/line_login.php" class="btn btn-lg btn-block line text-white px-0">
                                     <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
@@ -342,7 +342,7 @@ $linkcook = "cookiepolicy.php";
                         </div>
                         <div class="row no-gutters mx-n2">
                             <div class="col-12 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
+                                <a href="../frontend/line_login.php" class="btn btn-lg btn-block line text-white px-0">
                                     <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
@@ -354,3 +354,16 @@ $linkcook = "cookiepolicy.php";
         </div>
     </div>
 </div>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+        function logOut() {
+            liff.init({
+                liffId: "1656973328-Oae71Lxj"
+            });
+            liff.logout();
+       
+        }
+
+      
+     
+    </script>

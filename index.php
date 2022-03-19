@@ -10,7 +10,7 @@ LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
 LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
 LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
 LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
-WHERE advertise.ad_status = '1' ORDER BY advertise.a_id  DESC limit 6 ";
+WHERE advertise.ad_status = '1' ORDER BY advertise.date  DESC limit 6 ";
 $result2 = mysqli_query($con, $sql2) or die(mysqli_error($con));
 
 $sql3 = "SELECT location_property.l_id,location_property.province_id,location_property.amphure_id,location_property.district_id,

@@ -145,25 +145,33 @@
 </style>
 <div class="row">
     <div class="col-5 box-one">
-        <h1><span class="text-gradient"> ทำไมต้องโฆษณากับเรา ? </span></h1>
+    <?php $sqlb = "SELECT * FROM article WHERE a_id = '6'";
+      $resultb = mysqli_query($con, $sqlb);
+      $rowb = mysqli_fetch_array($resultb)?>
+        <h1><span class="text-gradient"><?php echo $rowb['a_title'] ?></span></h1>
         <div class="text-all fs-18 text-dark font-weight-400 ">
-            Home ID ตอบโจทย์ความต้องการเช่า-ขาย อสังหาฯ โฆษณากับเรา ช่วยให้คุณประหยัดงบประมาณการทำการตลาด ไม่ต้องสร้างเว็บไซต์โฆษณาขายเอง ลูกค้าดูเว็บไวต์เยอะ หาบ้านที่คุณต้องการขายเจอง่ายๆ รอรับสายลูกค้าที่บ้านได้เลย ประหยัด คุ้ม ดี ที่นี่ Home ID เพื่อนคู่คิด ธุรกิจอสังหาฯ
+        <?php echo $rowb['a_note'] ?>
         </div>
     </div>
     <div class="col-7 box-two">
         <div class="slider">
             <div class="wrapper">
+            <?php $sqlim = "SELECT * FROM article WHERE a_title = 'แบนเนอร์รูปภาพ'";
+             $resultim = mysqli_query($con, $sqlim);
+             ?>
                 <div class="carousel owl-carousel">
+                    <?php  while($rowim = mysqli_fetch_array($resultim)) { ?>
                     <div class="card-two" id="c1">
-                        <img class="img-one" src="images/new0.png" alt="">
+                        <img class="img-one" src="image/a_img/<?php echo $rowim['a_img'] ?>" alt="">
                     </div>
-                    <div class="card-two" id="c2">
+                    <!-- <div class="card-two" id="c2">
                         <img class="img-one" src="images/new1.png" alt="">
                     </div>
                     <div class="card-two" id="c3">
                         <img class="img-one" src="images/new2.png" alt="">
-                    </div>
-                </div>
+                    </div> -->
+                    <?php } ?>
+                </div> 
             </div>
         </div>
 

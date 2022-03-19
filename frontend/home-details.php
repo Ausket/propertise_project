@@ -158,25 +158,25 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
                       <i class="far fa-heart"></i></a>
               </li>
               <?php
-          // pass web-site url
-             $site_url  = "https://lifejung.com/frontend/home-details.php?id=$id";
-          // post title
-             $site_title  = "HOME detail lifejung";
-          ?>
+              // pass web-site url
+              $site_url  = "https://lifejung.com/frontend/home-details.php?id=$id";
+              // post title
+              $site_title  = "HOME detail lifejung";
+              ?>
               <li class="list-inline-item mr-2">
                 <button type="button" class="btn btn-white p-0 d-flex align-items-center justify-content-center w-40px h-40 text-heading bg-hover-primary hover-white rounded-circle border-0 shadow-none" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content=' <ul class="list-inline mb-0">
                     <li class="list-inline-item">
-                      <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                class="fab fa-line"></i></a>
+                    <a href="https://social-plugins.line.me/lineit/share?url=<?= $site_url ?>" target="_blank" class="text-muted fs-17 hover-dark lh-1 px-2"><i
+                                                        class="fab fa-line"></i></a>
                     </li>
                     <li class="list-inline-item ">
-                      <a href="http://www.facebook.com/sharer.php?u=<?=$site_url?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
+                      <a href="http://www.facebook.com/sharer.php?u=<?= $site_url ?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
                                                 class="fab fa-facebook-f"></i></a>
                     </li>
                   
                     <li class="list-inline-item">
-                      <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                class="fab fa-youtube"></i></a>
+                    <a href="https://twitter.com/share?url=<?= $site_url ?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
+                                                        class="fab fa-twitter"></i></a>
                     </li>
                   </ul>
                   '>
@@ -253,7 +253,7 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
                         <li class="list-inline-item mr-0">
                           <span class="text-warning fs-12 lh-2"><i class="fas fa-star"></i></span>
                         </li> -->
-                      <!-- </ul>
+                    <!-- </ul>
                     </li> -->
                   </ul>
                 </div>
@@ -272,19 +272,19 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
                       <span class="col-8 p-0"><?php echo $rowad['email']; ?></span>
                     </li> -->
                     <li class="list-group-item d-flex align-items-sm-center lh-114 row m-0 px-0 pt-3 pb-0">
-                      <span class="col-3 p-0 fs-13">ติดต่อ</span>
+                    <span class="col-3 p-0 fs-13">การติดต่อ</span>
                       <ul class="col-9 list-inline text-gray-lighter m-0 p-0 z-index-2">
                         <li class="list-inline-item m-0">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-twitter"></i></a>
+                          <a href="tel:<?php echo $rowa['tel'] ?>" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-phone"></i></a>
                         </li>
                         <li class="list-inline-item mr-0 ml-2">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-facebook-f"></i></a>
+                          <a  href="https://line.me/ti/p/~<?php echo $rowa['line_id'] ?>" target="_blank" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-line"></i></a>
                         </li>
                         <li class="list-inline-item mr-0 ml-2">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-instagram"></i></a>
+                          <a href="mailto:<?php echo $rowa['email'] ?>" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-envelope"></i></a>
                         </li>
                         <li class="list-inline-item mr-0 ml-2">
-                          <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-linkedin-in"></i></a>
+                          <a href="<?php echo $rowa['website'] ?>" target="_blank" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-browser"></i></a>
                         </li>
                       </ul>
                     </li>
@@ -297,21 +297,20 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
           </div>
           <article class="col-lg-8 mb-6 mb-lg-0">
             <section class="pb-8 px-6 pt-6 bg-white rounded-lg">
-              <div class="row">
-                <div class="col-10">
-                  <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
-                    <?php foreach ($resultb as $key){  if ($key['a_id'] == $rowad['a_id']) {?>
-                      <li class="list-inline-item badge badge-orange mr-3" >ยอดนิยม</li>
-                      <?php } }?>
-                    <li class="list-inline-item badge mr-3" style="background-color : <?php echo $rowad['color']; ?>; color:white;"><?php echo $rowad['type']; ?></li>
-                    <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i> ประกาศ <?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
-                    <li class="list-inline-item mt-2 mt-sm-0"><i class="fal fa-eye mr-1"></i><?php echo $rowad['view']; ?> ครั้ง</li>
-                  </ul>
-                </div>
-                <div class="col-2 text-right ">
-                  <span class="badge badge-pill text-primary fs-18 font-weight-bold "> <?php echo $rowad['ad_id']; ?></span>
-                </div>
-              </div>
+
+
+              <ul class="list-inline d-sm-flex align-items-sm-center mb-2">
+                <?php foreach ($resultb as $key) {
+                  if ($key['a_id'] == $rowad['a_id']) { ?>
+                    <li class="list-inline-item badge badge-orange mr-3">ยอดนิยม</li>
+                <?php }
+                } ?>
+                <li class="list-inline-item badge mr-3" style="background-color : <?php echo $rowad['color']; ?>; color:white;"><?php echo $rowad['type']; ?></li>
+                <li class="list-inline-item mr-2 mt-2 mt-sm-0"><i class="fal fa-clock mr-1"></i> ประกาศ <?php echo $years . ' ' . 'ปี' . ' ' . $months . ' ' . 'เดือน' . ' ' . $days . ' ' . 'วันที่แล้ว' ?></li>
+                <li class="list-inline-item mt-2 mt-sm-0 mr-5"><i class="fal fa-eye mr-1"></i><?php echo $rowad['view']; ?> ครั้ง</li>
+                <li class="list-inline-item mt-2 mt-sm-0"><span class="badge badge-pill text-primary fs-18 font-weight-bold "> <?php echo $rowad['ad_id']; ?></span></li>
+              </ul>
+              
               <div class="d-sm-flex justify-content-sm-between">
                 <div>
                   <h2 class="fs-35 font-weight-600 lh-15 text-heading"><?php echo $rowad['title']; ?></h2>
@@ -418,19 +417,19 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-3 col-sm-4 mb-6">
+                <!-- <div class="col-lg-3 col-sm-4 mb-6">
                   <div class="media">
                     <div class="p-2 shadow-xxs-1 rounded-lg mr-2">
                       <svg class="icon icon-status fs-32 text-primary">
                         <use xlink:href="#icon-status"></use>
                       </svg>
                     </div>
-                    <!-- <div class="media-body">
+                    <div class="media-body">
                       <h5 class="my-1 fs-14 text-uppercase letter-spacing-093 font-weight-normal">สถานะ</h5>
                       <p class="mb-0 fs-13 font-weight-bold text-heading"><?php echo $status; ?></p>
-                    </div> -->
+                    </div>
                   </div>
-                </div>
+                </div>  -->
               </div>
             </section>
             <section class="mt-2 pb-7 px-6 pt-5 bg-white rounded-lg">
@@ -561,6 +560,10 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+  <script type="text/javascript">
+    LineIt.loadButton();
+  </script>
   <script>
     $(document).ready(function($) {
       $('a#fav').on('click', function(e) {
@@ -611,7 +614,9 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
     );
 
 
-    const marker1 = new mapboxgl.Marker({color: 'red'})
+    const marker1 = new mapboxgl.Marker({
+        color: 'red'
+      })
       .setLngLat([<?= $rowad['lng']; ?>, <?= $rowad['lat']; ?>])
       .setPopup(popup).addTo(map)
 

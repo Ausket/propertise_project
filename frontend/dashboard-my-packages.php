@@ -9,7 +9,7 @@ if (empty($id)) {
 
 $sqlpa = "SELECT * FROM (pay_status 
 LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
-WHERE u_id= $id ORDER BY pay_status.id DESC";
+WHERE u_id= $id AND void = '0' ORDER BY pay_status.id DESC";
 $resultpa = mysqli_query($con, $sqlpa);
 $nump = mysqli_num_rows($resultpa);
 
@@ -71,7 +71,7 @@ $order = 1;
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div class="mr-0 mr-md-auto">
-                <h2 class="mb-0 text-heading fs-22 lh-15"> แพ็คเกจของฉัน <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $nump ?></span>
+                <h2 class="mb-0 text-heading fs-22 lh-15"> ประวัติสั่งซื้อแพ็คเกจ <span class="badge badge-white badge-pill text-primary fs-18 font-weight-bold ml-2"><?php echo $nump ?></span>
                 </h2>
               </div>
             </div>
@@ -86,6 +86,7 @@ $order = 1;
                     <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">ราคา</th>
                     <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">วิธีชำระเงิน</th>
                     <th scope="col" class="border-top-0 pt-5 pb-4 fs-14">วันหมดอายุ</th>
+                   
                   </tr>
                 </thead>
                 <?php while ($rowp = mysqli_fetch_array($resultpa)) { ?>
@@ -100,7 +101,7 @@ $order = 1;
                     <td class="align-middle p-6">
                      <?php echo $rowp['referenceNo'] ?>
                     </td>
-                    <td class="align-middle">
+                    <td class="align-middle p-6">
                     <?php echo $rowp['pack_name'] ?>
                     </td>
                     <td class="align-middle">
@@ -114,14 +115,17 @@ $order = 1;
                     $time = strtotime($rowp['datetime_order']) ;
                     $month = '+'.$period.'day';
                     $stop_date = date('Y-m-d', strtotime($month,$time));
+                    $date = date('Y-m-d');
                     
-                    $sqlam = "SELECT SUM(price) FROM pay_status WHERE u_id = $id AND resultCode = '00' ";
+                    $sqlam = "SELECT SUM(price) FROM pay_status WHERE u_id = $id AND resultCode = '00' AND void = '0' ";
                     $qr = mysqli_query($con,$sqlam);
                     $amount = mysqli_fetch_array($qr);
                     ?>
                     <td class="align-middle">
-                    <?php echo $stop_date ?>
+                    <?php if($stop_date == $date ){?><p style="color:red" ><?php echo $stop_date ?> หมดอายุแล้ว</p>
+                      <?php }else{?><p ><?php echo $stop_date ?></p><?php } ?>
                     </td>
+                    
                   </tr>
                 </tbody>
                 <?php } ?>
@@ -133,9 +137,9 @@ $order = 1;
                 </h2>
               </div>
             </div>
-            <div class="text-right">
+            <!-- <div class="text-right">
               <a href="packages.php" class="btn btn-lg btn-primary">เปลี่ยนแพ็คเก็จ</a>
-            </div>
+            </div> -->
           </div>
         </main>
       </div>

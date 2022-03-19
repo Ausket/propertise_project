@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6 col-lg-4 mb-6 mb-md-0">
                 <a class="d-block mb-2" href="#">
-                    <img src="images/logo-white-primary.png" alt="HomeID">
+                    <img src="../images/logo-white-primary.png" alt="HomeID">
                 </a>
                 <div class="lh-26 font-weight-500">
                     <p class="mb-0">44/170 ปริญลักษณ์เพชรเกษม 69 ถนนเลียบฯ ฝั่งเหนือ <br> หนองแขม, หนองแขม, กรุงเทพมหานคร, 10160

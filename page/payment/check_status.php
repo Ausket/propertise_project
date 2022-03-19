@@ -166,6 +166,6 @@ if (isset($_POST['referenceNo']) && !empty($_POST['referenceNo'])) {
     if ($status == true) {
         print_r($response);
     } else {
-        echo json_encode(["resultCode" => "-"]);
+        echo json_encode(["resultCode" => "-" , "status" => ""]);
     }
 }

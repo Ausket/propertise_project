@@ -67,6 +67,7 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
   <meta property="og:url" content="onlinecode.org" />
   <meta property="og:description" content="social media sharing" />
 
+
 </head>
 
 <body>
@@ -137,21 +138,22 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
               <span class="d-inline-block text-heading font-weight-500 lh-17 mr-1">แชร์โพสต์นี้</span>
               <button type="button" class="btn btn-primary rounded-circle w-52px h-52 fs-20 d-inline-flex align-items-center justify-content-center" data-container="body" data-toggle="popover" data-placement="top" data-html="true" data-content=' <ul class="list-inline mb-0">
                   <li class="list-inline-item ">
-                    <a href="http://www.facebook.com/sharer.php?u=<?=$site_url?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
+                    <a href="http://www.facebook.com/sharer.php?u=<?= $site_url ?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
                                                         class="fab fa-facebook-f"></i></a>
                   </li>
                   <li class="list-inline-item">
-                    <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
-                                                        class="fab fa-youtube"></i></a>
+                    <a href="https://twitter.com/share?url=<?= $site_url ?>" target="_blank" class="text-muted fs-15 hover-dark lh-1 px-2"><i
+                                                        class="fab fa-twitter"></i></a>
                   </li>
                   <li class="list-inline-item">
-                    <a href="#" class="text-muted fs-15 hover-dark lh-1 px-2"><i
+                  <a href="https://social-plugins.line.me/lineit/share?url=<?= $site_url ?>" target="_blank" class="text-muted fs-17 hover-dark lh-1 px-2"><i
                                                         class="fab fa-line"></i></a>
                   </li>
                 </ul>
                 '>
                 <i class="fad fa-share-alt"></i>
               </button>
+              <!-- <div class="line-it-button" data-lang="th" data-type="share-b" data-env="REAL" data-url="https://lifejung.com/frontend/blog-details.php?id=<?php echo $ida; ?>" data-color="default" data-size="small" data-count="true" data-ver="3" ></div> -->
             </div>
           </div>
         </div>
@@ -174,6 +176,10 @@ $resultv = mysqli_query($con, $sqlv)  or die(mysqli_error($con));
   <script src="../css/vendors/jparallax/TweenMax.min.js"></script>
   <script src="../css/vendors/mapbox-gl/mapbox-gl.js"></script>
   <script src="../css/vendors/dataTables/jquery.dataTables.min.js"></script>
+  <script src="https://www.line-website.com/social-plugins/js/thirdparty/loader.min.js" async="async" defer="defer"></script>
+  <script type="text/javascript">
+    LineIt.loadButton();
+  </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

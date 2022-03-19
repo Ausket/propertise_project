@@ -21,7 +21,7 @@ $sql2 = "SELECT article.a_title , article.a_note , article.a_img , article.a_img
 article_type.a_type
 FROM (article
 INNER  JOIN  article_type ON article.at_id = article_type.at_id)
-WHERE article.at_id != '8' ORDER BY a_id DESC";
+WHERE article.at_id = '8' ORDER BY a_id DESC";
 $result2 = mysqli_query($con, $sql2);
 $order = 1;
 ?>
@@ -62,7 +62,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 style="text-transform: uppercase">บทความ</h1>
+                        <h1 style="text-transform: uppercase">แบนเนอร์</h1>
                     </div>
                 </div>
             </div><!-- /.container-fluid -->
@@ -78,7 +78,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                         <div class="card">
                             <div class="card-header">
-                                <a href="add_article.php" class="btn btn-warning ">เพิ่มบทความ&nbsp;<i class="fas fa-hand-holding-heart"></i></a>
+                                <a href="add_banner.php" class="btn btn-warning ">เพิ่มแบนเนอร์&nbsp;<i class="fas fa-hand-holding-heart"></i></a>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -87,11 +87,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <tr>
                                             <th>ลำดับ</th>
                                             <th>รูปภาพ</th>
+                                            <!-- <th>หัวข้อหลัก</th> -->
                                             <th>หัวข้อหลัก</th>
-                                            <th>หัวข้อย่อย</th>
                                             <th>รายละเอียด</th>    
-                                            <th>สถานะ</th>
-                                            <th>จัดการ</th>
+                                            <!-- <th>สถานะ</th> -->
+                                            <th width="10%">จัดการ</th>
 
 
                                         </tr>
@@ -101,11 +101,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <?php while ($row2 = mysqli_fetch_array($result2)) { ?>
                                             <tr>
                                                 <td><?php echo $order++ ?></td>
-                                                <td><img src="../image/a_img/<?php echo $row2['a_img'] ?>" width="100"></td>
-                                                <td><?php echo $row2['a_type']; ?></td>
+                                                <td><?php if ($row2['a_img'] != '') { ?>
+                                                    <img src="../image/a_img/<?php echo $row2['a_img'] ?>" width="200"><?php }?></td>
+                                                <!-- <td><?php echo $row2['a_type']; ?></td> -->
                                                 <td><?php echo $row2['a_title']; ?></td>
                                                 <td><?php echo $row2['a_note']; ?></td>
-                                                <td>
+                                                <!-- <td>
                                                 <?php if ($row2['a_status'] == '1') {
 
                                                     $status = 'checked';
@@ -120,11 +121,11 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                                 </label>
 
-                                                </td>
+                                                </td> -->
 
                                                 <td class="text-center">
-                                                    <a href="edit_article.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary"><i class="far fa-edit"></a></i>&nbsp;
-                                                    <a href="../backend/del_article.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('คุณต้องการลบจริงหรือ ?')" class="btn btn-danger"><i class="far fa-trash-alt"></i></a></td>
+                                                    <a href="edit_banner.php?id=<?php echo $row2['a_id']; ?>" class="btn btn-primary "><i class="far fa-edit"></a></i>&nbsp;
+                                                    <a href="../backend/del_article.php?id=<?php echo $row2['a_id']; ?>" onclick="return confirm('คุณต้องการลบจริงหรือ ?')" class="btn btn-danger "><i class="far fa-trash-alt"></i></a></td>
 
                                             </tr>
 
@@ -196,22 +197,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             "responsive": true,
                         });
                     });
-                    $(document).on('click', '.change', function() {
-                            var status_id = $(this).attr("id");
-                            if (status_id != '') {
-                                $.ajax({
-                                    url: "../backend/update_status_article.php",
-                                    method: "POST",
-                                    data: {
-                                        status_id: status_id
-                                    },
-                                    success: function(data) {
+                    // $(document).on('click', '.change', function() {
+                    //         var status_id = $(this).attr("id");
+                    //         if (status_id != '') {
+                    //             $.ajax({
+                    //                 url: "../backend/update_status_article.php",
+                    //                 method: "POST",
+                    //                 data: {
+                    //                     status_id: status_id
+                    //                 },
+                    //                 success: function(data) {
                                         
-                                        console.log(data);
-                                    }
-                                });
-                            }
-                        });
+                    //                     console.log(data);
+                    //                 }
+                    //             });
+                    //         }
+                    //     });
                 </script>
 </body>
 

@@ -26,6 +26,7 @@ $longitude = $_POST['longitude'];
 $atype = $_POST['atype'];
 $title = $_POST['title'];
 $describe = $_POST['describe'];
+$idpack = $_POST['idpack'];
 
 $file = $_FILES['upload_image']['name'];
 $files = pathinfo($file, PATHINFO_FILENAME);
@@ -76,7 +77,7 @@ if ($file != '') {
         $row4 = mysqli_fetch_assoc($result4);
         $pd_id = $row4['pd_id'];
 
-        $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2') ";
+        $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status,pack_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2','$idpack') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
         $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
@@ -147,7 +148,7 @@ if ($file != '') {
         $row4 = mysqli_fetch_assoc($result4);
         $pd_id = $row4['pd_id'];
 
-        $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0') ";
+        $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status,pack_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0','$idpack') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
         $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
@@ -220,7 +221,7 @@ if ($file != '') {
         $row4 = mysqli_fetch_assoc($result4);
         $pd_id = $row4['pd_id'];
 
-        $sql6 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2') ";
+        $sql6 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status,pack_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','2','$idpack') ";
         $result6 = mysqli_query($con, $sql6) or die(mysqli_error($con));
 
         $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");
@@ -293,7 +294,7 @@ if ($file != '') {
         $row4 = mysqli_fetch_assoc($result4);
         $pd_id = $row4['pd_id'];
 
-        $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0') ";
+        $sql5 = "INSERT INTO advertise(atype_id,ptype_id,l_id,pd_id,title,note,u_id,ad_status,pack_id) VALUES('$atype','$ptype','$l_id','$pd_id','$title','$describe','$id','0','$idpack') ";
         $result5 = mysqli_query($con, $sql5) or die(mysqli_error($con));;
 
         $yearMonth = substr(date("Y") + 543, -2) . date("m") .date("d");

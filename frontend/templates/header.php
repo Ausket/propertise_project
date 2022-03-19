@@ -92,7 +92,8 @@ $linkcook = "frontend/cookiepolicy.php";
     * {
         font-family: 'Prompt', sans-serif;
     }
-    .line{
+
+    .line {
         background-color: #00B900;
     }
 </style>
@@ -139,12 +140,12 @@ $linkcook = "frontend/cookiepolicy.php";
                                     <span class="caret"></span>
                                 </a>
                             </li>
-                            <li id="navbar-item-dashboard" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
+                            <!-- <li id="navbar-item-dashboard" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
                                 <a class="nav-link p-0" href="frontend/calculator.php">
                                     คำนวณสินเชื่อที่อยู่อาศัย
                                     <span class="caret"></span>
                                 </a>
-                            </li>
+                            </li> -->
                             <li id="navbar-item-dashboard" aria-haspopup="true" aria-expanded="false" class="nav-item dropdown py-2 py-xl-5 px-0 px-xl-4">
                                 <a class="nav-link p-0" href="frontend/packages.php">
                                     แพ็คเกจโฆษณา
@@ -172,7 +173,7 @@ $linkcook = "frontend/cookiepolicy.php";
                                     $resultfa = mysqli_query($con, $sqlfa);
                                     $numf = mysqli_num_rows($resultfa); ?>
                                     <li class="nav-item ">
-                                        <a class="nav-link " href="page/logout.php">ออกจากระบบ</a>
+                                        <a class="nav-link " href="page/logout.php" onclick="logOut();">ออกจากระบบ</a>
                                     </li>
                                 <?php } else { ?>
                                     <li class="nav-item ">
@@ -202,7 +203,7 @@ $linkcook = "frontend/cookiepolicy.php";
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right w-100">
                                         <a class="dropdown-item" href="frontend/dashboard-profiles.php">ข้อมูลส่วนตัว</a>
-                                        <a class="dropdown-item" href="page/logout.php">ออกจากระบบ</a>
+                                        <a class="dropdown-item" href="page/logout.php" onclick="logOut();">ออกจากระบบ</a>
                                     </div>
                                 </div>
                             </li>
@@ -256,9 +257,10 @@ $linkcook = "frontend/cookiepolicy.php";
                                         <span class="input-group-text bg-gray-01 border-0 text-muted fs-18" id="inputGroup-sizing-lg">
                                             <i class="far fa-user"></i></span>
                                     </div>
-                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" value="<?php if(isset($_COOKIE['user_login'])){
-                                    
-                                    echo $_COOKIE['user_login']; } ?>" required placeholder=" อีเมล">
+                                    <input type="email" class="form-control border-0 shadow-none fs-13" id="email" name="email" value="<?php if (isset($_COOKIE['user_login'])) {
+
+                                                                                                                                            echo $_COOKIE['user_login'];
+                                                                                                                                        } ?>" required placeholder=" อีเมล">
                                 </div>
                             </div>
                             <div class="form-group mb-4">
@@ -269,7 +271,9 @@ $linkcook = "frontend/cookiepolicy.php";
                                             <i class="far fa-lock"></i>
                                         </span>
                                     </div>
-                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" value="<?php if(isset($_COOKIE['user_login'])){ echo $_COOKIE['user_password'];} ?>" required placeholder="รหัสผ่าน">
+                                    <input type="password" class="form-control border-0 shadow-none fs-13" id="password" name="password" value="<?php if (isset($_COOKIE['user_login'])) {
+                                                                                                                                                    echo $_COOKIE['user_password'];
+                                                                                                                                                } ?>" required placeholder="รหัสผ่าน">
                                     <div class="input-group-append">
                                         <span class="input-group-text bg-gray-01 border-0 text-body fs-18">
                                             <i class="far fa-eye-slash"></i>
@@ -279,7 +283,7 @@ $linkcook = "frontend/cookiepolicy.php";
                             </div>
                             <div class="d-flex mb-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" <?php if(isset($_COOKIE['user_login'])){?> checked <?php }  ?> id="remember-me" name="remember">
+                                    <input class="form-check-input" type="checkbox" <?php if (isset($_COOKIE['user_login'])) { ?> checked <?php }  ?> id="remember-me" name="remember">
                                     <label class="form-check-label" for="remember-me">
                                         บันทึกการเข้าสู่ระบบ
                                     </label>
@@ -297,8 +301,8 @@ $linkcook = "frontend/cookiepolicy.php";
                         </div>
                         <div class="row no-gutters mx-n2">
                             <div class="col-12 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
-                                <i class="fab fa-line fa-fw fa-2x"></i>
+                                <a href="frontend/line_login.php" class="btn btn-lg btn-block line text-white px-0">
+                                    <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
                         </div>
@@ -361,8 +365,8 @@ $linkcook = "frontend/cookiepolicy.php";
                         </div>
                         <div class="row no-gutters mx-n2">
                             <div class="col-12 px-2 mb-4">
-                                <a href="#" class="btn btn-lg btn-block line text-white px-0">
-                                <i class="fab fa-line fa-fw fa-2x"></i>
+                                <a href="frontend/line_login.php" class="btn btn-lg btn-block line text-white px-0">
+                                    <i class="fab fa-line fa-fw fa-2x"></i>
                                 </a>
                             </div>
                         </div>
@@ -372,3 +376,16 @@ $linkcook = "frontend/cookiepolicy.php";
         </div>
     </div>
 </div>
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+        function logOut() {
+            liff.init({
+                liffId: "1656973328-Oae71Lxj"
+            });
+            liff.logout();
+       
+        }
+
+      
+     
+    </script>

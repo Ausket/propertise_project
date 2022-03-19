@@ -506,8 +506,7 @@ curl_close($curl);
                                 <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
                                   <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                                 </a>
-
-                                <button class="btn btn-lg btn-primary mb-3" id="next" onclick="checkPay()"> ขั้นตอนต่อไป
+                                <button class="btn btn-lg btn-primary mb-3" id="next" onclick="checkPay()" style="display:none;"> ขั้นตอนต่อไป
                                   <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
                                 </button>
                                 <button class="btn btn-lg btn-primary mb-3 next-button" id="nextbtn" style="display:none;"> ขั้นตอนต่อไป
@@ -876,16 +875,8 @@ curl_close($curl);
           id: "<?= $_SESSION['u_id'] ?>"
         }),
         success: function(data) {
-          // console.log(data);
-          // if(data.price == '0.00') {
-          //   Swal.fire({
-          //     position: 'top-center',
-          //     icon: 'success',
-          //     title: 'คุณได้รับแพ็คเกจฟรีแล้ว',
-          //     showConfirmButton: false,
-          //     timer: 1000
-          //   })
-       
+          console.log(data);
+
           Swal.fire({
             position: 'top-center',
             icon: 'success',
@@ -893,10 +884,12 @@ curl_close($curl);
             showConfirmButton: false,
             timer: 1000
           })
-        
-
         }
       });
+      if (($("#price").val()) == '0.00') {
+        $('#nextbtn').click()
+        document.getElementById('location').style.display = "none";
+      }
     }
 
 
@@ -917,18 +910,16 @@ curl_close($curl);
           referenceNo: $('#referenceNo').val()
         },
         success: function(dataCheck) {
-          // console.log(dataCheck)
+          console.log(dataCheck)
           // // alert($('#referenceNo').val())
 
           console.log('สถานะการชำระเงิน');
           console.log(dataCheck['resultCode']);
+
           if (dataCheck['resultCode'] == '00') {
 
             $('#nextbtn').click()
-            // $('#success').attr('style', 'opacity: 1; display: block;');
-            // $('#fieldset').attr('style', 'position: relative; opacity: 0; display: none;');
-            // $('#confirm').attr('class', 'active');
-            // $('#progress-bar').attr('style', 'width: 100%;');
+
           } else {
             // alert('ยังไมไ่ด้รับการชำระเงิน');
             Swal.fire({
@@ -942,6 +933,13 @@ curl_close($curl);
         },
       });
     }
+
+    // function checkPrice() {
+    //   if (($("#price").val()) == '0.00') {
+    //     // alert = function() {};
+    //     $('#nextbtn').click()
+    //   }
+    // }
 
     $("#nextbtn").click(function() {
       if (payMethod == 'qr') {

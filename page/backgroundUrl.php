@@ -5,7 +5,6 @@ header("Access-Control-Allow-Methods: OPTIONS,GET,POST,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// require('../base_require.php');
 require('../config.php');
 // require('../connect.php');
 // $con=mysqli_connect("localhost","root","123456","propertise") or die("เชื่อมต่อผิดพลาด");
@@ -110,3 +109,4 @@ if (!empty($_POST['resultCode'])) {
     }
     
 }
+?>

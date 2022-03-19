@@ -23,7 +23,7 @@ $idb = $_GET["id"];
 $sqlb = "SELECT advertise.a_id,advertise.title,advertise.note,advertise_type.type,advertise.atype_id,advertise.ad_id,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
 property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no,property_detail.facility,property_detail.pd_id,advertise.ad_status,
 location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,location_property.l_id,
-location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type 
+location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,advertise.pack_id
 FROM ((((advertise
     LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
     LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
@@ -47,7 +47,8 @@ $sqlfi = "SELECT file.f_name, file.f_date, file.f_id
 FROM (file
 INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
 WHERE file.pd_id = $pd_id ";
-$resultfi = mysqli_query($con, $sqlfi)  or die(mysqli_error($con));
+$resultfi = mysqli_query($con, $sqlfi) or die(mysqli_error($con));
+$numfi = mysqli_num_rows($resultfi);
 
 
 $facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
@@ -59,6 +60,12 @@ $resultpa = mysqli_query($con, $sqlpa);
 $amphure_id = $rowb['amphure_id'];
 $sqld = "SELECT * FROM districts WHERE amphure_id = $amphure_id";
 $resultd = mysqli_query($con, $sqld);
+
+$sqlpp = "SELECT * FROM advertise  
+LEFT  JOIN pay_status ON advertise.pack_id = pay_status.id
+LEFT  JOIN package_type ON pay_status.pack_name = package_type.pack_name 
+WHERE a_id =  $idb ";
+$resultpp = mysqli_query($con, $sqlpp);
 
 ?>
 <!doctype html>
@@ -267,6 +274,25 @@ $resultd = mysqli_query($con, $sqld);
                               <div class="col-lg-12">
                                 <div class="card mb-6">
                                   <div class="card-body p-6">
+                                    <h3 class="card-title mb-0 text-heading fs-22 lh-15"> เลือกแพ็คเกจในการลงประกาศ </h3>
+                                    <hr>
+                                    <div class="form-group mb-3">
+                                      <label for="status" class="text-heading">แพ็คเกจทั้งหมดของคุณ <span class="red">*</span> </label>
+                                      <select class="form-control border-0 shadow-none form-control-lg selectpicker" title="เลือก" data-style="btn-lg py-2 h-52" name="ptype" id="package" required>
+                                        <?php foreach ($resultpp as $value) {
+                                          $period = $value['period'];
+                                          $time = strtotime($value['datetime_order']);
+                                          $month = '+' . $period . 'day';
+                                          $stop_date = date('d-m-Y', strtotime($month, $time)); ?>
+
+                                          <option id="pack" value="<?php echo  $value['id'] ?>" <?php if ($value['pack_id'] == $rowb['pack_id']) {
+                                                                                        echo "selected";
+                                                                                      } ?>> ชื่อแพ็คเกจ : <?php echo $value['pack_name'] ?> /วันสั่งซื้อ <?php echo date('d-m-Y', strtotime($value['datetime_order'])) ?> /หมดอายุ <?php echo $stop_date ?> /ราคา <?php echo $value['price'] ?> </option>
+                                        <?php } ?>
+                                      </select>
+                                    </div>
+                                    <input type="text" id="idpack" name="idpack" hidden >
+                                    <input type="text" id="numimg" name="numimg" hidden >
                                     <h3 class="card-title mb-0 text-heading fs-22 lh-15"> รายละเอียดอสังหาริมทรัพย์ </h3>
                                     <hr>
                                     <div class="form-group mb-3">
@@ -632,13 +658,13 @@ $resultd = mysqli_query($con, $sqld);
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
                               <div class="text-right">
-                              <button class="btn btn-lg btn-primary next-button" id="nextbtn2" hidden> ขั้นตอนต่อไป
-                                <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
-                              </button>
-                              <span class="btn btn-lg btn-primary" onclick="checkVal2()"> ขั้นตอนต่อไป
-                                <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
-                              </span>
-                            </div>
+                                <button class="btn btn-lg btn-primary next-button" id="nextbtn2" hidden> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </button>
+                                <span class="btn btn-lg btn-primary" onclick="checkVal2()"> ขั้นตอนต่อไป
+                                  <span class="d-inline-block ml-2 fs-16"><i class="fal fa-long-arrow-right"></i></span>
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -661,26 +687,141 @@ $resultd = mysqli_query($con, $sqld);
                                       <div class="custom-file">
                                         <label for="upload_image"> เรียกดูไฟล์ </label>
                                         <input type="file" name="upload_image" id="upload_image" accept="image/*">
-                                        <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
+                                        <!-- <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p> -->
                                       </div>
                                     </div>
                                     <p class="card-text mt-5 mb-5"> รูปภาพเพิ่มเติม </p>
                                     <p class="text-heading fs-22 lh-15 mb-4"> อัพโหลดแบบหลายรูปภาพ </p>
-                                    <div class="custom-file">
-                                      <label for="fileupload2">
-                                        เรียกดูไฟล์
-                                      </label>
-                                      <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
-                                                                                      echo date("Y-m-d\TH:i:s"); ?>>
-                                      <input class="custom-file-input" id="fileupload2" type="file" name="file[]" multiple>
-                                      <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p>
-                                    </div><br><br><br>
                                     <?php while ($rowf = mysqli_fetch_array($resultfi)) { ?>
                                       <span id="<?php echo $rowf['f_id']; ?>">
                                         <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>"><span class="remove_file"></span></a>
                                       </span>
                                     <?php } ?>
                                     <div id="upload-img2"></div>
+                                    <input type="text" id="newfile" value="<?php echo $numfi ?>" hidden>
+                                    <br><br><br>
+                                    <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
+                                                                                    echo date("Y-m-d\TH:i:s"); ?>>
+
+                                    <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
+                                    <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
+                                    <input name="hdnLine" id="hdnLine" type="hidden" value=0>
+                                    <input name="limit" id="limit" type="hidden">
+
+                                    <div class="col-md-4 col_mem">
+                                      <div id="mySpan" name="mySpan"><br>
+                                      </div>
+                                      <script language="javascript">
+                                        function fncCreateElement() {
+
+                                          var id = $('#package').attr("id");
+                                          $('#idpack').val(id);
+
+                                          var mySpan = document.getElementById('mySpan');
+                                          var myLine = document.getElementById('hdnLine');
+                                          myLine.value++;
+
+
+                                          var div = document.createElement('div');
+                                          div.id = 'div' + myLine.value;
+                                          div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
+
+
+
+                                          var myElement2 = document.createElement('input');
+                                          myElement2.setAttribute('type', "file");
+                                          myElement2.setAttribute('name', "file[]");
+                                          myElement2.setAttribute('id', "file" + myLine.value);
+                                          myElement2.setAttribute('required', 'true');
+                                          myElement2.setAttribute('accept', 'image/*');
+                                          myElement2.setAttribute('OnChange', 'showPreview(this)');
+                                          div.appendChild(myElement2);
+
+                                          // accept="image/*" OnChange="showPreview(this)
+
+                                          var myElement4 = document.createElement('br');
+                                          myElement4.setAttribute('name', "br" + myLine.value);
+                                          myElement4.setAttribute('id', "br" + myLine.value);
+                                          mySpan.appendChild(myElement4);
+
+
+                                          var img = document.createElement('img');
+                                          img.id = 'imgAvatar' + myLine.value;
+                                          img.className = 'img-thumbnail2';
+                                          //img.setAttribute('height', '200');
+                                          //class="img-thumbnail2"
+
+                                          div.appendChild(img);
+
+
+                                          mySpan.appendChild(div);
+
+                                          var all = parseInt($('#numimg').val());
+                                          console.log(typeof(all));
+
+                                          var newfile = parseInt($('#newfile').val());
+                                          console.log(typeof(newfile));
+
+                                          var num = all - newfile;
+                                          console.log(typeof(num));
+
+                                          if (myLine.value > num) {
+                                            Swal.fire({
+                                              position: 'top-center',
+                                              icon: 'warning',
+                                              title: 'สามารถเพิ่มรูปได้สูงสุด ' + all + ' รูปเท่านั้น',
+                                              showConfirmButton: false,
+                                              timer: 1000
+                                            })
+
+
+                                            var deleteSpan = document.getElementById('div' + myLine.value);
+                                            mySpan.removeChild(deleteSpan);
+
+                                            var deleteBr = document.getElementById("br" + myLine.value);
+                                            mySpan.removeChild(deleteBr);
+
+                                            myLine.value--;
+                                          }
+
+                                        }
+
+                                        function fncDeleteElement() {
+
+                                          var mySpan = document.getElementById('mySpan');
+                                          var myLine = document.getElementById('hdnLine');
+
+                                          var deleteSpan = document.getElementById('div' + myLine.value);
+                                          mySpan.removeChild(deleteSpan);
+
+                                          var deleteBr = document.getElementById("br" + myLine.value);
+                                          mySpan.removeChild(deleteBr);
+
+                                          myLine.value--;
+
+                                        }
+
+                                        function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
+
+                                          var mySpan = document.getElementById('mySpan');
+                                          var myLine = document.getElementById('hdnLine');
+                                          $('#imgAvatar').attr('src', ele.value);
+                                          if (ele.files && ele.files[0]) {
+
+                                            var reader = new FileReader();
+
+                                            reader.onload = function(e) {
+                                              $('#imgAvatar'.$x).attr('src', e.target.result);
+                                            }
+                                            reader.readAsDataURL(ele.files[0]);
+                                          }
+                                          console.log('#imgAvatar');
+                                        }
+                                      </script>
+
+                                      <!-- <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p> -->
+
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -871,60 +1012,60 @@ $resultd = mysqli_query($con, $sqld);
     });
   </script>
   <script>
-    const dt = new DataTransfer();
+    // const dt = new DataTransfer();
 
-    $("#fileupload2").on('change', function(c) {
+    // $("#fileupload2").on('change', function(c) {
 
-      var input = this;
-      var filesAmount = input.files.length;
+    //   var input = this;
+    //   var filesAmount = input.files.length;
 
-      for (i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
-        var fileName = document.getElementById('fileupload2').files[i].name;
-        var j = 0;
+    //   for (i = 0; i < filesAmount; i++) {
+    //     var reader = new FileReader();
+    //     var fileName = document.getElementById('fileupload2').files[i].name;
+    //     var j = 0;
 
-        reader.fileName = input.files[i].name
-        reader.onload = (function(e) {
-          var span = document.createElement('span');
-          span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" id="',j++,'" ><span class="name"></span></span>'].join('');
-          // span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" id="',j++,'" ><span class="name">', e.target.fileName, '</span></span>'].join('');
-          document.getElementById('upload-img2').insertBefore(span, null);
-        });
-        
-        reader.readAsDataURL(input.files[i]);
-        
+    //     reader.fileName = input.files[i].name
+    //     reader.onload = (function(e) {
+    //       var span = document.createElement('span');
+    //       span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" id="',j++,'" ><span class="name"></span></span>'].join('');
+    //       // span.innerHTML = ['<img class="thumb" src="', e.target.result, '" title="', escape(e.name), '"/><span class="remove_img_preview" id="',j++,'" ><span class="name">', e.target.fileName, '</span></span>'].join('');
+    //       document.getElementById('upload-img2').insertBefore(span, null);
+    //     });
 
-      }
-      
+    //     reader.readAsDataURL(input.files[i]);
 
-      //เพิ่มไฟล์ไปยังวัตถุ DataTransfer
-      for (let file of input.files) {
-        dt.items.add(file);
-      }
-      //อัปเดตไฟล์ของไฟล์อินพุตหลังจากเพิ่ม
-      input.files = dt.files;
-      console.log(dt.items);
 
-      $(document).on('click', '.remove_img_preview', function() {
-        id = $(this).attr('id');
-        // let name = $('span.name').text();
-        // console.log(name);
-        console.log(id);
-        $(this).parent('span').remove();
+    //   }
 
-        for (let i = 0; i < dt.items.length; i++) {
-          // จับคู่ไฟล์และชื่อ
-          if (id === dt.items[i].getAsFile().name) {
-            // ลบไฟล์ในวัตถุ DataTransfer
-            dt.items.remove(i);
-            continue;
-          }
-        }
-        // อัปเดตไฟล์อินพุตไฟล์หลังจากการลบ
-        document.getElementById('fileupload2').files = dt.files;
-      });
 
-    });
+    //   //เพิ่มไฟล์ไปยังวัตถุ DataTransfer
+    //   for (let file of input.files) {
+    //     dt.items.add(file);
+    //   }
+    //   //อัปเดตไฟล์ของไฟล์อินพุตหลังจากเพิ่ม
+    //   input.files = dt.files;
+    //   console.log(dt.items);
+
+    //   $(document).on('click', '.remove_img_preview', function() {
+    //     id = $(this).attr('id');
+    //     // let name = $('span.name').text();
+    //     // console.log(name);
+    //     console.log(id);
+    //     $(this).parent('span').remove();
+
+    //     for (let i = 0; i < dt.items.length; i++) {
+    //       // จับคู่ไฟล์และชื่อ
+    //       if (id === dt.items[i].getAsFile().name) {
+    //         // ลบไฟล์ในวัตถุ DataTransfer
+    //         dt.items.remove(i);
+    //         continue;
+    //       }
+    //     }
+    //     // อัปเดตไฟล์อินพุตไฟล์หลังจากการลบ
+    //     document.getElementById('fileupload2').files = dt.files;
+    //   });
+
+    // });
 
     $(function() {
       $("#upload-img3").attr("src", x);
@@ -1031,7 +1172,9 @@ $resultd = mysqli_query($con, $sqld);
 
     });
 
-    const marker2 = new mapboxgl.Marker({color: 'red'})
+    const marker2 = new mapboxgl.Marker({
+        color: 'red'
+      })
       .setLngLat([<?= $rowb['lng']; ?>, <?= $rowb['lat']; ?>])
       .addTo(map)
 
@@ -1060,7 +1203,9 @@ $resultd = mysqli_query($con, $sqld);
         document.getElementById("lat").value = coordinates.lat
 
 
-        var marker1 = new mapboxgl.Marker({color: 'red'}).setLngLat(coordinates).addTo(map);
+        var marker1 = new mapboxgl.Marker({
+          color: 'red'
+        }).setLngLat(coordinates).addTo(map);
 
         marker.push(marker1);
 
@@ -1108,6 +1253,25 @@ $resultd = mysqli_query($con, $sqld);
         })
       }
     }
+
+    var id =  $('#pack').val(); ;
+      $('#idpack').val(id);
+
+      $.ajax({
+        type: "post",
+        url: "../backend/get_package.php",
+        data: {
+         id: id
+        },
+
+        success: function(data) {
+          console.log(data);
+          $('#numimg').val(data);
+        }
+      });
+
+   
+
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>

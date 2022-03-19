@@ -181,6 +181,9 @@ $resultt2 = mysqli_query($con, $sqlt2);
 
 $sqlat2 = "SELECT * FROM advertise_type  ";
 $resultat2 = mysqli_query($con, $sqlat2);
+
+
+
 ?>
 <section class="bg-secondary">
     <div class="container container-xxl">

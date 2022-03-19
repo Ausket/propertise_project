@@ -104,21 +104,31 @@
                   <div class="form-group">
                     <!-- Show Numbers Of Rows -->
                     <select class="form-control" name="state" id="maxRows">
-                    <option value="6000">แสดงทั้งหมด</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="25">25</option>
-                    <option value="30">30</option>
-                    <option value="60">60</option>
-                    <option value="100">100</option>
-                    <option value="150">150</option>
-                  </select>
+                      <option value="6000">แสดงทั้งหมด</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="25">25</option>
+                      <option value="30">30</option>
+                      <option value="60">60</option>
+                      <option value="100">100</option>
+                      <option value="150">150</option>
+                    </select>
                   </div>
                 </div>
               </div>
             </div>
             <div class="row" id="precard">
-              <?php while ($rowsb = mysqli_fetch_assoc($resultsb)) {
+              <?php
+              $_SESSION['a_id'] = array();
+              $_SESSION['lat'] = array();
+              $_SESSION['lng'] = array();
+
+              while ($rowsb = mysqli_fetch_assoc($resultsb)) {
+
+                $_SESSION['a_id'][] = $rowsb['a_id'];
+                $_SESSION['lat'][] = $rowsb['lat'];
+                $_SESSION['lng'][] = $rowsb['lng'];
+
                 $h_no = "เลขที่";
                 $v_no = "หมู่"; ?>
                 <div class="col-12" data-animate="fadeInUp" id="cardtwo">
@@ -276,7 +286,9 @@
         </div>
       </div>
     </div>
-    >
+                              <input type="text" id="id" value="<?= $_SESSION['a_id'][0] ?>" hidden>
+                              <input type="text" id="lng" value="<?= $_SESSION['lng'][0] ?>" hidden>
+                              <input type="text" id="lat" value="<?= $_SESSION['lat'][0] ?>" hidden>
   </main>
   <?php include 'templates/footer-two.php' ?>
   <!-- Vendors scripts -->
@@ -428,14 +440,44 @@
     });
   </script>
   <script>
+
+      
+    var at = $('#lat').val();
+    var ng = $('#lng').val();
+
+    var id = $('#id').val();
+
+    
+
+  var lng = 100.71180920953799;
+  var lat = 13.809430578185953;
+
+   
+console.log(id);
+
+    if (id !== '') {
+      lng = ng
+    } 
+    else {
+      lng = 100.71180920953799 
+    }
+    if (id !== '') {
+      lat = at
+    } 
+    else {
+      lat = 13.809430578185953 
+    }
+
+    console.log(lng);
+    console.log(lat);
+
     mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
     var map = new mapboxgl.Map({
       container: 'map',
-      center: [100.604274, 13.84786],
+      center: [lng, lat],
       style: 'mapbox://styles/mapbox/outdoors-v11',
       zoom: 13
     });
-
 
     map.addControl(
       new MapboxGeocoder({
@@ -451,7 +493,6 @@
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.FullscreenControl());
 
-
     $.getJSON("../backend/map.php", function(jsonObj) {
 
       $.each(jsonObj, function(i, item) {
@@ -463,12 +504,11 @@
           ' อ. ' + item.aname_th + ' จ. ' + item.name_th + ' ' + item.postal_code
         );
 
-        var marker2 = new mapboxgl.Marker({color: 'red'}).setLngLat([item.lng, item.lat]).setPopup(popup).addTo(map);
+        var marker2 = new mapboxgl.Marker({
+          color: 'red'
+        }).setLngLat([item.lng, item.lat]).setPopup(popup).addTo(map);
       });
     });
-
-
-
   </script>
   <script>
     getPagination('#precard');

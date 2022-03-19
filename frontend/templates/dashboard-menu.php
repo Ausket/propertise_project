@@ -23,18 +23,12 @@ $total_record3 = mysqli_num_rows($resulta3);
 
 $sqlf = "SELECT * FROM favourite WHERE u_id= $id";
 $resultf = mysqli_query($con, $sqlf);
-$numf = mysqli_num_rows($resultf); 
+$numf = mysqli_num_rows($resultf);
 
 $sqlv = "SELECT SUM(view) FROM advertise WHERE u_id = $id ";
 $resultv = mysqli_query($con, $sqlv) or die(mysqli_error($con));
 $rowv = mysqli_fetch_assoc($resultv);
 
-
-$sqlp = "SELECT * FROM (pay_status 
-LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
-WHERE u_id= $id";
-$resultp = mysqli_query($con, $sqlp);
-$nump = mysqli_num_rows($resultp);
 
 
 ?>
@@ -123,8 +117,16 @@ $nump = mysqli_num_rows($resultp);
                                             <use xlink:href="#icon-my-package"></use>
                                         </svg>
                                     </span>
-                                    <span class="sidebar-item-text">แพ็คเก็จของฉัน</span>
+                                    <span class="sidebar-item-text">ประวัติสั่งซื้อแพ็คเก็จ</span>
                                     <span class="sidebar-item-number ml-auto text-primary fs-15 font-weight-bold"><?php echo $nump ?></span>
+                                </a>
+                            </li>
+                            <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">
+                                <a href="packages.php" class="text-heading lh-1 sidebar-link d-flex align-items-center">
+                                    <span class="sidebar-item-icon d-inline-block mr-3 text-muted fs-20">
+                                        <i class="far fa-cash-register"></i>
+                                    </span>
+                                    <span class="sidebar-item-text">สั่งซื้อแพ็คเก็จ</span>
                                 </a>
                             </li>
                             <li class="list-group-item px-3 px-xl-4 py-2 sidebar-item">

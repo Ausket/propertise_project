@@ -86,6 +86,10 @@ if (isset($_POST["p_id"])) {
                                             <button type=button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i>
                                             </button></a>
                                     </div>
+                                    <div class='col-5'>
+                                        <a href="../file/<?php echo $row['f_name'] ?>" data-lightbox="photos" class="img-fluid zoom">
+                                            <button type=button class="btn btn-info btn-sm"><i class="fas fa-eye"></i></button></a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
@@ -103,5 +107,6 @@ if (isset($_POST["p_id"])) {
     </div>
 
 </body>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.8.2/js/lightbox.min.js"></script>
 </html>

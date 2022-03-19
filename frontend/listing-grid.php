@@ -408,7 +408,7 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
                 <h2 class="fs-15 text-dark mb-0">พบ <span class="text-primary"><?php echo $numrow ?></span> แห่งสำหรับการค้นหา </h2>
               </div>
 
-              <div class="col-md-6 col-xl-7 col-xxl-6 mt-6 mt-md-0">
+              <div class="col-md-3 col-xl-3 col-xxl-3 mt-6 mt-md-0">
                 <div class="d-flex justify-content-md-end align-items-center">
                   <div class="input-group border rounded input-group-lg w-auto bg-white">
                     <form name="test" method="post" action="">

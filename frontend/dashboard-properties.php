@@ -53,6 +53,9 @@ $order = 1;
   <link rel="stylesheet" href="../css/vendors/timepicker/bootstrap-timepicker.min.css">
   <link rel="stylesheet" href="../css/vendors/mapbox-gl/mapbox-gl.min.css">
   <link rel="stylesheet" href="../css/vendors/dataTables/jquery.dataTables.min.css">
+
+  <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Themes core CSS -->
   <link rel="stylesheet" href="../css/themes.css">
   <!-- Favicons -->
@@ -140,15 +143,15 @@ $order = 1;
                   <div class="form-group">
                     <!-- Show Numbers Of Rows -->
                     <select class="form-control" name="state" id="maxRows">
-                    <option value="6000">แสดงทั้งหมด</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="25">25</option>
-                    <option value="30">30</option>
-                    <option value="60">60</option>
-                    <option value="100">100</option>
-                    <option value="150">150</option>
-                  </select>
+                      <option value="6000">แสดงทั้งหมด</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="25">25</option>
+                      <option value="30">30</option>
+                      <option value="60">60</option>
+                      <option value="100">100</option>
+                      <option value="150">150</option>
+                    </select>
                   </div>
                 </div>
               </div>
@@ -182,18 +185,20 @@ $order = 1;
 
               $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise.ad_id,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
             property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
-            location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-            location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
-            FROM (((((advertise
+            location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,advertise.num_boots,
+            location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company,package_type.boots
+            FROM (((((((advertise
                 LEFT  JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
                 LEFT  JOIN location_property ON advertise.l_id = location_property.l_id)
                 LEFT  JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
                 LEFT  JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
                 LEFT  JOIN users ON advertise.u_id = users.u_id)
+                LEFT JOIN pay_status ON advertise.pack_id = pay_status.id)
+                LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
                 WHERE users.u_id = $id AND 
               (advertise.title LIKE '%$ad%' OR property_type.p_type LIKE '%$ad%' OR advertise_type.type LIKE '%$ad%' OR property_detail.price LIKE '%$ad%' ) ";
 
-              $sqln = "$sql2" . $text ;
+              $sqln = "$sql2" . $text;
               $result2 = mysqli_query($con, $sqln) or die(mysqli_error($con));
 
 
@@ -208,7 +213,6 @@ $order = 1;
                 (advertise.title LIKE '%$ad%' OR property_type.p_type LIKE '%$ad%' OR advertise_type.type LIKE '%$ad%'OR property_detail.price LIKE '%$ad%' )";
               $resultad = mysqli_query($con, $sqlad);
               $total_recordad = mysqli_num_rows($resultad);
-             
 
 
             ?>
@@ -221,13 +225,14 @@ $order = 1;
                 <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
-                    <th scope="col" class="border-top-0 pt-5 pb-4">ลำดับที่</th>
+                      <th scope="col" class="border-top-0 pt-5 pt-3 pb-4">ลำดับที่</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ไอดีประกาศ</th>
-                      <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
+                      <th scope="col" class="border-top-0 pt-6 pb-5">วันที่ลงประกาศ</th>
                       <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
-                      <th scope="col" class="border-top-0 pt-5 pb-4">จัดการ</th>
+                      <th scope="col" class="border-top-0 pt-6 pt-3 pb-5">จัดการ</th>
+                      <th scope="col" class="border-top-0 pt-6 pt-3 pb-5">ดันประกาศ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -238,9 +243,9 @@ $order = 1;
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
-                      <td class="align-middle"><?php echo $order++ ?></td>
-                      <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
-                      <td class="align-middle"><?php echo $row2['date']; ?></td>
+                        <td class="align-middle"><?php echo $order++ ?></td>
+                        <td class="align-middle" id="aid"><?php echo $row2['ad_id']; ?></td>
+                        <td class="align-middle pt-5 pb-3 px-5"><?php echo $row2['date']; ?></td>
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
@@ -282,7 +287,7 @@ $order = 1;
                             </div>
                           </div>
                         </td>
-                        
+
                         <td class="align-middle">
                           <?php if ($row2['ad_status'] == '1') {
                             $status = 'กำลังลงประกาศ';
@@ -298,20 +303,40 @@ $order = 1;
                           }
                           if ($row2['ad_status'] == '3') {
                             $status = 'ขายแล้ว';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-indigo"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '4') {
+                            $status = 'ประกาศหมดอายุ';
                             echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
                           }
-                           ?>
+                          ?>
 
 
 
                         </td>
                         <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
+                        <?php if ($row2['ad_status'] !== '3' && $row2['ad_status'] !== '4' ) { ?>
                           <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-3"><i class="fal fa-pencil-alt"></i></a>
-                          <?php if($row2['ad_status'] !== '1'){ ?>
-                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
-                          <?php  } ?></td>
+                          <?php  } ?>
+                          <?php if ($row2['ad_status'] == '1' ) { ?>
+                            <a href="../backend/soldout.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการเปลี่ยนสถานะเป็นขายแล้วใช่ไหม ?')" method="post" data-toggle="tooltip" title="ขายแล้ว" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fas fa-exchange"></i></a>
+                            <?php  } ?>
+                          <?php if ($row2['ad_status'] !== '1' && $row2['ad_status'] !== '3' && $row2['ad_status'] !== '4') { ?>
+                            <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
+                        </td>
                       <?php  } ?>
+                      <?php if ($row2['ad_status'] == '1' && $row2['boots'] !== '0') { ?>
+                        <?php if ($row2['num_boots'] !==  $row2['boots']) { ?>
+                          <td class="align-middle">
+                            <button id="boot" name="<?php echo $row2['a_id']; ?>" class="btn btn-sm btn-primary mr-3">ดันประกาศ <span><?php echo $row2['num_boots']; ?>/<?php echo $row2['boots']; ?></span></button>
+                          </td><?php  } else { ?>
+                          <td class="align-middle"><button class="btn btn-sm btn-primary mr-3" disabled>ดันประกาศ <span><?php echo $row2['num_boots']; ?>/<?php echo $row2['boots']; ?></span></button></td>
+                      <?php }
+                            } ?>
+
+                    <?php  } ?>
+
                       </tr>
 
                   </tbody>
@@ -328,23 +353,23 @@ $order = 1;
                 </ul>
               </nav> -->
 
-               
+
               <nav class="mt-6">
-                    <ul class="pagination rounded-active justify-content-center mb-0">
-                      <li data-page="prev" class="page-item" >
-                        <span class="page-link">
-                          <i class="far fa-angle-double-left"></i><span ></span>
-                        </span>
-                      </li>
-                      <!-- Here the JS Function Will Add the Rows -->
-                      <li data-page="next" id="prev" class="page-item">
-                        <span class="page-link">
-                          <i class="far fa-angle-double-right"></i><span ></span>
-                        </span>
-                      </li>
-                    </ul>
-                  </nav>
-            
+                <ul class="pagination rounded-active justify-content-center mb-0">
+                  <li data-page="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-left"></i><span></span>
+                    </span>
+                  </li>
+                  <!-- Here the JS Function Will Add the Rows -->
+                  <li data-page="next" id="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-right"></i><span></span>
+                    </span>
+                  </li>
+                </ul>
+              </nav>
+
 
             <?php } else {
 
@@ -370,17 +395,19 @@ $order = 1;
 
               $sql2 = "SELECT advertise.a_id,advertise.title,advertise.note,advertise.view,advertise.ad_id,advertise_type.type,advertise_type.color,property_detail.project_name,property_detail.bedroom,property_detail.bathroom,property_detail.parking,
               property_detail.price,property_detail.space_area,property_detail.img_video,location_property.house_no, location_property.l_id,property_detail.pd_id,advertise.date,
-              location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,
-              location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company
-              FROM (((((advertise
+              location_property.village_no,location_property.lane,location_property.road,location_property.province_id,location_property.district_id,advertise.ad_status,advertise.num_boots,
+              location_property.amphure_id,location_property.postal_code,location_property.lat,location_property.lng,property_type.p_type,users.name,users.tel,users.email,users.company,package_type.boots
+              FROM (((((((advertise
               LEFT JOIN advertise_type ON advertise.atype_id = advertise_type.atype_id)
               LEFT JOIN location_property ON advertise.l_id = location_property.l_id)
               LEFT JOIN property_detail ON advertise.pd_id = property_detail.pd_id)
               LEFT JOIN property_type ON advertise.ptype_id = property_type.ptype_id)
               LEFT JOIN users ON advertise.u_id = users.u_id)
+              LEFT JOIN pay_status ON advertise.pack_id = pay_status.id)
+              LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
               WHERE users.u_id = $id ";
 
-              $sqln = "$sql2" . $text ;
+              $sqln = "$sql2" . $text;
               $resulta = mysqli_query($con, $sqln) or die(mysqli_error($con));
 
 
@@ -390,13 +417,14 @@ $order = 1;
                 <table class="table table-hover bg-white border rounded-lg" id="table-id">
                   <thead class="thead-sm thead-black">
                     <tr>
-                    <th scope="col" class="border-top-0 pt-5 pb-4">ลำดับที่</th>
+                      <th scope="col" class="border-top-0 pt-5 pt-3 pb-4">ลำดับที่</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ไอดีประกาศ</th>
-                      <th scope="col" class="border-top-0 pt-5 pb-4">วันที่ลงประกาศ</th>
+                      <th scope="col" class="border-top-0 pt-6 pb-5">วันที่ลงประกาศ</th>
                       <th scope="col" class="border-top-0 px-6 pt-5 pb-4">ชื่อรายการ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">สถานะ</th>
                       <th scope="col" class="border-top-0 pt-5 pb-4">ยอดผู้เข้าชม</th>
-                      <th scope="col" class="border-top-0 pt-5 pb-4">จัดการ</th>
+                      <th scope="col" class="border-top-0 pt-6 pt-3 pb-5">จัดการ</th>
+                      <th scope="col" class="border-top-0 pt-6 pt-3 pb-5">ดันประกาศ</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -408,9 +436,9 @@ $order = 1;
                     ?>
 
                       <tr class="shadow-hover-xs-2 bg-hover-white">
-                      <td class="align-middle"><?php echo $order++; ?></td>
-                      <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
-                      <td class="align-middle"><?php echo $row2['date']; ?></td>
+                        <td class="align-middle"><?php echo $order++; ?></td>
+                        <td class="align-middle"><?php echo $row2['ad_id']; ?></td>
+                        <td class="align-middle pt-5 pb-3 px-5"><?php echo $row2['date']; ?></td>
                         <td class="align-middle pt-6 pb-4 px-6">
                           <div class="media">
                             <div class="w-120px mr-4 position-relative">
@@ -467,6 +495,10 @@ $order = 1;
                           }
                           if ($row2['ad_status'] == '3') {
                             $status = 'ขายแล้ว';
+                            echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-indigo"> ' . $status . ' </span>';
+                          }
+                          if ($row2['ad_status'] == '4') {
+                            $status = 'ประกาศหมดอายุ';
                             echo '<span class="badge text-capitalize font-weight-normal fs-12 badge-danger"> ' . $status . ' </span>';
                           } ?>
 
@@ -474,16 +506,31 @@ $order = 1;
                         </td>
                         <td class="align-middle"><?php echo $row2['view'] ?></td>
                         <td class="align-middle">
+                        <?php if ($row2['ad_status'] !== '3' && $row2['ad_status'] !== '4' ) { ?>
                           <a href="dashboard-edit-property.php?id=<?php echo $row2['a_id'] ?>" data-toggle="tooltip" title="แก้ไข" class="d-inline-block fs-18 text-muted hover-primary mr-3"><i class="fal fa-pencil-alt"></i></a>
-                          <?php if($row2['ad_status'] !== '1'){ ?>
-                          <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
-                          <?php  } ?> </td>
+                          <?php  } ?>
+                          <?php if ($row2['ad_status'] == '1' ) { ?>
+                            <a href="../backend/soldout.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการเปลี่ยนสถานะเป็นขายแล้วใช่ไหม ?')" method="post" data-toggle="tooltip" title="ขายแล้ว" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fas fa-exchange"></i></a>
+                            <?php  } ?>
+                          <?php if ($row2['ad_status'] !== '1'&& $row2['ad_status'] !== '3' && $row2['ad_status'] !== '4') { ?>
+                            <a href="../backend/deladvertise.php?id=<?php echo $row2['a_id'] ?>" onclick="return confirm('ต้องการลบข้อมูลจริงหรือ ?')" method="post" data-toggle="tooltip" title="ลบ" class="d-inline-block fs-18 text-muted hover-primary mr-5"><i class="fal fa-trash-alt"></i></a>
+                          <?php  } ?>
+                        </td>
+                        <?php if ($row2['ad_status'] == '1' && $row2['boots'] !== '0') { ?>
+                          <?php if ($row2['num_boots'] !==  $row2['boots']) { ?>
+                            <td class="align-middle">
+                              <button id="boot2" name="<?php echo $row2['a_id']; ?>" class="btn btn-sm btn-primary mr-3">ดันประกาศ <span><?php echo $row2['num_boots']; ?>/<?php echo $row2['boots']; ?></span></button>
+                            </td><?php  } else { ?>
+                            <td class="align-middle"><button class="btn btn-sm btn-primary mr-3" disabled>ดันประกาศ <span><?php echo $row2['num_boots']; ?>/<?php echo $row2['boots']; ?></span></button></td>
+                        <?php }
+                              } ?>
                       <?php  } ?>
+
                       </tr>
 
                   </tbody>
                 </table>
-               
+
               </div>
               <!-- <nav class="mt-6">
                 <ul class="pagination rounded-active justify-content-center">
@@ -494,25 +541,25 @@ $order = 1;
                   <li class="page-item"><a class="page-link" href="dashboard-properties.php?page=<?php echo $total_page; ?>"><i class="far fa-angle-double-right"></i></a></li>
                 </ul>
               </nav> -->
-             
-              <nav class="mt-6">
-                    <ul class="pagination rounded-active justify-content-center mb-0">
-                      <li data-page="prev" class="page-item" >
-                        <span class="page-link">
-                          <i class="far fa-angle-double-left"></i><span ></span>
-                        </span>
-                      </li>
-                      <!-- Here the JS Function Will Add the Rows -->
-                      <li data-page="next" id="prev" class="page-item">
-                        <span class="page-link">
-                          <i class="far fa-angle-double-right"></i><span ></span>
-                        </span>
-                      </li>
-                    </ul>
-                  </nav>
 
-              <?php } ?>
-              </div>
+              <nav class="mt-6">
+                <ul class="pagination rounded-active justify-content-center mb-0">
+                  <li data-page="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-left"></i><span></span>
+                    </span>
+                  </li>
+                  <!-- Here the JS Function Will Add the Rows -->
+                  <li data-page="next" id="prev" class="page-item">
+                    <span class="page-link">
+                      <i class="far fa-angle-double-right"></i><span></span>
+                    </span>
+                  </li>
+                </ul>
+              </nav>
+
+            <?php } ?>
+          </div>
         </main>
       </div>
     </div>
@@ -593,8 +640,8 @@ $order = 1;
                 .show();
             } // end for i
           } // end if row count > max rows
-          if(totalRows <= maxRows){
-            $('.pagination ').hide();       
+          if (totalRows <= maxRows) {
+            $('.pagination ').hide();
           }
           $('.pagination [data-page="1"]').addClass('page-item active'); // add active class to the first li
           $('.pagination li').on('click', function(evt) {
@@ -669,17 +716,55 @@ $order = 1;
       }
     }
 
-    // $(function() {
-    //   // Just to append id number for each row
-    //   $('table tr:eq(0)').prepend('<th> ID </th>');
+    $(document).on('click', '#boot2', function() {
+      var id = $(this).attr('name');
+      console.log(id);
+      $.ajax({
+        url: "../backend/boots.php",
+        method: "POST",
+        data: {
+          id: id
+        },
+        success: function(data) {
+          Swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'ดันประกาศแล้ว',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          setTimeout(function() {
+            window.location = window.location;
+          }, 1000);
+        }
 
-    //   var id = 0;
+      });
+    });
 
-    //   $('table tr:gt(0)').each(function() {
-    //     id++;
-    //     $(this).prepend('<td>' + id + '</td>');
-    //   });
-    // });
+    $(document).on('click', '#boot', function() {
+      var id = $(this).attr('name');
+      console.log(id);
+      $.ajax({
+        url: "../backend/boots.php",
+        method: "POST",
+        data: {
+          id: id
+        },
+        success: function(data) {
+          Swal.fire({
+            position: 'top-center',
+            icon: 'success',
+            title: 'ดันประกาศแล้ว',
+            showConfirmButton: false,
+            timer: 1000
+          })
+          setTimeout(function() {
+            window.location = window.location;
+          }, 1000);
+        }
+
+      });
+    });
   </script>
 
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

@@ -456,16 +456,16 @@
                             <span class="col-sm-4 p-0 fs-13 mb-1 mb-sm-0">การติดต่อ</span>
                             <ul class="col-md-8 list-inline text-gray-lighter m-0 p-0 z-index-2">
                               <li class="list-inline-item m-0">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-phone"></i></a>
+                                <a href="tel:<?php echo $rowa['tel'] ?>" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-phone"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-line"></i></a>
+                                <a href="https://line.me/ti/p/~<?php echo $rowa['line_id'] ?>" target="_blank" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fab fa-line"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-envelope"></i></a>
+                                <a href="mailto:<?php echo $rowa['email'] ?>" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-envelope"></i></a>
                               </li>
                               <li class="list-inline-item mr-0 ml-2">
-                                <a href="#" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-browser"></i></a>
+                                <a href="<?php echo $rowa['website'] ?>" target="_blank" class="w-32px h-32 rounded bg-hover-primary bg-white hover-white text-body d-flex align-items-center justify-content-center border border-hover-primary"><i class="fas fa-browser"></i></a>
                               </li>
                             </ul>
                           </li>

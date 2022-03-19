@@ -32,26 +32,27 @@ $err = false;
 
 if ($requestMethod === 'POST') {
     if (!empty($data)) {
-        
-            $referenceNo = $data['referenceNo'];
-            $amount = $data['price'];
-            $name = $data['name'];
-            $pack = $data['pack'];
-            $id = $data['id'];
 
-            //คำสั่ง SQL สำหรับเพิ่มข้อมูลใน Database
+        $referenceNo = $data['referenceNo'];
+        $amount = $data['price'];
+        $name = $data['name'];
+        $pack = $data['pack'];
+        $id = $data['id'];
+
+        if ($data['price'] == '0.00') {
+            $sql = "INSERT INTO pay_status (referenceNo, price ,name ,pack_name ,u_id,resultCode) VALUES ('$referenceNo','$amount','$name','$pack','$id','00')";
+        } else {
             $sql = "INSERT INTO pay_status (referenceNo, price ,name ,pack_name ,u_id) VALUES ('$referenceNo','$amount','$name','$pack','$id')";
+        }
+        $result = mysqli_query($con, $sql);
 
-            $result = mysqli_query($con, $sql);
-          
-            if ($result) {
-                $detail = 'Insert Data Success';
-                $msg = 'Success';
-                $err = false;
-            } else {
-                $err = true;
-            }
-        
+        if ($result) {
+            $detail = 'Insert Data Success';
+            $msg = 'Success';
+            $err = false;
+        } else {
+            $err = true;
+        }
     } else {
         $err = true;
     }
@@ -85,7 +86,3 @@ if ($resultArr == null) {
 }
 
 echo json_encode($response);
-
-
-   
-?>

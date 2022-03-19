@@ -290,7 +290,7 @@ $resultpack = mysqli_query($con, $pack);
                     <select class="form-control " id="order-detail" name="order-detail">
                         <option selected>กรุณาเลือกแพ็คเกจ</option>
                         <?php while ($rowpack = mysqli_fetch_assoc($resultpack)) : ?>
-                            <option value="<?= $rowpack['packtype_id'] ?>"><?= $rowpack['pack_name'] ?>/ระยะเวลา <?= $rowpack['period'] ?> วัน</option>
+                            <option value="<?= $rowpack['packtype_id'] ?>"><?= $rowpack['pack_name'] ?> /ระยะเวลา <?= $rowpack['period'] ?> วัน</option>
                         <?php endwhile; ?>
                     </select>
                    
@@ -636,6 +636,8 @@ $resultpack = mysqli_query($con, $pack);
 
         function create_order() {
             let name = $("#order-detail option:selected").text();
+            const myArray = name.split(" ");
+            console.log(myArray[0]);
             $.ajax({
                 url: "<?= $base_api_pay ?>payment/create_order.php",
                 // url: "http://localhost/deena/project-api/v1/create_order.php",
@@ -644,7 +646,7 @@ $resultpack = mysqli_query($con, $pack);
                     referenceNo: $("#referenceNo").val(),
                     price: $("#price").val(),
                     name: $("#cust-name").val(),
-                    pack: name,
+                    pack: myArray[0],
                     id: "<?= $_SESSION['u_id'] ?>"
                 }),
                 success: function(data) {
