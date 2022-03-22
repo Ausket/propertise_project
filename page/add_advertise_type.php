@@ -82,11 +82,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
                             <form action="../backend/add_advertise_type_db.php" method="POST">
                                 <div class="card-body">
                                     <div class="form-group">
-
-
                                         <label for="exampleInputEmail1">ประเภทประกาศ</label>
                                         <input type="text" class="form-control" id="exampleInputEmail1" name="type" value="" placeholder="Advertise Type" required>
-
                                     </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">เลือกสีชนิดประกาศ</label>

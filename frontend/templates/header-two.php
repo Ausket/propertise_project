@@ -1,67 +1,83 @@
 <?php
 require_once('../dbconnect.php');
 
-if (isset($_POST['submit'])) {
+if (isset($_POST['g-recaptcha-response'])) {
+    $captcha = $_POST['g-recaptcha-response'];
+    // $captcha = $_GET["g-recaptcha-response"];
+    $response = file_get_contents("https://www.google.com/recaptcha/api/siteverify?secret=6LcCCf4eAAAAAMWzSwJw_owYszOf91DfcGxp7S_Z&response=" . $captcha . "&remoteip=" . $_SERVER['REMOTE_ADDR']);
+    $g_response = json_decode($response);
 
-    $email = $con->real_escape_string($_POST['email']);
-    $password = $con->real_escape_string($_POST['password']);
 
-    $sql = "SELECT * FROM users
+    if (isset($_POST['submit'])) {
+
+        if ($g_response->success === true) {
+
+            $email = $con->real_escape_string($_POST['email']);
+            $password = $con->real_escape_string($_POST['password']);
+
+            $sql = "SELECT * FROM users
                   WHERE  email='" . $email . "' 
                   AND  password='" . $password . "' ";
 
-    $result = $con->query($sql);
-    $row = $result->fetch_assoc();
+            $result = $con->query($sql);
+            $row = $result->fetch_assoc();
 
-    if ($row["ustatus"] == '0') {
-        echo "<script>";
-        echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
-        echo "</script>";
-        header('Refresh:0; url=../index.php');
-    } else {
-
-        if (!empty($row)) {
-
-            $_SESSION["u_id"] = $row["u_id"];
-            $_SESSION["email"] = $row["email"];
-            $_SESSION["password"] = $row["password"];
-            $_SESSION["name"] = $row["name"];
-            $_SESSION["address"] = $row["address"];
-            $_SESSION["tel"] = $row["tel"];
-            $_SESSION["id_card"] = $row["id_card"];
-            $_SESSION["company"] = $row["company"];
-            $_SESSION["birth_date"] = $row["birth_date"];
-            $_SESSION["img"] = $row["img"];
-            $_SESSION["utype"] = $row["utype"];
-            $_SESSION["ustatus"] = $row["ustatus"];
-            $_SESSION['last_login_timestamp'] = time();
-
-            if (!empty($_POST['remember'])) {
-                setcookie('user_login', $_POST['email'], time() + (1 * 24 * 60 * 60), '/');
-                setcookie('user_password', $_POST['password'], time() + (1 * 24 * 60 * 60), '/');
+            if ($row["ustatus"] == '0') {
+                echo "<script>";
+                echo "alert(\"บัญชีนี้ถูกระงับการใช้งานแล้ว\");";
+                echo "</script>";
+                header('Refresh:0; url=../index.php');
             } else {
 
-                if (isset($_COOKIE['user_login'])) {
-                    setcookie('user_login', '');
+                if (!empty($row)) {
 
-                    if (isset($_COOKIE['user_password'])) {
-                        setcookie('user_password', '');
+                    $_SESSION["u_id"] = $row["u_id"];
+                    $_SESSION["email"] = $row["email"];
+                    $_SESSION["password"] = $row["password"];
+                    $_SESSION["name"] = $row["name"];
+                    $_SESSION["address"] = $row["address"];
+                    $_SESSION["tel"] = $row["tel"];
+                    $_SESSION["id_card"] = $row["id_card"];
+                    $_SESSION["company"] = $row["company"];
+                    $_SESSION["birth_date"] = $row["birth_date"];
+                    $_SESSION["img"] = $row["img"];
+                    $_SESSION["utype"] = $row["utype"];
+                    $_SESSION["ustatus"] = $row["ustatus"];
+                    $_SESSION['last_login_timestamp'] = time();
+
+                    if (!empty($_POST['remember'])) {
+                        setcookie('user_login', $_POST['email'], time() + (1 * 24 * 60 * 60), '/');
+                        setcookie('user_password', $_POST['password'], time() + (1 * 24 * 60 * 60), '/');
+                    } else {
+
+                        if (isset($_COOKIE['user_login'])) {
+                            setcookie('user_login', '');
+
+                            if (isset($_COOKIE['user_password'])) {
+                                setcookie('user_password', '');
+                            }
+                        }
                     }
+
+
+                    if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
+                        header("location: ../page/profile.php");
+                    }
+                    if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
+                        header("location: dashboard-profiles.php");
+                    }
+                } else {
+                    echo "<script>";
+                    echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
+                    echo "</script>";
+                    // header('Refresh:0; url=../index.php');
                 }
-            }
-
-
-            if ($_SESSION["utype"] == 'admin' || $_SESSION["utype"] == 'staff') {
-                header("location: ../page/profile.php");
-            }
-            if ($_SESSION["utype"] == 'member' || $_SESSION["utype"] == 'agent') {
-                header("location: dashboard-profiles.php");
             }
         } else {
             echo "<script>";
-            echo "alert(\" email หรือ  password ไม่ถูกต้อง\");";
+            echo "alert(\" กรุณายืนยันตัวตน \");";
             echo "</script>";
-            // header('Refresh:0; url=../index.php');
+            header('Refresh:0;');
         }
     }
 }
@@ -265,11 +281,14 @@ $linkcook = "cookiepolicy.php";
                                         บันทึกการเข้าสู่ระบบ
                                     </label>
                                 </div>
-                                <a href="password-recovery.html" class="d-inline-block ml-auto text-orange fs-15">
+                                <!-- <a href="password-recovery.html" class="d-inline-block ml-auto text-orange fs-15">
                                     ลืมรหัสผ่านใช่หรือไม่
-                                </a>
+                                </a> -->
                             </div>
-                            <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block">เข้าสู่ระบบ</button>
+                            <div align="center">
+                                    <div id="html_element"></div>
+                                </div>
+                            <button type="submit" name="submit" class="btn btn-primary btn-lg btn-block mt-5">เข้าสู่ระบบ</button>
                         </form>
                         <div class="divider text-center my-2">
                             <span class="px-4 bg-white lh-17 text">
@@ -354,16 +373,22 @@ $linkcook = "cookiepolicy.php";
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    var onloadCallback = function() {
+        grecaptcha.render('html_element', {
+            'sitekey': '6LcCCf4eAAAAALIttIMJvPMaY8MmdWfy_Z-awrO2'
+        });
+    };
+</script>
 <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-<script>
-        function logOut() {
-            liff.init({
-                liffId: "1656973328-Oae71Lxj"
-            });
-            liff.logout();
-       
-        }
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer></script>
 
-      
-     
-    </script>
+<script>
+    function logOut() {
+        liff.init({
+            liffId: "1656973328-Oae71Lxj"
+        });
+        liff.logout();
+
+    }
+</script>

@@ -80,7 +80,7 @@ if (isset($_POST['ch'])) {
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>My Favourites </title>
+  <title>รายการโปรด</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->

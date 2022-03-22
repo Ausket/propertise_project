@@ -50,7 +50,14 @@ INNER JOIN districts ON location_property.district_id = districts.id)
 ";
 $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
 
-$facility_arr = array("สระว่ายน้ำ","ห้องสมุด","สวนสาธารณะ","ฟิตเนส","ร้านสะดวกซื้อ","สนามเด็กเล่น","เครื่องปรับอากาศ","Wi-Fi");
+$facility_arr = array("สระว่ายน้ำ", "ห้องสมุด", "สวนสาธารณะ", "ฟิตเนส", "ร้านสะดวกซื้อ", "สนามเด็กเล่น", "เครื่องปรับอากาศ", "Wi-Fi");
+
+$sqlpp = "SELECT * FROM advertise  
+LEFT  JOIN pay_status ON advertise.pack_id = pay_status.id
+LEFT  JOIN package_type ON pay_status.pack_name = package_type.pack_name 
+WHERE a_id =  $id2 ";
+$resultpp = mysqli_query($con, $sqlpp);
+
 
 ?>
 
@@ -77,6 +84,17 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <!--   <script src="../js/jquery.min.js"></script>
+ -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+    <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -115,6 +133,20 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
                                 <div class="card-body">
+
+                                    <label for="exampleInputEmail1">แพ็คเกจของคุณ</label>
+                                    <select class="custom-select" name="packtype" id="package" required>
+                                        <?php foreach ($resultpp as $value) {
+                                            $period = $value['period'];
+                                            $time = strtotime($value['datetime_order']);
+                                            $month = '+' . $period . 'day';
+                                            $stop_date = date('d-m-Y', strtotime($month, $time)); ?>
+
+                                            <option id="pack" value="<?php echo  $value['id'] ?>" <?php if ($value['pack_id'] == $rowb['pack_id']) {
+                                                                                                        echo "selected";
+                                                                                                    } ?>> ชื่อแพ็คเกจ : <?php echo $value['pack_name'] ?> /วันสั่งซื้อ <?php echo date('d-m-Y', strtotime($value['datetime_order'])) ?> /หมดอายุ <?php echo $stop_date ?> /ราคา <?php echo $value['price'] ?> </option>
+                                        <?php } ?>
+                                    </select>
                                     <div class="form-group">
 
                                         <label for="exampleInputEmail1">ประเภทอสังหา</label>
@@ -162,33 +194,33 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-group">
-                                            <div class="form-group col-md-4">
-                                                <label>รูปภาพเดิม</label><br>
-                                                <img src="../image/p_img/<?php echo $row2['img_video']; ?>" width="40%"> &nbsp;&nbsp;
-                                            </div>
-                                            <div class="form-group col-md-3">
-                                                <script language="JavaScript">
-                                                    function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
-                                                        $('#imgAvatar').attr('src', ele.value);
-                                                        if (ele.files && ele.files[0]) {
+                                        <div class="form-group text-center">
 
-                                                            var reader = new FileReader();
-
-                                                            reader.onload = function(e) {
-                                                                $('#imgAvatar').attr('src', e.target.result);
-                                                            }
-                                                            reader.readAsDataURL(ele.files[0]);
-                                                        }
-                                                    }
-                                                </script>
-                                                <img id="imgAvatar" width="50%">
-                                            </div>
-                                            <label>
-                                                เลือกรูปภาพ</label>
-                                            <input type="file" name="img" id="fileToUpload">
-
+                                            <label>รูปภาพเดิม</label><br>
+                                            <img src="../image/p_img/<?php echo $row2['img_video']; ?>" width="40%"> &nbsp;&nbsp;
                                         </div>
+                                        <div class="form-group col-md-3 text-center">
+                                            <script language="JavaScript">
+                                                function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
+                                                    $('#imgAvatar').attr('src', ele.value);
+                                                    if (ele.files && ele.files[0]) {
+
+                                                        var reader = new FileReader();
+
+                                                        reader.onload = function(e) {
+                                                            $('#imgAvatar').attr('src', e.target.result);
+                                                        }
+                                                        reader.readAsDataURL(ele.files[0]);
+                                                    }
+                                                }
+                                            </script>
+                                            <img id="imgAvatar" width="50%">
+                                        </div>
+                                        <label>
+                                            เลือกรูปภาพ</label>
+                                        <input type="file" name="upload_image" id="upload_image" accept="image/*">
+                                        <input type="text" id="saveimg" name="nameimg" value="" hidden>
+
                                     </div>
                                 </div>
                             </div>
@@ -279,6 +311,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="exampleInputEmail1">รหัสไปรษณีย์</label>
                                         <input type="text" class="form-control" id="exampleInputEmail1" name="postal_code" value="<?php echo $row2['postal_code']; ?>" placeholder="รหัสไปรษณีย์" required>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">แผนที่</label>
+                                        <div id="map" style="height: 296px"></div>
+                                        <div class="form-row mx-n2">
+                                            <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group mb-md-0">
+                                                    <label for="latitude"> ละติจูด </label>
+                                                    <input type="text" class="form-control form-control-lg border-0" id="lat" name="latitude" value="<?php echo $row2['lat']; ?>" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group mb-md-0">
+                                                    <label for="longitude"> ลองจิจูด </label>
+                                                    <input type="text" class="form-control form-control-lg border-0" id="lng" name="longitude" value="<?php echo $row2['lng']; ?>" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- /.card-body -->
                                 </div>
@@ -364,6 +414,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
         </section>
         <!-- /.card-body -->
 
+        <div id="uploadimageModal" class="modal" role="dialog">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Upload & Crop Image</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-md-12 ">
+                            <div id="image_demo" class="demo"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary crop_image " id="img">Crop & Upload Image</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
     </div>
@@ -406,23 +475,129 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../js/buttons.colVis.min.js"></script>
 
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
+        mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+
+        var map = new mapboxgl.Map({
+            container: 'map',
+            center: [<?= $row2['lng']; ?>, <?= $row2['lat']; ?>],
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 10
+
+        });
+
+        const marker2 = new mapboxgl.Marker({
+                color: 'red'
+            })
+            .setLngLat([<?= $row2['lng']; ?>, <?= $row2['lat']; ?>])
+            .addTo(map)
+
+
+        var marker = [];
+
+        map.on('style.load', function() {
+            map.on('click', function(e) {
+                marker2.remove();
+
+                if (marker.length !== 0) {
+
+                    for (var i = marker.length - 1; i >= 0; i--) {
+                        marker[i].remove();
+                    }
+
+                } else {
+                    console.log('test');
+
+                }
+
+                var coordinates = e.lngLat;
+                new mapboxgl.Popup()
+
+                document.getElementById("lng").value = coordinates.lng
+                document.getElementById("lat").value = coordinates.lat
+
+
+                var marker1 = new mapboxgl.Marker({
+                    color: 'red'
+                }).setLngLat(coordinates).addTo(map);
+
+                marker.push(marker1);
+
+
             });
         });
+
+
+        map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+
+            })
+        );
+
+        map.on('idle', function() {
+            map.resize()
+        })
+        map.addControl(new mapboxgl.NavigationControl());
+        map.addControl(new mapboxgl.FullscreenControl());
+
+        // ------------------------------------------------------------------------------------------------------
+
+        $(document).ready(function() {
+
+            $image_crop = $('#image_demo').croppie({
+                enableExif: true,
+                viewport: {
+                    width: 490,
+                    height: 310,
+                    type: 'square' //circle
+                },
+                boundary: {
+                    width: 550,
+                    height: 500
+                }
+            });
+
+            $('#upload_image').on('change', function() {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    $image_crop.croppie('bind', {
+                        url: event.target.result
+                    }).then(function() {
+                        console.log('jQuery bind complete');
+                    });
+                }
+                reader.readAsDataURL(this.files[0]);
+                $('#uploadimageModal').modal('show');
+            });
+
+            $('.crop_image').click(function(event) {
+                $image_crop.croppie('result', {
+                        type: 'canvas',
+                        size: 'viewport'
+                    })
+                    .then(function(response) {
+
+                        $.ajax({
+                            url: "../backend/uploadimg.php",
+                            type: "POST",
+                            data: {
+                                "img": response
+                            },
+                            success: function(data) {
+                                $('#uploadimageModal').modal('hide');
+                                $('#uploaded_image').attr('src', data).width(450).height(300);
+                                let name = data;
+                                let cutname = name.slice(15);
+                                $('#saveimg').val(cutname);
+                                console.log(data);
+                            }
+                        });
+                    })
+            });
+
+        });
+
 
         /* ---------------------------------------get_amphure  -------------------------------------------------   */
 
@@ -477,29 +652,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
         function updateTextView(_obj) {
-                            var num = getNumber(_obj.val());
-                            if (num == 0) {
-                                _obj.val('');
-                            } else {
-                                _obj.val(num.toLocaleString());
-                            }
-                        }
+            var num = getNumber(_obj.val());
+            if (num == 0) {
+                _obj.val('');
+            } else {
+                _obj.val(num.toLocaleString());
+            }
+        }
 
-                        function getNumber(_str) {
-                            var arr = _str.split('');
-                            var out = new Array();
-                            for (var cnt = 0; cnt < arr.length; cnt++) {
-                                if (isNaN(arr[cnt]) == false) {
-                                    out.push(arr[cnt]);
-                                }
-                            }
-                            return Number(out.join(''));
-                        }
-                        $(document).ready(function() {
-                            $('#price').on('keyup', function() {
-                                updateTextView($(this));
-                            });
-                        });
+        function getNumber(_str) {
+            var arr = _str.split('');
+            var out = new Array();
+            for (var cnt = 0; cnt < arr.length; cnt++) {
+                if (isNaN(arr[cnt]) == false) {
+                    out.push(arr[cnt]);
+                }
+            }
+            return Number(out.join(''));
+        }
+        $(document).ready(function() {
+            $('#price').on('keyup', function() {
+                updateTextView($(this));
+            });
+        });
     </script>
 </body>
 

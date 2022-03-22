@@ -124,7 +124,7 @@ WHERE advertise.ad_status = '1' ";
   if (isset($_POST['ch'])) {
     $choice = $_POST['ch'];
     if ($choice == 1) {
-      $text = 'ORDER BY advertise.a_id DESC';
+      $text = 'ORDER BY advertise.date DESC';
     }
     if ($choice == 2) {
       $text = 'ORDER BY property_detail.price DESC';
@@ -141,7 +141,7 @@ WHERE advertise.ad_status = '1' ";
     $numrow = mysqli_num_rows($result2);
   } else {
 
-    $sqls = "$sql2" . 'ORDER BY advertise.a_id DESC ';
+    $sqls = "$sql2" . 'ORDER BY advertise.date DESC ';
     $result2 = mysqli_query($con, $sqls) or die(mysqli_error($con));
     $numrow = mysqli_num_rows($result2);
   }
@@ -192,7 +192,7 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Listing Grid - Home</title>
+  <title>ค้นหาอสังหาริมทรัพย์</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->

@@ -114,9 +114,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <!-- /.card -->
 
                         <div class="card">
-                            <div class="card-header">
+                            <!-- <div class="card-header">
                                 <a href="addpropertise.php" class="btn btn-warning ">เพิ่มอสังหา &nbsp; <i class="fas fa-user"></i></a>
-                            </div>
+                            </div> -->
                             <!-- /.card-header -->
                             <div class="card-body">
                                 <table id="example1" class="table table-bordered table-striped">
@@ -166,7 +166,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <i class="fas fa-folder"></i></a>&nbsp;
                                                         <a title='วิว' type=button class="btn btn-warning view" name="view" value="วิว" id="<?php echo $row2["pd_id"]; ?>">
                                                         <i class="fas fa-eye"></i></a>&nbsp;
-                                                    <a href="../backend/delpropertise.php?id=<?php echo $row2['l_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger "><i class="far fa-trash-alt"></i></a>
+                                                    <!-- <a href="../backend/delpropertise.php?id=<?php echo $row2['l_id']; ?>" onclick="return confirm('Are you sure to delete ?')" class="btn btn-danger "><i class="far fa-trash-alt"></i></a> -->
                                                 </td>
 
                                             </tr>

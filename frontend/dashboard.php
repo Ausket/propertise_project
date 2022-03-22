@@ -7,7 +7,7 @@
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Dashboard - HomeID</title>
+  <title>แดชบอร์ด</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -61,7 +61,7 @@
       <?php include 'templates/dashboard-menu.php'; ?>
       <div class="page-content">
         <?php include 'templates/header-dashboard.php'; ?>
-        <main id="content" class="bg-gray-01">
+        <main id="content" class="bg-gray-01" style="margin-bottom:50px;">
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div>

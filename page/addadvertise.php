@@ -26,6 +26,10 @@ $resulta = mysqli_query($con, $sqla);
 $sqlpr = "SELECT * FROM provinces";
 $resultpr = mysqli_query($con, $sqlpr);
 
+$sqlpa = "SELECT * FROM (pay_status 
+LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
+WHERE u_id= $id AND void = '0' AND resultCode = '00' AND pack_status = '1'  ORDER BY pay_status.id DESC";
+$resultpa = mysqli_query($con, $sqlpa);
 
 
 ?>
@@ -53,6 +57,18 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <!--   <script src="../js/jquery.min.js"></script>
+ -->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css' rel='stylesheet' />
+    <script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.min.js"></script>
+    <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.7.2/mapbox-gl-geocoder.css" type="text/css">
+    <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -91,6 +107,26 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
 
                                 <div class="card-body">
+                                    <div class="form-group">
+
+                                        <label for="exampleInputEmail1">แพ็คเกจของคุณ</label>
+                                        <select class="custom-select" name="packtype" id="package" required>
+                                            <option class="text-center">เลือกแพ็คเกจ</option>
+                                            <?php while ($row = mysqli_fetch_array($resultpa)) {
+                                                $period = $row['period'];
+                                                $time = strtotime($row['datetime_order']);
+                                                $month = '+' . $period . 'day';
+                                                $stop_date = date('d-m-Y', strtotime($month, $time));
+                                                $allad = $row['num_ad'];
+
+
+                                                echo " <option  value=" . $row['id'] . "> " . "ชื่อแพ็คเกจ : " . $row['pack_name'] . " /วันสั่งซื้อ " . date('d-m-Y', strtotime($row['datetime_order'])) . " /หมดอายุ " . $stop_date . " /ราคา " . $row['price'] . " /จำนวนประกาศ " . $allad . " </option> ";
+                                            } ?>
+                                        </select>
+                                        <input type="text" id="idpack" name="idpack" hidden>
+                                        <input type="text" id="numimg" name="numimg" hidden>
+                                        <input type="text" id="numad" name="numad" hidden>
+                                    </div>
                                     <div class="form-group">
 
                                         <label for="exampleInputEmail1">ประเภทอสังหา</label>
@@ -195,6 +231,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <label for="exampleInputEmail1">รหัสไปรษณีย์</label>
                                         <input type="text" class="form-control" id="postal_code" name="postal_code" value="" placeholder="รหัสไปรษณีย์" required>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">แผนที่</label>
+                                        <div id="map" style="height: 296px"></div>
+                                        <div class="form-row mx-n2">
+                                            <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group mb-md-0">
+                                                    <label for="latitude"> ละติจูด </label>
+                                                    <input type="text" class="form-control form-control-lg border-0" id="lat" name="latitude" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
+                                                <div class="form-group mb-md-0">
+                                                    <label for="longitude"> ลองจิจูด </label>
+                                                    <input type="text" class="form-control form-control-lg border-0" id="lng" name="longitude" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                     <!-- /.card-body -->
                                 </div>
@@ -241,11 +295,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                     <!-- /.card-header -->
                                     <!-- form start -->
                                     <div class="card-body">
-                                        <div class="form-group">
+                                        <div class="form-group text-center">
                                             <div class="form-group">
                                                 <label>
                                                     รูปภาพหลัก</label>
-                                                <input type="file" name="img" id="imageUpload">
+                                                <div class="profile-images">
+                                                    <img src="../images/up-img.png" id="uploaded_image" width="100px">
+                                                </div>
+                                                <input type="file" name="upload_image" id="upload_image" accept="image/*">
+                                                <input type="text" id="saveimg" name="nameimg" value="" hidden>
                                             </div>
                                             <div></div>
                                         </div>
@@ -267,40 +325,69 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                                         <script language="javascript">
                                                             function fncCreateElement() {
 
+                                                                // var id = $('#package').attr("id");
+                                                                // $('#idpack').val(id);
+
                                                                 var mySpan = document.getElementById('mySpan');
                                                                 var myLine = document.getElementById('hdnLine');
                                                                 myLine.value++;
 
-                                                                var myElement4 = document.createElement('br');
-                                                                myElement4.setAttribute('name', "br" + myLine.value);
-                                                                myElement4.setAttribute('id', "br" + myLine.value);
-                                                                mySpan.appendChild(myElement4);
 
                                                                 var div = document.createElement('div');
                                                                 div.id = 'div' + myLine.value;
-                                                                div.className = 'card-body bg-light';
                                                                 div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
 
 
-                                                                var myElement4 = document.createElement('br');
-                                                                myElement4.setAttribute('name', "br" + myLine.value);
-                                                                myElement4.setAttribute('id', "br" + myLine.value);
-                                                                div.appendChild(myElement4);
 
                                                                 var myElement2 = document.createElement('input');
                                                                 myElement2.setAttribute('type', "file");
                                                                 myElement2.setAttribute('name', "file[]");
                                                                 myElement2.setAttribute('id', "file" + myLine.value);
                                                                 myElement2.setAttribute('required', 'true');
+                                                                myElement2.setAttribute('accept', 'image/*');
+                                                                myElement2.setAttribute('OnChange', 'showPreview(this)');
                                                                 div.appendChild(myElement2);
+
+                                                                // accept="image/*" OnChange="showPreview(this)
 
                                                                 var myElement4 = document.createElement('br');
                                                                 myElement4.setAttribute('name', "br" + myLine.value);
                                                                 myElement4.setAttribute('id', "br" + myLine.value);
-                                                                div.appendChild(myElement4);
+                                                                mySpan.appendChild(myElement4);
+
+
+                                                                var img = document.createElement('img');
+                                                                img.id = 'imgAvatar' + myLine.value;
+                                                                img.className = 'img-thumbnail2';
+                                                                //img.setAttribute('height', '200');
+                                                                //class="img-thumbnail2"
+
+                                                                div.appendChild(img);
+
 
                                                                 mySpan.appendChild(div);
 
+                                                                var limit = parseInt($('#numimg').val());
+                                                                console.log(typeof(limit));
+
+                                                                if (myLine.value > limit) {
+                                                                    Swal.fire({
+                                                                        position: 'top-center',
+                                                                        icon: 'warning',
+                                                                        title: 'สามารถเพิ่มรูปได้สูงสุด ' + limit + ' รูปเท่านั้น',
+                                                                        showConfirmButton: false,
+                                                                        timer: 1000
+                                                                    })
+
+
+                                                                    var deleteSpan = document.getElementById('div' + myLine.value);
+                                                                    mySpan.removeChild(deleteSpan);
+
+                                                                    var deleteBr = document.getElementById("br" + myLine.value);
+                                                                    mySpan.removeChild(deleteBr);
+
+                                                                    myLine.value--;
+                                                                }
 
                                                             }
 
@@ -314,16 +401,29 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                                                 var deleteBr = document.getElementById("br" + myLine.value);
                                                                 mySpan.removeChild(deleteBr);
-                                                                // var deleteFile = document.getElementById("file" + myLine.value);
-                                                                // mySpan.removeChild(deleteFile);
-                                                                // var deleteBr = document.getElementById("br" + myLine.value);
-                                                                // mySpan.removeChild(deleteBr);
-
 
                                                                 myLine.value--;
 
                                                             }
+
+                                                            function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
+
+                                                                var mySpan = document.getElementById('mySpan');
+                                                                var myLine = document.getElementById('hdnLine');
+                                                                $('#imgAvatar').attr('src', ele.value);
+                                                                if (ele.files && ele.files[0]) {
+
+                                                                    var reader = new FileReader();
+
+                                                                    reader.onload = function(e) {
+                                                                        $('#imgAvatar'.$x).attr('src', e.target.result);
+                                                                    }
+                                                                    reader.readAsDataURL(ele.files[0]);
+                                                                }
+                                                                console.log('#imgAvatar');
+                                                            }
                                                         </script>
+
                                                     </div>
                                                 </div>
 
@@ -390,6 +490,25 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     </div>
     <!-- /.content-wrapper -->
+    <div id="uploadimageModal" class="modal" role="dialog">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Upload & Crop Image</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 ">
+                        <div id="image_demo" class="demo"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary crop_image " id="img">Crop & Upload Image</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Control Sidebar -->
     <aside class="control-sidebar control-sidebar-dark">
@@ -405,7 +524,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
     </div>
     <!-- ./wrapper -->
 
-    <!-- REQUIRED SCRIPTS -->
 
     <!-- jQuery -->
     <script src="../js/jquery.min.js"></script>
@@ -428,23 +546,62 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../js/buttons.colVis.min.js"></script>
 
     <script>
-        $(function() {
-            $("#example1").DataTable({
-                "responsive": true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-            }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": false,
-                "searching": false,
-                "ordering": true,
-                "info": true,
-                "autoWidth": false,
-                "responsive": true,
+        $(document).ready(function() {
+
+            $image_crop = $('#image_demo').croppie({
+                enableExif: true,
+                viewport: {
+                    width: 490,
+                    height: 310,
+                    type: 'square' //circle
+                },
+                boundary: {
+                    width: 550,
+                    height: 500
+                }
             });
+
+            $('#upload_image').on('change', function() {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    $image_crop.croppie('bind', {
+                        url: event.target.result
+                    }).then(function() {
+                        console.log('jQuery bind complete');
+                    });
+                }
+                reader.readAsDataURL(this.files[0]);
+                $('#uploadimageModal').modal('show');
+            });
+
+            $('.crop_image').click(function(event) {
+                $image_crop.croppie('result', {
+                        type: 'canvas',
+                        size: 'viewport'
+                    })
+                    .then(function(response) {
+
+                        $.ajax({
+                            url: "../backend/uploadimg.php",
+                            type: "POST",
+                            data: {
+                                "img": response
+                            },
+                            success: function(data) {
+                                $('#uploadimageModal').modal('hide');
+                                $('#uploaded_image').attr('src', data).width(450).height(300);
+                                let name = data;
+                                let cutname = name.slice(15);
+                                $('#saveimg').val(cutname);
+                                console.log(data);
+                            }
+                        });
+                    })
+            });
+
         });
+
+      
 
         /* ---------------------------------------get_amphure  -------------------------------------------------   */
 
@@ -489,29 +646,121 @@ scratch. This page gets rid of all links and provides the needed markup only.
         });
 
         function updateTextView(_obj) {
-                            var num = getNumber(_obj.val());
-                            if (num == 0) {
-                                _obj.val('');
-                            } else {
-                                _obj.val(num.toLocaleString());
-                            }
-                        }
+            var num = getNumber(_obj.val());
+            if (num == 0) {
+                _obj.val('');
+            } else {
+                _obj.val(num.toLocaleString());
+            }
+        }
 
-                        function getNumber(_str) {
-                            var arr = _str.split('');
-                            var out = new Array();
-                            for (var cnt = 0; cnt < arr.length; cnt++) {
-                                if (isNaN(arr[cnt]) == false) {
-                                    out.push(arr[cnt]);
-                                }
-                            }
-                            return Number(out.join(''));
-                        }
-                        $(document).ready(function() {
-                            $('#price').on('keyup', function() {
-                                updateTextView($(this));
-                            });
-                        });
+        function getNumber(_str) {
+            var arr = _str.split('');
+            var out = new Array();
+            for (var cnt = 0; cnt < arr.length; cnt++) {
+                if (isNaN(arr[cnt]) == false) {
+                    out.push(arr[cnt]);
+                }
+            }
+            return Number(out.join(''));
+        }
+        $(document).ready(function() {
+            $('#price').on('keyup', function() {
+                updateTextView($(this));
+            });
+        });
+
+        $('#package').change(function() {
+            var id = $(this).val();
+            $('#idpack').val(id);
+
+            $.ajax({
+                type: "post",
+                url: "../backend/get_package.php",
+                data: {
+                    id: id
+                },
+
+                success: function(data) {
+                    console.log(data);
+                    $('#numimg').val(data);
+                }
+            });
+
+            $.ajax({
+                type: "post",
+                url: "../backend/get_numad.php",
+                data: {
+                    id: id
+                },
+
+                success: function(data) {
+                    console.log(data);
+                    $('#numad').val(data);
+                }
+            });
+
+        });
+
+        mapboxgl.accessToken = 'pk.eyJ1IjoicG9uZDA4MjkiLCJhIjoiY2t6YzdqdDNrMmw5MzJub2Y2M2lkbncwdSJ9.hdSf1-d_NbXj6WsPUpua-Q';
+        var map = new mapboxgl.Map({
+            container: 'map',
+            center: [100.604274, 13.84786],
+            style: 'mapbox://styles/mapbox/streets-v11',
+            zoom: 10
+        });
+        var marker = [];
+
+        console.log(marker)
+
+        map.on('style.load', function() {
+            map.on('click', function(e) {
+
+
+                if (marker.length !== 0) {
+
+                    for (var i = marker.length - 1; i >= 0; i--) {
+                        marker[i].remove();
+                    }
+
+
+                } else {
+                    console.log('test');
+
+                }
+
+                var coordinates = e.lngLat;
+                new mapboxgl.Popup()
+
+                document.getElementById("lng").value = coordinates.lng
+                document.getElementById("lat").value = coordinates.lat
+
+
+
+                var marker1 = new mapboxgl.Marker({
+                    color: 'red'
+                }).setLngLat(coordinates).addTo(map);
+
+                marker.push(marker1);
+
+            });
+        });
+
+        map.addControl(
+            new MapboxGeocoder({
+                accessToken: mapboxgl.accessToken,
+                mapboxgl: mapboxgl
+
+            })
+
+        );
+
+        map.on('idle', function() {
+            map.resize()
+        })
+
+        map.addControl(new mapboxgl.NavigationControl());
+        map.addControl(new mapboxgl.FullscreenControl());
     </script>
 </body>
 

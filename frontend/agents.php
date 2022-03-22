@@ -7,7 +7,7 @@
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Agent</title>
+  <title>ค้นหานายหน้า</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -128,12 +128,7 @@
         if ($choice == 2) {
           $text = 'ORDER BY users.u_id ASC ';
         }
-        if ($choice == 3) {
-          $text = ' ';
-        }
-        if ($choice == 4) {
-          $text = ' ';
-        }
+     
 
         $sqlc = $_POST['sql'];
         $texts = $_POST['Order_text'];
@@ -174,13 +169,7 @@
                           <option <?php if ($choice == "2") {
                                     echo "selected";
                                   } ?> value='2'>ล่าสุด</option>
-                          <option <?php if ($choice == "3") {
-                                    echo "selected";
-                                  } ?> value='3'>เรตติ้ง</option>
-                          <option <?php if ($choice == "4") {
-                                    echo "selected";
-                                  } ?> value='4'>จำนวนทรัพย์สิน</option>
-
+                        
                         </select>
                       </div>
                     </form>
@@ -328,13 +317,7 @@
         if ($choice == 2) {
           $text = 'ORDER BY u_id ASC ';
         }
-        if ($choice == 3) {
-          $text = ' ';
-        }
-        if ($choice == 4) {
-
-          $text = ' ';
-        }
+      
 
         $sqlc = $_POST['sql'];
         $texts = $_POST['Order_text'];
@@ -376,12 +359,7 @@
                           <option <?php if ($choice == "2") {
                                     echo "selected";
                                   } ?> value='2'>ล่าสุด</option>
-                          <option <?php if ($choice == "3") {
-                                    echo "selected";
-                                  } ?> value='3'>เรตติ้ง</option>
-                          <option <?php if ($choice == "4") {
-                                    echo "selected";
-                                  } ?> value='4'>จำนวนทรัพย์สิน</option>
+                  
 
                         </select>
                       </div>

@@ -21,10 +21,8 @@ $resultpr = mysqli_query($con, $sqlpr);
 
 $sqlpa = "SELECT * FROM (pay_status 
 LEFT JOIN package_type ON pay_status.pack_name = package_type.pack_name)
-WHERE u_id= $id AND void = '0' ORDER BY pay_status.id DESC";
+WHERE u_id= $id AND void = '0' AND resultCode = '00' AND pack_status = '1'  ORDER BY pay_status.id DESC";
 $resultpa = mysqli_query($con, $sqlpa);
-
-
 
 ?>
 <!doctype html>
@@ -36,7 +34,7 @@ $resultpa = mysqli_query($con, $sqlpa);
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Add new property - HomeID</title>
+  <title>ลงประกาศ</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -172,6 +170,12 @@ $resultpa = mysqli_query($con, $sqlpa);
       height: 100%;
       width: 100%;
     }
+
+    .demo {
+      width: 350px;
+      margin-top: 30px;
+      margin-left: 100px;
+    }
   </style>
 
 </head>
@@ -182,7 +186,7 @@ $resultpa = mysqli_query($con, $sqlpa);
       <?php include 'templates/dashboard-menu.php'; ?>
       <div class="page-content">
         <?php include 'templates/header-dashboard.php'; ?>
-        <main id="content" class="bg-gray-01">
+        <main id="content" class="bg-gray-01" style="margin-bottom:50px;">
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10 my-profile">
             <div class="mb-6">
               <h2 class="mb-0 text-heading fs-22 lh-15">ลงประกาศ
@@ -224,13 +228,17 @@ $resultpa = mysqli_query($con, $sqlpa);
                                           $time = strtotime($row['datetime_order']);
                                           $month = '+' . $period . 'day';
                                           $stop_date = date('d-m-Y', strtotime($month, $time));
+                                          $allad = $row['num_ad'];
+                                          
 
-                                          echo " <option  value=" . $row['id'] . "> " . "ชื่อแพ็คเกจ : " . $row['pack_name'] . " /วันสั่งซื้อ " . date('d-m-Y', strtotime($row['datetime_order'])) . " /หมดอายุ " . $stop_date . " /ราคา " . $row['price'] . " </option> ";
+                                          echo " <option  value=" . $row['id'] . "> " . "ชื่อแพ็คเกจ : " . $row['pack_name'] . " /วันสั่งซื้อ " . date('d-m-Y', strtotime($row['datetime_order'])) . " /หมดอายุ " . $stop_date . " /ราคา " . $row['price'] ." /จำนวนประกาศ " . $allad . " </option> ";
                                         } ?>
                                       </select>
                                     </div>
-                                    <input type="text" id="idpack" name="idpack" hidden >
+                                    <input type="text" id="idpack" name="idpack" hidden>
                                     <input type="text" id="numimg" name="numimg" hidden>
+                                    <input type="text" id="numad" name="numad" hidden>
+                                    <!-- <input type="text" id="remain" name="remain" value=""  > -->
                                     <h3 class="card-title mb-0 text-heading fs-22 lh-15"> รายละเอียดอสังหาริมทรัพย์ </h3>
                                     <hr>
                                     <div class="form-group mb-3">
@@ -254,13 +262,13 @@ $resultpa = mysqli_query($con, $sqlpa);
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
                                           <label for="price" class="text-heading"> จำนวนห้องนอน <span class="red">*</span></label>
-                                          <input type="number" class="form-control form-control-lg border-0" id="bedroom" name="bedroom"  required>
+                                          <input type="number" class="form-control form-control-lg border-0" id="bedroom" name="bedroom" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
                                           <label for="price" class="text-heading"> จำนวนห้องน้ำ <span class="red">*</span></label>
-                                          <input type="number" class="form-control form-control-lg border-0" id="bathroom" name="bathroom"  required>
+                                          <input type="number" class="form-control form-control-lg border-0" id="bathroom" name="bathroom" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
@@ -272,13 +280,13 @@ $resultpa = mysqli_query($con, $sqlpa);
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
                                           <label for="price" class="text-heading"> ขนาดพื้นที่ <span class="red">*</span><span class="text-muted">( ตร.วา )</span> </label>
-                                          <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area"  required>
+                                          <input type="number" class="form-control form-control-lg border-0" id="space_area" name="space_area" required>
                                         </div>
                                       </div>
                                     </div>
                                     <div class="form-group">
                                       <label for="price" class="text-heading"> ราคา <span class="red">*</span></label>
-                                      <input type="text" class="form-control form-control-lg border-0" id="price" name="price"  required>
+                                      <input type="text" class="form-control form-control-lg border-0" id="price" name="price" required>
                                     </div>
                                     <h3 class="card-title mt-6 mb-0 text-heading fs-22 lh-15"> สิ่งอำนวยความสะดวก </h3>
                                     <hr>
@@ -380,13 +388,13 @@ $resultpa = mysqli_query($con, $sqlpa);
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
                                           <label for="state" class="text-heading"> บ้านเลขที่ <span class="red">*</span></label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="house_no" name="house_no"  required>
+                                          <input type="text" class="form-control form-control-lg border-0" id="house_no" name="house_no" required>
                                         </div>
                                       </div>
                                       <div class="col-md-6 col-lg-12 col-xxl-6 px-2">
                                         <div class="form-group">
                                           <label for="city" class="text-heading"> หมู่ <span class="red">*</span></label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="village_no" name="village_no"  required>
+                                          <input type="text" class="form-control form-control-lg border-0" id="village_no" name="village_no" required>
                                         </div>
                                       </div>
                                     </div>
@@ -440,7 +448,7 @@ $resultpa = mysqli_query($con, $sqlpa);
                                       <div class="col-md-12 col-lg-12 col-xxl-12 px-2">
                                         <div class="form-group">
                                           <label for="neighborhood" class="text-heading"> รหัสไปรษณีย์ <span class="red">*</span></label>
-                                          <input type="text" class="form-control form-control-lg border-0" id="postal_code" name="postal_code"  required>
+                                          <input type="text" class="form-control form-control-lg border-0" id="postal_code" name="postal_code" required>
                                         </div>
                                       </div>
                                     </div>
@@ -530,94 +538,80 @@ $resultpa = mysqli_query($con, $sqlpa);
                                         <input type="file" name="upload_image" id="upload_image" accept="image/*">
                                         <!-- <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p> -->
                                       </div>
+                                      <input type="text" id="saveimg" name="nameimg" value="" hidden>
                                     </div>
                                     <p class="card-text mt-5 mb-5"> รูปภาพเพิ่มเติม </p>
                                     <p class="text-heading fs-22 lh-15 mb-4"> อัพโหลดแบบหลายรูปภาพ </p>
-                                   
-                                      <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
-                                                                                      echo date("Y-m-d\TH:i:s"); ?>>
-                                                                                      
-                                                <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
-                                                <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
-                                                <input name="hdnLine" id="hdnLine" type="hidden" value=0>
-                                                <input name="limit" id="limit" type="hidden" >
 
-                                      <div class="col-md-4 col_mem">
-                                        <div id="mySpan" name="mySpan"><br>
-                                        </div>
-                                        <script language="javascript">
-                                          function fncCreateElement() {
-                                            
-                                            var id = $('#package').attr("id");
-                                            $('#idpack').val(id);
+                                    <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
+                                                                                    echo date("Y-m-d\TH:i:s"); ?>>
+                                    <div align="center">
+                                      <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
+                                      <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();">
+                                    </div><br><br>
+                                    <input name="hdnLine" id="hdnLine" type="hidden" value=0>
+                                    <input name="limit" id="limit" type="hidden">
 
-                                            var mySpan = document.getElementById('mySpan');
-                                            var myLine = document.getElementById('hdnLine');
-                                            myLine.value++;
+                                    <div class="col-md-4 col_mem">
+                                      <div id="mySpan" name="mySpan"><br>
+                                      </div>
+                                      <script language="javascript">
+                                        function fncCreateElement() {
 
+                                          var id = $('#package').attr("id");
+                                          $('#idpack').val(id);
 
-                                            var div = document.createElement('div');
-                                            div.id = 'div' + myLine.value;
-                                            div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
+                                          var mySpan = document.getElementById('mySpan');
+                                          var myLine = document.getElementById('hdnLine');
+                                          myLine.value++;
 
 
-
-                                            var myElement2 = document.createElement('input');
-                                            myElement2.setAttribute('type', "file");
-                                            myElement2.setAttribute('name', "file[]");
-                                            myElement2.setAttribute('id', "file" + myLine.value);
-                                            myElement2.setAttribute('required', 'true');
-                                            myElement2.setAttribute('accept', 'image/*');
-                                            myElement2.setAttribute('OnChange', 'showPreview(this)');
-                                            div.appendChild(myElement2);
-
-                                            // accept="image/*" OnChange="showPreview(this)
-
-                                            var myElement4 = document.createElement('br');
-                                            myElement4.setAttribute('name', "br" + myLine.value);
-                                            myElement4.setAttribute('id', "br" + myLine.value);
-                                            mySpan.appendChild(myElement4);
+                                          var div = document.createElement('div');
+                                          div.id = 'div' + myLine.value;
+                                          div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
 
 
-                                            var img = document.createElement('img');
-                                            img.id = 'imgAvatar' + myLine.value;
-                                            img.className = 'img-thumbnail2';
-                                            //img.setAttribute('height', '200');
-                                            //class="img-thumbnail2"
 
-                                            div.appendChild(img);
+                                          var myElement2 = document.createElement('input');
+                                          myElement2.setAttribute('type', "file");
+                                          myElement2.setAttribute('name', "file[]");
+                                          myElement2.setAttribute('id', "file" + myLine.value);
+                                          myElement2.setAttribute('required', 'true');
+                                          myElement2.setAttribute('accept', 'image/*');
+                                          myElement2.setAttribute('OnChange', 'showPreview(this)');
+                                          div.appendChild(myElement2);
 
+                                          // accept="image/*" OnChange="showPreview(this)
 
-                                            mySpan.appendChild(div);
-
-                                            var limit = parseInt($('#numimg').val());
-                                            console.log(typeof(limit));
-
-                                            if (myLine.value > limit) {
-                                              Swal.fire({
-                                                position: 'top-center',
-                                                icon: 'warning',
-                                                title: 'สามารถเพิ่มรูปได้สูงสุด ' + limit + ' รูปเท่านั้น',
-                                                showConfirmButton: false,
-                                                timer: 1000
-                                              })
+                                          var myElement4 = document.createElement('br');
+                                          myElement4.setAttribute('name', "br" + myLine.value);
+                                          myElement4.setAttribute('id', "br" + myLine.value);
+                                          mySpan.appendChild(myElement4);
 
 
-                                              var deleteSpan = document.getElementById('div' + myLine.value);
-                                              mySpan.removeChild(deleteSpan);
+                                          var img = document.createElement('img');
+                                          img.id = 'imgAvatar' + myLine.value;
+                                          img.className = 'img-thumbnail2';
+                                          //img.setAttribute('height', '200');
+                                          //class="img-thumbnail2"
 
-                                              var deleteBr = document.getElementById("br" + myLine.value);
-                                              mySpan.removeChild(deleteBr);
+                                          div.appendChild(img);
 
-                                              myLine.value--;
-                                            }
 
-                                          }
+                                          mySpan.appendChild(div);
 
-                                          function fncDeleteElement() {
+                                          var limit = parseInt($('#numimg').val());
+                                          console.log(typeof(limit));
 
-                                            var mySpan = document.getElementById('mySpan');
-                                            var myLine = document.getElementById('hdnLine');
+                                          if (myLine.value > limit) {
+                                            Swal.fire({
+                                              position: 'top-center',
+                                              icon: 'warning',
+                                              title: 'สามารถเพิ่มรูปได้สูงสุด ' + limit + ' รูปเท่านั้น',
+                                              showConfirmButton: false,
+                                              timer: 1000
+                                            })
+
 
                                             var deleteSpan = document.getElementById('div' + myLine.value);
                                             mySpan.removeChild(deleteSpan);
@@ -626,28 +620,44 @@ $resultpa = mysqli_query($con, $sqlpa);
                                             mySpan.removeChild(deleteBr);
 
                                             myLine.value--;
-
                                           }
 
-                                          function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
+                                        }
 
-                                            var mySpan = document.getElementById('mySpan');
-                                            var myLine = document.getElementById('hdnLine');
-                                            $('#imgAvatar').attr('src', ele.value);
-                                            if (ele.files && ele.files[0]) {
+                                        function fncDeleteElement() {
 
-                                              var reader = new FileReader();
+                                          var mySpan = document.getElementById('mySpan');
+                                          var myLine = document.getElementById('hdnLine');
 
-                                              reader.onload = function(e) {
-                                                $('#imgAvatar'.$x).attr('src', e.target.result);
-                                              }
-                                              reader.readAsDataURL(ele.files[0]);
+                                          var deleteSpan = document.getElementById('div' + myLine.value);
+                                          mySpan.removeChild(deleteSpan);
+
+                                          var deleteBr = document.getElementById("br" + myLine.value);
+                                          mySpan.removeChild(deleteBr);
+
+                                          myLine.value--;
+
+                                        }
+
+                                        function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
+
+                                          var mySpan = document.getElementById('mySpan');
+                                          var myLine = document.getElementById('hdnLine');
+                                          $('#imgAvatar').attr('src', ele.value);
+                                          if (ele.files && ele.files[0]) {
+
+                                            var reader = new FileReader();
+
+                                            reader.onload = function(e) {
+                                              $('#imgAvatar'.$x).attr('src', e.target.result);
                                             }
-                                            console.log('#imgAvatar');
+                                            reader.readAsDataURL(ele.files[0]);
                                           }
-                                        </script>
+                                          console.log('#imgAvatar');
+                                        }
+                                      </script>
 
-                                      </div>
+                                    </div>
                                     <br><br><br>
                                     <div id="upload-img2"></div>
                                   </div>
@@ -719,8 +729,8 @@ $resultpa = mysqli_query($con, $sqlpa);
                               <a href="#" class="btn btn-lg bg-hover-white border rounded-lg mb-3 mr-auto prev-button">
                                 <span class="d-inline-block text-primary mr-2 fs-16"><i class="fal fa-long-arrow-left"></i></span> ย้อนกลับ
                               </a>
-                              <button class="btn btn-lg bg-white rounded-lg mb-3 mr-3 " type="submit" name="submit1" id="submit"> บันทึก </button>
-                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2" id="submit2"> ลงประกาศ </button>
+                              <button class="btn btn-lg bg-white rounded-lg mb-3 mr-3 " type="submit" name="submit1" id="submit" > บันทึก </button>
+                              <button class="btn btn-lg btn-primary mb-3" type="submit" name="submit2" id="submit2" > ลงประกาศ </button>
                             </div>
                           </div>
                         </div>
@@ -736,26 +746,19 @@ $resultpa = mysqli_query($con, $sqlpa);
     </div>
   </div>
   <div id="uploadimageModal" class="modal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Upload & Crop Image</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8 text-center">
-              <div id="image_demo" style="width:350px; margin-top:30px"></div>
-            </div>
-            <div class="col-md-4" style="padding-top:30px;">
-              <br />
-              <br />
-              <br />
-              <button class="btn btn-success crop_image" id="img">Crop & Upload Image</button>
-            </div>
+          <div class="col-md-12 ">
+            <div id="image_demo" class="demo"></div>
           </div>
         </div>
         <div class="modal-footer">
+          <button class="btn btn-primary crop_image " id="img">Crop & Upload Image</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -786,13 +789,13 @@ $resultpa = mysqli_query($con, $sqlpa);
       $image_crop = $('#image_demo').croppie({
         enableExif: true,
         viewport: {
-          width: 200,
-          height: 200,
+          width: 490,
+          height: 310,
           type: 'square' //circle
         },
         boundary: {
-          width: 300,
-          height: 300
+          width: 550,
+          height: 500
         }
       });
 
@@ -824,7 +827,10 @@ $resultpa = mysqli_query($con, $sqlpa);
               },
               success: function(data) {
                 $('#uploadimageModal').modal('hide');
-                $('#uploaded_image').attr('src', data);
+                $('#uploaded_image').attr('src', data).width(450).height(300);
+                let name = data;
+                let cutname = name.slice(15);
+                $('#saveimg').val(cutname);
                 console.log(data);
               }
             });
@@ -1080,7 +1086,7 @@ $resultpa = mysqli_query($con, $sqlpa);
         type: "post",
         url: "../backend/get_package.php",
         data: {
-         id: id
+          id: id
         },
 
         success: function(data) {
@@ -1089,9 +1095,33 @@ $resultpa = mysqli_query($con, $sqlpa);
         }
       });
 
-      
+      $.ajax({
+        type: "post",
+        url: "../backend/get_numad.php",
+        data: {
+          id: id
+        },
+
+        success: function(data) {
+          console.log(data);
+          $('#numad').val(data);
+        }
+      });
 
     });
+
+    // function checkAd() {
+    //  let num = $('#numad').val();
+    //  if (num == '0'){
+    //   Swal.fire({
+    //       icon: 'warning',
+    //       title: 'แจ้งเตือน',
+    //       text: 'จำนวนลงประกาศของคุณครบแล้ว'
+    //     })
+    //  } 
+    // }
+
+
   </script>
   <svg aria-hidden="true" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>

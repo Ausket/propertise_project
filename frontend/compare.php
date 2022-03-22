@@ -85,7 +85,7 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
     <meta name="description" content="Real Estate Html Template">
     <meta name="author" content="">
     <meta name="generator" content="Jekyll">
-    <title>Compare - HomeID</title>
+    <title>เปรียบเทียบ</title>
     <!-- Google fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <!-- Vendors CSS -->
@@ -370,15 +370,15 @@ $result3 = mysqli_query($con, $sql3)  or die(mysqli_error($con));
                     ชื่อหมู่บ้านหรือโครงการ
                 </div>
                 <div class="rows">
-                    <?php echo $row1['title'] ?>
+                    <a href="home-details.php?id=<?php echo $id1 ?>"><?php echo $row1['title'] ?></a>
                 </div>
                 <div class="rows">
-                    <?php echo $row22['title'] ?>
+                <a href="home-details.php?id=<?php echo $id2 ?>"><?php echo $row22['title'] ?></a>
                 </div>
 
                 <div class="rows">
                     <?php if (isset($_GET["id3"]) ? $_GET["id3"] : '') { ?>
-                        <?php echo $row3['title'] ?> <?php } ?>
+                        <a href="home-details.php?id=<?php echo $id3 ?>"> <?php echo $row3['title'] ?> <?php } ?></a>
                 </div>
 
             </div>

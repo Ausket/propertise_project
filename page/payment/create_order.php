@@ -38,6 +38,7 @@ if ($requestMethod === 'POST') {
         $name = $data['name'];
         $pack = $data['pack'];
         $id = $data['id'];
+        $date = date('Y-m-d H:i:s');
 
         if ($data['price'] == '0.00') {
             $sql = "INSERT INTO pay_status (referenceNo, price ,name ,pack_name ,u_id,resultCode) VALUES ('$referenceNo','$amount','$name','$pack','$id','00')";
@@ -50,6 +51,32 @@ if ($requestMethod === 'POST') {
             $detail = 'Insert Data Success';
             $msg = 'Success';
             $err = false;
+
+            $sToken = "IKk4FOtF09RzptEE1B4dlEVUCFfnDeGspxIJQEsCFCu";
+            $ms = 
+                "\n" . "รหัสสั่งซื้อ :  $referenceNo".
+                "\n" . "ชื่อแพ็คเกจ : $pack " .
+                "\n" . "ชื่อผู้ชื่อ :  $name".
+                "\n" . "ราคา : $amount " . " บาท" .
+                "\n" . "เวลาสั่งซื้อ : $date "  ;
+               
+
+
+
+            $chOne = curl_init();
+            curl_setopt($chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify");
+            curl_setopt($chOne, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($chOne, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($chOne, CURLOPT_POST, 1);
+            curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=" . $ms);
+            $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer ' . $sToken . '',);
+            curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
+            $result = curl_exec($chOne);
+
+          
+            curl_close($chOne);
+
         } else {
             $err = true;
         }

@@ -79,7 +79,7 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Property Detail</title>
+  <title>รายละเอียดอสังหาริมทรัพย์</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -121,7 +121,7 @@ $resultb = mysqli_query($con, $sqlb) or die(mysqli_error($con));
 
   <meta property="og:title" content="HOME detail Lifejung" />
   <meta property="og:image" content="URL OF IMAGE ONLY" />
-  <meta property="og:url" content="https://lifejung.com/frontend/home-details.php" />
+  <meta property="og:url" content="onlinecode.org" />
   <meta property="og:description" content="HOME detail Lifejung" />
 
 </head>

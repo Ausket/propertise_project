@@ -20,7 +20,19 @@ $idf = $_GET['id'];
 $sqlf = "SELECT * FROM propertise_detail WHERE pd_id = $idf";
 $resultf = mysqli_query($con, $sqlf);
 
+$sqlf = "SELECT * FROM advertise 
+LEFT JOIN pay_status ON advertise.pack_id = pay_status.id 
+WHERE pd_id = $idf";
+$resultf = mysqli_query($con, $sqlf);
+$row = mysqli_fetch_array($resultf);
+$pid = $row['pack_id'];
 
+$sqlfi = "SELECT file.f_name, file.f_date, file.f_id
+FROM (file
+INNER  JOIN property_detail ON file.pd_id = property_detail.pd_id)
+WHERE file.pd_id = $idf ";
+$resultfi = mysqli_query($con, $sqlfi) or die(mysqli_error($con));
+$numfi = mysqli_num_rows($resultfi);
 ?>
 
 <!DOCTYPE html>
@@ -46,6 +58,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <link rel="stylesheet" href="../css/responsive.bootstrap4.min.css">
     <link rel="stylesheet" href="../css/buttons.bootstrap4.min.css">
     <script src="//cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+    <script src="https://cdn.jsdelivr.netnpmsweetalert2@11script"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -74,10 +89,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
                 </div>
                 <!-- /.card-header -->
                 <!-- form start -->
-                <form action="../backend/addfile_ad_db.php?id=<?php echo $idf?>" enctype="multipart/form-data" method="POST">
+                <form action="../backend/addfile_ad_db.php?id=<?php echo $idf ?>" enctype="multipart/form-data" method="POST">
                     <div class="card-body">
                         <div class="form-row">
                             <div class="form-group col-md-12">
+                                <input type="text" name="packid" id="idpack" value="<?php echo $pid ?>" hidden>
+                                <input type="text" name="numimg" id="numimg" hidden>
+                                <input type="text" id="newfile" value="<?php echo $numfi ?>" hidden >
                                 <label>รูปภาพเพิ่มเติม</label>
                                 <div></div>
                                 <input type="text" name="ids" value="<?php echo $ids ?>" hidden>
@@ -94,40 +112,74 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                         <script language="javascript">
                                             function fncCreateElement() {
 
+                                                // var id = $('#package').attr("id");
+                                                // $('#idpack').val(id);
+
                                                 var mySpan = document.getElementById('mySpan');
                                                 var myLine = document.getElementById('hdnLine');
                                                 myLine.value++;
 
-                                                var myElement4 = document.createElement('br');
-                                                myElement4.setAttribute('name', "br" + myLine.value);
-                                                myElement4.setAttribute('id', "br" + myLine.value);
-                                                mySpan.appendChild(myElement4);
 
                                                 var div = document.createElement('div');
                                                 div.id = 'div' + myLine.value;
-                                                div.className = 'card-body bg-light';
+
                                                 div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
 
 
-                                                var myElement4 = document.createElement('br');
-                                                myElement4.setAttribute('name', "br" + myLine.value);
-                                                myElement4.setAttribute('id', "br" + myLine.value);
-                                                div.appendChild(myElement4);
 
                                                 var myElement2 = document.createElement('input');
                                                 myElement2.setAttribute('type', "file");
                                                 myElement2.setAttribute('name', "file[]");
                                                 myElement2.setAttribute('id', "file" + myLine.value);
                                                 myElement2.setAttribute('required', 'true');
+                                                myElement2.setAttribute('accept', 'image/*');
+                                                // myElement2.setAttribute('onchange', 'showPreview(this);');
                                                 div.appendChild(myElement2);
+
+                                                // accept="image/*" OnChange="showPreview(this)
 
                                                 var myElement4 = document.createElement('br');
                                                 myElement4.setAttribute('name', "br" + myLine.value);
                                                 myElement4.setAttribute('id', "br" + myLine.value);
-                                                div.appendChild(myElement4);
+                                                mySpan.appendChild(myElement4);
+
+
+                                                // var img = document.createElement('img');
+                                                // img.setAttribute('id', "img" + myLine.value);
+                                                // img.setAttribute('src', "#" + myLine.value);
+
+                                                // div.appendChild(img);
+
 
                                                 mySpan.appendChild(div);
 
+                                                var all = parseInt($('#numimg').val());
+                                                console.log(typeof(all));
+
+                                                var newfile = parseInt($('#newfile').val());
+                                                console.log(typeof(newfile));
+
+                                                var num = all - newfile;
+                                                console.log(typeof(num));
+
+                                                if (myLine.value > num) {
+                                                    Swal.fire({
+                                                        position: 'top-center',
+                                                        icon: 'warning',
+                                                        title: 'สามารถเพิ่มรูปได้สูงสุด ' + all + ' รูปเท่านั้น',
+                                                        showConfirmButton: false,
+                                                        timer: 1000
+                                                    })
+
+
+                                                    var deleteSpan = document.getElementById('div' + myLine.value);
+                                                    mySpan.removeChild(deleteSpan);
+
+                                                    var deleteBr = document.getElementById("br" + myLine.value);
+                                                    mySpan.removeChild(deleteBr);
+
+                                                    myLine.value--;
+                                                }
 
                                             }
 
@@ -141,15 +193,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                                                 var deleteBr = document.getElementById("br" + myLine.value);
                                                 mySpan.removeChild(deleteBr);
-                                                // var deleteFile = document.getElementById("file" + myLine.value);
-                                                // mySpan.removeChild(deleteFile);
-                                                // var deleteBr = document.getElementById("br" + myLine.value);
-                                                // mySpan.removeChild(deleteBr);
-
 
                                                 myLine.value--;
 
                                             }
+
+                                            $("#file" + myLine.value).change(function() {
+                                                const file = this.files[0];
+                                                if (file) {
+                                                    let reader = new FileReader();
+                                                    reader.onload = function(event) {
+                                                        $("#img")
+                                                            .attr("src", event.target.result);
+                                                    };
+                                                    reader.readAsDataURL(file);
+                                                }
+                                            });
                                         </script>
                                     </div>
                                 </div>
@@ -211,7 +270,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="../js/buttons.print.min.js"></script>
     <script src="../js/buttons.colVis.min.js"></script>
 
+    <script>
+      
+        var id = $('#idpack').val();
+        console.log(id);
+        $.ajax({
+            type: "post",
+            url: "../backend/get_package.php",
+            data: {
+                id: id
+            },
 
+            success: function(data) {
+                console.log(data);
+                $('#numimg').val(data);
+            }
+        });
+    </script>
 </body>
 
 </html>

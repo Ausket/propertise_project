@@ -24,7 +24,7 @@ $resultp = mysqli_query($con, $sqlp);
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>My Profile - Home</title>
+  <title>ข้อมูลส่วนตัว</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -67,7 +67,7 @@ $resultp = mysqli_query($con, $sqlp);
       <?php include 'templates/dashboard-menu.php'; ?>
       <div class="page-content">
         <?php include 'templates/header-dashboard.php'; ?>
-        <main id="content" class="bg-gray-01">
+        <main id="content" class="bg-gray-01" style="margin-bottom:50px;">
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="mb-6">
               <h2 class="mb-0 text-heading fs-22 lh-15"> ข้อมูลส่วนตัว </h2>

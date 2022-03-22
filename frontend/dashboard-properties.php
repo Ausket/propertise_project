@@ -38,7 +38,7 @@ $order = 1;
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>My Properties - Home</title>
+  <title>ประกาศของฉัน</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -88,13 +88,13 @@ $order = 1;
 </head>
 
 <body>
-  <div class="wrapper dashboard-wrapper">
+  <div class="wrapper dashboard-wrapper" >
     <div class="d-flex flex-wrap flex-xl-nowrap">
       <?php include 'templates/dashboard-menu.php'; ?>
       <div class="page-content">
         <?php include 'templates/header-dashboard.php'; ?>
-        <main id="content" class="bg-gray-01">
-          <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
+        <main id="content" class="bg-gray-01" style="margin-bottom:50px;" >
+          <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10" >
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div class="mr-0 mr-md-auto">
                 <a href="dashboard-properties.php">

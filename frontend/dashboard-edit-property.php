@@ -77,7 +77,7 @@ $resultpp = mysqli_query($con, $sqlpp);
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Add new property - HomeID</title>
+  <title>แก้ไขประกาศ</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -209,7 +209,7 @@ $resultpp = mysqli_query($con, $sqlpp);
     .remove_file {
       position: relative;
       top: -20px;
-      right: 5px;
+      right: 10px;
       background: black;
       color: white;
       border-radius: 50%;
@@ -231,6 +231,12 @@ $resultpp = mysqli_query($con, $sqlpp);
     #map {
       height: 100%;
       width: 100%;
+    }
+
+    .demo {
+      width: 350px;
+      margin-top: 30px;
+      margin-left: 100px;
     }
   </style>
 
@@ -286,13 +292,13 @@ $resultpp = mysqli_query($con, $sqlpp);
                                           $stop_date = date('d-m-Y', strtotime($month, $time)); ?>
 
                                           <option id="pack" value="<?php echo  $value['id'] ?>" <?php if ($value['pack_id'] == $rowb['pack_id']) {
-                                                                                        echo "selected";
-                                                                                      } ?>> ชื่อแพ็คเกจ : <?php echo $value['pack_name'] ?> /วันสั่งซื้อ <?php echo date('d-m-Y', strtotime($value['datetime_order'])) ?> /หมดอายุ <?php echo $stop_date ?> /ราคา <?php echo $value['price'] ?> </option>
+                                                                                                  echo "selected";
+                                                                                                } ?>> ชื่อแพ็คเกจ : <?php echo $value['pack_name'] ?> /วันสั่งซื้อ <?php echo date('d-m-Y', strtotime($value['datetime_order'])) ?> /หมดอายุ <?php echo $stop_date ?> /ราคา <?php echo $value['price'] ?> </option>
                                         <?php } ?>
                                       </select>
                                     </div>
-                                    <input type="text" id="idpack" name="idpack" hidden >
-                                    <input type="text" id="numimg" name="numimg" hidden >
+                                    <input type="text" id="idpack" name="idpack" hidden>
+                                    <input type="text" id="numimg" name="numimg" hidden>
                                     <h3 class="card-title mb-0 text-heading fs-22 lh-15"> รายละเอียดอสังหาริมทรัพย์ </h3>
                                     <hr>
                                     <div class="form-group mb-3">
@@ -689,22 +695,24 @@ $resultpp = mysqli_query($con, $sqlpp);
                                         <input type="file" name="upload_image" id="upload_image" accept="image/*">
                                         <!-- <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p> -->
                                       </div>
+                                      <input type="text" id="saveimg" name="nameimg" value="" hidden>
                                     </div>
                                     <p class="card-text mt-5 mb-5"> รูปภาพเพิ่มเติม </p>
-                                    <p class="text-heading fs-22 lh-15 mb-4"> อัพโหลดแบบหลายรูปภาพ </p>
+                                    <p class="text-heading fs-22 lh-15 mb-4"> รูปภาพเดิม </p>
                                     <?php while ($rowf = mysqli_fetch_array($resultfi)) { ?>
                                       <span id="<?php echo $rowf['f_id']; ?>">
-                                        <img src="../file/<?php echo $rowf['f_name']; ?>" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>"><span class="remove_file"></span></a>
+                                        <img src="../file/<?php echo $rowf['f_name']; ?>" class="m-auto" id="upload-img3" width="150"><a id="file_del" name="<?php echo $rowf['f_id']; ?>"><span class="remove_file"></span></a>
                                       </span>
                                     <?php } ?>
-                                    <div id="upload-img2"></div>
                                     <input type="text" id="newfile" value="<?php echo $numfi ?>" hidden>
                                     <br><br><br>
+                                    <p class="text-heading fs-22 lh-15 mb-4"> อัพโหลดแบบหลายรูปภาพ </p>
                                     <input hidden name="date" type="datetime" value=<?php date_default_timezone_set("Asia/Bangkok");
                                                                                     echo date("Y-m-d\TH:i:s"); ?>>
-
-                                    <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
-                                    <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();"><br><br>
+                                    <div align="center">
+                                      <input name="btnCreate" type="button" class="btn  btn-warning" value="เพิ่มไฟล์" onClick="JavaScript:fncCreateElement();">
+                                      <input name="btnDelete" type="button" class="btn  btn-danger" value="ลบไฟล์" onClick="JavaScript:fncDeleteElement();">
+                                    </div><br><br>
                                     <input name="hdnLine" id="hdnLine" type="hidden" value=0>
                                     <input name="limit" id="limit" type="hidden">
 
@@ -724,6 +732,7 @@ $resultpp = mysqli_query($con, $sqlpp);
 
                                           var div = document.createElement('div');
                                           div.id = 'div' + myLine.value;
+
                                           div.innerHTML = 'ไฟล์ที่ ' + myLine.value;
 
 
@@ -734,7 +743,7 @@ $resultpp = mysqli_query($con, $sqlpp);
                                           myElement2.setAttribute('id', "file" + myLine.value);
                                           myElement2.setAttribute('required', 'true');
                                           myElement2.setAttribute('accept', 'image/*');
-                                          myElement2.setAttribute('OnChange', 'showPreview(this)');
+                                          // myElement2.setAttribute('onchange', 'showPreview(this);');
                                           div.appendChild(myElement2);
 
                                           // accept="image/*" OnChange="showPreview(this)
@@ -745,13 +754,11 @@ $resultpp = mysqli_query($con, $sqlpp);
                                           mySpan.appendChild(myElement4);
 
 
-                                          var img = document.createElement('img');
-                                          img.id = 'imgAvatar' + myLine.value;
-                                          img.className = 'img-thumbnail2';
-                                          //img.setAttribute('height', '200');
-                                          //class="img-thumbnail2"
+                                          // var img = document.createElement('img');
+                                          // img.setAttribute('id', "img" + myLine.value);
+                                          // img.setAttribute('src', "#" + myLine.value);
 
-                                          div.appendChild(img);
+                                          // div.appendChild(img);
 
 
                                           mySpan.appendChild(div);
@@ -801,22 +808,17 @@ $resultpp = mysqli_query($con, $sqlpp);
 
                                         }
 
-                                        function showPreview(ele) { //ฟังก์โชว์ภาพก่อน กด submit 
-
-                                          var mySpan = document.getElementById('mySpan');
-                                          var myLine = document.getElementById('hdnLine');
-                                          $('#imgAvatar').attr('src', ele.value);
-                                          if (ele.files && ele.files[0]) {
-
-                                            var reader = new FileReader();
-
-                                            reader.onload = function(e) {
-                                              $('#imgAvatar'.$x).attr('src', e.target.result);
-                                            }
-                                            reader.readAsDataURL(ele.files[0]);
+                                        $("#file" + myLine.value).change(function() {
+                                          const file = this.files[0];
+                                          if (file) {
+                                            let reader = new FileReader();
+                                            reader.onload = function(event) {
+                                              $("#img")
+                                                .attr("src", event.target.result);
+                                            };
+                                            reader.readAsDataURL(file);
                                           }
-                                          console.log('#imgAvatar');
-                                        }
+                                        });
                                       </script>
 
                                       <!-- <p class="text-one">ขนาดของภาพไม่เกิน 1200 x 800 พิกเซล</p> -->
@@ -917,26 +919,19 @@ $resultpp = mysqli_query($con, $sqlpp);
     </div>
   </div>
   <div id="uploadimageModal" class="modal" role="dialog">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Upload & Crop Image</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-md-8 text-center">
-              <div id="image_demo" style="width:350px; margin-top:30px"></div>
-            </div>
-            <div class="col-md-4" style="padding-top:30px;">
-              <br />
-              <br />
-              <br />
-              <button class="btn btn-success crop_image" id="img">Crop & Upload Image</button>
-            </div>
+          <div class="col-md-12 ">
+            <div id="image_demo" class="demo"></div>
           </div>
         </div>
         <div class="modal-footer">
+          <button class="btn btn-primary crop_image " id="img">Crop & Upload Image</button>
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -964,13 +959,13 @@ $resultpp = mysqli_query($con, $sqlpp);
       $image_crop = $('#image_demo').croppie({
         enableExif: true,
         viewport: {
-          width: 200,
-          height: 200,
+          width: 490,
+          height: 310,
           type: 'square' //circle
         },
         boundary: {
-          width: 300,
-          height: 300
+          width: 550,
+          height: 500
         }
       });
 
@@ -1002,7 +997,10 @@ $resultpp = mysqli_query($con, $sqlpp);
               },
               success: function(data) {
                 $('#uploadimageModal').modal('hide');
-                $('#uploaded_image').attr('src', data);
+                $('#uploaded_image').attr('src', data).width(450).height(300);
+                let name = data;
+                let cutname = name.slice(15);
+                $('#saveimg').val(cutname);
                 console.log(data);
               }
             });
@@ -1254,24 +1252,21 @@ $resultpp = mysqli_query($con, $sqlpp);
       }
     }
 
-    var id =  $('#pack').val(); ;
-      $('#idpack').val(id);
+    var id = $('#pack').val();;
+    $('#idpack').val(id);
 
-      $.ajax({
-        type: "post",
-        url: "../backend/get_package.php",
-        data: {
-         id: id
-        },
+    $.ajax({
+      type: "post",
+      url: "../backend/get_package.php",
+      data: {
+        id: id
+      },
 
-        success: function(data) {
-          console.log(data);
-          $('#numimg').val(data);
-        }
-      });
-
-   
-
+      success: function(data) {
+        console.log(data);
+        $('#numimg').val(data);
+      }
+    });
   </script>
   <!-- Theme scripts -->
   <script src="../js/theme.js"></script>

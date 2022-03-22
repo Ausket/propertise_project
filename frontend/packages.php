@@ -35,7 +35,7 @@ curl_close($curl);
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Packages - Home</title>
+  <title>แพ็คเกจ</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -232,6 +232,10 @@ curl_close($curl);
                     <li class="d-flex justify-content-between">
                       <p class="text-gray-light mb-0">รูปภาพ</p>
                       <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['images'] ?></p>
+                    </li>
+                    <li class="d-flex justify-content-between">
+                      <p class="text-gray-light mb-0">จำนวนประกาศ</p>
+                      <p class="font-weight-500 text-heading mb-0"><?php echo $rowp['num_ad'] ?></p>
                     </li>
                     <li class="d-flex justify-content-between">
                       <p class="text-gray-light mb-0">หน้าเพจ</p>

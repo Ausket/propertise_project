@@ -137,12 +137,14 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        
     }
 
     .flex-center-center {
         display: flex;
         align-items: center;
         justify-content: center;
+        
     }
 
     .flex-center-flex-start {
@@ -184,7 +186,7 @@
         flex-wrap: wrap;
     }
 </style>
-<div class="Bt-menu flex-center-center">
+<div class="Bt-menu flex-center-center " >
     <a href="dashboard.php" class="item flex-center-center-wrap">
         <div class="icon flex-center-center border-background">
             <i class="fal fa-cog"></i>

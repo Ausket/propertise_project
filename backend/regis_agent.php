@@ -37,6 +37,30 @@ if (isset($_POST['submit'])) {
             echo "alert(\" สมัครเป็นตัวแทนสำเร็จ\");";
             echo "</script>";
             header('Refresh:0; url=../index.php');
+
+            
+            $sToken = "ikREbCH8W5zjrcmXkyqnDCf8p7qNwvEstaBFBzXpSsq";
+            $ms = 
+                "\n" . "ชื่อ :  $name".
+                "\n" . "อีเมล : $email   "  .
+                "\n" . "สถานะ : นายหน้า/ตัวแทน " .
+                "\n" . "เบอร์โทร : $tel " ;
+
+
+
+            $chOne = curl_init();
+            curl_setopt($chOne, CURLOPT_URL, "https://notify-api.line.me/api/notify");
+            curl_setopt($chOne, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($chOne, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($chOne, CURLOPT_POST, 1);
+            curl_setopt($chOne, CURLOPT_POSTFIELDS, "message=" . $ms);
+            $headers = array('Content-type: application/x-www-form-urlencoded', 'Authorization: Bearer ' . $sToken . '',);
+            curl_setopt($chOne, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($chOne, CURLOPT_RETURNTRANSFER, 1);
+            $result = curl_exec($chOne);
+
+          
+            curl_close($chOne);
             exit(0);
         } else {
             echo "mysql_error($con)";

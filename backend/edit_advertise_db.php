@@ -24,8 +24,11 @@ $postal_code = $_POST['postal_code'];
 $atype = $_POST['atype'];
 $title = $_POST['title'];
 $describe = $_POST['describe'];
+$latitude = $_POST['latitude'];
+$longitude = $_POST['longitude'];
 
-$file = $_FILES['img']['name'];
+
+$file = $_FILES['upload_image']['name'];
 //แต่งชื่อไฟล์
 $files_v = strrev($file);
 $files_r = strrchr($files_v, ".");
@@ -41,7 +44,7 @@ if ($file != '') {
     $newname = $files . $nameDate . $numrand . $type; //ประกอบเป็นชื่อใหม่
     $path_copy = $path . $newname; //กำหนด path ในการเก็บ
 
-    move_uploaded_file($_FILES['img']['tmp_name'], $path_copy);
+    move_uploaded_file($_FILES['upload_image']['tmp_name'], $path_copy);
 
     if (isset($_POST['submit'])) {
 
@@ -51,7 +54,7 @@ if ($file != '') {
         $l_id = $row5['l_id'];
         $p_id = $row5['pd_id'];
 
-        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province_id',postal_code='$postal_code' WHERE l_id = $l_id ";
+        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province_id',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
 
@@ -79,7 +82,7 @@ if ($file == '') {
         $l_id = $row5['l_id'];
         $p_id = $row5['pd_id'];
 
-        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code' WHERE l_id = $l_id ";
+        $sql2 = "UPDATE location_property SET house_no='$house_no',village_no='$village_no',lane='$lane',road='$road',district_id='$district',amphure_id='$amphure',province_id='$province',postal_code='$postal_code',lng='$longitude',lat='$latitude' WHERE l_id = $l_id ";
         $result2 = mysqli_query($con, $sql2);
 
 

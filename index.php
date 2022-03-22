@@ -71,7 +71,7 @@ $result8 = mysqli_query($con, $sql8) or die(mysqli_error($con));
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>Home</title>
+  <title>หน้าแรก</title>
   <!-- Vendors CSS -->
   <link rel="stylesheet" href="css/vendors/fontawesome-pro-5/css/all.css">
   <link rel="stylesheet" href="css/vendors/bootstrap-select/css/bootstrap-select.min.css">
@@ -142,7 +142,7 @@ $result8 = mysqli_query($con, $sql8) or die(mysqli_error($con));
             <div class="box pb-7 pt-2">
               <div class="card shadow-hover-2" data-animate="zoomIn">
                 <div class="hover-change-image bg-hover-overlay rounded-lg card-img-top">
-                  <img src="image/p_img/<?php echo $row7['img_video']; ?>" alt="Home in Metric Way">
+                  <img src="image/p_img/<?php echo $row7['img_video']; ?>" alt="" >
                   <div class="card-img-overlay p-2 d-flex flex-column">
                     <div>
                       <span class="badge mr-2 badge-orange">ยอดนิยม</span>

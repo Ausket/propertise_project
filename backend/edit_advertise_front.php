@@ -28,17 +28,8 @@ $longitude = $_POST['longitude'];
 $atype = $_POST['atype'];
 $title = $_POST['title'];
 $describe = $_POST['describe'];
+$file = $_POST['nameimg'];
 
-$file = $_FILES['upload_image']['name'];
-//แต่งชื่อไฟล์
-$files_v = strrev($file);
-$files_r = strrchr($files_v, ".");
-$files = strrev($files_r);
-
-$nameDate = date('Ymd'); //เก็บวันที่
-$path = "../image/p_img/"; //สร้างไฟล์สำหรับเก็บไฟล์ใหม่
-date_default_timezone_set('Asia/Bangkok');
-$numrand = (mt_rand(1000, 9999));
 
 // --------------------------------------------------------
 
@@ -56,12 +47,7 @@ $status = $rowc['ad_status'];
 
 
 if ($file != '') {
-    $type = strrchr($file, "."); //ตัดชื่อไฟล์เหลือแต่นามสกุล
-    $newname = $files . $nameDate . $numrand . $type; //ประกอบเป็นชื่อใหม่
-    $path_copy = $path . $newname; //กำหนด path ในการเก็บ
-
-    move_uploaded_file($_FILES['upload_image']['tmp_name'], $path_copy);
-
+    
     if (isset($_POST['submit1']) || isset($_POST['submit2'])) {
 
         $sql5 = "SELECT * FROM advertise WHERE a_id =$id";
@@ -74,9 +60,9 @@ if ($file != '') {
         $result2 = mysqli_query($con, $sql2);
 
         if (isset($_POST["facility"])) {
-        $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+        $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$file',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
         }else{
-            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area' WHERE l_id = $l_id ";
+            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$file',space_area='$space_area' WHERE l_id = $l_id ";
         }
         $result = mysqli_query($con, $sql);
 
@@ -125,9 +111,9 @@ if ($file != '') {
 
 
         if (isset($_POST["facility"])) {
-            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
+            $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$file',space_area='$space_area',facility='$facility' WHERE l_id = $l_id ";
             }else{
-                $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$newname',space_area='$space_area' WHERE l_id = $l_id ";
+                $sql = "UPDATE property_detail SET ptype_id='$ptype',project_name='$project_name',bedroom='$bedroom',bathroom='$bathroom',parking='$parking',price='$price',img_video='$file',space_area='$space_area' WHERE l_id = $l_id ";
             }
         $result = mysqli_query($con, $sql);
 

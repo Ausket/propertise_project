@@ -83,7 +83,7 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
   if (isset($_POST['ch'])) {
     $choice = $_POST['ch'];
     if ($choice == 1) {
-      $text = 'ORDER BY advertise.a_id DESC';
+      $text = 'ORDER BY advertise.date DESC';
     }
     if ($choice == 2) {
       $text = 'ORDER BY property_detail.price DESC';
@@ -100,7 +100,7 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
     $numrow = mysqli_num_rows($resultsb);
   } else {
 
-    $sqls = "$sqlsb" . 'ORDER BY advertise.a_id DESC ';
+    $sqls = "$sqlsb" . 'ORDER BY advertise.date DESC ';
     $resultsb = mysqli_query($con, $sqls) or die(mysqli_error($con));
     $numrow = mysqli_num_rows($resultsb);
   }
@@ -121,7 +121,7 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
   if (isset($_POST['ch'])) {
     $choice = $_POST['ch'];
     if ($choice == 1) {
-      $text = 'ORDER BY advertise.a_id DESC';
+      $text = 'ORDER BY advertise.date DESC';
     }
     if ($choice == 2) {
       $text = 'ORDER BY property_detail.price DESC';
@@ -138,7 +138,7 @@ if (isset($_GET['submits2'])) { //เมื่อกด ค้นหา
     $numrow = mysqli_num_rows($resultsb);
   } else {
 
-    $sqls = "$sqlsb" . 'ORDER BY advertise.a_id DESC ';
+    $sqls = "$sqlsb" . 'ORDER BY advertise.date DESC ';
     $resultsb = mysqli_query($con, $sqls) or die(mysqli_error($con));
     $numrow = mysqli_num_rows($resultsb);
   }

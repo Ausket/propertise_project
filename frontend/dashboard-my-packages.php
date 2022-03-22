@@ -24,7 +24,7 @@ $order = 1;
   <meta name="description" content="Real Estate Html Template">
   <meta name="author" content="">
   <meta name="generator" content="Jekyll">
-  <title>My Package - HomeID</title>
+  <title>แพ็คเกจของฉัน</title>
   <!-- Google fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
   <!-- Vendors CSS -->
@@ -67,7 +67,7 @@ $order = 1;
       <?php include 'templates/dashboard-menu.php'; ?>
       <div class="page-content">
         <?php include 'templates/header-dashboard.php'; ?>
-        <main id="content" class="bg-gray-01">
+        <main id="content" class="bg-gray-01" style="margin-bottom:50px;">
           <div class="px-3 px-lg-6 px-xxl-13 py-5 py-lg-10">
             <div class="d-flex flex-wrap flex-md-nowrap mb-6">
               <div class="mr-0 mr-md-auto">
@@ -122,7 +122,7 @@ $order = 1;
                     $amount = mysqli_fetch_array($qr);
                     ?>
                     <td class="align-middle">
-                    <?php if($stop_date == $date ){?><p style="color:red" ><?php echo $stop_date ?> หมดอายุแล้ว</p>
+                    <?php if($stop_date <= $date ){?><p style="color:red" ><?php echo $stop_date ?> หมดอายุแล้ว</p>
                       <?php }else{?><p ><?php echo $stop_date ?></p><?php } ?>
                     </td>
                     
